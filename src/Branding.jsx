@@ -7,6 +7,51 @@ import {
 } from "./components/CustomButton";
 import { useNavigate } from "react-router";
 import HeroSection from "./components/HeroSection";
+const pricingPlans = [
+  {
+    name: "Basic",
+    price: 15,
+    priceId:'prod_SgRIbITKi179cC',
+    features: [
+      { label: "1 Company Account", available: true },
+      { label: "1 QuickBooks Integration", available: true },
+      { label: "Access to Core Features", available: true },
+      { label: "Multi-Company Dashboard", available: false },
+      { label: "Advanced Reporting Tools", available: false },
+    ],
+    buttonComponent: "CustomButton",
+    delay: 100,
+  },
+  {
+    name: "Standard",
+    price: 29,
+    features: [
+      { label: "3 Company Accounts", available: true },
+      { label: "3 QuickBooks Integrations", available: true },
+      { label: "Access to All Core Features", available: true },
+      { label: "Multi-Company Dashboard", available: true },
+      { label: "Priority Support", available: false },
+    ],
+    featured: true,
+    buttonComponent: "CustomButtonGreen",
+    delay: 200,
+    priceId:'prod_SgRIbITKi179cC',
+  },
+  {
+    name: "Premium",
+    price: 49,
+    priceId:'prod_SgRIbITKi179cC',
+    features: [
+      { label: "5 Company Accounts", available: true },
+      { label: "5 QuickBooks Integrations", available: true },
+      { label: "All Features from Standard", available: true },
+      { label: "Advanced Reporting Tools", available: true },
+      { label: "Priority Support", available: true },
+    ],
+    buttonComponent: "CustomButton",
+    delay: 300,
+  },
+];
 
 function Branding() {
   let navigate = useNavigate();
@@ -18,9 +63,7 @@ function Branding() {
   });
 
   const [errors, setErrors] = useState({});
-  console.log("🚀 ~ Branding ~ errors:", errors)
   const [isSubmitting, setIsSubmitting] = useState(false);
-  console.log("🚀 ~ Branding ~ isSubmitting:", isSubmitting)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,7 +104,9 @@ function Branding() {
 
     setIsSubmitting(true);
   };
-
+const handleSubscription=(priceId)=>{
+ navigate("/register")
+}
   useEffect(() => {
     const preloader = document.getElementById("preloader");
     if (preloader) {
@@ -247,120 +292,52 @@ function Branding() {
         </section>
 
         {/* ======= Pricing Section ======= */}
-        <section id="pricing" className="pricing">
-          <div className="container" data-aos="fade-up">
-            <div className="section-title">
-              <h2>Pricing</h2>
-              <p>
-                At Earthco, we believe in honest pricing with no hidden fees.
-                Our flexible service packages are designed to give you the best
-                value — whether you're managing a single business or multiple
-                operations through QuickBooks.
-              </p>
-            </div>
+     
+<section id="pricing" className="pricing">
+  <div className="container" data-aos="fade-up">
+    <div className="section-title">
+      <h2>Pricing</h2>
+      <p>
+        At Earthco, we believe in honest pricing with no hidden fees.
+        Our flexible service packages are designed to give you the best
+        value — whether you're managing a single business or multiple
+        operations through QuickBooks.
+      </p>
+    </div>
 
-            <div className="row">
-              {/* Basic Plan */}
-              <div
-                className="col-lg-4 text-start"
-                data-aos="fade-up"
-                data-aos-delay="100"
-              >
-                <div className="box">
-                  <h3>Basic</h3>
-                  <h4>
-                    <sup>$</sup>15<span className="per-month">per month</span>
-                  </h4>
-                  <ul>
-                    <li>
-                      <i className="bx bx-check"></i> 1 Company Account
-                    </li>
-                    <li>
-                      <i className="bx bx-check"></i> 1 QuickBooks Integration
-                    </li>
-                    <li>
-                      <i className="bx bx-check"></i> Access to Core Features
-                    </li>
-                    <li className="na">
-                      <i className="bx bx-x"></i>{" "}
-                      <span>Multi-Company Dashboard</span>
-                    </li>
-                    <li className="na">
-                      <i className="bx bx-x"></i>{" "}
-                      <span>Advanced Reporting Tools</span>
-                    </li>
-                  </ul>
-                  <CustomButton onClick={() => navigate("/register")} />
-                </div>
-              </div>
-
-              {/* Standard Plan */}
-              <div
-                className="col-lg-4 mt-4 mt-lg-0 text-start"
-                data-aos="fade-up"
-                data-aos-delay="200"
-              >
-                <div className="box featured">
-                  <h3>Standard</h3>
-                  <h4>
-                    <sup>$</sup>29<span className="per-month">per month</span>
-                  </h4>
-                  <ul>
-                    <li>
-                      <i className="bx bx-check"></i> 3 Company Accounts
-                    </li>
-                    <li>
-                      <i className="bx bx-check"></i> 3 QuickBooks Integrations
-                    </li>
-                    <li>
-                      <i className="bx bx-check"></i> Access to All Core
-                      Features
-                    </li>
-                    <li>
-                      <i className="bx bx-check"></i> Multi-Company Dashboard
-                    </li>
-                    <li className="na">
-                      <i className="bx bx-x"></i> <span>Priority Support</span>
-                    </li>
-                  </ul>
-                  <CustomButtonGreen onClick={() => navigate("/register")} />
-                </div>
-              </div>
-
-              {/* Premium Plan */}
-              <div
-                className="col-lg-4 mt-4 mt-lg-0 text-start"
-                data-aos="fade-up"
-                data-aos-delay="300"
-              >
-                <div className="box">
-                  <h3>Premium</h3>
-                  <h4>
-                    <sup>$</sup>49<span className="per-month">per month</span>
-                  </h4>
-                  <ul>
-                    <li>
-                      <i className="bx bx-check"></i> 5 Company Accounts
-                    </li>
-                    <li>
-                      <i className="bx bx-check"></i> 5 QuickBooks Integrations
-                    </li>
-                    <li>
-                      <i className="bx bx-check"></i> All Features from Standard
-                    </li>
-                    <li>
-                      <i className="bx bx-check"></i> Advanced Reporting Tools
-                    </li>
-                    <li>
-                      <i className="bx bx-check"></i> Priority Support
-                    </li>
-                  </ul>
-                  <CustomButton onClick={() => navigate("/register")} />
-                </div>
-              </div>
+    <div className="row">
+      {pricingPlans.map((plan, index) => {
+        const ButtonComponent = plan.buttonComponent === "CustomButtonGreen" ? CustomButtonGreen : CustomButton;
+        return (
+          <div
+            key={plan.name}
+            className={`col-lg-4 mt-4 mt-lg-0 text-start`}
+            data-aos="fade-up"
+            data-aos-delay={plan.delay}
+          >
+            <div className={`box ${plan.featured ? "featured" : ""}`}>
+              <h3>{plan.name}</h3>
+              <h4>
+                <sup>$</sup>
+                {plan.price}
+                <span className="per-month">per month</span>
+              </h4>
+              <ul>
+                {plan.features.map((feature, i) => (
+                  <li key={i} className={feature.available ? "" : "na"}>
+                    <i className={`bx ${feature.available ? "bx-check" : "bx-x"}`}></i>{" "}
+                    <span>{feature.label}</span>
+                  </li>
+                ))}
+              </ul>
+              <ButtonComponent onClick={()=>handleSubscription(plan.priceId)} />
             </div>
           </div>
-        </section>
+        );
+      })}
+    </div>
+  </div>
+</section>
 
         {/* ======= Contact Section ======= */}
 

@@ -5,6 +5,7 @@ import Dashboard from './Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useEffect, useState } from 'react'
 import { LoginScreen } from './Login'
+import Setting from './components/Setting'
 
 function Layout({ children }) {
   const location = useLocation();
@@ -237,6 +238,7 @@ function App() {
               <Dashboard />
             </ProtectedRoute>
           } />
+          <Route path="/setting" element={ <Setting /> } />
         </Routes>
       </Layout>
     </Router>

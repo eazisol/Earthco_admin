@@ -9299,12 +9299,12 @@ label {
 
 .nav-header {
   height: 3.125rem;
-  width: 15rem;
+  width: 16rem;
   display: inline-block;
   text-align: left;
   position: absolute;
   top: 0;
-  background-color: var(--nav-headbg);
+  background-color:#242424;
   transition: all .2s ease;
   z-index: 5; }
   .nav-header .logo-compact {
@@ -9481,13 +9481,38 @@ label {
     display: none; }
   [data-sidebar-style="modern"][data-layout="vertical"] .nav-header .logo-compact {
     display: none; }
+/* Sidebar base style */
+.deznav {
+  width: 220px;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+.menu-toggle .deznav .menu-title {
+  display: none;
+}
+
+/* Collapsed state (only icons visible) */
+.menu-toggle .deznav {
+  width: 74px;
+}
+
+/* Hide text in nav when collapsed */
+.menu-toggle .deznav .nav-text {
+  display: none;
+}
+
+/* Optional: center the icons when collapsed */
+.menu-toggle .deznav .menu-icon {
+  margin: auto;
+}
+
 
 .header {
   height: 3.125rem;
   z-index: 1;
   position: relative;
   padding: 0rem;
-  background: var(--headerbg);
+  background: #242424;
   z-index: 3;
   padding-left: 15rem;
   padding-top: 0rem;
@@ -12307,7 +12332,15 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   @media only screen and (max-width: 47.9375rem) {
     .content-body {
       padding-right: 0rem; } }
+.content-body {
+  margin-left: 220px;
+  transition: all 0.3s ease;
+}
 
+/* When sidebar is collapsed */
+.menu-toggle .content-body {
+  margin-left: 60px;
+}
 .bell img {
   -webkit-animation: ring 8s .7s ease-in-out infinite;
   -webkit-transform-origin: 50% 0.25rem;
@@ -12464,9 +12497,49 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     transform: rotate(0); }
   100% {
     transform: rotate(0); } }
+/* When sidebar is collapsed, hide or shrink logo */
+.menu-toggle .sidebar-logo {
+  width: 30px;
+  margin-left: 0; /* adjust spacing if needed */
+  transition: all 0.3s ease;
+}
+.menu-toggle .sidebar-logo {
+  display: block;
+  margin: 10px auto;
+}
+/* Default full logo */
+.sidebar-logo {
+  transition: all 0.3s ease;
+  margin-left: 22%;
+}
+/* Default (expanded sidebar) */
+.nav-header {
+  transition: all 0.3s ease;
+}
+
+/* Collapsed (when menu-toggle is active on wrapper) */
+.menu-toggle .nav-header {
+  width: 74px;
+}
+
+/* Collapsed sidebar */
+.menu-toggle .sidebar-logo {
+  width: 35px; /* Or whatever small size you want */
+  margin-left: 0;
+}
+/* Default expanded sidebar */
+.header {
+  margin-left: 220px;
+  transition: all 0.3s ease;
+}
+
+/* Collapsed sidebar */
+.menu-toggle .header {
+  margin-left: 60px;
+}
 
 .deznav {
-  width: 15rem;
+  width: 16rem;
   padding-bottom: 10px;
   height: calc(100% - 3.125rem);
   position: absolute;

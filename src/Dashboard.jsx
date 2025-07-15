@@ -77,7 +77,7 @@ function Dashboard() {
             Here’s your tenant information:
           </p>
           <div style={{ marginBottom: "12px" }}>
-            <strong>Name:</strong> {tenant?.Name || "N/A"}
+            <strong>Name:</strong> {tenant?.Name }
           </div>
           {tenant?.SubDomain ? (
             <button
@@ -105,7 +105,7 @@ function Dashboard() {
               Sub Domain
             </button>
           ) : (
-            "N/A"
+            ""
           )}
         </div>
       </div>
