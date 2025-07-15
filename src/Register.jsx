@@ -28,7 +28,7 @@ function Register() {
 
   return (
     <>
-      <HeroSection />
+      {/* <HeroSection /> */}
       <LoginForm />
     </>
   );

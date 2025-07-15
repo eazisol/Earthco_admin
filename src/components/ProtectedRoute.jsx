@@ -5,7 +5,7 @@ import { useAppContext } from '../context/AppContext';
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAppContext();
 
-  if (!isAuthenticated) {
+  if (isAuthenticated) {
     // Redirect to register page if not authenticated
     return <Navigate to="/register" replace />;
   }

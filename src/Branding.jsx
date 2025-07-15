@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import {
   CustomButton,
@@ -6,9 +6,62 @@ import {
   CustomButtonRec,
 } from "./components/CustomButton";
 import { useNavigate } from "react-router";
-import HeroSection from './components/HeroSection';
+import HeroSection from "./components/HeroSection";
+
 function Branding() {
   let navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const [errors, setErrors] = useState({});
+  console.log("🚀 ~ Branding ~ errors:", errors)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  console.log("🚀 ~ Branding ~ isSubmitting:", isSubmitting)
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters long";
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+  };
+
   useEffect(() => {
     const preloader = document.getElementById("preloader");
     if (preloader) {
@@ -35,14 +88,10 @@ function Branding() {
   }, []);
   return (
     <>
-
-
       {/* ======= Hero Section ======= */}
       <HeroSection />
 
       <main id="main">
-      
-
         {/* ======= About Us Section ======= */}
         <section id="about" className="about">
           <div className="container" data-aos="fade-up">
@@ -52,7 +101,7 @@ function Branding() {
             <div className="row content">
               <div className="col-lg-6">
                 <p className="text-start">
-                  Welcome to EarthCo Landscape, where we transform outdoor
+                  Welcome to Earthco Landscape, where we transform outdoor
                   spaces into stunning, sustainable landscapes that enhance both
                   beauty and functionality.
                 </p>
@@ -107,7 +156,7 @@ function Branding() {
             <div className="section-title">
               <h2>Services</h2>
               <p>
-                At EarthCo Landscape, we offer comprehensive landscaping
+                At Earthco Landscape, we offer comprehensive landscaping
                 solutions tailored to your needs. Our expert team delivers
                 professional services ranging from design and installation to
                 maintenance and sustainability consulting, ensuring your outdoor
@@ -189,7 +238,7 @@ function Branding() {
                   landscape of your dreams.
                 </p>
               </div>
-            
+
               <div className="col-lg-3 cta-btn-container text-center">
                 <CustomButton text="Call To Action" />
               </div>
@@ -205,122 +254,116 @@ function Branding() {
               <p>
                 At Earthco, we believe in honest pricing with no hidden fees.
                 Our flexible service packages are designed to give you the best
-                value — whether you're upgrading your outdoor space or need
-                regular maintenance.
+                value — whether you're managing a single business or multiple
+                operations through QuickBooks.
               </p>
             </div>
 
             <div className="row">
+              {/* Basic Plan */}
               <div
                 className="col-lg-4 text-start"
                 data-aos="fade-up"
                 data-aos-delay="100"
               >
                 <div className="box">
-                  <h3>Free Plan</h3>
+                  <h3>Basic</h3>
                   <h4>
-                    <sup>$</sup>0<span className="per-month">per month</span>
+                    <sup>$</sup>15<span className="per-month">per month</span>
                   </h4>
                   <ul>
                     <li>
-                      <i className="bx bx-check"></i> Quam adipiscing vitae
-                      proin
+                      <i className="bx bx-check"></i> 1 Company Account
                     </li>
                     <li>
-                      <i className="bx bx-check"></i> Nec feugiat nisl pretium
+                      <i className="bx bx-check"></i> 1 QuickBooks Integration
                     </li>
                     <li>
-                      <i className="bx bx-check"></i> Nulla at volutpat diam
-                      uteera
+                      <i className="bx bx-check"></i> Access to Core Features
                     </li>
                     <li className="na">
                       <i className="bx bx-x"></i>{" "}
-                      <span>Pharetra massa massa ultricies</span>
+                      <span>Multi-Company Dashboard</span>
                     </li>
                     <li className="na">
                       <i className="bx bx-x"></i>{" "}
-                      <span>Massa ultricies mi quis hendrerit</span>
+                      <span>Advanced Reporting Tools</span>
                     </li>
                   </ul>
-                  <CustomButton onClick={()=> navigate("/register")}/>
+                  <CustomButton onClick={() => navigate("/register")} />
                 </div>
               </div>
 
+              {/* Standard Plan */}
               <div
                 className="col-lg-4 mt-4 mt-lg-0 text-start"
                 data-aos="fade-up"
                 data-aos-delay="200"
               >
                 <div className="box featured">
-                  <h3>Business Plan</h3>
+                  <h3>Standard</h3>
                   <h4>
                     <sup>$</sup>29<span className="per-month">per month</span>
                   </h4>
                   <ul>
                     <li>
-                      <i className="bx bx-check"></i> Quam adipiscing vitae
-                      proin
+                      <i className="bx bx-check"></i> 3 Company Accounts
                     </li>
                     <li>
-                      <i className="bx bx-check"></i> Nec feugiat nisl pretium
+                      <i className="bx bx-check"></i> 3 QuickBooks Integrations
                     </li>
                     <li>
-                      <i className="bx bx-check"></i> Nulla at volutpat diam
-                      uteera
+                      <i className="bx bx-check"></i> Access to All Core
+                      Features
                     </li>
                     <li>
-                      <i className="bx bx-check"></i> Pharetra massa massa
-                      ultricies
+                      <i className="bx bx-check"></i> Multi-Company Dashboard
                     </li>
-                    <li>
-                      <i className="bx bx-check"></i> Massa ultricies mi quis
-                      hendrerit
+                    <li className="na">
+                      <i className="bx bx-x"></i> <span>Priority Support</span>
                     </li>
                   </ul>
-                  <CustomButtonGreen  onClick={()=> navigate("/register")}/>
+                  <CustomButtonGreen onClick={() => navigate("/register")} />
                 </div>
               </div>
 
+              {/* Premium Plan */}
               <div
                 className="col-lg-4 mt-4 mt-lg-0 text-start"
                 data-aos="fade-up"
                 data-aos-delay="300"
               >
                 <div className="box">
-                  <h3>Developer Plan</h3>
+                  <h3>Premium</h3>
                   <h4>
                     <sup>$</sup>49<span className="per-month">per month</span>
                   </h4>
                   <ul>
                     <li>
-                      <i className="bx bx-check"></i> Quam adipiscing vitae
-                      proin
+                      <i className="bx bx-check"></i> 5 Company Accounts
                     </li>
                     <li>
-                      <i className="bx bx-check"></i> Nec feugiat nisl pretium
+                      <i className="bx bx-check"></i> 5 QuickBooks Integrations
                     </li>
                     <li>
-                      <i className="bx bx-check"></i> Nulla at volutpat diam
-                      uteera
+                      <i className="bx bx-check"></i> All Features from Standard
                     </li>
                     <li>
-                      <i className="bx bx-check"></i> Pharetra massa massa
-                      ultricies
+                      <i className="bx bx-check"></i> Advanced Reporting Tools
                     </li>
                     <li>
-                      <i className="bx bx-check"></i> Massa ultricies mi quis
-                      hendrerit
+                      <i className="bx bx-check"></i> Priority Support
                     </li>
                   </ul>
-               
-                  <CustomButton  onClick={()=> navigate("/register")}/>
+                  <CustomButton onClick={() => navigate("/register")} />
                 </div>
               </div>
             </div>
           </div>
         </section>
+
         {/* ======= Contact Section ======= */}
-       
+
         <section id="contact" className="contact">
           <div className="container" data-aos="fade-up">
             <div className="section-title">
@@ -359,31 +402,49 @@ function Branding() {
               </div>
               <div className="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch text-start">
                 <form
-                  action="forms/contact.php"
-                  method="post"
-                  role="form"
+                  onSubmit={handleSubmit}
+                 
                   className="php-email-form"
+                  
                 >
                   <div className="row">
                     <div className="form-group col-md-6">
-                      <label htmlFor="name">Your Name</label>
+                      <label htmlFor="name">
+                        Your Name <span className="text-danger">*</span>
+                      </label>
                       <input
                         type="text"
                         name="name"
-                        className="form-control"
+                        className={`form-control ${
+                          errors.name ? "is-invalid" : ""
+                        }`}
                         id="name"
-                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Enter your full name"
                       />
+                      {errors.name && (
+                        <div className="invalid-feedback">{errors.name}</div>
+                      )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label htmlFor="email">Your Email</label>
+                      <label htmlFor="email">
+                        Your Email <span className="text-danger">*</span>
+                      </label>
                       <input
                         type="email"
-                        className="form-control"
                         name="email"
+                        className={`form-control ${
+                          errors.email ? "is-invalid" : ""
+                        }`}
                         id="email"
-                        required
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Enter your email address"
                       />
+                      {errors.email && (
+                        <div className="invalid-feedback">{errors.email}</div>
+                      )}
                     </div>
                   </div>
                   <div className="form-group">
@@ -393,7 +454,7 @@ function Branding() {
                       className="form-control"
                       name="subject"
                       id="subject"
-                      required
+                    
                     />
                   </div>
                   <div className="form-group">
@@ -402,7 +463,7 @@ function Branding() {
                       className="form-control"
                       name="message"
                       rows="10"
-                      required
+                 
                     ></textarea>
                   </div>
                   <div className="my-3">
@@ -413,7 +474,13 @@ function Branding() {
                     </div>
                   </div>
                   <div className="text-center">
-                    <CustomButtonGreen text="Send Message" type="submit" />
+                    <CustomButtonGreen
+                      text={
+                        isSubmitting ? "Creating Account..." : "Contact Us"
+                      }
+                      type="submit"
+                      disabled={isSubmitting}
+                    />
                   </div>
                 </form>
               </div>
@@ -423,7 +490,6 @@ function Branding() {
       </main>
 
       {/* ======= Footer ======= */}
-      
 
       <div id="preloader"></div>
       <a

@@ -4,20 +4,14 @@ import Register from './Register'
 import Dashboard from './Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useEffect, useState } from 'react'
+import { LoginScreen } from './Login'
 
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // try {
-    //   const preloader = document.getElementById('preloader');
-    //   if (preloader && preloader.parentNode) {
-    //     preloader.parentNode.removeChild(preloader);
-    //   }
-    // } catch (e) {
-    //   // ignore
-    // }
+
     const selectHeader = document.querySelector('#header');
     if (selectHeader) {
       let headerOffset = selectHeader.offsetTop;
@@ -64,6 +58,9 @@ function Layout({ children }) {
   const hideNavFooter = location.pathname.startsWith('/dashboard');
   const showNavFooter = location.pathname === '/' || location.pathname === '/register';
 
+  // Add this line to detect register page
+  const isRegisterPage = location.pathname === '/register';
+
   const handleMobileToggle = () => {
     setMobileMenuOpen((prev) => !prev);
   };
@@ -71,10 +68,10 @@ function Layout({ children }) {
   return (
     <>
       {showNavFooter && (
-        <header id="header" className="fixed-top ">
+        <header id="header" className={`fixed-top${isRegisterPage ? ' register-navbar' : ''}`}>
           <div className="container d-flex align-items-center">
             <h1 className="logo me-auto">
-              <a href="" className="logo me-auto">
+              <a href="/#hero" className="logo me-auto">
                 <img src="/src/assets/img/favicon.svg" alt="" className="img-fluid" />
               </a>
             </h1>
@@ -112,7 +109,7 @@ function Layout({ children }) {
                     Join our newsletter to get landscaping tips, seasonal updates,
                     and exclusive offers from Earthco — straight to your inbox.
                   </p>
-                  <form action="" method="post">
+                  <form >
                     <input type="email" name="email" />
                     <input type="submit" value="Subscribe" />
                   </form>
@@ -147,15 +144,19 @@ function Layout({ children }) {
                   <h4>Quick Navigation</h4>
                   <ul>
                     <li>
-                      <i className="bx bx-chevron-right"></i> <a href="#">Home</a>
+                      <i className="bx bx-chevron-right"></i> <a href="/#">Home</a>
                     </li>
                     <li>
                       <i className="bx bx-chevron-right"></i>{" "}
-                      <a href="#about">About us</a>
+                      <a href="/#about">About us</a>
                     </li>
                     <li>
                       <i className="bx bx-chevron-right"></i>{" "}
-                      <a href="#services">Services</a>
+                      <a href="/#services">Services</a>
+                    </li>
+                    <li>
+                      <i className="bx bx-chevron-right"></i>{" "}
+                      <a href="/#pricing">Pricing</a>
                     </li>
                     <li>
                       <i className="bx bx-chevron-right"></i>{" "}
@@ -190,12 +191,7 @@ function Layout({ children }) {
                     >
                       <i className="bx bxl-linkedin"></i>
                     </a>
-                    <a href="#" className="twitter">
-                      <i className="bx bxl-twitter"></i>
-                    </a>
-                    <a href="#" className="google-plus">
-                      <i className="bx bxl-skype"></i>
-                    </a>
+                   
                   </div>
                 </div>
               </div>
@@ -204,9 +200,8 @@ function Layout({ children }) {
           <div className="container footer-bottom clearfix">
             <div className="copyright">
               &copy; Copyright{" "}
-              <strong>
-                <span>2024 EARTHCO COMMERCIAL LANDSCAPE</span>
-              </strong>
+          
+                <span>2025 EARTHCO COMMERCIAL LANDSCAPE</span>
               . All Rights Reserved
             </div>
             <div className="credits">
@@ -236,6 +231,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Branding />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<LoginScreen />} />
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />

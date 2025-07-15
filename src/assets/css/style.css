@@ -9,11 +9,14 @@
 # General
 --------------------------------------------------------------*/
 :root {
-  --primary-green: #3A7D0E;
+  /* --primary-green: #3A7D0E;
   --navbar-bg: rgba(30, 60, 15, 0.9); 
+  --nav-active-color: #BFFF00; */
+  --primary-green: #6DA34D;       /* Deep Leaf Green */
+--navbar-bg: rgba(20, 40, 10, 0.9); /* Darker Olive */
+--nav-active-color: 	#B5FF75;    /* Soft Lime Green */
   --button-color: white;
   --nav-text-color: white;
-  --nav-active-color: #BFFF00;
   --error-message: #dc3545;
 }
 
@@ -32,7 +35,15 @@ a:hover {
   text-decoration: none; 
   transition: all 0.3s ease;
 }
-
+.login-screen {
+ 
+  z-index: 9999;
+  min-height: 100vh;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.15); /* Optional: for overlay effect */
+}
 h1, h2, h3, h4, h5, h6 ,p{
   font-family:"Open Sans", sans-serif;
 }
@@ -83,7 +94,13 @@ h1, h2, h3, h4, h5, h6 ,p{
     transform: rotate(360deg);
   }
 }
-
+#main-wrapper {
+  opacity: 0;
+  transition: all 0.25s ease-in;
+  position: relative; }
+  #main-wrapper.show {
+    opacity: 1; }
+    
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/
@@ -403,7 +420,7 @@ h1, h2, h3, h4, h5, h6 ,p{
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(30, 60, 15, 0.7);
+  background: rgba(69, 87, 61, 0.7);
   z-index: 1;
 }
 
@@ -579,7 +596,7 @@ section {
 .section-title {
   text-align: center;
   padding-bottom: 30px;
-  
+  margin-top: 4%;
 }
 
 .section-title h2 {
@@ -1488,7 +1505,8 @@ font-size: 20px;
   float: left;
   width: 44px;
   height: 44px;
-  background: #e7f5fb;
+  /* background: #e7f5fb; */
+  background: #D1FFBD;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1533,10 +1551,10 @@ font-size: 20px;
   margin-right: 10px;
 }
 
-.contact .info .social-links a:hover {
+/* .contact .info .social-links a:hover {
   background: var(--primary-green);
   color: #fff;
-}
+} */
 
 .contact .info .email:hover i, .contact .info .address:hover i, .contact .info .phone:hover i {
   background: var(--primary-green);
@@ -1607,13 +1625,13 @@ font-size: 20px;
   animation: animate-loading 1s linear infinite;
 }
 
-.contact .php-email-form .form-group {
+/* .contact .php-email-form .form-group {
   margin-bottom: 20px;
-}
+} */
 
-.contact .php-email-form label {
+/* .contact .php-email-form label {
   padding-bottom: 8px;
-}
+} */
 
 .contact .php-email-form input, .contact .php-email-form textarea {
   border-radius: 0;
@@ -1993,4 +2011,10 @@ font-size: 20px;
   .login-image-container {
     min-height: 250px;
   }
+}
+
+/* Register page navbar background */
+.register-navbar {
+  background: var(--primary-green) !important; /* darker green, adjust as needed */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
 }
