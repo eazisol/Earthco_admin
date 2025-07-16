@@ -3690,7 +3690,10 @@ textarea.form-control-lg {
     padding-right: var(--bs-breadcrumb-item-padding-x);
     color: var(--bs-breadcrumb-divider-color);
     content: var(--bs-breadcrumb-divider, "https://w3crm.dexignzone.com/") /* rtl: var(--bs-breadcrumb-divider, "/") */; }
-
+.breadcrumb .breadcrumb-item{
+margin-left: 10px;
+}
+           
 .breadcrumb-item.active {
   color: var(--bs-breadcrumb-item-active-color); }
 
@@ -9299,7 +9302,7 @@ label {
 
 .nav-header {
   height: 3.125rem;
-  width: 16rem;
+  width: 15rem;
   display: inline-block;
   text-align: left;
   position: absolute;
@@ -12326,14 +12329,14 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   top: 0.625rem; }
 
 .content-body {
-  margin-left: 15rem;
+  margin-left: 15rem ;
   z-index: 0;
   transition: all .2s ease; }
   @media only screen and (max-width: 47.9375rem) {
     .content-body {
       padding-right: 0rem; } }
 .content-body {
-  margin-left: 220px;
+  margin-left: 210px;
   transition: all 0.3s ease;
 }
 
@@ -12341,6 +12344,20 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 .menu-toggle .content-body {
   margin-left: 60px;
 }
+.subMenu {
+  height: 2px;
+  width: 5%;
+  background-color: #77993d;
+  transition: width 0.3s ease;
+  margin-right: 8px;
+  margin-left: 15px;
+}
+
+.submenu-link:hover .subMenu,
+.submenu-link.active .subMenu {
+  width: 10%;
+}
+
 .bell img {
   -webkit-animation: ring 8s .7s ease-in-out infinite;
   -webkit-transform-origin: 50% 0.25rem;
@@ -12529,7 +12546,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 }
 /* Default expanded sidebar */
 .header {
-  margin-left: 220px;
+  margin-left: 210px;
   transition: all 0.3s ease;
 }
 
@@ -12539,7 +12556,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 }
 
 .deznav {
-  width: 16rem;
+  width: 15rem;
   padding-bottom: 10px;
   height: calc(100% - 3.125rem);
   position: absolute;
@@ -12660,8 +12677,8 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     .deznav .metismenu .menu-title {
       font-size: 0.75rem;
       font-weight: 400;
-      padding: 8px 0px 10px 20.6px;
-      color: var(--primary); }
+      
+     }
       .deznav .metismenu .menu-title:not(:first-child) {
         margin-top: 10px; }
     .deznav .metismenu ul {

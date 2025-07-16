@@ -11,7 +11,8 @@ import './assets/vendor/remixicon/remixicon.css'
 import './assets/vendor/swiper/swiper-bundle.min.css'
 import './assets/vendor/aos/aos.css'
 import './assets/css/style.css'
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import App from './App.jsx'
 import { AppProvider } from './context/AppContext.jsx'
 

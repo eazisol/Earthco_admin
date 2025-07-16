@@ -5,7 +5,13 @@ import Dashboard from './Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
 import { useEffect, useState } from 'react'
 import { LoginScreen } from './Login'
-import Setting from './components/Setting'
+import { PackagesScreen } from './components/Packages'
+import { TenantScreen } from './components/TenantUser'
+import { TransactionsScreen } from './components/Transactions'
+import { EmailScreen } from './components/Setting/emailSetting'
+import { QBookScreen } from './components/Setting/QBook'
+import { CompanyScreen } from './components/Setting/Company'
+import { GoogleMapScreen } from './components/Setting/googleMap'
 
 function Layout({ children }) {
   const location = useLocation();
@@ -238,7 +244,14 @@ function App() {
               <Dashboard />
             </ProtectedRoute>
           } />
-          <Route path="/setting" element={ <Setting /> } />
+          <Route path="/package" element={ <PackagesScreen /> } />
+          <Route path="/tenant" element={ <TenantScreen /> } />
+          <Route path="/transaction" element={ <TransactionsScreen /> } />
+          <Route path="/email" element={ <EmailScreen /> } />
+          <Route path="/qb" element={ <QBookScreen /> } />
+          <Route path="/company" element={ <CompanyScreen /> } />
+          <Route path="/google-map" element={ <GoogleMapScreen /> } />
+
         </Routes>
       </Layout>
     </Router>
