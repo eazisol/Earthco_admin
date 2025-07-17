@@ -9391,8 +9391,12 @@ h1, .h1, .h1, h2, .h2, .h2, h3, .h3, .h3, h4, .h4, .h4, h5, .h5, .h5, h6, .h6, .
   border-radius: 0.375rem !important; }
 
 label {
-  margin-bottom: 0.5rem; }
-
+  margin-bottom: 0rem !important;
+ }
+.css-2s8ubb-MuiFormHelperText-root.Mui-error{
+  margin-top: -1px !important;
+  margin-left: 1px !important;
+}
 @keyframes gXGDoR {
   from {
     -webkit-transform: translateY(5px) scale(0.8);
@@ -12777,7 +12781,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 }
 /* Default expanded sidebar */
 .header {
-  margin-left: 210px;
+  margin-left: 202px;
   transition: all 0.3s ease;
 }
 
@@ -13043,7 +13047,22 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   .deznav {
     left: 0;
     top: 3.2rem; } }
-
+@media (max-width: 900px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .header-right {
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .header-info2 {
+    display: none !important;
+  }
+}
 .extra-menu-area + .show-more-btn .show-less {
   display: none; }
 

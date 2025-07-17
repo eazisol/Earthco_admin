@@ -1,6 +1,6 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import image from "../../assets/img/team/team-1.jpg";
-import { TextField } from "@mui/material";
+import { FormControl, MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
 import { Offcanvas } from "bootstrap";
 
@@ -51,12 +51,16 @@ export const EmailScreen = () => {
   const [selectedId, setSelectedId] = useState(0);
   const [openForm, setOpenForm] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    maxUser: "",
-    maxStorage: "",
-    monthlyPrice: "",
-    maxCompanies: "",
+    Email: "",
+    EmailPassword: "",
+    EmailPort: "",
+    EmailSSL: false,
+    EmailHost: "",
+    EmailClientId: "",
+    EmailClientSecret: "",
+    EmailMode: 1,
   });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -150,60 +154,128 @@ export const EmailScreen = () => {
             {/* <form > */}
             <div class="row">
               <div className="col-xl-6 mb-3">
-                <label className="form-label">Name</label>
+                <label className="form-label">Email Address</label>
                 <TextField
-                  className="form-control form-control-sm"
-                  name="name"
-                  value={formData.name}
+                  name="Email"
+                  value={formData.Email}
                   onChange={handleInputChange}
                   size="small"
-                />
-              </div>
-              <div class="col-xl-6 mb-3">
-                <label class="form-label">Max User</label>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="maxUser"
-                  value={formData.maxUser}
-                  onChange={handleInputChange}
-                  size="small"
+                  fullWidth
                 />
               </div>
 
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Max Storage<span class="text-danger">*</span>
-                </label>
+              <div className="col-xl-6 mb-3">
+                <label className="form-label">Email Password</label>
                 <TextField
-                  className="form-control form-control-sm"
-                  name="maxStorage"
-                  value={formData.maxStorage}
+                  name="EmailPassword"
+                  type="password"
+                  value={formData.EmailPassword}
                   onChange={handleInputChange}
                   size="small"
+                  fullWidth
                 />
               </div>
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Monthly Price<span class="text-danger">*</span>
-                </label>
+
+              <div className="col-xl-6 mb-3">
+                <label className="form-label">Email Port</label>
                 <TextField
-                  className="form-control form-control-sm"
-                  name="monthlyPrice"
-                  value={formData.monthlyPrice}
+                  name="EmailPort"
+                  value={formData.EmailPort}
                   onChange={handleInputChange}
                   size="small"
+                  fullWidth
                 />
               </div>
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Max Companies<span class="text-danger">*</span>
-                </label>
+
+              {/* <div className="col-xl-6 mb-3">
+                <label className="form-label">Use SSL</label>
+                <select
+                  className="form-select form-select-sm"
+                  name="EmailSSL"
+                  value={formData.EmailSSL ? "true" : "false"}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      EmailSSL: e.target.value === "true",
+                    }))
+                  }
+                >
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div> */}
+               <div className="col-xl-6 mb-3">
+<FormControl fullWidth>
+                  <label className="form-label">
+                    Package<span className="text-danger">*</span>
+                  </label>
+                  <Select
+                    name="EmailSSL"
+                    value={formData.EmailSSL ? "true" : "false"}
+                   onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      EmailSSL: e.target.value === "true",
+                    }))
+                  }
+                    style={{ height: "2.5rem" }}
+                  >
+                    <MenuItem value="true"> Yes</MenuItem>
+                    <MenuItem value='false'> No</MenuItem>
+                    {/* {packageOptions.map((option) => (
+                      <MenuItem
+                        key={option.PackageTypeId}
+                        value={option.PackageTypeId}
+                        // disabled={option.disabled || false}
+                      >
+                        {option.Package}
+                      </MenuItem>
+                    ))} */}
+                  </Select>
+                </FormControl></div>
+              <div className="col-xl-6 mb-3">
+                <label className="form-label">Email Host</label>
                 <TextField
-                  className="form-control form-control-sm"
-                  name="maxCompanies"
-                  value={formData.maxCompanies}
+                  name="EmailHost"
+                  value={formData.EmailHost}
                   onChange={handleInputChange}
                   size="small"
+                  fullWidth
+                />
+              </div>
+
+              <div className="col-xl-6 mb-3">
+                <label className="form-label">Email Client ID</label>
+                <TextField
+                  name="EmailClientId"
+                  value={formData.EmailClientId}
+                  onChange={handleInputChange}
+                  size="small"
+                  fullWidth
+                />
+              </div>
+
+              <div className="col-xl-6 mb-3">
+                <label className="form-label">Email Client Secret</label>
+                <TextField
+                  name="EmailClientSecret"
+                  type="password"
+                  value={formData.EmailClientSecret}
+                  onChange={handleInputChange}
+                  size="small"
+                  fullWidth
+                />
+              </div>
+
+              <div className="col-xl-6 mb-3">
+                <label className="form-label">Email Mode</label>
+                <TextField
+                  name="EmailMode"
+                  value={formData.EmailMode}
+                  onChange={handleInputChange}
+                  size="small"
+                  fullWidth
+                  type="number"
                 />
               </div>
             </div>

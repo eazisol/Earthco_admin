@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppContext } from "./context/AppContext";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "./components/DashboardLayout/DashboardLayout";
+import { getTenantById } from "./APIS/auth";
 function Dashboard() {
   const { user, logout } = useAppContext();
   const navigate = useNavigate();
@@ -9,29 +10,34 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    
-    console.log("🚀 ~ useEffect ~ user:", user)
 
-    const fetchTenant = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(
-          `https://admin.earthcoapp.com/admin/api/Tenant/GetTenant?id=${user.TenantId}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch tenant");
-        const data = await response.json();
+useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const fetchTenant = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await getTenantById(user?.Data?.TenantId, user.token.data);
+
+      if (!data.error) {
         setTenant(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      } else {
+        setError(data.message);
       }
-    };
+    } catch (err) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (user?.Data?.TenantId) {
     fetchTenant();
-  }, []);
+  }
+}, []);
+
 
   const handleLogout = () => {
     logout();
@@ -77,7 +83,7 @@ function Dashboard() {
             Here’s your tenant information:
           </p>
           <div style={{ marginBottom: "12px" }}>
-            <strong>Name:</strong> {tenant?.Name }
+            <strong>Name:</strong> {tenant?.CompanyName }
           </div>
           {tenant?.SubDomain ? (
             <button

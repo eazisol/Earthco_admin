@@ -1,77 +1,43 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import image from "../../assets/img/team/team-1.jpg";
-import { TextField } from "@mui/material";
-import { useState } from "react";
+import {
+  CircularProgress,
+  FormControl,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
-// import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
+import {
+  addPackage,
+  deletePackage,
+  getPackages,
+  getPackagesType,
+} from "../../APIS/packages";
 export const PackagesScreen = () => {
-  const employees = [
-    {
-      id: 1001,
-      name: "Liam Antony",
-      maxUser: 20,
-      maxStorage: 3,
-      monthlyPrice: 5,
-      maxCompanies: 23,
-    },
-    {
-      id: 1002,
-      name: "Noah Oliver",
-      maxUser: 20,
-      maxStorage: 3,
-      monthlyPrice: 5,
-      maxCompanies: 23,
-    },
-    {
-      id: 1003,
-      name: "Elijah James",
-      maxUser: 20,
-      maxStorage: 3,
-      monthlyPrice: 5,
-      maxCompanies: 23,
-    },
-    {
-      id: 1004,
-      name: "James Antony",
-      maxUser: 20,
-      maxStorage: 3,
-      monthlyPrice: 5,
-      maxCompanies: 23,
-    },
-    {
-      id: 1005,
-      name: "William Sokli",
-      maxUser: 20,
-      maxStorage: 3,
-      monthlyPrice: 5,
-      maxCompanies: 23,
-    },
-  ];
-  const [content, setContent] = useState("");
-// const [value, setValue] = useState('');
-  const [employeesData, setEmployeesData] = useState(employees);
+  const [packageOptions, setPackageOptions] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [employeesData, setEmployeesData] = useState([]);
+  console.log("🚀 ~ PackagesScreen ~ employeesData:", employeesData)
   const [selectedId, setSelectedId] = useState(0);
   const [openForm, setOpenForm] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [formData, setFormData] = useState({
+    PackageId: selectedId,
     name: "",
     maxUser: "",
-    maxStorage: "",
-    monthlyPrice: "",
+    MaxStorageMB: "",
+    Price: "",
     maxCompanies: "",
+    PackageTypeId: 0,
+    Description: "Test",
   });
-  const handleChange = (value) => {
-    setContent(value);
-  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    const numericFields = [
-      "maxUser",
-      "maxStorage",
-      "monthlyPrice",
-      "maxCompanies",
-    ];
+    const numericFields = ["maxUser", "MaxStorageMB", "Price", "maxCompanies"];
 
     if (numericFields.includes(name)) {
       const isValid = /^\d*$/.test(value);
@@ -83,38 +49,103 @@ export const PackagesScreen = () => {
       [name]: value,
     }));
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoader(true);
 
-    if (selectedId === 0) {
-      const newId = Math.max(...employeesData.map((emp) => emp.id)) + 1;
-      setEmployeesData([
-        ...employeesData,
-        {
-          ...formData,
-        },
-      ]);
-    } else {
-      const updated = employeesData.map((emp) =>
-        emp.id === selectedId ? { ...emp, ...formData } : emp
-      );
-      setEmployeesData(updated);
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.maxUser) newErrors.maxUser = "Max User is required";
+    if (!formData.MaxStorageMB)
+      newErrors.MaxStorageMB = "Max Storage is required";
+    if (!formData.Price) newErrors.Price = "Price is required";
+    if (!formData.maxCompanies)
+      newErrors.maxCompanies = "Max Companies is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setLoader(false);
+      return;
     }
-    const offcanvasEl = document.getElementById("offcanvasExample");
-    const bsOffcanvas =
-      Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
-    bsOffcanvas.hide();
 
-    setOpenForm(false);
-    setFormData({
-      name: "",
-      maxUser: "",
-      maxStorage: "",
-      monthlyPrice: "",
-      maxCompanies: "",
+    setErrors({}); // Clear errors
+
+    const obj = {
+      ...formData,
+      PackageId: selectedId,
+      Description: "Test",
+    };
+
+    try {
+      const response = await addPackage(obj);
+
+      if (response.status === 200) {
+        const offcanvasEl = document.getElementById("offcanvasExample");
+        const bsOffcanvas =
+          Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
+        bsOffcanvas.hide();
+
+        setOpenForm(false);
+        setFormData({
+          name: "",
+          maxUser: "",
+          maxStorage: "",
+          monthlyPrice: "",
+          maxCompanies: "",
+          MaxStorageMB: "",
+          Price: "",
+          PackageTypeId: "",
+        });
+        setSelectedId(0);
+        fetchPackages();
+      } else {
+      }
+    } catch (error) {
+    } finally {
+      setLoader(false);
+    }
+  };
+  const fetchPackages = async () => {
+    setLoader(true);
+    const response = await getPackages({
+      Search: "",
+      DisplayStart: 1,
+      DisplayLength: 10,
     });
-    setSelectedId(0);
+    
+      setEmployeesData(response);
+
+      setLoader(false);
+  
+  };
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    fetchPackages();
+    const fetchTenant = async () => {
+      try {
+        const data = await getPackagesType(user.token.data);
+        setPackageOptions(data);
+      } catch (err) {}
+    };
+
+    if (user.token.data) {
+      fetchTenant();
+    }
+  }, []);
+
+  const handleDelete = async () => {
+    try {
+      const response = await deletePackage(selectedId);
+      if (response?.status == 200) {
+        const offcanvasEl = document.getElementById("offcanvasExample");
+        const bsOffcanvas =
+          Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
+        bsOffcanvas.hide();
+        setSelectedId(0);
+        fetchPackages();
+        setOpenForm(false);
+      }
+    } catch (error) {}
   };
 
   return (
@@ -139,6 +170,7 @@ export const PackagesScreen = () => {
               bsOffcanvas.hide();
 
               setSelectedId(0);
+              setErrors({});
               setFormData({
                 name: "",
                 maxUser: "",
@@ -163,16 +195,21 @@ export const PackagesScreen = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   size="small"
+                  error={!!errors.name}
+                  helperText={errors.name}
                 />
               </div>
               <div class="col-xl-6 mb-3">
                 <label class="form-label">Max User</label>
+
                 <TextField
                   className="form-control form-control-sm"
                   name="maxUser"
                   value={formData.maxUser}
                   onChange={handleInputChange}
                   size="small"
+                  error={!!errors.maxUser}
+                  helperText={errors.maxUser}
                 />
               </div>
 
@@ -182,10 +219,12 @@ export const PackagesScreen = () => {
                 </label>
                 <TextField
                   className="form-control form-control-sm"
-                  name="maxStorage"
-                  value={formData.maxStorage}
+                  name="MaxStorageMB"
+                  value={formData.MaxStorageMB}
                   onChange={handleInputChange}
                   size="small"
+                  error={!!errors.MaxStorageMB}
+                  helperText={errors.MaxStorageMB}
                 />
               </div>
               <div class="col-xl-6 mb-3">
@@ -194,10 +233,12 @@ export const PackagesScreen = () => {
                 </label>
                 <TextField
                   className="form-control form-control-sm"
-                  name="monthlyPrice"
-                  value={formData.monthlyPrice}
+                  name="Price"
+                  value={formData.Price}
                   onChange={handleInputChange}
                   size="small"
+                  error={!!errors.Price}
+                  helperText={errors.Price}
                 />
               </div>
               <div class="col-xl-6 mb-3">
@@ -210,73 +251,74 @@ export const PackagesScreen = () => {
                   value={formData.maxCompanies}
                   onChange={handleInputChange}
                   size="small"
+                  error={!!errors.maxCompanies}
+                  helperText={errors.maxCompanies}
                 />
               </div>
+              <div class="col-xl-6 mb-3">
+                <FormControl fullWidth>
+                  <label className="form-label">
+                    Package<span className="text-danger">*</span>
+                  </label>
+                  <Select
+                    name="PackageTypeId"
+                    value={formData.PackageTypeId}
+                    onChange={handleInputChange}
+                    style={{ height: "2.5rem" }}
+                  >
+                    {packageOptions.map((option) => (
+                      <MenuItem
+                        key={option.PackageTypeId}
+                        value={option.PackageTypeId}
+                        // disabled={option.disabled || false}
+                      >
+                        {option.Package}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
               <div class="col-xl-12 mb-3">
-               {/* <ReactQuill theme="snow" value={value} onChange={setValue} />; */}
+                {/* <ReactQuill theme="snow" value={value} onChange={setValue} />; */}
                 {/* <h4>Output:</h4>
                 <div dangerouslySetInnerHTML={{ __html: content }} /> */}
               </div>
             </div>
-            <div>
-              <div>
-                <button className="btn btn-primary me-1" onClick={handleSubmit}>
-                  {selectedId === 0 ? "Add" : "Update"}
+            <div style={{ textAlign: "end" }}>
+              <button className="btn btn-primary me-1" onClick={handleSubmit}>
+                {selectedId === 0 ? "Add" : "Update"}
+              </button>
+              <button
+                className="btn btn-danger light ms-1"
+                onClick={() => {
+                  setOpenForm(false);
+                  setSelectedId(0);
+                  const offcanvasEl =
+                    document.getElementById("offcanvasExample");
+                  const bsOffcanvas =
+                    Offcanvas.getInstance(offcanvasEl) ||
+                    new Offcanvas(offcanvasEl);
+                  bsOffcanvas.hide();
+                  setErrors({});
+                  setFormData({
+                    name: "",
+                    maxUser: "",
+                    maxStorage: "",
+                    monthlyPrice: "",
+                    maxCompanies: "",
+                  });
+                }}
+              >
+                Cancel
+              </button>
+
+              {selectedId !== 0 && (
+                <button className="btn btn-danger ms-2" onClick={handleDelete}>
+                  Delete
                 </button>
-                <button
-                  className="btn btn-danger light ms-1"
-                  onClick={() => {
-                    setOpenForm(false);
-                    setSelectedId(0);
-                    const offcanvasEl =
-                      document.getElementById("offcanvasExample");
-                    const bsOffcanvas =
-                      Offcanvas.getInstance(offcanvasEl) ||
-                      new Offcanvas(offcanvasEl);
-                    bsOffcanvas.hide();
-
-                    setFormData({
-                      name: "",
-                      maxUser: "",
-                      maxStorage: "",
-                      monthlyPrice: "",
-                      maxCompanies: "",
-                    });
-                  }}
-                >
-                  Cancel
-                </button>
-
-                {selectedId !== 0 && (
-                  <button
-                    className="btn btn-danger ms-2"
-                    onClick={() => {
-                      setEmployeesData(
-                        employeesData.filter((emp) => emp.id !== selectedId)
-                      );
-                      setSelectedId(0);
-                      setFormData({
-                        name: "",
-                        maxUser: "",
-                        maxStorage: "",
-                        monthlyPrice: "",
-                        maxCompanies: "",
-                      });
-                      const offcanvasEl =
-                        document.getElementById("offcanvasExample");
-                      const bsOffcanvas =
-                        Offcanvas.getInstance(offcanvasEl) ||
-                        new Offcanvas(offcanvasEl);
-                      bsOffcanvas.hide();
-
-                      setOpenForm(false);
-                    }}
-                  >
-                    Delete
-                  </button>
-                )}
-              </div>
+              )}
             </div>
+
             {/* </form> */}
           </div>
         </div>
@@ -340,8 +382,8 @@ export const PackagesScreen = () => {
                           setFormData({
                             name: "",
                             maxUser: "",
-                            maxStorage: "",
-                            monthlyPrice: "",
+                            MaxStorageMB: "",
+                            Price: "",
                             maxCompanies: "",
                           });
 
@@ -365,45 +407,59 @@ export const PackagesScreen = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {employeesData.map((emp, index) => (
-                          <tr
-                            key={index}
-                            onClick={() => {
-                              setSelectedId(emp.id);
-                              setFormData({
-                                name: emp.name,
-                                maxUser: emp.maxUser || "",
-                                maxStorage: emp.maxStorage || "",
-                                monthlyPrice: emp.monthlyPrice || "",
-                                maxCompanies: emp.maxCompanies || "",
-                              });
-
-                              // Show the offcanvas properly
-                              const offcanvasEl =
-                                document.getElementById("offcanvasExample");
-                              const bsOffcanvas = new Offcanvas(offcanvasEl);
-                              bsOffcanvas.show();
-                            }}
-                          >
-                            <td>
-                              <div className="products">
-                                <h6>{emp.name}</h6>
-                              </div>
-                            </td>
-                            <td>
-                              <span>{emp.maxUser}</span>
-                            </td>
-                            <td>
-                              <span>{emp.maxStorage}</span>
-                            </td>
-                            <td>
-                              <span>{`$${emp.monthlyPrice}`}</span>
-                            </td>
-                            <td>
-                              <span>{emp.maxCompanies}</span>
+                        {loader ? (
+                          <tr>
+                            <td colSpan={5} className="text-center py-5">
+                              <CircularProgress />
                             </td>
                           </tr>
-                        ))}
+                        ) : employeesData?.length == 0 ? (
+                          <tr>
+                            <td colSpan={5} className="text-center">
+                              No data found
+                            </td>
+                          </tr>
+                        ) : (
+                          employeesData?.Data?.map((emp, index) => (
+                            <tr
+                              key={index}
+                              onClick={() => {
+                                setSelectedId(emp.PackageId);
+                                setFormData({
+                                  name: emp.Name,
+                                  maxUser: emp.MaxUser || "",
+                                  MaxStorageMB: emp.MaxStorageMB || "",
+                                  Price: emp.Price || "",
+                                  maxCompanies: emp.MaxCompanies || "",
+                                  PackageTypeId: emp.PackageTypeId,
+                                });
+
+                                const offcanvasEl =
+                                  document.getElementById("offcanvasExample");
+                                const bsOffcanvas = new Offcanvas(offcanvasEl);
+                                bsOffcanvas.show();
+                              }}
+                            >
+                              <td>
+                                <div className="products">
+                                  <h6>{emp.Name}</h6>
+                                </div>
+                              </td>
+                              <td>
+                                <span>{emp.MaxUser ?? 0}</span>
+                              </td>
+                              <td>
+                                <span>{emp.MaxStorageMB ?? 0}</span>
+                              </td>
+                              <td>
+                                <span>{`$${emp.Price || 0}`}</span>
+                              </td>
+                              <td>
+                                <span>{emp.MaxCompanies ?? 0}</span>
+                              </td>
+                            </tr>
+                          ))
+                        )}
                       </tbody>
                     </table>
                   </div>

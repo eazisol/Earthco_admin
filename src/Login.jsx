@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CustomButtonGreen } from "./components/CustomButton";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "./APIS/auth";
 
 export const LoginScreen = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -38,39 +39,29 @@ export const LoginScreen = ({ onClose }) => {
   e.preventDefault();
   setApiError("");
   if (!validateForm()) return;
+
   setIsSubmitting(true);
 
   try {
-    const response = await fetch("https://admin.earthcoapp.com/admin/api/Accounts/Login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    const response = await loginUser({
+      body: {
         Email: formData.Email,
         Password: formData.Password,
-      }),
+      },
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Login failed");
+    if (response?.error) {
+      throw new Error(response.message || "Login failed");
     }
-
-    // ✅ Save the response Data to localStorage
-    localStorage.setItem("user", JSON.stringify(data.Data));
-
-    // ✅ Optionally close modal or dialog
     if (onClose) onClose();
-
-    // ✅ Navigate to Dashboard
     navigate("/dashboard");
 
   } catch (error) {
-    setApiError(error.message);
+    setApiError(error.message || "Something went wrong");
   } finally {
     setIsSubmitting(false);
   }
 };
+
 
   return (
     <div className="  login-screen" tabIndex="-1" >

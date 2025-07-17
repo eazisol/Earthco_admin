@@ -1,10 +1,10 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import image from "../../assets/img/team/team-1.jpg";
-import { FormControl, MenuItem, Select, TextField } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
-import useApi from "../../hooks/useApi";
-import { getTenant } from "../../hooks/APIS/TenantApi";
+import { getPackages } from "../../APIS/packages";
+import { AddTenant, getTenant, getTenantRole } from "../../APIS/auth";
 
 export const TenantScreen = () => {
   const employees = [
@@ -39,72 +39,118 @@ export const TenantScreen = () => {
       entityName: "dnhey34",
     },
   ];
-  const packageOptions = [
-    { value: "", label: "Please select", disabled: true },
-    { value: 1, label: "Monthly" },
-    { value: 2, label: "Year" },
-    { value: 3, label: "Other" },
-  ];
-  useEffect(() => {
-    const data = getTenant();
-    console.log("🚀 ~ useEffect ~ data:", data);
-  }, []);
+
   const [employeesData, setEmployeesData] = useState(employees);
+  const [packagesData, setPackagesdata] = useState({});
+  const [role, setRole] = useState([]);
   const [selectedId, setSelectedId] = useState(0);
+  const [packages, setpackegs] = useState([]);
+  const [tenants, setTenants] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    package: "",
+    FirstName: "",
+    LastName: "",
+    PhoneNo: "",
+    Email: "",
     Password: "",
     confirmPassword: "",
-    entityName: "",
+    RoleId: 1,
+    SubDomain: "",
+    PackageId: 0,
+    TenantId: 0,
+    CompanyName: "",
   });
-  console.log("🚀 ~ TenantScreen ~ formData:", formData);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (selectedId === 0) {
-      // Create new
-      const newId = Math.max(...employeesData.map((emp) => emp.id)) + 1;
-      setEmployeesData([
-        ...employeesData,
-        {
-          ...formData,
-        },
-      ]);
-    } else {
-      // Update
-      const updated = employeesData.map((emp) =>
-        emp.id === selectedId ? { ...emp, ...formData } : emp
-      );
-      setEmployeesData(updated);
+    // Optional: if you want to save full selected object too
+    if (name === "PackageId") {
+      const selectedPackage = packages.find((pkg) => pkg.PackageId === value);
+      setPackagesdata(selectedPackage);
     }
-    const offcanvasEl = document.getElementById("offcanvasExample");
-    const bsOffcanvas =
-      Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
-    bsOffcanvas.hide();
-
-    setOpenForm(false);
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      entityName: "",
-    });
-    setSelectedId(0);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const {
+      confirmPassword, // exclude
+      PackageId, // exclude
+      ...filteredFormData // keep everything else
+    } = formData;
+    const obj = {
+      ...filteredFormData,
+      tblUserpackages: [
+        {
+          UserPackageId: formData?.PackageId,
+          PackageId: packagesData?.PackageId,
+          TenantId: formData?.TenantId,
+          Name: packagesData?.Name,
+          PackageTypeId: packagesData?.PackageTypeId,
+          MaxUsers: packagesData?.MaxUser,
+          MaxStorageMB: packagesData?.MaxStorageMB,
+          MaxCompanies: packagesData?.MaxCompanies,
+          Price: packagesData?.Price,
+        },
+      ],
+    };
+    try {
+      const data = await AddTenant(obj);
+      if (data.status === 200) {
+        const offcanvasEl = document.getElementById("offcanvasExample");
+        const bsOffcanvas =
+          Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
+        bsOffcanvas.hide();
+      }
+      setFormData({
+        FirstName: "",
+        LastName: "",
+        PhoneNo: "",
+        Email: "",
+        Password: "",
+        confirmPassword: "",
+        RoleId: 1,
+        SubDomain: "",
+        PackageId: 0,
+        TenantId: 0,
+        CompanyName: "",
+      });
+      setOpenForm(false);
+      setSelectedId(0);
+    } catch (error) {
+      console.log("🚀 ~ handleSubmit ~ error:", error);
+    }
+  };
+  const fetchPackages = async () => {
+    const response = await getPackages({
+      Search: "",
+      DisplayStart: 1,
+      DisplayLength: 10,
+    });
+
+    setpackegs(response?.Data);
+  };
+  const fetchTenants = async () => {
+    const response = await getTenant({
+      Search: "",
+      DisplayStart: 1,
+      DisplayLength: 10,
+    });
+
+    setTenants(response?.Data);
+  };
+  const getRole = async () => {
+    const response = await getTenantRole();
+    setRole(response?.data);
+  };
+  useEffect(() => {
+    fetchTenants();
+    fetchPackages();
+    getRole();
+  }, []);
   return (
     <DashboardLayout>
       <div
@@ -128,11 +174,14 @@ export const TenantScreen = () => {
 
               setSelectedId(0);
               setFormData({
-                name: "",
-                maxUser: "",
-                maxStorage: "",
-                monthlyPrice: "",
-                maxCompanies: "",
+                FirstName: "",
+                LastName: "",
+                PhoneNo: "",
+                Email: "",
+                Password: "",
+                confirmPassword: "",
+                RoleId: 1,
+                SubDomain: "",
               });
             }}
           >
@@ -144,23 +193,45 @@ export const TenantScreen = () => {
             {/* <form > */}
             <div class="row">
               <div className="col-xl-6 mb-3">
-                <label className="form-label">Name</label>
+                <label className="form-label">First Name</label>
                 <span class="text-danger">*</span>
                 <TextField
                   className="form-control form-control-sm"
-                  name="name"
-                  value={formData.name}
+                  name="FirstName"
+                  value={formData.FirstName}
+                  onChange={handleInputChange}
+                  size="small"
+                />
+              </div>
+              <div className="col-xl-6 mb-3">
+                <label className="form-label">Last Name</label>
+                <span class="text-danger">*</span>
+                <TextField
+                  className="form-control form-control-sm"
+                  name="LastName"
+                  value={formData.LastName}
+                  onChange={handleInputChange}
+                  size="small"
+                />
+              </div>
+              <div className="col-xl-6 mb-3">
+                <label className="form-label">Email</label>
+                <span class="text-danger">*</span>
+                <TextField
+                  className="form-control form-control-sm"
+                  name="Email"
+                  value={formData.Email}
                   onChange={handleInputChange}
                   size="small"
                 />
               </div>
               <div class="col-xl-6 mb-3">
-                <label class="form-label">Email</label>
+                <label class="form-label">Comapny Name</label>
                 <span class="text-danger">*</span>
                 <TextField
                   className="form-control form-control-sm"
-                  name="email"
-                  value={formData.email}
+                  name="CompanyName"
+                  value={formData.CompanyName}
                   onChange={handleInputChange}
                   size="small"
                 />
@@ -170,45 +241,104 @@ export const TenantScreen = () => {
                 <span class="text-danger">*</span>
                 <TextField
                   className="form-control form-control-sm"
-                  name="phone"
-                  value={formData.phone}
+                  name="PhoneNo"
+                  value={formData.PhoneNo}
                   onChange={handleInputChange}
                   size="small"
                 />
               </div>
               <div class="col-xl-6 mb-3">
                 <FormControl fullWidth>
-                  <label class="form-label">
-                    Package<span class="text-danger">*</span>
+                  <label className="form-label">
+                    Role<span className="text-danger">*</span>
                   </label>
-
                   <Select
-                    name="package"
-                    value={formData.package}
+                    name="RoleId"
+                    value={formData.RoleId}
                     onChange={handleInputChange}
                     style={{ height: "2.5rem" }}
                   >
-                    {packageOptions.map((option) => (
-                      <MenuItem
-                        key={option.value}
-                        value={option.value}
-                        disabled={option.disabled || false}
-                      >
-                        {option.label}
-                      </MenuItem>
-                    ))}
+                    {role.map((option) => {
+                      return (
+                        <MenuItem
+                          key={option.RoleId}
+                          value={option.RoleId}
+                          // disabled={option.disabled || false}
+                        >
+                          {option.Role}
+                        </MenuItem>
+                      );
+                    })}
                   </Select>
                 </FormControl>
               </div>
-
+              <div class="col-xl-6 mb-3">
+                <label class="form-label">username</label>
+                <span class="text-danger">*</span>
+                <TextField
+                  className="form-control form-control-sm"
+                  name="SubDomain"
+                  value={formData.SubDomain}
+                  onChange={handleInputChange}
+                  size="small"
+                />
+              </div>
+              {/* <div class="col-xl-6 mb-3">
+                <div className="col-xl-6 mb-3">
+                  <label className="form-label">
+                    Package<span className="text-danger">*</span>
+                  </label>
+                  <FormControl fullWidth size="small">
+                    <Select
+                      name="PackageId"
+                      value={formData.PackageId}
+                      onChange={handleInputChange}
+                      className="form-select form-select-sm"
+                      displayEmpty
+                    >
+                      {packages.map((option) => (
+                        <MenuItem
+                          key={option.PackageId}
+                          value={option.PackageId}
+                          // disabled={option.disabled || false}
+                        >
+                          {option.Name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+              </div> */}
+              <div class="col-xl-6 mb-3">
+                <FormControl fullWidth margin="normal">
+                   <label className="form-label">
+                    use SSL<span className="text-danger">*</span>
+                  </label>
+                  <Select
+                    labelId="email-ssl-label"
+                    name="EmailSSL"
+                    value={formData.EmailSSL ? "true" : "false"}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        EmailSSL: e.target.value === "true",
+                      }))
+                    }
+                    label="Use SSL"
+                  >
+                    <MenuItem value="true">Yes</MenuItem>
+                    <MenuItem value="false">No</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
               <div class="col-xl-6 mb-3">
                 <label for="exampleFormControlInput10" class="form-label">
                   Password<span class="text-danger">*</span>
                 </label>
                 <TextField
                   className="form-control form-control-sm"
-                  name="password"
-                  value={formData.password}
+                  name="Password"
+                  value={formData.Password}
                   onChange={handleInputChange}
                   size="small"
                   type="password"
@@ -227,7 +357,7 @@ export const TenantScreen = () => {
                   type="password"
                 />
               </div>
-              <div class="col-xl-6 mb-3">
+              {/* <div class="col-xl-6 mb-3">
                 <label for="exampleFormControlInput10" class="form-label">
                   Entity Name<span class="text-danger">*</span>
                 </label>
@@ -238,20 +368,57 @@ export const TenantScreen = () => {
                   onChange={handleInputChange}
                   size="small"
                 />
-              </div>
+              </div> */}
             </div>
-              <div style={{textAlign:"end"}}>
+            <div style={{ textAlign: "end" }}>
+              <button className="btn btn-primary me-1 " onClick={handleSubmit}>
+                {selectedId === 0 ? "Add" : "Update"}
+              </button>
+              <button
+                className="btn btn-danger light ms-1"
+                onClick={() => {
+                  setOpenForm(false);
+                  setSelectedId(0);
+                  const offcanvasEl =
+                    document.getElementById("offcanvasExample");
+                  const bsOffcanvas =
+                    Offcanvas.getInstance(offcanvasEl) ||
+                    new Offcanvas(offcanvasEl);
+                  bsOffcanvas.hide();
+
+                  setFormData({
+                    FirstName: "",
+                    LastName: "",
+                    PhoneNo: "",
+                    Email: "",
+                    Password: "",
+                    confirmPassword: "",
+                    RoleId: 1,
+                    SubDomain: "",
+                  });
+                }}
+              >
+                Cancel
+              </button>
+
+              {selectedId !== 0 && (
                 <button
-                  className="btn btn-primary me-1 "
-                  onClick={handleSubmit}
-                >
-                  {selectedId === 0 ? "Add" : "Update"}
-                </button>
-                <button
-                  className="btn btn-danger light ms-1"
+                  className="btn btn-danger ms-2"
                   onClick={() => {
-                    setOpenForm(false);
+                    setEmployeesData(
+                      employeesData.filter((emp) => emp.id !== selectedId)
+                    );
                     setSelectedId(0);
+                    setFormData({
+                      FirstName: "",
+                      LastName: "",
+                      PhoneNo: "",
+                      Email: "",
+                      Password: "",
+                      confirmPassword: "",
+                      RoleId: 1,
+                      SubDomain: "",
+                    });
                     const offcanvasEl =
                       document.getElementById("offcanvasExample");
                     const bsOffcanvas =
@@ -259,48 +426,14 @@ export const TenantScreen = () => {
                       new Offcanvas(offcanvasEl);
                     bsOffcanvas.hide();
 
-                    setFormData({
-                      name: "",
-                      email: "",
-                      password: "",
-                      confirmPassword: "",
-                      entityName: "",
-                    });
+                    setOpenForm(false);
                   }}
                 >
-                  Cancel
+                  Delete
                 </button>
+              )}
+            </div>
 
-                {selectedId !== 0 && (
-                  <button
-                    className="btn btn-danger ms-2"
-                    onClick={() => {
-                      setEmployeesData(
-                        employeesData.filter((emp) => emp.id !== selectedId)
-                      );
-                      setSelectedId(0);
-                      setFormData({
-                        name: "",
-                        email: "",
-                        password: "",
-                        confirmPassword: "",
-                        entityName: "",
-                      });
-                      const offcanvasEl =
-                        document.getElementById("offcanvasExample");
-                      const bsOffcanvas =
-                        Offcanvas.getInstance(offcanvasEl) ||
-                        new Offcanvas(offcanvasEl);
-                      bsOffcanvas.hide();
-
-                      setOpenForm(false);
-                    }}
-                  >
-                    Delete
-                  </button>
-                )}
-              </div>
-            
             {/* </form> */}
           </div>
         </div>
@@ -353,11 +486,14 @@ export const TenantScreen = () => {
                         onClick={() => {
                           setSelectedId(0);
                           setFormData({
-                            name: "",
-                            maxUser: "",
-                            maxStorage: "",
-                            monthlyPrice: "",
-                            maxCompanies: "",
+                            FirstName: "",
+                            LastName: "",
+                            PhoneNo: "",
+                            Email: "",
+                            Password: "",
+                            confirmPassword: "",
+                            RoleId: 1,
+                            SubDomain: "",
                           });
 
                           const offcanvasEl =
@@ -386,7 +522,7 @@ export const TenantScreen = () => {
                               setFormData({
                                 name: emp.name,
                                 email: emp.email || "",
-                                password: emp.password || "",
+                                Password: emp.Password || "",
                                 confirmPassword: emp.confirmPassword || "",
                                 entityName: emp.entityName || "",
                               });
