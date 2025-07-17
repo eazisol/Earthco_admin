@@ -4,43 +4,12 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/mater
 import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
 import { getPackages } from "../../APIS/packages";
-import { AddTenant, getTenant, getTenantRole } from "../../APIS/auth";
+import { AddTenant, deleteTenant, getTenant, getTenantRole } from "../../APIS/auth";
+import { toast } from "react-toastify";
 
 export const TenantScreen = () => {
-  const employees = [
-    {
-      id: 1001,
-      name: "Liam Antony",
-      email: "abc@gmail.com",
-      entityName: "dnhey34",
-    },
-    {
-      id: 1002,
-      name: "Noah Oliver",
-      email: "abc@gmail.com",
-      entityName: "dnhey34",
-    },
-    {
-      id: 1003,
-      name: "Elijah James",
-      email: "abc@gmail.com",
-      entityName: "dnhey34",
-    },
-    {
-      id: 1004,
-      name: "James Antony",
-      email: "abc@gmail.com",
-      entityName: "dnhey34",
-    },
-    {
-      id: 1005,
-      name: "William Sokli",
-      email: "abc@gmail.com",
-      entityName: "dnhey34",
-    },
-  ];
-
-  const [employeesData, setEmployeesData] = useState(employees);
+ 
+  const [tenantData, setTenantData] = useState([]);
   const [packagesData, setPackagesdata] = useState({});
   const [role, setRole] = useState([]);
   const [selectedId, setSelectedId] = useState(0);
@@ -57,7 +26,6 @@ export const TenantScreen = () => {
     RoleId: 1,
     SubDomain: "",
     PackageId: 0,
-    TenantId: 0,
     CompanyName: "",
   });
   const handleInputChange = (e) => {
@@ -83,6 +51,7 @@ export const TenantScreen = () => {
     } = formData;
     const obj = {
       ...filteredFormData,
+      TenantId:selectedId,
       tblUserpackages: [
         {
           UserPackageId: formData?.PackageId,
@@ -99,12 +68,12 @@ export const TenantScreen = () => {
     };
     try {
       const data = await AddTenant(obj);
-      if (data.status === 200) {
+      // if (data.status == 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
         const bsOffcanvas =
           Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
         bsOffcanvas.hide();
-      }
+      // }
       setFormData({
         FirstName: "",
         LastName: "",
@@ -118,10 +87,12 @@ export const TenantScreen = () => {
         TenantId: 0,
         CompanyName: "",
       });
+      fetchTenants()
       setOpenForm(false);
       setSelectedId(0);
+      toast.success("Tenant added successfully!");
     } catch (error) {
-      console.log("🚀 ~ handleSubmit ~ error:", error);
+      toast.error("Error adding tenant");
     }
   };
   const fetchPackages = async () => {
@@ -139,12 +110,21 @@ export const TenantScreen = () => {
       DisplayStart: 1,
       DisplayLength: 10,
     });
-
-    setTenants(response?.Data);
+    setTenantData(response?.Data);
   };
   const getRole = async () => {
     const response = await getTenantRole();
     setRole(response?.data);
+  };
+  const tenantDelete = async () => {
+    try {
+      const response = await deleteTenant(selectedId);
+      console.log('response',response)
+      fetchTenants();
+      toast.success("Tenant deleted successfully!");
+    } catch (error) {
+      toast.error("Error deleting tenant");
+    }
   };
   useEffect(() => {
     fetchTenants();
@@ -309,25 +289,26 @@ export const TenantScreen = () => {
                   </FormControl>
                 </div>
               </div> */}
-              <div class="col-xl-6 mb-3">
-                <FormControl fullWidth margin="normal">
-                   <label className="form-label">
-                    use SSL<span className="text-danger">*</span>
+               <div class="col-xl-6 mb-3">
+                <FormControl fullWidth>
+                  <label className="form-label">
+                    Package<span className="text-danger">*</span>
                   </label>
                   <Select
-                    labelId="email-ssl-label"
-                    name="EmailSSL"
-                    value={formData.EmailSSL ? "true" : "false"}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        EmailSSL: e.target.value === "true",
-                      }))
-                    }
-                    label="Use SSL"
+                    name="PackageId"
+                    value={formData.PackageId}
+                    onChange={handleInputChange}
+                    style={{ height: "2.5rem" }}
                   >
-                    <MenuItem value="true">Yes</MenuItem>
-                    <MenuItem value="false">No</MenuItem>
+                    {packages.map((option) => (
+                      <MenuItem
+                        key={option.PackageId}
+                        value={option.PackageId}
+                        // disabled={option.disabled || false}
+                      >
+                        {option.Name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </div>
@@ -405,9 +386,8 @@ export const TenantScreen = () => {
                 <button
                   className="btn btn-danger ms-2"
                   onClick={() => {
-                    setEmployeesData(
-                      employeesData.filter((emp) => emp.id !== selectedId)
-                    );
+                   
+                    tenantDelete()
                     setSelectedId(0);
                     setFormData({
                       FirstName: "",
@@ -509,23 +489,32 @@ export const TenantScreen = () => {
                       <thead>
                         <tr>
                           <th>Name</th>
+                          <th>Role</th>
                           <th>Email Address</th>
-                          <th>Entity Name</th>
+                          <th>Phone No</th>
+                          <th>username</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {employeesData.map((emp, index) => (
+                        {tenantData.map((emp, index) =>{
+                          console.log('emp',emp)
+                          return (
                           <tr
                             key={index}
                             onClick={() => {
-                              setSelectedId(emp.id);
+                              setSelectedId(emp.TenantId);
+                             
                               setFormData({
-                                name: emp.name,
-                                email: emp.email || "",
+                                CompanyName: emp.CompanyName,
+                                Email: emp.Email || "",
                                 Password: emp.Password || "",
-                                confirmPassword: emp.confirmPassword || "",
-                                entityName: emp.entityName || "",
-                              });
+                                confirmPassword: emp.Password || "",
+                                RoleId: emp.RoleId || "",
+                                SubDomain: emp.SubDomain || "",
+                                PhoneNo:emp.PhoneNo||""  ,
+                                FirstName:emp.FirstName||"",
+                              LastName:emp.LastName||"",  
+                              PackageId:emp.tblUserPackages[0]?.PackageId||''                          });
 
                               // Show the offcanvas properly
                               const offcanvasEl =
@@ -535,17 +524,23 @@ export const TenantScreen = () => {
                             }}
                           >
                             <td>
-                              <h6>{emp.name}</h6>
+                              <h6>{emp.CompanyName}</h6>
+                            </td>
+                            <td>
+                              <h6>{emp.Role}</h6>
                             </td>
 
                             <td>
-                              <span className="text-primary">{emp.email}</span>
+                              <span className="text-primary">{emp.Email}</span>
                             </td>
                             <td>
-                              <span>{emp.entityName}</span>
+                              <span>{emp.PhoneNo}</span>
+                            </td>
+                            <td>
+                              <span>{emp.SubDomain}</span>
                             </td>
                           </tr>
-                        ))}
+                        )})}
                       </tbody>
                     </table>
                   </div>

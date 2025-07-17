@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
+import { toast } from "react-toastify";
 import {
   addPackage,
   deletePackage,

@@ -89,3 +89,17 @@ export const getTenant = async ({ Search = "", DisplayStart = 0, DisplayLength =
     };
   }
 };
+export const deleteTenant=async(id )=>{
+  const token = JSON.parse(localStorage.getItem("user"));
+  try {
+    const { data } = await axios.get(`${apiUrl}Tenant/DeleteTenant?id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${token.token.data}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
