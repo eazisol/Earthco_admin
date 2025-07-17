@@ -1,8 +1,10 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import image from "../../assets/img/team/team-1.jpg";
-import { TextField } from "@mui/material";
-import { useState } from "react";
+import { FormControl, MenuItem, Select, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
+import useApi from "../../hooks/useApi";
+import { getTenant } from "../../hooks/APIS/TenantApi";
 
 export const TenantScreen = () => {
   const employees = [
@@ -37,20 +39,33 @@ export const TenantScreen = () => {
       entityName: "dnhey34",
     },
   ];
+  const packageOptions = [
+    { value: "", label: "Please select", disabled: true },
+    { value: 1, label: "Monthly" },
+    { value: 2, label: "Year" },
+    { value: 3, label: "Other" },
+  ];
+  useEffect(() => {
+    const data = getTenant();
+    console.log("🚀 ~ useEffect ~ data:", data);
+  }, []);
   const [employeesData, setEmployeesData] = useState(employees);
   const [selectedId, setSelectedId] = useState(0);
   const [openForm, setOpenForm] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
+    package: "",
     Password: "",
     confirmPassword: "",
     entityName: "",
   });
+  console.log("🚀 ~ TenantScreen ~ formData:", formData);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
@@ -101,7 +116,7 @@ export const TenantScreen = () => {
           <h5 class="modal-title" id="#gridSystemModal">
             Add Tenant
           </h5>
-         <button
+          <button
             type="button"
             className="btn-close"
             onClick={() => {
@@ -150,6 +165,41 @@ export const TenantScreen = () => {
                   size="small"
                 />
               </div>
+              <div class="col-xl-6 mb-3">
+                <label class="form-label">Mobile</label>
+                <span class="text-danger">*</span>
+                <TextField
+                  className="form-control form-control-sm"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  size="small"
+                />
+              </div>
+              <div class="col-xl-6 mb-3">
+                <FormControl fullWidth>
+                  <label class="form-label">
+                    Package<span class="text-danger">*</span>
+                  </label>
+
+                  <Select
+                    name="package"
+                    value={formData.package}
+                    onChange={handleInputChange}
+                    style={{ height: "2.5rem" }}
+                  >
+                    {packageOptions.map((option) => (
+                      <MenuItem
+                        key={option.value}
+                        value={option.value}
+                        disabled={option.disabled || false}
+                      >
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
 
               <div class="col-xl-6 mb-3">
                 <label for="exampleFormControlInput10" class="form-label">
@@ -190,9 +240,11 @@ export const TenantScreen = () => {
                 />
               </div>
             </div>
-            <div>
-              <div>
-                <button className="btn btn-primary me-1" onClick={handleSubmit}>
+              <div style={{textAlign:"end"}}>
+                <button
+                  className="btn btn-primary me-1 "
+                  onClick={handleSubmit}
+                >
                   {selectedId === 0 ? "Add" : "Update"}
                 </button>
                 <button
@@ -248,7 +300,7 @@ export const TenantScreen = () => {
                   </button>
                 )}
               </div>
-            </div>
+            
             {/* </form> */}
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import axios from 'axios';
 
 /**
  * Simple custom hook for making GET and POST API calls
@@ -27,40 +28,32 @@ const useApi = (url, options = {}) => {
     const finalUrl = customUrl || url;
     const finalOptions = { ...options, ...customOptions };
     const finalMethod = finalOptions.method || method;
-    const finalHeaders = { ...headers, ...finalOptions.headers };
+    const finalHeaders = { 'Content-Type': 'application/json', ...headers, ...finalOptions.headers };
     const finalBody = finalOptions.body !== undefined ? finalOptions.body : body;
 
     setLoading(true);
     setError(null);
 
     try {
-      const requestOptions = {
-        method: finalMethod,
-        headers: {
-          'Content-Type': 'application/json',
-          ...finalHeaders,
-        },
+      const axiosConfig = {
+        method: finalMethod.toLowerCase(),
+        url: finalUrl,
+        headers: finalHeaders,
       };
 
-      // Add body for POST requests
-      if (finalBody && finalMethod === 'POST') {
-        requestOptions.body = typeof finalBody === 'string' 
-          ? finalBody 
-          : JSON.stringify(finalBody);
+      if (finalMethod === 'POST') {
+        axiosConfig.data = finalBody;
+      } else if (finalMethod === 'GET' && finalBody) {
+        axiosConfig.params = finalBody; // for query params
       }
 
-      const response = await fetch(finalUrl, requestOptions);
+      const response = await axios(axiosConfig);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-      }
-
-      const responseData = await response.json();
-      setData(responseData);
-      return responseData;
+      setData(response.data);
+      return response.data;
 
     } catch (err) {
-      const errorMessage = err.message || 'An error occurred while fetching data';
+      const errorMessage = err.response?.data?.message || err.message || 'An error occurred while fetching data';
       setError(errorMessage);
       throw err;
     } finally {
@@ -81,4 +74,4 @@ const useApi = (url, options = {}) => {
   };
 };
 
-export default useApi; 
+export default useApi;
