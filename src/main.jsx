@@ -17,11 +17,26 @@ import App from './App.jsx'
 import { AppProvider } from './context/AppContext.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AppProvider>
       <App />
-      <ToastContainer />
+      <ToastContainer 
+        position="bottom-right" 
+        autoClose={3000} 
+        hideProgressBar={false} 
+        newestOnTop={false} 
+        closeOnClick 
+        rtl={false} 
+        pauseOnFocusLoss 
+        draggable 
+        pauseOnHover 
+      />
+      {/* For demonstration, render both EmailScreen and StripeSetting */}
+      {/* <EmailScreen /> */}
+      {/* <StripeSetting /> */}
     </AppProvider>
   </StrictMode>,
 )

@@ -17,10 +17,9 @@ import {
   getPackagesType,
 } from "../../APIS/packages";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
-// import 'react-quill/dist/quill.snow.css';
-// import ReactQuill from 'react-quill';
+import { addCompany,deleteCompany,getCompanyList } from "../../APIS/companies";
 
-export const PackagesScreen = () => {
+export const CompaniesScreen = () => {
   const [packageOptions, setPackageOptions] = useState([]);
   const [errors, setErrors] = useState({});
   const [employeesData, setEmployeesData] = useState([]);
@@ -28,44 +27,29 @@ export const PackagesScreen = () => {
   const [openForm, setOpenForm] = useState(false);
   const [loader, setLoader] = useState(false);
   const [formData, setFormData] = useState({
-    PackageId: selectedId,
-    name: "",
-    maxUser: "",
-    MaxStorageMB: "",
-    Price: "",
-    maxCompanies: "",
-    PackageTypeId: 0,
-    Description: "",
+    CompanyName: "",
+    CompanyRealmId: "",
+    DsiplayName: "",
+    Address: "",
+    PhoneNo: "",
+    Website: "",
+    SecondPhoneNo: "",
+    Email: "",
   });
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "Confirmation",
-    description: "Are you sure you want to delete this package?",
+    description: "Are you sure you want to delete this company?",
     onConfirm: () => {},
-    confirmText: "Delete", 
+    confirmText: "Delete",
     cancelText: "Cancel",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    const numericFields = ["maxUser", "MaxStorageMB", "Price", "maxCompanies"];
-
-    if (numericFields.includes(name)) {
-      const isValid = /^\d*$/.test(value);
-      if (!isValid) return;
-    }
-
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }));
-  };
-
-  const handleDescriptionChange = (content) => {
-    setFormData(prev => ({
-      ...prev,
-      Description: content
     }));
   };
 
@@ -74,15 +58,10 @@ export const PackagesScreen = () => {
     setLoader(true);
 
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.maxUser) newErrors.maxUser = "Max User is required";
-    if (!formData.MaxStorageMB)
-      newErrors.MaxStorageMB = "Max Storage is required";
-    if (!formData.Price) newErrors.Price = "Price is required";
-    if (!formData.maxCompanies)
-      newErrors.maxCompanies = "Max Companies is required";
-    if (!formData.Description)
-      newErrors.Description = "Description is required";
+    if (!formData.CompanyName.trim()) newErrors.CompanyName = "Company Name is required";
+    if (!formData.CompanyRealmId.trim()) newErrors.CompanyRealmId = "Company Realm ID is required";
+    if (!formData.Email.trim()) newErrors.Email = "Email is required";
+    if (!formData.PhoneNo.trim()) newErrors.PhoneNo = "Phone number is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -90,61 +69,57 @@ export const PackagesScreen = () => {
       return;
     }
 
-    setErrors({}); // Clear errors
+    setErrors({});
 
     const obj = {
       ...formData,
-      PackageId: selectedId,
+      CompanyId: selectedId,
     };
-
+console.log(obj,'obj');
     try {
-      const response = await addPackage(obj);
-      if (response.status === 200) {
-        const offcanvasEl = document.getElementById("offcanvasExample");
-        const bsOffcanvas =
-          Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
-        bsOffcanvas.hide();
+      const response = await addCompany(obj);
+      console.log(response,'response');
+        if (response.status === 200) {
+            const offcanvasEl = document.getElementById("offcanvasExample");
+            const bsOffcanvas =
+              Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
+            bsOffcanvas.hide();
 
-        setOpenForm(false);
-        setFormData({
-          name: "",
-          maxUser: "",
-          maxStorage: "",
-          monthlyPrice: "",
-          maxCompanies: "",
-          MaxStorageMB: "",
-          Price: "",
-          PackageTypeId: "",
-          Description: "",
-        });
-        setSelectedId(0);
-        fetchPackages();
-        toast.success(response?.data?.Message);
-      } else {
-          toast.error("Error adding package");
-      }
+            setOpenForm(false);
+            setFormData({
+              CompanyName: "",
+              CompanyRealmId: "",
+              DsiplayName: "",
+              Address: "",
+              PhoneNo: "",
+              Website: "",
+              SecondPhoneNo: "",
+              Email: "",
+            });
+            setSelectedId(0);
+            fetchCompanies();
+            toast.success(response?.data?.Message);
+          } else {
+            toast.error("Error adding company");
+          }
     } catch (error) {
-      toast.error("Error adding package");
+      toast.error("Error adding company");
     } finally {
       setLoader(false);
     }
   };
 
-  const fetchPackages = async () => {
+  const fetchCompanies = async () => {
     setLoader(true);
-    const response = await getPackages({
-      Search: "",
-      DisplayStart: 1,
-      DisplayLength: 10,
-    });
-    
-    setEmployeesData(response);
+    const response = await getCompanyList();
+    console.log(response,'response');
+    setEmployeesData(response?.data?.Data);
     setLoader(false);
   };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    fetchPackages();
+    fetchCompanies();
     const fetchTenant = async () => {
       try {
         const data = await getPackagesType(user.token.data);
@@ -159,27 +134,27 @@ export const PackagesScreen = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await deletePackage(selectedId);
+      const response = await deleteCompany(selectedId);
       if (response?.status == 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
         const bsOffcanvas =
           Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
         bsOffcanvas.hide();
         setSelectedId(0);
-        fetchPackages();
+        fetchCompanies();
         setOpenForm(false);
         toast.success(response?.data?.Message);
       } else {
-        toast.error("Error deleting package");
+        toast.error("Error deleting company");
       }
     } catch (error) {
-      toast.error("Error deleting package");
+      toast.error("Error deleting company");
     }
   };
 
   return (
     <DashboardLayout>
-       <ConfirmationModal
+      <ConfirmationModal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
         title={modalConfig.title}
@@ -195,7 +170,7 @@ export const PackagesScreen = () => {
       >
         <div class="offcanvas-header">
           <h5 class="modal-title" id="#gridSystemModal">
-            Add package
+            Add Company
           </h5>
           <button
             type="button"
@@ -210,12 +185,14 @@ export const PackagesScreen = () => {
               setSelectedId(0);
               setErrors({});
               setFormData({
-                name: "",
-                maxUser: "",
-                maxStorage: "",
-                monthlyPrice: "",
-                maxCompanies: "",
-                Description: "",
+                CompanyName: "",
+                CompanyRealmId: "",
+                DsiplayName: "",
+                Address: "",
+                PhoneNo: "",
+                Website: "",
+                SecondPhoneNo: "",
+                Email: "",
               });
             }}
           >
@@ -226,108 +203,101 @@ export const PackagesScreen = () => {
           <div class="container-fluid">
             <div class="row">
               <div className="col-xl-6 mb-3">
-                <label className="form-label">Name</label>
+                <label className="form-label">Company Name</label>
                 <TextField
                   className="form-control form-control-sm"
-                  name="name"
-                  value={formData.name}
+                  name="CompanyName"
+                  value={formData.CompanyName}
                   onChange={handleInputChange}
                   size="small"
-                  error={!!errors.name}
-                  helperText={errors.name}
+                  error={!!errors.CompanyName}
+                  helperText={errors.CompanyName}
                 />
               </div>
               <div class="col-xl-6 mb-3">
-                <label class="form-label">Max User</label>
+                <label class="form-label">Company Realm ID</label>
+                <TextField
+                  className="form-control form-control-sm"
+                  name="CompanyRealmId"
+                  value={formData.CompanyRealmId}
+                  onChange={handleInputChange}
+                  size="small"
+                  error={!!errors.CompanyRealmId}
+                  helperText={errors.CompanyRealmId}
+                />
+              </div>
 
+              <div class="col-xl-6 mb-3">
+                <label class="form-label">Display Name</label>
                 <TextField
                   className="form-control form-control-sm"
-                  name="maxUser"
-                  value={formData.maxUser}
+                  name="DsiplayName"
+                  value={formData.DsiplayName}
                   onChange={handleInputChange}
                   size="small"
-                  error={!!errors.maxUser}
-                  helperText={errors.maxUser}
                 />
               </div>
 
               <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Max Storage<span class="text-danger">*</span>
-                </label>
+                <label class="form-label">Email</label>
                 <TextField
                   className="form-control form-control-sm"
-                  name="MaxStorageMB"
-                  value={formData.MaxStorageMB}
+                  name="Email"
+                  value={formData.Email}
                   onChange={handleInputChange}
                   size="small"
-                  error={!!errors.MaxStorageMB}
-                  helperText={errors.MaxStorageMB}
+                  error={!!errors.Email}
+                  helperText={errors.Email}
                 />
               </div>
+
               <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Monthly Price<span class="text-danger">*</span>
-                </label>
+                <label class="form-label">Phone Number</label>
                 <TextField
                   className="form-control form-control-sm"
-                  name="Price"
-                  value={formData.Price}
+                  name="PhoneNo"
+                  value={formData.PhoneNo}
                   onChange={handleInputChange}
                   size="small"
-                  error={!!errors.Price}
-                  helperText={errors.Price}
+                  error={!!errors.PhoneNo}
+                  helperText={errors.PhoneNo}
                 />
               </div>
+
               <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Max Companies<span class="text-danger">*</span>
-                </label>
+                <label class="form-label">Secondary Phone Number</label>
                 <TextField
                   className="form-control form-control-sm"
-                  name="maxCompanies"
-                  value={formData.maxCompanies}
+                  name="SecondPhoneNo"
+                  value={formData.SecondPhoneNo}
                   onChange={handleInputChange}
                   size="small"
-                  error={!!errors.maxCompanies}
-                  helperText={errors.maxCompanies}
                 />
               </div>
+
               <div class="col-xl-6 mb-3">
-                <FormControl fullWidth>
-                  <label className="form-label">
-                    Package<span className="text-danger">*</span>
-                  </label>
-                  <Select
-                    name="PackageTypeId"
-                    value={formData.PackageTypeId}
-                    onChange={handleInputChange}
-                    style={{ height: "2.5rem" }}
-                  >
-                    {packageOptions.map((option) => (
-                      <MenuItem
-                        key={option.PackageTypeId}
-                        value={option.PackageTypeId}
-                      >
-                        {option.Package}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </div>
-              {/* <div class="col-xl-12 mb-3">
-                <label className="form-label">Description<span className="text-danger">*</span></label>
-                <ReactQuill 
-                  theme="snow" 
-                  value={formData.Description} 
-                  onChange={handleDescriptionChange}
-                  style={{height: '200px', marginBottom: '50px'}}
+                <label class="form-label">Website</label>
+                <TextField
+                  className="form-control form-control-sm"
+                  name="Website"
+                  value={formData.Website}
+                  onChange={handleInputChange}
+                  size="small"
                 />
-                {errors.Description && (
-                  <div className="text-danger small">{errors.Description}</div>
-                )}
-              </div> */}
+              </div>
+
+              <div class="col-xl-6 mb-3">
+                <label class="form-label">Address</label>
+                <TextField
+                  className="form-control form-control-sm"
+                  name="Address"
+                  value={formData.Address}
+                  onChange={handleInputChange}
+                  size="small"
+                />
+              </div>
             </div>
+
             <div style={{ textAlign: "end" }}>
               <button className="btn btn-primary me-1" onClick={handleSubmit}>
                 {selectedId === 0 ? "Add" : "Update"}
@@ -337,20 +307,21 @@ export const PackagesScreen = () => {
                 onClick={() => {
                   setOpenForm(false);
                   setSelectedId(0);
-                  const offcanvasEl =
-                    document.getElementById("offcanvasExample");
+                  const offcanvasEl = document.getElementById("offcanvasExample");
                   const bsOffcanvas =
                     Offcanvas.getInstance(offcanvasEl) ||
                     new Offcanvas(offcanvasEl);
                   bsOffcanvas.hide();
                   setErrors({});
                   setFormData({
-                    name: "",
-                    maxUser: "",
-                    maxStorage: "",
-                    monthlyPrice: "",
-                    maxCompanies: "",
-                    Description: "",
+                    CompanyName: "",
+                    CompanyRealmId: "",
+                    DsiplayName: "",
+                    Address: "",
+                    PhoneNo: "",
+                    Website: "",
+                    SecondPhoneNo: "",
+                    Email: "",
                   });
                 }}
               >
@@ -358,21 +329,24 @@ export const PackagesScreen = () => {
               </button>
 
               {selectedId !== 0 && (
-                <button className="btn btn-danger ms-2" onClick={()=>{
-                  setModalOpen(true);
-                  setModalConfig({
-                    title: "Confirmation",
-                    description: "Are you sure you want to delete this package?",
-                    onConfirm: () => {
-                      handleDelete();
-                      setModalOpen(false);
-                    },
-                    confirmText: "Delete",
-                    cancelText: "Cancel",
-                  });
-                  }}>
+                <button
+                  className="btn btn-danger ms-2"
+                  onClick={() => {
+                    setModalOpen(true);
+                    setModalConfig({
+                      title: "Confirmation",
+                      description: "Are you sure you want to delete this company?",
+                      onConfirm: () => {
+                        handleDelete();
+                        setModalOpen(false);
+                      },
+                      confirmText: "Delete",
+                      cancelText: "Cancel",
+                    });
+                  }}
+                >
                   Delete
-                  </button>
+                </button>
               )}
             </div>
           </div>
@@ -417,7 +391,7 @@ export const PackagesScreen = () => {
                     strokeRinejoin="round"
                   />
                 </svg>
-                Packages{" "}
+                Companies{" "}
               </a>
             </li>
           </ol>
@@ -429,18 +403,20 @@ export const PackagesScreen = () => {
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
                     <div className="tbl-caption">
-                      <h4 className="heading mb-0">Packages</h4>
+                      <h4 className="heading mb-0">Companies</h4>
                       <button
                         className="btn btn-primary btn-sm"
                         onClick={() => {
                           setSelectedId(0);
                           setFormData({
-                            name: "",
-                            maxUser: "",
-                            MaxStorageMB: "",
-                            Price: "",
-                            maxCompanies: "",
-                            Description: "",
+                            CompanyName: "",
+                            CompanyRealmId: "",
+                            DsiplayName: "",
+                            Address: "",
+                            PhoneNo: "",
+                            Website: "",
+                            SecondPhoneNo: "",
+                            Email: "",
                           });
 
                           const offcanvasEl =
@@ -449,17 +425,17 @@ export const PackagesScreen = () => {
                           bsOffcanvas.show();
                         }}
                       >
-                        + Add Package
+                        + Add Company
                       </button>
                     </div>
                     <table id="employees-tblwrapper" className="table">
                       <thead>
                         <tr>
                           <th>Name</th>
-                          <th className="text-center">Max User</th>
-                          <th className="text-center">max Storage</th>
-                          <th className="text-center">Monthly Price</th>
-                          <th className="text-center">Max Companies</th>
+                          <th className="text-center">Email</th>
+                          <th className="text-center">Phone</th>
+                          <th className="text-center">Address</th>
+                          <th className="text-center">Website</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -476,19 +452,20 @@ export const PackagesScreen = () => {
                             </td>
                           </tr>
                         ) : (
-                          employeesData?.Data?.map((emp, index) => (
+                          employeesData?.map((emp, index) => (
                             <tr
                               key={index}
                               onClick={() => {
-                                setSelectedId(emp.PackageId);
+                                setSelectedId(emp.CompanyId);
                                 setFormData({
-                                  name: emp.Name,
-                                  maxUser: emp.MaxUser || "",
-                                  MaxStorageMB: emp.MaxStorageMB || "",
-                                  Price: emp.Price || "",
-                                  maxCompanies: emp.MaxCompanies || "",
-                                  PackageTypeId: emp.PackageTypeId,
-                                  Description: emp.Description || "",
+                                  CompanyName: emp.CompanyName,
+                                  CompanyRealmId: emp.CompanyRealmId || "",
+                                  DsiplayName: emp.DsiplayName || "",
+                                  Email: emp.Email || "",
+                                  PhoneNo: emp.PhoneNo || "",
+                                  SecondPhoneNo: emp.SecondPhoneNo || "",
+                                  Address: emp.Address || "",
+                                  Website: emp.Website || "",
                                 });
 
                                 const offcanvasEl =
@@ -499,20 +476,20 @@ export const PackagesScreen = () => {
                             >
                               <td>
                                 <div className="products">
-                                  <h6>{emp.Name}</h6>
+                                  <h6>{emp.CompanyName}</h6>
                                 </div>
                               </td>
                               <td className="text-center">
-                                <span>{emp.MaxUser ?? 0}</span>
+                                <span>{emp.Email ?? "-"}</span>
                               </td>
                               <td className="text-center">
-                                <span>{emp.MaxStorageMB ?? 0}</span>
+                                <span>{emp.PhoneNo ?? "-"}</span>
                               </td>
                               <td className="text-center">
-                                <span>{`$${emp.Price || 0}`}</span>
+                                <span>{emp.Address ?? "-"}</span>
                               </td>
                               <td className="text-center">
-                                <span>{emp.MaxCompanies ?? 0}</span>
+                                <span>{emp.Website ?? "-"}</span>
                               </td>
                             </tr>
                           ))

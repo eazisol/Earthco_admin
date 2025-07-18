@@ -583,11 +583,11 @@ a:hover {
 /*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
-section {
+/* section {
   padding: 60px 0;
   overflow: hidden;
-  scroll-margin-top: 80px; /* Adjust this value to your navbar height */
-}
+  scroll-margin-top: 80px; 
+} */
 
 .section-bg {
   background-color: #f3f5fa;

@@ -11,7 +11,9 @@ import { TransactionsScreen } from './components/Transactions'
 import { EmailScreen } from './components/Setting/emailSetting'
 import { QBookScreen } from './components/Setting/QBook'
 import { CompanyScreen } from './components/Setting/Company'
-import { GoogleMapScreen } from './components/Setting/googleMap'
+import { GoogleSetting } from './components/Setting/googleMap';
+import { StripeSetting } from './components/Setting/StripeSetting';
+import { CompaniesScreen } from './components/Comanies';
 
 function Layout({ children }) {
   const location = useLocation();
@@ -250,8 +252,9 @@ function App() {
           <Route path="/email" element={ <EmailScreen /> } />
           <Route path="/qb" element={ <QBookScreen /> } />
           <Route path="/company" element={ <CompanyScreen /> } />
-          <Route path="/google-map" element={ <GoogleMapScreen /> } />
-
+          <Route path="/google-map" element={ <GoogleSetting /> } />
+          <Route path="/stripe" element={ <StripeSetting /> } />
+          <Route path="/companies" element={ <CompaniesScreen /> } />
         </Routes>
       </Layout>
     </Router>

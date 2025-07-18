@@ -124,7 +124,7 @@ export const LoginForm = () => {
   return (
     <section className="contact">
       <div className="container" data-aos="fade-up">
-        <div className="section-title">
+        <div className="section-title " style={{marginTop: "7%"}}> 
           <h2>Create Account</h2>
           <p>
             Join Earthco today and start your journey towards beautiful

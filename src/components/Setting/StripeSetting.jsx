@@ -1,18 +1,17 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import { CircularProgress,  FormControl, MenuItem, Select, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
-import { Offcanvas } from "bootstrap";
-import { addEmailSetting, getEmailSetting } from "../../APIS/settings";
+import { getEmailSetting, addEmailSetting } from "../../APIS/settings";
 import { toast } from "react-toastify";
 
-export const QBookScreen = () => {
+export const StripeSetting = () => {
   const [settingData, setSettingData] = useState({});
   const [formData, setFormData] = useState({
-    QBProductionClientId: "",
-    QBProductionClientSecret: "",
-    QBSandBoxClientId: "", 
-    QBSandBoxClientSecret: "",
-    QBMode: 1
+    StripeProductionClientId: "",
+    StripeProductionSecretId: "",
+    StripeSandboxClientId: "",
+    StripeSandboxSecretId: "",
+    StripeMode: 1
   });
   const [loading, setLoading] = useState(false);
   const handleInputChange = (e) => {
@@ -30,13 +29,12 @@ export const QBookScreen = () => {
       const response = await getEmailSetting(user?.Data?.TenantId);
       setSettingData(response);
       setFormData({
-        QBProductionClientId: response?.QBProductionClientId || "",
-        QBProductionClientSecret: response?.QBProductionClientSecret || "",
-        QBSandBoxClientId: response?.QBSandBoxClientId || "",
-        QBSandBoxClientSecret: response?.QBSandBoxClientSecret || "",
-        QBMode: response?.QBMode || 1
+        StripeProductionClientId: response?.StripeProductionClientId || "",
+        StripeProductionSecretId: response?.StripeProductionSecretId || "",
+        StripeSandboxClientId: response?.StripeSandboxClientId || "",
+        StripeSandboxSecretId: response?.StripeSandboxSecretId || "",
+        StripeMode: response?.StripeMode || 1
       });
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching settings:", error);
       toast.error("Failed to fetch settings");
@@ -57,14 +55,14 @@ export const QBookScreen = () => {
     
     const settingDataToSend = {
       ...settingData,
-      QBProductionClientId: formData.QBProductionClientId,
-      QBProductionClientSecret: formData.QBProductionClientSecret,
-      QBSandBoxClientId: formData.QBSandBoxClientId,
-      QBSandBoxClientSecret: formData.QBSandBoxClientSecret,
-      QBMode: formData.QBMode
+      StripeProductionClientId: formData.StripeProductionClientId,
+      StripeProductionSecretId: formData.StripeProductionSecretId,
+      StripeSandboxClientId: formData.StripeSandboxClientId,
+      StripeSandboxSecretId: formData.StripeSandboxSecretId,
+      StripeMode: formData.StripeMode
     };
 
-    if (!formData.QBProductionClientId || !formData.QBProductionClientSecret || !formData.QBSandBoxClientId || !formData.QBSandBoxClientSecret) {
+    if (!formData.StripeProductionClientId || !formData.StripeProductionSecretId || !formData.StripeSandboxClientId || !formData.StripeSandboxSecretId) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -90,7 +88,7 @@ export const QBookScreen = () => {
         <div className="page-titles">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="javascript:void(0)">QuickBooks Settings</a>
+              <a href="javascript:void(0)">Stripe Settings</a>
             </li>
           </ol>
         </div>
@@ -100,7 +98,7 @@ export const QBookScreen = () => {
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body">
-                  <h4 className="card-title mb-4">QuickBooks Settings</h4>
+                  <h4 className="card-title mb-4">Stripe Settings</h4>
                   {loading ? <div className="text-center">
             <div className="spinner-border" role="status">
               <span className="visually-hidden"><CircularProgress /></span>
@@ -111,8 +109,8 @@ export const QBookScreen = () => {
                     <div className="col-xl-6 mb-3">
                       <label className="form-label">Production Client ID<span className="text-danger">*</span></label>
                       <TextField
-                        name="QBProductionClientId"
-                        value={formData.QBProductionClientId}
+                        name="StripeProductionClientId"
+                        value={formData.StripeProductionClientId}
                         onChange={handleInputChange}
                         size="small"
                         fullWidth
@@ -120,10 +118,10 @@ export const QBookScreen = () => {
                     </div>
 
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">Production Client Secret<span className="text-danger">*</span></label>
+                      <label className="form-label">Production Secret ID<span className="text-danger">*</span></label>
                       <TextField
-                        name="QBProductionClientSecret"
-                        value={formData.QBProductionClientSecret}
+                        name="StripeProductionSecretId"
+                        value={formData.StripeProductionSecretId}
                         onChange={handleInputChange}
                         size="small"
                         fullWidth
@@ -133,8 +131,8 @@ export const QBookScreen = () => {
                     <div className="col-xl-6 mb-3">
                       <label className="form-label">Sandbox Client ID<span className="text-danger">*</span></label>
                       <TextField
-                        name="QBSandBoxClientId"
-                        value={formData.QBSandBoxClientId}
+                        name="StripeSandboxClientId"
+                        value={formData.StripeSandboxClientId}
                         onChange={handleInputChange}
                         size="small"
                         fullWidth
@@ -142,14 +140,28 @@ export const QBookScreen = () => {
                     </div>
 
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">Sandbox Client Secret<span className="text-danger">*</span></label>
+                      <label className="form-label">Sandbox Secret ID<span className="text-danger">*</span></label>
                       <TextField
-                        name="QBSandBoxClientSecret"
-                        value={formData.QBSandBoxClientSecret}
+                        name="StripeSandboxSecretId"
+                        value={formData.StripeSandboxSecretId}
                         onChange={handleInputChange}
                         size="small"
                         fullWidth
                       />
+                    </div>
+
+                    <div className="col-xl-6 mb-3">
+                      <label className="form-label">Mode</label>
+                      <Select
+                        name="StripeMode"
+                        value={formData.StripeMode}
+                        onChange={handleInputChange}
+                        size="small"
+                        fullWidth
+                      >
+                        <MenuItem value={1}>Production</MenuItem>
+                        <MenuItem value={2}>Sandbox</MenuItem>
+                      </Select>
                     </div>
                   </div>
 
@@ -168,3 +180,5 @@ export const QBookScreen = () => {
     </DashboardLayout>
   );
 };
+
+export default StripeSetting;

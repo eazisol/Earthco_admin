@@ -1,11 +1,12 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import image from "../../assets/img/team/team-1.jpg";
-import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
 import { getPackages } from "../../APIS/packages";
 import { AddTenant, deleteTenant, getTenant, getTenantRole } from "../../APIS/auth";
 import { toast } from "react-toastify";
+import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 
 export const TenantScreen = () => {
  
@@ -16,6 +17,15 @@ export const TenantScreen = () => {
   const [packages, setpackegs] = useState([]);
   const [tenants, setTenants] = useState([]);
   const [openForm, setOpenForm] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "Confirmation",
+    description: "Are you sure you want to delete this tenant?",
+    onConfirm: () => {},
+    confirmText: "Delete",
+    cancelText: "Cancel",
+  });
   const [formData, setFormData] = useState({
     FirstName: "",
     LastName: "",
@@ -44,6 +54,7 @@ export const TenantScreen = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const {
       confirmPassword, // exclude
       PackageId, // exclude
@@ -68,6 +79,7 @@ export const TenantScreen = () => {
     };
     try {
       const data = await AddTenant(obj);
+      console.log(data,'data');
       // if (data.status == 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
         const bsOffcanvas =
@@ -90,9 +102,11 @@ export const TenantScreen = () => {
       fetchTenants()
       setOpenForm(false);
       setSelectedId(0);
-      toast.success("Tenant added successfully!");
+      toast.success(data?.Message);
     } catch (error) {
       toast.error("Error adding tenant");
+    } finally {
+      setLoading(false);
     }
   };
   const fetchPackages = async () => {
@@ -105,13 +119,15 @@ export const TenantScreen = () => {
     setpackegs(response?.Data);
   };
   const fetchTenants = async () => {
+    setLoading(true);
     const response = await getTenant({
       Search: "",
       DisplayStart: 1,
       DisplayLength: 10,
     });
     setTenantData(response?.Data);
-  };
+    setLoading(false);
+    };
   const getRole = async () => {
     const response = await getTenantRole();
     setRole(response?.data);
@@ -121,7 +137,7 @@ export const TenantScreen = () => {
       const response = await deleteTenant(selectedId);
       console.log('response',response)
       fetchTenants();
-      toast.success("Tenant deleted successfully!");
+      toast.success(response?.Message);
     } catch (error) {
       toast.error("Error deleting tenant");
     }
@@ -133,6 +149,15 @@ export const TenantScreen = () => {
   }, []);
   return (
     <DashboardLayout>
+         <ConfirmationModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        title={modalConfig.title}
+        description={modalConfig.description}
+        onConfirm={modalConfig.onConfirm}
+        confirmText={modalConfig.confirmText}
+        cancelText={modalConfig.cancelText}
+      />
       <div
         class="offcanvas offcanvas-end customeoff"
         tabindex="-1"
@@ -327,7 +352,7 @@ export const TenantScreen = () => {
               </div>
               <div class="col-xl-6 mb-3">
                 <label for="exampleFormControlInput10" class="form-label">
-                  ConfirmPassword<span class="text-danger">*</span>
+                  Confirm Password<span class="text-danger">*</span>
                 </label>
                 <TextField
                   className="form-control form-control-sm"
@@ -352,8 +377,8 @@ export const TenantScreen = () => {
               </div> */}
             </div>
             <div style={{ textAlign: "end" }}>
-              <button className="btn btn-primary me-1 " onClick={handleSubmit}>
-                {selectedId === 0 ? "Add" : "Update"}
+                  <button className="btn btn-primary me-1 " onClick={handleSubmit} disabled={loading}>
+                {loading ? "Adding..." : selectedId === 0 ? "Add" : "Update"}
               </button>
               <button
                 className="btn btn-danger light ms-1"
@@ -386,8 +411,17 @@ export const TenantScreen = () => {
                 <button
                   className="btn btn-danger ms-2"
                   onClick={() => {
-                   
-                    tenantDelete()
+                    setModalOpen(true);
+                    setModalConfig({
+                      title: "Confirmation",
+                      description: "Are you sure you want to delete this tenant?",
+                      onConfirm: () => {
+                        tenantDelete();
+                        setModalOpen(false);
+                      },
+                      confirmText: "Delete",
+                      cancelText: "Cancel",
+                    }); 
                     setSelectedId(0);
                     setFormData({
                       FirstName: "",
@@ -489,15 +523,20 @@ export const TenantScreen = () => {
                       <thead>
                         <tr>
                           <th>Name</th>
-                          <th>Role</th>
-                          <th>Email Address</th>
-                          <th>Phone No</th>
-                          <th>username</th>
+                          <th className="text-center">Role</th>
+                          <th className="text-center">Email Address</th>
+                          <th className="text-center">Phone No</th>
+                          <th className="text-center">username</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {tenantData.map((emp, index) =>{
-                          console.log('emp',emp)
+                        {loading ? <tr>
+                         <td colSpan={5} className="text-center py-5">
+                          <CircularProgress />
+                         </td>
+                          </tr> 
+                         : tenantData.map((emp, index) =>{
+                       
                           return (
                           <tr
                             key={index}
@@ -526,17 +565,17 @@ export const TenantScreen = () => {
                             <td>
                               <h6>{emp.CompanyName}</h6>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <h6>{emp.Role}</h6>
                             </td>
 
-                            <td>
+                            <td className="text-center">
                               <span className="text-primary">{emp.Email}</span>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <span>{emp.PhoneNo}</span>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <span>{emp.SubDomain}</span>
                             </td>
                           </tr>
