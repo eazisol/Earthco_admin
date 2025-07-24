@@ -72,59 +72,56 @@ export const PackagesScreen = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-
+console.log('formData',formData)
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.maxUser) newErrors.maxUser = "Max User is required";
-    if (!formData.MaxStorageMB)
-      newErrors.MaxStorageMB = "Max Storage is required";
+    if (!formData.MaxStorageMB) newErrors.MaxStorageMB = "Max Storage is required";
     if (!formData.Price) newErrors.Price = "Price is required";
-    if (!formData.maxCompanies)
-      newErrors.maxCompanies = "Max Companies is required";
-    if (!formData.Description)
-      newErrors.Description = "Description is required";
+    if (!formData.maxCompanies) newErrors.maxCompanies = "Max Companies is required";
+    if (!formData.PackageTypeId) newErrors.PackageTypeId = "Package Type is required";
+    // if (!formData.Description) newErrors.Description = "Description is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setLoader(false);
+      toast.error("Please fill all required fields");
       return;
     }
 
-    setErrors({}); // Clear errors
-
-    const obj = {
-      ...formData,
-      PackageId: selectedId,
-    };
+    setErrors({});
 
     try {
-      const response = await addPackage(obj);
-      if (response.status === 200) {
+      const response = await addPackage({
+        ...formData,
+        PackageId: selectedId,
+        Description: "test"
+      });
+console.log('response',response)
+      if (response?.status === 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
-        const bsOffcanvas =
-          Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
+        const bsOffcanvas = Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
         bsOffcanvas.hide();
 
         setOpenForm(false);
         setFormData({
           name: "",
           maxUser: "",
-          maxStorage: "",
-          monthlyPrice: "",
-          maxCompanies: "",
           MaxStorageMB: "",
           Price: "",
-          PackageTypeId: "",
-          Description: "",
+          maxCompanies: "",
+          PackageTypeId: 0,
+          Description: "test",
         });
         setSelectedId(0);
         fetchPackages();
-        toast.success(response?.data?.Message);
+        toast.success(response?.data?.Message || "Package saved successfully");
       } else {
-          toast.error("Error adding package");
+        toast.error(response?.data?.Message || "Error saving package");
       }
     } catch (error) {
-      toast.error("Error adding package");
+      console.error(error);
+      toast.error(error?.response?.data?.Message || "Error saving package");
     } finally {
       setLoader(false);
     }
@@ -149,10 +146,13 @@ export const PackagesScreen = () => {
       try {
         const data = await getPackagesType(user.token.data);
         setPackageOptions(data);
-      } catch (err) {}
+      } catch (err) {
+        console.error(err);
+        toast.error("Error fetching package types");
+      }
     };
 
-    if (user.token.data) {
+    if (user?.token?.data) {
       fetchTenant();
     }
   }, []);
@@ -160,20 +160,20 @@ export const PackagesScreen = () => {
   const handleDelete = async () => {
     try {
       const response = await deletePackage(selectedId);
-      if (response?.status == 200) {
+      if (response?.status === 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
-        const bsOffcanvas =
-          Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
+        const bsOffcanvas = Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
         bsOffcanvas.hide();
         setSelectedId(0);
         fetchPackages();
         setOpenForm(false);
-        toast.success(response?.data?.Message);
+        toast.success(response?.data?.Message || "Package deleted successfully");
       } else {
-        toast.error("Error deleting package");
+        toast.error(response?.data?.Message || "Error deleting package");
       }
     } catch (error) {
-      toast.error("Error deleting package");
+      console.error(error);
+      toast.error(error?.response?.data?.Message || "Error deleting package");
     }
   };
 
@@ -303,8 +303,9 @@ export const PackagesScreen = () => {
                     value={formData.PackageTypeId}
                     onChange={handleInputChange}
                     style={{ height: "2.5rem" }}
+                    error={!!errors.PackageTypeId}
                   >
-                    {packageOptions.map((option) => (
+                    {packageOptions?.map((option) => (
                       <MenuItem
                         key={option.PackageTypeId}
                         value={option.PackageTypeId}
@@ -313,6 +314,9 @@ export const PackagesScreen = () => {
                       </MenuItem>
                     ))}
                   </Select>
+                  {errors.PackageTypeId && (
+                    <div className="text-danger small">{errors.PackageTypeId}</div>
+                  )}
                 </FormControl>
               </div>
               {/* <div class="col-xl-12 mb-3">

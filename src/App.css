@@ -40,3 +40,24 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Sidebar fixed and scrollable children */
+.deznav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background: #fff;
+  z-index: 1000;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.deznav-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  height: 100%;
+  padding-bottom: 20px;
+}

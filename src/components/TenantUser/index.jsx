@@ -13,8 +13,8 @@ export const TenantScreen = () => {
   const [tenantData, setTenantData] = useState([]);
   const [packagesData, setPackagesdata] = useState({});
   const [role, setRole] = useState([]);
-  const [selectedId, setSelectedId] = useState(0);
   const [packages, setpackegs] = useState([]);
+  const [selectedId, setSelectedId] = useState(0);
   const [tenants, setTenants] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -125,6 +125,7 @@ export const TenantScreen = () => {
       DisplayStart: 1,
       DisplayLength: 10,
     });
+    
     setTenantData(response?.Data);
     setLoading(false);
     };
@@ -133,6 +134,7 @@ export const TenantScreen = () => {
     setRole(response?.data);
   };
   const tenantDelete = async () => {
+    console.log('selectedId',selectedId)
     try {
       const response = await deleteTenant(selectedId);
       console.log('response',response)
@@ -263,7 +265,7 @@ export const TenantScreen = () => {
                     onChange={handleInputChange}
                     style={{ height: "2.5rem" }}
                   >
-                    {role.map((option) => {
+                    {role?.map((option) => {
                       return (
                         <MenuItem
                           key={option.RoleId}
@@ -325,7 +327,7 @@ export const TenantScreen = () => {
                     onChange={handleInputChange}
                     style={{ height: "2.5rem" }}
                   >
-                    {packages.map((option) => (
+                    {packages?.map((option) => (
                       <MenuItem
                         key={option.PackageId}
                         value={option.PackageId}
@@ -527,6 +529,7 @@ export const TenantScreen = () => {
                           <th className="text-center">Email Address</th>
                           <th className="text-center">Phone No</th>
                           <th className="text-center">username</th>
+                          <th className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -535,7 +538,8 @@ export const TenantScreen = () => {
                           <CircularProgress />
                          </td>
                           </tr> 
-                         : tenantData.map((emp, index) =>{
+                         : tenantData?.map((emp, index) =>{
+                         console.log("🚀 ~ TenantScreen ~ emp:", emp)
                        
                           return (
                           <tr
@@ -577,6 +581,29 @@ export const TenantScreen = () => {
                             </td>
                             <td className="text-center">
                               <span>{emp.SubDomain}</span>
+                            </td>
+                            <td className="text-center">
+                              <i 
+                                className="fa-solid fa-trash text-danger cursor-pointer" 
+                                title="Delete Tenant"
+                                style={{cursor: 'pointer'}}
+                                onClick={(e)=>{
+                                  e.stopPropagation(); // Prevent row click event
+                                  console.log('emp.TenantId',emp.TenantId)
+                                  setModalOpen(true);
+                                  setModalConfig({
+                                    title: "Confirmation", 
+                                    description: "Are you sure you want to delete this tenant?",
+                                    onConfirm: () => {
+                                      setSelectedId(emp.TenantId);
+                                      tenantDelete();
+                                      setModalOpen(false);
+                                    },
+                                    confirmText: "Delete",
+                                    cancelText: "Cancel",
+                                  });
+                                }}
+                              ></i>
                             </td>
                           </tr>
                         )})}

@@ -103,3 +103,18 @@ export const deleteTenant=async(id )=>{
     return error;
   }
 };
+// /Accounts/RegisterTenant
+export const RegisterTenant = async (obj) => {
+  const token = JSON.parse(localStorage.getItem("user"));
+  try {
+    const data  = await axios.post(`${apiUrl}Accounts/RegisterTenant`, obj, {
+      headers: {
+        Authorization: `Bearer ${token.token.data}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+};

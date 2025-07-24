@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { CustomButtonGreen } from "./CustomButton";
-import useApi from "../hooks/useApi";
 import { Link } from "react-router-dom";
+import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { getPackages } from "../APIS/packages";
+import { getTenantRole } from "../APIS/auth";
+import { RegisterTenant } from "../APIS/auth";
 
 export const LoginForm = () => {
   const [formData, setFormData] = useState({
-    Name: "",
+    FirstName: "",
+    LastName: "",
+    CompanyName: "",
+    PhoneNo: "",
+    RoleId: 1,
+    PackageId: 0,
+    SubDomain: "",
     Email: "",
     Password: "",
     confirmPassword: "",
@@ -14,12 +23,23 @@ export const LoginForm = () => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [role, setRole] = useState([]);
+  const [packages, setpackegs] = useState([]);
+  const [packagesData, setPackagesdata] = useState(null);
+ console.log('packagesData',packagesData)
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
-  // Register API hook
-  const { execute: registerUser, loading: registerLoading, error: registerError } = useApi('https://admin.earthcoapp.com/admin/api/Accounts/RegisterTenant', {
-    method: 'POST',
-    immediate: false
-  });
+    // Optional: if you want to save full selected object too
+    if (name === "PackageId") {
+      const selectedPackage = packages.find((pkg) => pkg.PackageId === value);
+      setPackagesdata(selectedPackage);
+    }
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -65,7 +85,23 @@ export const LoginForm = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  const fetchPackages = async () => {
+    const response = await getPackages({
+      Search: "",
+      DisplayStart: 1,
+      DisplayLength: 10,
+    });
 
+    setpackegs(response?.Data);
+  };
+  const getRole = async () => {
+    const response = await getTenantRole();
+    setRole(response?.data);
+  };
+  useEffect(() => {
+    fetchPackages();
+    getRole();
+  }, []);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -84,24 +120,46 @@ export const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
+console.log('formData',formData)
+    // if (!validateForm()) {
+    //   return;
+    // }
 
     setIsSubmitting(true);
 
     try {
       // Prepare data for API call (remove confirmPassword as it's not needed on backend)
       const { confirmPassword, ...registerData } = formData;
-      
-      // Make API call using useApi hook
-      const response = await registerUser('https://admin.earthcoapp.com/admin/api/Accounts/RegisterTenant', {
-        method: 'POST',
-        body: registerData
-      });
-
-      console.log("Registration successful:", response);
+      const obj = {
+        TenantId: 0,
+        FirstName: formData.FirstName,
+        LastName: formData.LastName, 
+        Email: formData.Email,
+        Password: formData.Password,
+        SubDomain: formData.SubDomain,
+        CompanyName: formData.CompanyName,
+        PhoneNo: formData.PhoneNo,
+        RoleId: formData.RoleId,
+        tblUserpackages: [
+          {
+            UserPackageId:0,
+            PackageId:packagesData?.PackageId,
+            TenantId: 0,
+            Name: packagesData?.Name,
+            PackageTypeId: packagesData?.PackageTypeId,
+            MaxUsers: packagesData?.MaxUser,
+            MaxStorageMB: packagesData?.MaxStorageMB,
+            MaxCompanies: packagesData?.MaxCompanies,
+            Price: packagesData?.Price,
+            
+          }
+        ]
+      };
+      const data = await RegisterTenant(obj);
+      console.log('data.data',data.data)
+if (data?.data?.PaymentLink) {
+  window.open(data.data.PaymentLink, '_blank');
+}
 
       // Reset form after successful submission
       setFormData({
@@ -112,10 +170,8 @@ export const LoginForm = () => {
         SubDomain: "",
       });
 
-      alert("Registration successful! Please check your email to verify your account.");
     } catch (error) {
       console.error("Registration error:", error);
-      alert("Registration failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -175,54 +231,166 @@ export const LoginForm = () => {
           >
             <div className="row">
               <div className="form-group col-md-6">
-                <label htmlFor="name">
-                  Your Name <span className="text-danger">*</span>
+                <label htmlFor="FirstName">
+                  First Name <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
-                  name="Name"
-                  className={`form-control ${errors.Name ? "is-invalid" : ""}`}
-                  id="name"
-                  value={formData.Name}
-                  onChange={handleChange}
-                  placeholder="Enter your full name"
+                  name="FirstName"
+                  className={`form-control ${errors.FirstName ? "is-invalid" : ""}`}
+                  id="FirstName"
+                  value={formData.FirstName}
+                  onChange={handleInputChange}
+                  placeholder="Enter your first name"
                 />
-                {errors.Name && (
-                  <div className="invalid-feedback">{errors.Name}</div>
+                {errors.FirstName && (
+                  <div className="invalid-feedback">{errors.FirstName}</div>
                 )}
               </div>
               <div className="form-group col-md-6">
-                <label htmlFor="email">
-                  Your Email <span className="text-danger">*</span>
+                <label htmlFor="LastName">
+                  Last Name <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="LastName"
+                  className={`form-control ${errors.LastName ? "is-invalid" : ""}`}
+                  id="LastName"
+                  value={formData.LastName}
+                  onChange={handleInputChange}
+                  placeholder="Enter your last name"
+                />
+                {errors.LastName && (
+                  <div className="invalid-feedback">{errors.LastName}</div>
+                )}
+              </div>
+              <div className="form-group col-md-6">
+                <label htmlFor="Email">
+                  Email <span className="text-danger">*</span>
                 </label>
                 <input
                   type="email"
                   name="Email"
                   className={`form-control ${errors.Email ? "is-invalid" : ""}`}
-                  id="email"
+                  id="Email"
                   value={formData.Email}
-                  onChange={handleChange}
-                  placeholder="Enter your email address"
+                  onChange={handleInputChange}
+                  placeholder="Enter your email"
                 />
                 {errors.Email && (
                   <div className="invalid-feedback">{errors.Email}</div>
                 )}
               </div>
+              <div className="form-group col-md-6">
+                <label htmlFor="CompanyName">
+                  Company Name <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="CompanyName"
+                  className={`form-control ${errors.CompanyName ? "is-invalid" : ""}`}
+                  id="CompanyName"
+                  value={formData.CompanyName}
+                  onChange={handleInputChange}
+                  placeholder="Enter your company name"
+                />
+                {errors.CompanyName && (
+                  <div className="invalid-feedback">{errors.CompanyName}</div>
+                )}
+              </div>
             </div>
             <div className="row">
               <div className="form-group col-md-6">
-                <label htmlFor="password">
+                <label htmlFor="PhoneNo">
+                  Phone Number <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="tel"
+                  name="PhoneNo"
+                  className={`form-control ${errors.PhoneNo ? "is-invalid" : ""}`}
+                  id="PhoneNo"
+                  value={formData.PhoneNo}
+                  onChange={handleInputChange}
+                  placeholder="Enter your phone number"
+                />
+                {errors.PhoneNo && (
+                  <div className="invalid-feedback">{errors.PhoneNo}</div>
+                )}
+              </div>
+              <div className="form-group col-md-6">
+                <label htmlFor="SubDomain">
+                  Username <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="SubDomain"
+                  className={`form-control ${errors.SubDomain ? "is-invalid" : ""}`}
+                  id="SubDomain"
+                  value={formData.SubDomain}
+                  onChange={handleInputChange}
+                  placeholder="Enter your username"
+                />
+                {errors.SubDomain && (
+                  <div className="invalid-feedback">{errors.SubDomain}</div>
+                )}
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xl-6 mb-3">
+                <FormControl fullWidth>
+                  <label className="form-label">
+                    Role <span className="text-danger">*</span>
+                  </label>
+                  <Select
+                    name="RoleId"
+                    value={formData.RoleId}
+                    onChange={handleInputChange}
+                    style={{ height: "2.5rem" }}
+                  >
+                    {role?.map((option) => (
+                      <MenuItem
+                        key={option.RoleId}
+                        value={option.RoleId}
+                      >
+                        {option.Role}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="col-xl-6 mb-3">
+                <FormControl fullWidth>
+                  <label className="form-label">
+                    Package <span className="text-danger">*</span>
+                  </label>
+                  <Select
+                    name="PackageId"
+                    value={formData.PackageId}
+                    onChange={handleInputChange}
+                    style={{ height: "2.5rem" }}
+                  >
+                    {packages?.map((option) => (
+                      <MenuItem
+                        key={option.PackageId}
+                        value={option.PackageId}
+                      >
+                        {option.Name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="form-group col-md-6">
+                <label htmlFor="Password">
                   Password <span className="text-danger">*</span>
                 </label>
                 <input
                   type="password"
                   name="Password"
-                  className={`form-control ${
-                    errors.Password ? "is-invalid" : ""
-                  }`}
-                  id="password"
+                  className={`form-control ${errors.Password ? "is-invalid" : ""}`}
+                  id="Password"
                   value={formData.Password}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   placeholder="Enter your password"
                 />
                 {errors.Password && (
@@ -236,55 +404,35 @@ export const LoginForm = () => {
                 <input
                   type="password"
                   name="confirmPassword"
-                  className={`form-control ${
-                    errors.confirmPassword ? "is-invalid" : ""
-                  }`}
+                  className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}`}
                   id="confirmPassword"
                   value={formData.confirmPassword}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   placeholder="Confirm your password"
                 />
                 {errors.confirmPassword && (
-                  <div className="invalid-feedback">
-                    {errors.confirmPassword}
-                  </div>
+                  <div className="invalid-feedback">{errors.confirmPassword}</div>
                 )}
               </div>
             </div>
-            <div className="form-group col-md-6">
-              <label htmlFor="dbName">
-                Entity Name <span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="SubDomain"
-                className={`form-control ${errors.SubDomain ? "is-invalid" : ""}`}
-                id="dbName"
-                value={formData.SubDomain}
-                onChange={handleChange}
-                placeholder="Enter Entity name"
-              />
-              {errors.SubDomain && (
-                <div className="invalid-feedback">{errors.SubDomain}</div>
-              )}
-            </div>
+           
             <p className="mt-2 mb-1 ">&#8226; At least 8 characters</p>
             <p className="mb-1 ">&#8226; At least 1 number</p>
             <p className=" ">&#8226; At least 1 upper case letter</p>
-            {registerError && (
+            {/* {registerError && (
               <div className="alert alert-danger mt-3" role="alert">
                 {registerError}
               </div>
-            )}
+            )} */}
             <div className="text-center">
               <CustomButtonGreen
                 text={
-                  isSubmitting || registerLoading
+                  isSubmitting 
                   ? "Creating Account..."
                   : "Create Account"
                 }
                 type="submit"
-                disabled={isSubmitting || registerLoading}
+                disabled={isSubmitting }
               />
              <p className="text-center mt-2">
   Already user? <Link to="/login">Login</Link>

@@ -1,8 +1,9 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import image from "../../assets/img/team/team-1.jpg";
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
+import { getTenantServerSideList } from "../../APIS/transactions";
 
 export const TransactionsScreen = () => {
   const employees = [
@@ -50,6 +51,8 @@ export const TransactionsScreen = () => {
   const [employeesData, setEmployeesData] = useState(employees);
   const [selectedId, setSelectedId] = useState(0);
   const [openForm, setOpenForm] = useState(false);
+  const [transactionsData, setTransactionsData] = useState([]);
+  
   const [formData, setFormData] = useState({
     name: "",
     maxUser: "",
@@ -112,7 +115,13 @@ export const TransactionsScreen = () => {
     });
     setSelectedId(0);
   };
-
+useEffect(()=>{
+  const fetchTransactions = async () => {
+      const data = await getTenantServerSideList();
+      setTransactionsData(data.Data);
+  }
+  fetchTransactions();
+},[])
   return (
     <DashboardLayout>
       <div
@@ -270,55 +279,75 @@ export const TransactionsScreen = () => {
                   <div className="table-responsive active-projects style-1">
                     <div className="tbl-caption">
                       <h4 className="heading mb-0">Transactions</h4>
-                     
                     </div>
                     <table id="employees-tblwrapper" className="table">
                       <thead>
                         <tr>
-                          <th>Name</th>
-                          <th>Max User</th>
-                          <th>max Storage</th>
-                          <th>Monthly Price</th>
-                          <th>Max Companies</th>
+                          <th>Customer Name</th>
+                          <th>Invoice Number</th>
+                          <th>Transaction ID</th>
+                          <th>Package Name</th>
+                          <th>Payment</th>
+                          <th>Invoice Link</th>
+                          <th>Status</th>
+                          <th>Subscription ID</th>
+                          <th>Paid Date</th>
+                          <th>Transaction Date</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {employeesData.map((emp, index) => (
-                          <tr
-                            key={index}
-                            onClick={() => {
-                              setSelectedId(emp.id);
-                              setFormData({
-                                name: emp.name,
-                                maxUser: emp.maxUser || "",
-                                maxStorage: emp.maxStorage || "",
-                                monthlyPrice: emp.monthlyPrice || "",
-                                maxCompanies: emp.maxCompanies || "",
-                              });
-
-                              // Show the offcanvas properly
-                              const offcanvasEl =
-                                document.getElementById("offcanvasExample");
-                              const bsOffcanvas = new Offcanvas(offcanvasEl);
-                              bsOffcanvas.show();
-                            }}
-                          >
+                        {transactionsData?.map((transaction, index) => (
+                          <tr key={index}>
                             <td>
                               <div className="products">
-                                <h6>{emp.name}</h6>
+                                <h6>{transaction.tenantName}</h6>
                               </div>
                             </td>
                             <td>
-                              <span>{emp.maxUser}</span>
+                              <span>{transaction.InvoiceNumber}</span>
                             </td>
                             <td>
-                              <span>{emp.maxStorage}</span>
+                              <span>{transaction.TransactionId}</span>
                             </td>
                             <td>
-                              <span>{`$${emp.monthlyPrice}`}</span>
+                              <span>{transaction.packageName}</span>
                             </td>
                             <td>
-                              <span>{emp.maxCompanies}</span>
+                              <span>
+                                {transaction.PaymentLink && (
+                                  <a href={transaction.PaymentLink} target="_blank" rel="noopener noreferrer" style={{color:"#0000FF"}}>
+                                    View Payment
+                                  </a>
+                                )}
+                              </span>
+                            </td>
+                            <td>
+                              <span>
+                                {transaction.InvoiceLink && (
+                                  <a href={transaction.InvoiceLink} target="_blank" rel="noopener noreferrer" style={{color:"#0000FF"}}>
+                                    View Invoice
+                                  </a>
+                                )}
+                              </span>
+                            </td>
+                            <td>
+                              <span className={`badge ${
+                                transaction.Status === 'Paid' ? 'badge-success' :
+                                transaction.Status === 'Pending' ? 'badge-warning' :
+                                transaction.Status === 'Failed' ? 'badge-danger' :
+                                'badge-secondary'
+                              }`}>
+                                {transaction.Status}
+                              </span>
+                            </td>
+                            <td>
+                              <span>{transaction.SubscriptionId}</span>
+                            </td>
+                            <td>
+                              <span>{transaction.PaidDate ? new Date(transaction.PaidDate).toLocaleDateString() : '-'}</span>
+                            </td>
+                            <td>
+                              <span>{new Date(transaction.TransactionDate).toLocaleDateString()}</span>
                             </td>
                           </tr>
                         ))}
