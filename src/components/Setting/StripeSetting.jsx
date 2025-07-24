@@ -37,7 +37,7 @@ export const StripeSetting = () => {
       });
     } catch (error) {
       console.error("Error fetching settings:", error);
-      toast.error("Failed to fetch settings");
+      // toast.error("Failed to fetch settings");
     } finally {
       setLoading(false);
     }
@@ -94,7 +94,7 @@ export const StripeSetting = () => {
         </div>
 
         <div className="container-fluid">
-          <div className="row">
+          <div className="row table-space">
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body">

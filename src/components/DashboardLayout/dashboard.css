@@ -3291,7 +3291,11 @@ textarea.form-control-lg {
 
 .tab-content > .active {
   display: block; }
-
+@media screen and (min-width: 1400px) {
+  .table-space {
+    margin-left: 1%;
+  }
+}
 .navbar {
   --bs-navbar-padding-x: 0;
   --bs-navbar-padding-y: 0.5rem;
@@ -25655,7 +25659,22 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 .fc .fc-scroller-liquid-absolute, .fc-scroller {
   position: relative;
   overflow: visible !important; }
-
+.close-btn{
+  background-color: #f3eeee !important;
+  color: #383737 !important;
+  border-radius: 50% !important;
+  font-size: 14px !important;
+  height: 20px !important;
+  width: 20px !important;
+}
+.add-package-btn  {
+  height: 3em !important;
+}
+.cancel-btn{
+  background-color: #f3eeee !important;
+  color: #383737 !important;
+  border-color: #f3eeee !important;
+}
 .fc .fc-button-group > .fc-button {
   color: #b5b5c3;
   background: 0 0;

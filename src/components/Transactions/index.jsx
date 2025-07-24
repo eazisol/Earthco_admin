@@ -4,54 +4,23 @@ import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
 import { getTenantServerSideList } from "../../APIS/transactions";
+import { useAppContext } from "../../context/AppContext";
+  // Add Material UI Pagination
+import Pagination from '@mui/material/Pagination';
 
 export const TransactionsScreen = () => {
-  const employees = [
-    {
-      id: 1001,
-      name: "Liam Antony",
-      maxUser: 20,
-      maxStorage: 3,
-      monthlyPrice: 5,
-      maxCompanies: 23,
-    },
-    {
-      id: 1002,
-      name: "Noah Oliver",
-      maxUser: 20,
-      maxStorage: 3,
-      monthlyPrice: 5,
-      maxCompanies: 23,
-    },
-    {
-      id: 1003,
-      name: "Elijah James",
-      maxUser: 20,
-      maxStorage: 3,
-      monthlyPrice: 5,
-      maxCompanies: 23,
-    },
-    {
-      id: 1004,
-      name: "James Antony",
-      maxUser: 20,
-      maxStorage: 3,
-      monthlyPrice: 5,
-      maxCompanies: 23,
-    },
-    {
-      id: 1005,
-      name: "William Sokli",
-      maxUser: 20,
-      maxStorage: 3,
-      monthlyPrice: 5,
-      maxCompanies: 23,
-    },
-  ];
-  const [employeesData, setEmployeesData] = useState(employees);
+  const { loginUser } = useAppContext();
   const [selectedId, setSelectedId] = useState(0);
   const [openForm, setOpenForm] = useState(false);
   const [transactionsData, setTransactionsData] = useState([]);
+  // Pagination and search state
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+  console.log("🚀 ~ TransactionsScreen ~ totalCount:", totalCount)
+  
+  const [loading, setLoading] = useState(false);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -85,174 +54,42 @@ export const TransactionsScreen = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
 
-    if (selectedId === 0) {
-      // Create new
-      const newId = Math.max(...employeesData.map((emp) => emp.id)) + 1;
-      setEmployeesData([
-        ...employeesData,
-        {
-          ...formData,
-        },
-      ]);
-    } else {
-      // Update
-      const updated = employeesData.map((emp) =>
-        emp.id === selectedId ? { ...emp, ...formData } : emp
-      );
-      setEmployeesData(updated);
-    }
 
-    setOpenForm(false);
-    setFormData({
-      name: "",
-      maxUser: "",
-      maxStorage: "",
-      monthlyPrice: "",
-      maxCompanies: "",
-    });
-    setSelectedId(0);
-  };
-useEffect(()=>{
-  const fetchTransactions = async () => {
-      const data = await getTenantServerSideList();
+  // Fetch transactions with search and pagination
+  const fetchTransactions = async (searchValue = search, pageValue = page, pageSizeValue = pageSize) => {
+    setLoading(true);
+    try {
+      const data = await getTenantServerSideList(searchValue, pageValue, pageSizeValue);
       setTransactionsData(data.Data);
-  }
-  fetchTransactions();
-},[])
+      setTotalCount(data.totalRecords || 0);
+    } catch (e) {
+      setTransactionsData([]);
+      setTotalCount(0);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+    // eslint-disable-next-line
+  }, [page, pageSize]);
+
+  // Search handler
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    setPage(1);
+    fetchTransactions(e.target.value, 1, pageSize);
+  };
+
+  // Pagination handler
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
   return (
     <DashboardLayout>
-      <div
-        class="offcanvas offcanvas-end customeoff"
-        tabindex="-1"
-        id="offcanvasExample"
-      >
-        <div class="offcanvas-header">
-          <h5 class="modal-title" id="#gridSystemModal">
-            Add Transaction
-          </h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <div class="offcanvas-body">
-          <div class="container-fluid">
-            {/* <form > */}
-            <div class="row">
-              <div className="col-xl-6 mb-3">
-                <label className="form-label">Name</label>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
-              <div class="col-xl-6 mb-3">
-                <label class="form-label">Max User</label>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="maxUser"
-                  value={formData.maxUser}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
 
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Max Storage<span class="text-danger">*</span>
-                </label>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="maxStorage"
-                  value={formData.maxStorage}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Monthly Price<span class="text-danger">*</span>
-                </label>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="monthlyPrice"
-                  value={formData.monthlyPrice}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Max Companies<span class="text-danger">*</span>
-                </label>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="maxCompanies"
-                  value={formData.maxCompanies}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
-            </div>
-            <div>
-              <div>
-                <button className="btn btn-primary me-1" onClick={handleSubmit}>
-                  {selectedId === 0 ? "Add" : "Update"}
-                </button>
-                <button
-                  className="btn btn-danger light ms-1"
-                  onClick={() => {
-                    setOpenForm(false);
-                    setSelectedId(0);
-                    setFormData({
-                      name: "",
-                      maxUser: "",
-                      maxStorage: "",
-                      monthlyPrice: "",
-                      maxCompanies: "",
-                    });
-                  }}
-                >
-                  Cancel
-                </button>
-
-                {selectedId !== 0 && (
-                  <button
-                    className="btn btn-danger ms-2"
-                    onClick={() => {
-                      setEmployeesData(
-                        employeesData.filter((emp) => emp.id !== selectedId)
-                      );
-                      setSelectedId(0);
-                      setFormData({
-                        name: "",
-                        maxUser: "",
-                        maxStorage: "",
-                        monthlyPrice: "",
-                        maxCompanies: "",
-                      });
-                      setOpenForm(false);
-                    }}
-                  >
-                    Delete
-                  </button>
-                )}
-              </div>
-            </div>
-            {/* </form> */}
-          </div>
-        </div>
-      </div>
       <div className="content-body">
         <div className="page-titles">
           <ol className="breadcrumb">
@@ -272,87 +109,121 @@ useEffect(()=>{
           {/* <a className="text-primary fs-13" data-bs-toggle="offcanvas" href="#offcanvasExample1" role="button" aria-controls="offcanvasExample1">+ Add Task</a> */}
         </div>
         <div className="container-fluid">
-          <div className="row"  style={{marginLeft:"0.5px"}}>
+          <div className="row table-space"  >
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
-                    <div className="tbl-caption">
+                    <div className="tbl-caption d-flex justify-content-between align-items-center">
                       <h4 className="heading mb-0">Transactions</h4>
+                      {/* Search Field */}
+                      <TextField
+                        size="small"
+                        placeholder="Search..."
+                        value={search}
+                        onChange={handleSearchChange}
+                        style={{ minWidth: 200 }}
+                      />
                     </div>
                     <table id="employees-tblwrapper" className="table">
+                    {/* loginUser?.Data?.RoleId */}
                       <thead>
                         <tr>
-                          <th>Customer Name</th>
+                          {loginUser?.Data?.RoleId === 1 && <th>Customer Name</th>}
                           <th>Invoice Number</th>
-                          <th>Transaction ID</th>
+                          {loginUser?.Data?.RoleId === 1 && <th>Transaction ID</th>}
                           <th>Package Name</th>
-                          <th>Payment</th>
-                          <th>Invoice Link</th>
-                          <th>Status</th>
-                          <th>Subscription ID</th>
-                          <th>Paid Date</th>
+                        
+                        {loginUser?.Data?.RoleId === 1 && <th>Subscription ID</th>}
                           <th>Transaction Date</th>
+                          <th>Paid Date</th>
+                         
+                          <th>Status</th>
+                          <th>Links</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {transactionsData?.map((transaction, index) => (
-                          <tr key={index}>
-                            <td>
-                              <div className="products">
-                                <h6>{transaction.tenantName}</h6>
-                              </div>
-                            </td>
-                            <td>
-                              <span>{transaction.InvoiceNumber}</span>
-                            </td>
-                            <td>
-                              <span>{transaction.TransactionId}</span>
-                            </td>
-                            <td>
-                              <span>{transaction.packageName}</span>
-                            </td>
-                            <td>
-                              <span>
-                                {transaction.PaymentLink && (
-                                  <a href={transaction.PaymentLink} target="_blank" rel="noopener noreferrer" style={{color:"#0000FF"}}>
-                                    View Payment
-                                  </a>
-                                )}
-                              </span>
-                            </td>
-                            <td>
-                              <span>
-                                {transaction.InvoiceLink && (
-                                  <a href={transaction.InvoiceLink} target="_blank" rel="noopener noreferrer" style={{color:"#0000FF"}}>
-                                    View Invoice
-                                  </a>
-                                )}
-                              </span>
-                            </td>
-                            <td>
-                              <span className={`badge ${
-                                transaction.Status === 'Paid' ? 'badge-success' :
-                                transaction.Status === 'Pending' ? 'badge-warning' :
-                                transaction.Status === 'Failed' ? 'badge-danger' :
-                                'badge-secondary'
-                              }`}>
-                                {transaction.Status}
-                              </span>
-                            </td>
-                            <td>
-                              <span>{transaction.SubscriptionId}</span>
-                            </td>
-                            <td>
-                              <span>{transaction.PaidDate ? new Date(transaction.PaidDate).toLocaleDateString() : '-'}</span>
-                            </td>
-                            <td>
-                              <span>{new Date(transaction.TransactionDate).toLocaleDateString()}</span>
-                            </td>
-                          </tr>
-                        ))}
+                        {loading ? (
+                          <tr><td colSpan={10} className="text-center">Loading...</td></tr>
+                        ) : transactionsData?.length === 0 ? (
+                          <tr><td colSpan={10} className="text-center">No data found</td></tr>
+                        ) : (
+                          transactionsData?.map((transaction, index) => (
+                            
+                            <tr key={index}>
+                              {loginUser?.Data?.RoleId === 1 && <td>
+                                <div className="products">
+                                  <h6>{transaction.FirstName}</h6>
+                                </div>
+                              </td>}
+                              <td>
+                                <span>{transaction.InvoiceNumber}</span>
+                              </td>
+                                  {loginUser?.Data?.RoleId === 1 && <td>
+                                    <span>{transaction.TransactionId}</span>
+                                  </td>}
+                              <td>
+                                <span>{transaction.Name}</span>
+                              </td>
+                           {loginUser?.Data?.RoleId === 1 && <td>
+                                <span>{transaction.SubscriptionId}</span>
+                              </td>}
+                              <td>
+                                <span>{new Date(transaction.TransactionDate).toLocaleDateString()}</span>
+                              </td>
+                              <td>
+                                <span>{transaction.PaidDate ? new Date(transaction.PaidDate).toLocaleDateString() : '-'}</span>
+                              </td>
+                            
+                             
+                              <td>
+                                <span className={`badge ${
+                                  transaction.Status === 'paid' ? 'badge-success' :
+                                  transaction.Status === 'Pending' ? 'badge-warning' :
+                                  transaction.Status === 'Failed' ? 'badge-danger' :
+                                  'badge-secondary'
+                                }`}>
+                                  {transaction.Status}
+                                </span>
+                              </td>
+                              <td>
+                                <div>
+                                <span>
+                                  {transaction.PaymentLink && (
+                                    <a href={transaction.PaymentLink} target="_blank" rel="noopener noreferrer" style={{color:"#0000FF"}}>
+                                     Payment
+                                    </a>
+                                  )}
+                                </span>
+                              <span style={{marginLeft:"5px",marginRight:"5px"}}>|</span>
+                                <span>
+                                  {transaction.InvoiceLink && (
+                                    <a href={transaction.InvoiceLink} target="_blank" rel="noopener noreferrer" style={{color:"#0000FF"}}>
+                                  Invoice
+                                    </a>
+                                  )}
+                                </span>
+                                </div>
+                              </td>
+                            
+                             
+                            </tr>
+                          ))
+                        )}
                       </tbody>
                     </table>
+                    {/* Pagination Controls */}
+                    <div className="d-flex justify-content-end align-items-center p-3">
+                      <Pagination
+                        count={Math.ceil(totalCount / pageSize)}
+                        page={page}
+                        onChange={handlePageChange}
+                        color="#b0e15b"
+                        shape="rounded"
+                        showFirstButton
+                        showLastButton
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

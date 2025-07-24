@@ -35,6 +35,7 @@ export const addCompany = async (body) => {
     }
 };
 export const deleteCompany = async (id) => {
+  console.log('id delete',id);
     const token = JSON.parse(localStorage.getItem("user"));
     try {
         const data = await axios.get(`${apiUrl}Company/DeleteCompany?id=${id}`, {

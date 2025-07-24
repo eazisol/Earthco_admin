@@ -28,7 +28,7 @@ console.log(formData,'formData');
       setFormData(response);
     } catch (error) {
       console.error("Error fetching settings:", error);
-      toast.error("Failed to fetch settings");
+      // toast.error("Failed to fetch settings");
     } finally {
       setLoading(false);
     } 
@@ -96,7 +96,7 @@ console.log(formData,'formData');
           </ol>
         </div>
         <div className="container-fluid">
-          <div className="row">
+          <div className="row table-space">
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body">

@@ -7,10 +7,16 @@ import { getPackages } from "../../APIS/packages";
 import { AddTenant, deleteTenant, getTenant, getTenantRole } from "../../APIS/auth";
 import { toast } from "react-toastify";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
+import Pagination from '@mui/material/Pagination';
 
 export const TenantScreen = () => {
  
   const [tenantData, setTenantData] = useState([]);
+  // Pagination and search state
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
   const [packagesData, setPackagesdata] = useState({});
   const [role, setRole] = useState([]);
   const [packages, setpackegs] = useState([]);
@@ -52,63 +58,7 @@ export const TenantScreen = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const {
-      confirmPassword, // exclude
-      PackageId, // exclude
-      ...filteredFormData // keep everything else
-    } = formData;
-    const obj = {
-      ...filteredFormData,
-      TenantId:selectedId,
-      tblUserpackages: [
-        {
-          UserPackageId: formData?.PackageId,
-          PackageId: packagesData?.PackageId,
-          TenantId: formData?.TenantId,
-          Name: packagesData?.Name,
-          PackageTypeId: packagesData?.PackageTypeId,
-          MaxUsers: packagesData?.MaxUser,
-          MaxStorageMB: packagesData?.MaxStorageMB,
-          MaxCompanies: packagesData?.MaxCompanies,
-          Price: packagesData?.Price,
-        },
-      ],
-    };
-    try {
-      const data = await AddTenant(obj);
-      console.log(data,'data');
-      // if (data.status == 200) {
-        const offcanvasEl = document.getElementById("offcanvasExample");
-        const bsOffcanvas =
-          Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
-        bsOffcanvas.hide();
-      // }
-      setFormData({
-        FirstName: "",
-        LastName: "",
-        PhoneNo: "",
-        Email: "",
-        Password: "",
-        confirmPassword: "",
-        RoleId: 1,
-        SubDomain: "",
-        PackageId: 0,
-        TenantId: 0,
-        CompanyName: "",
-      });
-      fetchTenants()
-      setOpenForm(false);
-      setSelectedId(0);
-      toast.success(data?.Message);
-    } catch (error) {
-      toast.error("Error adding tenant");
-    } finally {
-      setLoading(false);
-    }
-  };
+ 
   const fetchPackages = async () => {
     const response = await getPackages({
       Search: "",
@@ -118,37 +68,68 @@ export const TenantScreen = () => {
 
     setpackegs(response?.Data);
   };
-  const fetchTenants = async () => {
+  // Fetch tenants with search and pagination
+  const fetchTenants = async (searchValue = search, pageValue = page, pageSizeValue = pageSize) => {
     setLoading(true);
-    const response = await getTenant({
-      Search: "",
-      DisplayStart: 1,
-      DisplayLength: 10,
-    });
-    
-    setTenantData(response?.Data);
-    setLoading(false);
-    };
+    try {
+      const response = await getTenant({
+        Search: searchValue || "",
+        DisplayStart: pageValue,
+        DisplayLength: pageSizeValue,
+      });
+      
+      if (response?.error) {
+        toast.error(response.message || "Error fetching tenants");
+        setTenantData([]);
+        setTotalCount(0);
+      } else {
+        setTenantData(response?.Data || []);
+        setTotalCount(response?.totalRecords || 0);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch tenants");
+      setTenantData([]);
+      setTotalCount(0);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTenants();
+    fetchPackages();
+    getRole();
+  }, [page, pageSize]);
+
+  // Search handler
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+    setPage(1);
+    fetchTenants(value, 1, pageSize);
+  };
+
+  // Pagination handler
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
   const getRole = async () => {
     const response = await getTenantRole();
     setRole(response?.data);
   };
   const tenantDelete = async () => {
-    console.log('selectedId',selectedId)
     try {
       const response = await deleteTenant(selectedId);
-      console.log('response',response)
-      fetchTenants();
-      toast.success(response?.Message);
+      if (response?.error) {
+        toast.error(response.message || "Error deleting tenant");
+      } else {
+        toast.success(response?.Message || "Tenant deleted successfully");
+        fetchTenants();
+      }
     } catch (error) {
       toast.error("Error deleting tenant");
     }
   };
-  useEffect(() => {
-    fetchTenants();
-    fetchPackages();
-    getRole();
-  }, []);
   return (
     <DashboardLayout>
          <ConfirmationModal
@@ -160,304 +141,10 @@ export const TenantScreen = () => {
         confirmText={modalConfig.confirmText}
         cancelText={modalConfig.cancelText}
       />
-      <div
-        class="offcanvas offcanvas-end customeoff"
-        tabindex="-1"
-        id="offcanvasExample"
-      >
-        <div class="offcanvas-header">
-          <h5 class="modal-title" id="#gridSystemModal">
-            Add Tenant
-          </h5>
-          <button
-            type="button"
-            className="btn-close"
-            onClick={() => {
-              const offcanvasEl = document.getElementById("offcanvasExample");
-              const bsOffcanvas =
-                Offcanvas.getInstance(offcanvasEl) ||
-                new Offcanvas(offcanvasEl);
-              bsOffcanvas.hide();
-
-              setSelectedId(0);
-              setFormData({
-                FirstName: "",
-                LastName: "",
-                PhoneNo: "",
-                Email: "",
-                Password: "",
-                confirmPassword: "",
-                RoleId: 1,
-                SubDomain: "",
-              });
-            }}
-          >
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <div class="offcanvas-body">
-          <div class="container-fluid">
-            {/* <form > */}
-            <div class="row">
-              <div className="col-xl-6 mb-3">
-                <label className="form-label">First Name</label>
-                <span class="text-danger">*</span>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="FirstName"
-                  value={formData.FirstName}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
-              <div className="col-xl-6 mb-3">
-                <label className="form-label">Last Name</label>
-                <span class="text-danger">*</span>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="LastName"
-                  value={formData.LastName}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
-              <div className="col-xl-6 mb-3">
-                <label className="form-label">Email</label>
-                <span class="text-danger">*</span>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="Email"
-                  value={formData.Email}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
-              <div class="col-xl-6 mb-3">
-                <label class="form-label">Comapny Name</label>
-                <span class="text-danger">*</span>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="CompanyName"
-                  value={formData.CompanyName}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
-              <div class="col-xl-6 mb-3">
-                <label class="form-label">Mobile</label>
-                <span class="text-danger">*</span>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="PhoneNo"
-                  value={formData.PhoneNo}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
-              <div class="col-xl-6 mb-3">
-                <FormControl fullWidth>
-                  <label className="form-label">
-                    Role<span className="text-danger">*</span>
-                  </label>
-                  <Select
-                    name="RoleId"
-                    value={formData.RoleId}
-                    onChange={handleInputChange}
-                    style={{ height: "2.5rem" }}
-                  >
-                    {role?.map((option) => {
-                      return (
-                        <MenuItem
-                          key={option.RoleId}
-                          value={option.RoleId}
-                          // disabled={option.disabled || false}
-                        >
-                          {option.Role}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </div>
-              <div class="col-xl-6 mb-3">
-                <label class="form-label">username</label>
-                <span class="text-danger">*</span>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="SubDomain"
-                  value={formData.SubDomain}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div>
-              {/* <div class="col-xl-6 mb-3">
-                <div className="col-xl-6 mb-3">
-                  <label className="form-label">
-                    Package<span className="text-danger">*</span>
-                  </label>
-                  <FormControl fullWidth size="small">
-                    <Select
-                      name="PackageId"
-                      value={formData.PackageId}
-                      onChange={handleInputChange}
-                      className="form-select form-select-sm"
-                      displayEmpty
-                    >
-                      {packages.map((option) => (
-                        <MenuItem
-                          key={option.PackageId}
-                          value={option.PackageId}
-                          // disabled={option.disabled || false}
-                        >
-                          {option.Name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </div>
-              </div> */}
-               <div class="col-xl-6 mb-3">
-                <FormControl fullWidth>
-                  <label className="form-label">
-                    Package<span className="text-danger">*</span>
-                  </label>
-                  <Select
-                    name="PackageId"
-                    value={formData.PackageId}
-                    onChange={handleInputChange}
-                    style={{ height: "2.5rem" }}
-                  >
-                    {packages?.map((option) => (
-                      <MenuItem
-                        key={option.PackageId}
-                        value={option.PackageId}
-                        // disabled={option.disabled || false}
-                      >
-                        {option.Name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </div>
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Password<span class="text-danger">*</span>
-                </label>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="Password"
-                  value={formData.Password}
-                  onChange={handleInputChange}
-                  size="small"
-                  type="password"
-                />
-              </div>
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Confirm Password<span class="text-danger">*</span>
-                </label>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  size="small"
-                  type="password"
-                />
-              </div>
-              {/* <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Entity Name<span class="text-danger">*</span>
-                </label>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="entityName"
-                  value={formData.entityName}
-                  onChange={handleInputChange}
-                  size="small"
-                />
-              </div> */}
-            </div>
-            <div style={{ textAlign: "end" }}>
-                  <button className="btn btn-primary me-1 " onClick={handleSubmit} disabled={loading}>
-                {loading ? "Adding..." : selectedId === 0 ? "Add" : "Update"}
-              </button>
-              <button
-                className="btn btn-danger light ms-1"
-                onClick={() => {
-                  setOpenForm(false);
-                  setSelectedId(0);
-                  const offcanvasEl =
-                    document.getElementById("offcanvasExample");
-                  const bsOffcanvas =
-                    Offcanvas.getInstance(offcanvasEl) ||
-                    new Offcanvas(offcanvasEl);
-                  bsOffcanvas.hide();
-
-                  setFormData({
-                    FirstName: "",
-                    LastName: "",
-                    PhoneNo: "",
-                    Email: "",
-                    Password: "",
-                    confirmPassword: "",
-                    RoleId: 1,
-                    SubDomain: "",
-                  });
-                }}
-              >
-                Cancel
-              </button>
-
-              {selectedId !== 0 && (
-                <button
-                  className="btn btn-danger ms-2"
-                  onClick={() => {
-                    setModalOpen(true);
-                    setModalConfig({
-                      title: "Confirmation",
-                      description: "Are you sure you want to delete this tenant?",
-                      onConfirm: () => {
-                        tenantDelete();
-                        setModalOpen(false);
-                      },
-                      confirmText: "Delete",
-                      cancelText: "Cancel",
-                    }); 
-                    setSelectedId(0);
-                    setFormData({
-                      FirstName: "",
-                      LastName: "",
-                      PhoneNo: "",
-                      Email: "",
-                      Password: "",
-                      confirmPassword: "",
-                      RoleId: 1,
-                      SubDomain: "",
-                    });
-                    const offcanvasEl =
-                      document.getElementById("offcanvasExample");
-                    const bsOffcanvas =
-                      Offcanvas.getInstance(offcanvasEl) ||
-                      new Offcanvas(offcanvasEl);
-                    bsOffcanvas.hide();
-
-                    setOpenForm(false);
-                  }}
-                >
-                  Delete
-                </button>
-              )}
-            </div>
-
-            {/* </form> */}
-          </div>
-        </div>
-      </div>
+  
       <div className="content-body">
         <div className="page-titles">
           <ol className="breadcrumb">
-            {/* <li><h5 className="bc-title">Employee</h5></li> */}
             <li className="breadcrumb-item">
               <a href="javascript:void(0)">
                 <svg
@@ -484,95 +171,58 @@ export const TenantScreen = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                Tenant{" "}
+                <span style={{  marginLeft:'8px'}}>Tenant</span>
               </a>
             </li>
           </ol>
         </div>
         <div className="container-fluid">
-          <div className="row" style={{ marginLeft: "0.5px" }}>
+          <div className="row table-space">
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
-                    <div className="tbl-caption">
-                      <h4 className="heading mb-0">Tenant</h4>
-                      <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() => {
-                          setSelectedId(0);
-                          setFormData({
-                            FirstName: "",
-                            LastName: "",
-                            PhoneNo: "",
-                            Email: "",
-                            Password: "",
-                            confirmPassword: "",
-                            RoleId: 1,
-                            SubDomain: "",
-                          });
-
-                          const offcanvasEl =
-                            document.getElementById("offcanvasExample");
-                          const bsOffcanvas = new Offcanvas(offcanvasEl);
-                          bsOffcanvas.show();
-                        }}
-                      >
-                        + Add Tenant
-                      </button>
+                    {/* Search Field */}
+                    <div className="d-flex justify-content-between align-items-center mb-2 pt-3">
+                      <h4 className="heading mb-0" style={{marginLeft:"15px"}}>Tenant List</h4>
+                      <TextField
+                        size="small"
+                        placeholder="Search Tenant..."
+                        value={search}
+                        onChange={handleSearchChange}
+                        style={{ minWidth: 200, marginRight: "15px" }}
+                      />
                     </div>
                     <table id="employees-tblwrapper" className="table">
                       <thead>
                         <tr>
                           <th>Name</th>
-                          <th className="text-center">Role</th>
+                          <th className="text-center">Username</th>
                           <th className="text-center">Email Address</th>
                           <th className="text-center">Phone No</th>
-                          <th className="text-center">username</th>
+                          <th className="text-center">Role</th>
                           <th className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {loading ? <tr>
-                         <td colSpan={5} className="text-center py-5">
+                         <td colSpan={6} className="text-center py-5">
                           <CircularProgress />
                          </td>
                           </tr> 
-                         : tenantData?.map((emp, index) =>{
-                         console.log("🚀 ~ TenantScreen ~ emp:", emp)
-                       
+                         : tenantData?.length === 0 ? (
+                          <tr>
+                            <td colSpan={6} className="text-center">No data found</td>
+                          </tr>
+                        ) : tenantData?.map((emp, index) =>{
                           return (
-                          <tr
-                            key={index}
-                            onClick={() => {
-                              setSelectedId(emp.TenantId);
-                             
-                              setFormData({
-                                CompanyName: emp.CompanyName,
-                                Email: emp.Email || "",
-                                Password: emp.Password || "",
-                                confirmPassword: emp.Password || "",
-                                RoleId: emp.RoleId || "",
-                                SubDomain: emp.SubDomain || "",
-                                PhoneNo:emp.PhoneNo||""  ,
-                                FirstName:emp.FirstName||"",
-                              LastName:emp.LastName||"",  
-                              PackageId:emp.tblUserPackages[0]?.PackageId||''                          });
-
-                              // Show the offcanvas properly
-                              const offcanvasEl =
-                                document.getElementById("offcanvasExample");
-                              const bsOffcanvas = new Offcanvas(offcanvasEl);
-                              bsOffcanvas.show();
-                            }}
-                          >
+                          <tr key={index}>
                             <td>
                               <h6>{emp.CompanyName}</h6>
                             </td>
                             <td className="text-center">
-                              <h6>{emp.Role}</h6>
+                              <span>{emp.SubDomain}</span>
                             </td>
-
                             <td className="text-center">
                               <span className="text-primary">{emp.Email}</span>
                             </td>
@@ -580,7 +230,7 @@ export const TenantScreen = () => {
                               <span>{emp.PhoneNo}</span>
                             </td>
                             <td className="text-center">
-                              <span>{emp.SubDomain}</span>
+                              <h6>{emp.Role}</h6>
                             </td>
                             <td className="text-center">
                               <i 
@@ -588,8 +238,7 @@ export const TenantScreen = () => {
                                 title="Delete Tenant"
                                 style={{cursor: 'pointer'}}
                                 onClick={(e)=>{
-                                  e.stopPropagation(); // Prevent row click event
-                                  console.log('emp.TenantId',emp.TenantId)
+                                  e.stopPropagation(); 
                                   setModalOpen(true);
                                   setModalConfig({
                                     title: "Confirmation", 
@@ -609,6 +258,18 @@ export const TenantScreen = () => {
                         )})}
                       </tbody>
                     </table>
+                    {/* Pagination Controls */}
+                    <div className="d-flex justify-content-end align-items-center p-3">
+                      <Pagination
+                        count={Math.ceil(totalCount / pageSize)}
+                        page={page}
+                        onChange={handlePageChange}
+                        color="#b0e15b"
+                        shape="rounded"
+                        showFirstButton
+                        showLastButton
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

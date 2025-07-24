@@ -63,22 +63,18 @@ export const getTenantRole = async () => {
     };
   }
 };
-export const getTenant = async ({ Search = "", DisplayStart = 0, DisplayLength = 10 } = {}) => {
+export const getTenant = async ({ Search = "", DisplayStart = 1, DisplayLength = 10 } = {}) => {
   const token = JSON.parse(localStorage.getItem("user"));
-
+console.log("🚀 ~ getTenant ~ Search:",typeof Search)
   try {
     const { data } = await axios.get(
-      `${apiUrl}Tenant/GetTenantServerSideList`,
+      `${apiUrl}Tenant/GetTenantServerSideList?Search="${Search}"&DisplayStart=${DisplayStart}&DisplayLength=${DisplayLength}`,
       {
         headers: {
           Authorization: `Bearer ${token?.token?.data}`,
           "Content-Type": "application/json",
         },
-        params: {
-          Search,
-          DisplayStart,
-          DisplayLength,
-        },
+      
       }
     );
     return data;

@@ -17,6 +17,7 @@ import {
   getPackagesType,
 } from "../../APIS/packages";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
+import Pagination from '@mui/material/Pagination';
 // import 'react-quill/dist/quill.snow.css';
 // import ReactQuill from 'react-quill';
 
@@ -46,14 +47,27 @@ export const PackagesScreen = () => {
     cancelText: "Cancel",
   });
 
+  // Pagination and search state
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    const numericFields = ["maxUser", "MaxStorageMB", "Price", "maxCompanies"];
+    const numericFields = [ "MaxStorageMB", "Price", ];
 
     if (numericFields.includes(name)) {
-      const isValid = /^\d*$/.test(value);
-      if (!isValid) return;
+      if (name === "Price") {
+        // Allow numbers and commas for Price field
+        const isValid = /^[\d.]*$/.test(value);
+        if (!isValid) return;
+      } else {
+        // Only allow numbers for other numeric fields
+        const isValid = /^\d*$/.test(value);
+        if (!isValid) return;
+      }
     }
 
     setFormData((prevData) => ({
@@ -127,15 +141,16 @@ console.log('response',response)
     }
   };
 
-  const fetchPackages = async () => {
+  // Update fetchPackages to use search, page, pageSize
+  const fetchPackages = async (searchValue = search, pageValue = page, pageSizeValue = pageSize) => {
     setLoader(true);
     const response = await getPackages({
-      Search: "",
-      DisplayStart: 1,
-      DisplayLength: 10,
+      Search: searchValue || "",
+      DisplayStart: pageValue,
+      DisplayLength: pageSizeValue,
     });
-    
     setEmployeesData(response);
+    setTotalCount(response?.totalRecords || 0);
     setLoader(false);
   };
 
@@ -151,11 +166,23 @@ console.log('response',response)
         toast.error("Error fetching package types");
       }
     };
-
     if (user?.token?.data) {
       fetchTenant();
     }
-  }, []);
+  }, [page, pageSize]);
+
+  // Search handler
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+    setPage(1);
+    fetchPackages(value, 1, pageSize);
+  };
+
+  // Pagination handler
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   const handleDelete = async () => {
     try {
@@ -195,11 +222,12 @@ console.log('response',response)
       >
         <div class="offcanvas-header">
           <h5 class="modal-title" id="#gridSystemModal">
-            Add package
+           {selectedId === 0 ? "Add package" : "Edit package"}
           </h5>
           <button
             type="button"
-            className="btn-close"
+            className="btn-close close-btn"
+          
             onClick={() => {
               const offcanvasEl = document.getElementById("offcanvasExample");
               const bsOffcanvas =
@@ -226,7 +254,7 @@ console.log('response',response)
           <div class="container-fluid">
             <div class="row">
               <div className="col-xl-6 mb-3">
-                <label className="form-label">Name</label>
+                <label className="form-label">Name<span class="text-danger">*</span></label>
                 <TextField
                   className="form-control form-control-sm"
                   name="name"
@@ -238,7 +266,7 @@ console.log('response',response)
                 />
               </div>
               <div class="col-xl-6 mb-3">
-                <label class="form-label">Max User</label>
+                <label class="form-label">Max User<span class="text-danger">*</span></label>
 
                 <TextField
                   className="form-control form-control-sm"
@@ -336,8 +364,27 @@ console.log('response',response)
               <button className="btn btn-primary me-1" onClick={handleSubmit}>
                 {selectedId === 0 ? "Add" : "Update"}
               </button>
-              <button
-                className="btn btn-danger light ms-1"
+             
+
+              {/* {selectedId !== 0 && (
+                <button className="btn btn-danger ms-2" onClick={()=>{
+                  setModalOpen(true);
+                  setModalConfig({
+                    title: "Confirmation",
+                    description: "Are you sure you want to delete this package?",
+                    onConfirm: () => {
+                      handleDelete();
+                      setModalOpen(false);
+                    },
+                    confirmText: "Delete",
+                    cancelText: "Cancel",
+                  });
+                  }}>
+                  Delete
+                  </button>
+              )} */}
+               <button
+                className="btn btn-danger light ms-1 cancel-btn"
                 onClick={() => {
                   setOpenForm(false);
                   setSelectedId(0);
@@ -360,24 +407,6 @@ console.log('response',response)
               >
                 Cancel
               </button>
-
-              {selectedId !== 0 && (
-                <button className="btn btn-danger ms-2" onClick={()=>{
-                  setModalOpen(true);
-                  setModalConfig({
-                    title: "Confirmation",
-                    description: "Are you sure you want to delete this package?",
-                    onConfirm: () => {
-                      handleDelete();
-                      setModalOpen(false);
-                    },
-                    confirmText: "Delete",
-                    cancelText: "Cancel",
-                  });
-                  }}>
-                  Delete
-                  </button>
-              )}
             </div>
           </div>
         </div>
@@ -427,15 +456,25 @@ console.log('response',response)
           </ol>
         </div>
         <div className="container-fluid">
-          <div className="row" style={{ marginLeft: "0.5px" }}>
+          <div className="row table-space" >
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
-                    <div className="tbl-caption">
+                    <div className="tbl-caption d-flex justify-content-between align-items-center mb-2 pt-3">
                       <h4 className="heading mb-0">Packages</h4>
-                      <button
-                        className="btn btn-primary btn-sm"
+                      {/* Search Field */}
+                     <div>
+                     <TextField
+                     className="serch-package"
+                        size="small"
+                        placeholder="Search Packages..."
+                        value={search}
+                        onChange={handleSearchChange}
+                        style={{ minWidth: 200, marginRight: "15px" }}
+                      />
+                     <button
+                        className="btn btn-primary btn-sm add-package-btn"
                         onClick={() => {
                           setSelectedId(0);
                           setFormData({
@@ -446,7 +485,6 @@ console.log('response',response)
                             maxCompanies: "",
                             Description: "",
                           });
-
                           const offcanvasEl =
                             document.getElementById("offcanvasExample");
                           const bsOffcanvas = new Offcanvas(offcanvasEl);
@@ -455,6 +493,9 @@ console.log('response',response)
                       >
                         + Add Package
                       </button>
+                     
+                     </div>
+                     
                     </div>
                     <table id="employees-tblwrapper" className="table">
                       <thead>
@@ -464,18 +505,19 @@ console.log('response',response)
                           <th className="text-center">max Storage</th>
                           <th className="text-center">Monthly Price</th>
                           <th className="text-center">Max Companies</th>
+                          <th className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {loader ? (
                           <tr>
-                            <td colSpan={5} className="text-center py-5">
+                            <td colSpan={6} className="text-center py-5">
                               <CircularProgress />
                             </td>
                           </tr>
-                        ) : employeesData?.length == 0 ? (
+                        ) : employeesData?.Data?.length === 0 ? (
                           <tr>
-                            <td colSpan={5} className="text-center">
+                            <td colSpan={6} className="text-center">
                               No data found
                             </td>
                           </tr>
@@ -483,7 +525,9 @@ console.log('response',response)
                           employeesData?.Data?.map((emp, index) => (
                             <tr
                               key={index}
-                              onClick={() => {
+                              onClick={(e) => {
+                                // Prevent row click if delete icon is clicked
+                                if (e.target.closest('.delete-icon')) return;
                                 setSelectedId(emp.PackageId);
                                 setFormData({
                                   name: emp.Name,
@@ -494,7 +538,6 @@ console.log('response',response)
                                   PackageTypeId: emp.PackageTypeId,
                                   Description: emp.Description || "",
                                 });
-
                                 const offcanvasEl =
                                   document.getElementById("offcanvasExample");
                                 const bsOffcanvas = new Offcanvas(offcanvasEl);
@@ -518,11 +561,45 @@ console.log('response',response)
                               <td className="text-center">
                                 <span>{emp.MaxCompanies ?? 0}</span>
                               </td>
+                              <td className="text-center">
+                                <i
+                                  className="fa-solid fa-trash text-danger cursor-pointer delete-icon"
+                                  title="Delete Package"
+                                  style={{ cursor: 'pointer' }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedId(emp.PackageId);
+                                    setModalOpen(true);
+                                    setModalConfig({
+                                      title: "Confirmation",
+                                      description: "Are you sure you want to delete this package?",
+                                      onConfirm: () => {
+                                        handleDelete();
+                                        setModalOpen(false);
+                                      },
+                                      confirmText: "Delete",
+                                      cancelText: "Cancel",
+                                    });
+                                  }}
+                                ></i>
+                              </td>
                             </tr>
                           ))
                         )}
                       </tbody>
                     </table>
+                    {/* Pagination Controls */}
+                    <div className="d-flex justify-content-end align-items-center p-3">
+                      <Pagination
+                        count={Math.ceil(totalCount / pageSize)}
+                        page={page}
+                        onChange={handlePageChange}
+                        color=""
+                        shape="rounded"
+                        showFirstButton
+                        showLastButton
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

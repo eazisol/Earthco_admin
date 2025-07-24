@@ -25,7 +25,7 @@ export const getEmailSetting = async (id) => {
         Authorization: `Bearer ${token.token.data}`,
       }
     });
-    return response.data;
+    return response;
   } catch (error) {
     throw error;
   }

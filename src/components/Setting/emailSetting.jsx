@@ -105,7 +105,7 @@ const [loading, setLoading] = useState(false);
         </div>
 
         <div className="container-fluid">
-          <div className="row">
+          <div className="row table-space">
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body">
