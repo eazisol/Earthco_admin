@@ -25670,6 +25670,51 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 .add-package-btn  {
   height: 3em !important;
 }
+/* Force sidebar background and text color to match topbar */
+.deznav {
+  background-color: #242424 !important;
+}
+.deznav .metismenu > li > a,
+.deznav .metismenu > li > a i,
+.deznav .metismenu > li > a svg,
+.deznav .metismenu > li > a .menu-title,
+.deznav .metismenu > li.mm-active > a,
+.deznav .metismenu > li.mm-active > a i,
+.deznav .metismenu > li.mm-active > a svg,
+.deznav .metismenu > li.mm-active > a .menu-title,
+.deznav .metismenu ul a,
+.deznav .metismenu ul a.active {
+  color: #fff !important;
+}
+.deznav .metismenu > li.mm-active > a {
+  background-color: #242424 !important;
+}
+/* Submenu inactive text */
+.deznav .metismenu ul a,
+.deznav .metismenu ul a .menu-title {
+  color: #fff !important;
+  font-weight: normal;
+}
+/* Submenu active text */
+.deznav .metismenu ul a.active,
+.deznav .metismenu ul a.active .menu-title {
+  color: #77993d !important;
+  font-weight: bold;
+}
+
+/* Sidebar inactive text */
+.deznav .metismenu > li > a,
+.deznav .metismenu > li > a .menu-title {
+  color: #fff !important;
+  font-weight: normal;
+}
+/* Sidebar active text */
+.deznav .metismenu > li > a.active,
+.deznav .metismenu > li > a.active .menu-title {
+  color: #77993d !important;
+  font-weight: bold;
+}
+
 .cancel-btn{
   background-color: #f3eeee !important;
   color: #383737 !important;

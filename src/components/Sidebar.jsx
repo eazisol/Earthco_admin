@@ -188,7 +188,7 @@ const Sidebar = () => {
     <div className="deznav">
       <div className="deznav-scroll">
         <ul className="metismenu" id="menu">
-          <li className="menu-title" style={{marginLeft:"30px",fontSize:"15px"}}>Earthco</li>
+          {/* <li className="menu-title" style={{marginLeft:"30px",fontSize:"15px"}}>Earthco</li> */}
           {menuItems.map((item) => {
             const isActive = location.pathname === item.href;
             const isSubActive = item.submenu?.some(
@@ -202,9 +202,8 @@ const Sidebar = () => {
                   <Link
                     to={item.href}
                     onClick={() => setOpenSubmenu(null)}
+                    className={isActive ? "active" : ""}
                     style={{
-                      backgroundColor: isActive ? "#e6f0ff" : "transparent",
-                      color: isActive ? activeColor : inactiveColor,
                       padding: "10px",
                       display: "flex",
                       alignItems: "center",
@@ -229,7 +228,6 @@ const Sidebar = () => {
                     alignItems: "center",
                     gap: "15px",
                     backgroundColor: "transparent",
-                    color: inactiveColor,
                   }}
                 >
                  <span style={{marginLeft:"8px"}}> {item.icon(inactiveColor)}
@@ -243,18 +241,13 @@ const Sidebar = () => {
                         <li key={sub.href}>
                           <Link
                             to={sub.href}
-                            className={`submenu-link ${
-                              subActive ? "active" : ""
-                            }`}
+                            className={`submenu-link ${subActive ? "active" : ""}`}
                             style={{
                               padding: "8px 20px",
                               display: "flex",
                               alignItems: "center",
                               gap: "8px",
-                              color: subActive ? activeColor : inactiveColor,
-                              backgroundColor: subActive
-                                ? "#e6f0ff"
-                                : "transparent",
+                              // backgroundColor: subActive ? "#e6f0ff" : "transparent",
                               position: "relative",
                             }}
                           >
