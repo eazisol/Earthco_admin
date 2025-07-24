@@ -1,8 +1,9 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
-import { CircularProgress, FormControl, MenuItem, Select, TextField } from "@mui/material";
+import { CircularProgress, FormControl, MenuItem, Select, TextField, IconButton, InputAdornment } from "@mui/material";
 import { useEffect, useState } from "react";
 import { addEmailSetting, getEmailSetting } from "../../APIS/settings";
 import { toast } from "react-toastify";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 export const EmailScreen = () => {
   const [settingData, setSettingData] = useState({});
@@ -16,29 +17,128 @@ export const EmailScreen = () => {
     EmailClientSecret: "",
     EmailMode: 1
   });
-const [loading, setLoading] = useState(false);
+
+  const [errors, setErrors] = useState({
+    Email: "",
+    EmailPassword: "",
+    EmailHost: "",
+    EmailClientId: "",
+    EmailPort: ""
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showClientSecret, setShowClientSecret] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const validateEmail = (email) => {
+    if (!email) {
+      return "Email is required";
+    }
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address";
+    }
+    return "";
+  };
+
+  const validatePassword = (password) => {
+    if (!password) {
+      return "Password is required";
+    }
+    if (password.length < 8) {
+      return "Password must be at least 8 characters";
+    }
+    return "";
+  };
+
+  const validateHost = (host) => {
+    if (!host) {
+      return "SMTP Host is required";
+    }
+    const hostRegex = /^(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,})|(?:\d{1,3}(?:\.\d{1,3}){3}))$/;
+    if (!hostRegex.test(host)) {
+      return "Please enter a valid domain or IP address";
+    }
+    return "";
+  };
+
+  const validateClientId = (clientId) => {
+    if (!clientId) return "";
+    const clientIdRegex = /^[a-zA-Z0-9-_.]+$/;
+    if (!clientIdRegex.test(clientId)) {
+      return "Client ID must contain only letters, numbers, hyphens, underscores and periods";
+    }
+    return "";
+  };
+
+  const validatePort = (port) => {
+    if (!port) {
+      return "Port is required";
+    }
+    const portNum = Number(port);
+    if (isNaN(portNum) || portNum < 1 || portNum > 65535) {
+      return "Port must be a number between 1 and 65535";
+    }
+    return "";
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+
+    if (name === "Email") {
+      setErrors(prev => ({
+        ...prev,
+        Email: validateEmail(value)
+      }));
+    }
+
+    if (name === "EmailPassword") {
+      setErrors(prev => ({
+        ...prev,
+        EmailPassword: validatePassword(value)
+      }));
+    }
+
+    if (name === "EmailHost") {
+      setErrors(prev => ({
+        ...prev,
+        EmailHost: validateHost(value)
+      }));
+    }
+
+    if (name === "EmailClientId") {
+      setErrors(prev => ({
+        ...prev,
+        EmailClientId: validateClientId(value)
+      }));
+    }
+
+    if (name === "EmailPort") {
+      setErrors(prev => ({
+        ...prev,
+        EmailPort: validatePort(value)
+      }));
+    }
   };
 
   const getSetting = async () => {
     setLoading(true);
     const user=JSON.parse(localStorage.getItem('user'));
     const response = await getEmailSetting(user?.Data?.TenantId);
-    setSettingData(response);
+    setSettingData(response?.data);
     setFormData({
-      Email: response?.Email || "",
-      EmailPassword: response?.EmailPassword || "",
-      EmailPort: response?.EmailPort || 0,
-      EmailSSL: response?.EmailSSL || false,
-      EmailHost: response?.EmailHost || "",
-      EmailClientId: response?.EmailClientId || "",
-      EmailClientSecret: response?.EmailClientSecret || "",
-      EmailMode: response?.EmailMode || 1
+      Email: response?.data?.Email || "",
+      EmailPassword: response?.data?.EmailPassword || "",
+      EmailPort: response?.data?.EmailPort || 0,
+      EmailSSL: response?.data?.EmailSSL || false,
+      EmailHost: response?.data?.EmailHost || "",
+      EmailClientId: response?.data?.EmailClientId || "",
+      EmailClientSecret: response?.data?.EmailClientSecret || "",
+      EmailMode: response?.data?.EmailMode || 1
     });
     setLoading(false);
   };
@@ -46,6 +146,27 @@ const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    const emailError = validateEmail(formData.Email);
+    const passwordError = validatePassword(formData.EmailPassword);
+    const hostError = validateHost(formData.EmailHost);
+    const clientIdError = validateClientId(formData.EmailClientId);
+    const portError = validatePort(formData.EmailPort);
+    
+    setErrors(prev => ({
+      ...prev,
+      Email: emailError,
+      EmailPassword: passwordError,
+      EmailHost: hostError,
+      EmailClientId: clientIdError,
+      EmailPort: portError
+    }));
+
+    if (emailError || passwordError || hostError || clientIdError || portError) {
+      setLoading(false);
+      return;
+    }
+
     const formDataToSend = new FormData();
     formDataToSend.append('Files', null);
     
@@ -106,7 +227,7 @@ const [loading, setLoading] = useState(false);
 
         <div className="container-fluid">
           <div className="row table-space">
-            <div className="col-xl-12">
+            <div className="col-xl-6">
               <div className="card">
                 <div className="card-body">
                   <h4 className="card-title mb-4">Email Settings</h4>
@@ -125,23 +246,39 @@ const [loading, setLoading] = useState(false);
                         onChange={handleInputChange}
                         size="small"
                         fullWidth
+                        error={!!errors.Email}
+                        helperText={errors.Email}
                       />
                     </div>
 
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">Email Password<span className="text-danger">*</span></label>
+                      <label className="form-label">App password<span className="text-danger">*</span></label>
                       <TextField
                         name="EmailPassword"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         value={formData.EmailPassword}
                         onChange={handleInputChange}
                         size="small"
                         fullWidth
+                        error={!!errors.EmailPassword}
+                        helperText={errors.EmailPassword}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() => setShowPassword(!showPassword)}
+                                edge="end"
+                              >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </div>
 
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">Email Port<span className="text-danger">*</span></label>
+                      <label className="form-label">Port<span className="text-danger">*</span></label>
                       <TextField
                         name="EmailPort"
                         value={formData.EmailPort}
@@ -149,12 +286,18 @@ const [loading, setLoading] = useState(false);
                         size="small"
                         fullWidth
                         type="number"
+                        error={!!errors.EmailPort}
+                        helperText={errors.EmailPort}
+                        inputProps={{
+                          min: 1,
+                          max: 65535
+                        }}
                       />
                     </div>
 
                     <div className="col-xl-6 mb-3">
                       <FormControl fullWidth>
-                        <label className="form-label">Use SSL<span className="text-danger">*</span></label>
+                        <label className="form-label">Use SSL/TLS<span className="text-danger">*</span></label>
                         <Select
                           name="EmailSSL"
                           value={formData.EmailSSL ? "true" : "false"}
@@ -173,53 +316,80 @@ const [loading, setLoading] = useState(false);
                     </div>
 
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">Email Host<span className="text-danger">*</span></label>
+                      <label className="form-label">SMTP Host<span className="text-danger">*</span></label>
                       <TextField
                         name="EmailHost"
                         value={formData.EmailHost}
                         onChange={handleInputChange}
                         size="small"
                         fullWidth
+                        error={!!errors.EmailHost}
+                        helperText={errors.EmailHost}
+                        placeholder="e.g., smtp.gmail.com"
                       />
                     </div>
 
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">Email Client ID</label>
+                      <label className="form-label">OAuth Client ID</label>
                       <TextField
                         name="EmailClientId"
                         value={formData.EmailClientId}
                         onChange={handleInputChange}
                         size="small"
                         fullWidth
+                        error={!!errors.EmailClientId}
+                        helperText={errors.EmailClientId}
+                        placeholder="Enter alphanumeric client ID"
                       />
                     </div>
 
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">Email Client Secret</label>
+                      <label className="form-label">OAuth Client Secret</label>
                       <TextField
                         name="EmailClientSecret"
-                        type="password"
+                        type={showClientSecret ? "text" : "password"}
                         value={formData.EmailClientSecret}
                         onChange={handleInputChange}
                         size="small"
                         fullWidth
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() => setShowClientSecret(!showClientSecret)}
+                                edge="end"
+                              >
+                                {showClientSecret ? <VisibilityOff /> : <Visibility />}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </div>
 
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">Email Mode</label>
-                      <TextField
-                        name="EmailMode"
-                        value={formData.EmailMode}
-                        onChange={handleInputChange}
-                        size="small"
-                        fullWidth
-                        type="number"
-                      />
+                      <label className="form-label">Mode</label>
+                      <div className="form-check form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="EmailMode" 
+                          checked={formData.EmailMode == 2}
+                          onChange={(e) => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              EmailMode: e.target.checked ? 2 : 1
+                            }))
+                          }}
+                        />
+                        <label className="form-check-label">
+                          {formData.EmailMode == 2 ? "Production" : "Sandbox"}
+                        </label>
+                      </div>
                     </div>
                   </div>
-                    <div className="mt-3">
-                    <button className="btn btn-primary" onClick={handleSubmit} disabled={loading}>
+                    <div className="mt-3 d-flex justify-content-end">
+                    <button className="btn btn-primary btn-sm" onClick={handleSubmit} disabled={loading}>
                     {loading ? "Updating..." : "Update Settings"}
                   </button>
                 </div></>

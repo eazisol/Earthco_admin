@@ -56,7 +56,15 @@ export const PackagesScreen = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    const numericFields = [ "MaxStorageMB", "Price", ];
+    const numericFields = [ "MaxStorageMB", "Price", 'maxCompanies','maxUser'];
+
+    if (name === "name") {
+      // Validate name field
+      const isValid = /^[a-zA-Z0-9\s_-]{0,50}$/.test(value);
+      if (!isValid) return;
+
+      if (value.length > 50) return;
+    }
 
     if (numericFields.includes(name)) {
       if (name === "Price") {
@@ -88,7 +96,16 @@ export const PackagesScreen = () => {
     setLoader(true);
 console.log('formData',formData)
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (formData.name.length < 3) {
+      newErrors.name = "Name must be at least 3 characters";
+    } else if (formData.name.length > 50) {
+      newErrors.name = "Name must be less than 50 characters";
+    } else if (!/^[a-zA-Z0-9\s_-]*$/.test(formData.name)) {
+      newErrors.name = "Name can only contain letters, numbers, spaces, dashes and underscores";
+    }
+    
     if (!formData.maxUser) newErrors.maxUser = "Max User is required";
     if (!formData.MaxStorageMB) newErrors.MaxStorageMB = "Max Storage is required";
     if (!formData.Price) newErrors.Price = "Price is required";
@@ -131,7 +148,7 @@ console.log('response',response)
         fetchPackages();
         toast.success(response?.data?.Message || "Package saved successfully");
       } else {
-        toast.error(response?.data?.Message || "Error saving package");
+        toast.error(response?.response?.data || "Error saving package");
       }
     } catch (error) {
       console.error(error);
@@ -184,9 +201,9 @@ console.log('response',response)
     setPage(value);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (id) => {
     try {
-      const response = await deletePackage(selectedId);
+      const response = await deletePackage(id);
       if (response?.status === 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
         const bsOffcanvas = Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
@@ -281,7 +298,7 @@ console.log('response',response)
 
               <div class="col-xl-6 mb-3">
                 <label for="exampleFormControlInput10" class="form-label">
-                  Max Storage<span class="text-danger">*</span>
+                  Max Storage(MB)<span class="text-danger">*</span>
                 </label>
                 <TextField
                   className="form-control form-control-sm"
@@ -462,10 +479,7 @@ console.log('response',response)
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
                     <div className="tbl-caption d-flex justify-content-between align-items-center mb-2 pt-3">
-                      <h4 className="heading mb-0">Packages</h4>
-                      {/* Search Field */}
-                     <div>
-                     <TextField
+                    <TextField
                      className="serch-package"
                         size="small"
                         placeholder="Search Packages..."
@@ -473,6 +487,9 @@ console.log('response',response)
                         onChange={handleSearchChange}
                         style={{ minWidth: 200, marginRight: "15px" }}
                       />
+                   
+                  
+                 
                      <button
                         className="btn btn-primary btn-sm add-package-btn"
                         onClick={() => {
@@ -494,7 +511,7 @@ console.log('response',response)
                         + Add Package
                       </button>
                      
-                     </div>
+                   
                      
                     </div>
                     <table id="employees-tblwrapper" className="table">
@@ -502,7 +519,7 @@ console.log('response',response)
                         <tr>
                           <th>Name</th>
                           <th className="text-center">Max User</th>
-                          <th className="text-center">max Storage</th>
+                          <th className="text-center">max Storage(MB) </th>
                           <th className="text-center">Monthly Price</th>
                           <th className="text-center">Max Companies</th>
                           <th className="text-center">Action</th>
@@ -568,13 +585,12 @@ console.log('response',response)
                                   style={{ cursor: 'pointer' }}
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setSelectedId(emp.PackageId);
                                     setModalOpen(true);
                                     setModalConfig({
                                       title: "Confirmation",
                                       description: "Are you sure you want to delete this package?",
                                       onConfirm: () => {
-                                        handleDelete();
+                                        handleDelete(emp.PackageId);
                                         setModalOpen(false);
                                       },
                                       confirmText: "Delete",

@@ -59,17 +59,13 @@ export const getPackages = async ({ Search = "", DisplayStart = 0, DisplayLength
 
   try {
     const { data } = await axios.get(
-      `${apiUrl}Packages/GetPackagesServerSideList`,
+      `${apiUrl}Packages/GetPackagesServerSideList?Search="${Search}"&DisplayStart=${DisplayStart}&DisplayLength=${DisplayLength}`,
       {
         headers: {
           Authorization: `Bearer ${token?.token?.data}`,
           "Content-Type": "application/json",
         },
-        params: {
-          Search,
-          DisplayStart,
-          DisplayLength,
-        },
+      
       }
     );
     return data;
