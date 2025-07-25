@@ -7,7 +7,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState,useRef } from "react";
 import { Offcanvas } from "bootstrap";
 import { toast } from "react-toastify";
 import {
@@ -18,8 +18,7 @@ import {
 } from "../../APIS/packages";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import Pagination from '@mui/material/Pagination';
-// import 'react-quill/dist/quill.snow.css';
-// import ReactQuill from 'react-quill';
+import JoditEditor from 'jodit-react';
 
 export const PackagesScreen = () => {
   const [packageOptions, setPackageOptions] = useState([]);
@@ -38,6 +37,16 @@ export const PackagesScreen = () => {
     PackageTypeId: 0,
     Description: "",
   });
+  const editor = useRef(null);
+	const [content, setContent] = useState('');
+
+	const config = useMemo(() => ({
+			readonly: false,
+			placeholder: ''
+		}),
+		[]
+	);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "Confirmation",
@@ -126,7 +135,7 @@ console.log('formData',formData)
       const response = await addPackage({
         ...formData,
         PackageId: selectedId,
-        Description: "test"
+        Description: content
       });
 console.log('response',response)
       if (response?.status === 200) {
@@ -142,8 +151,9 @@ console.log('response',response)
           Price: "",
           maxCompanies: "",
           PackageTypeId: 0,
-          Description: "test",
+          Description: "",
         });
+        setContent('');
         setSelectedId(0);
         fetchPackages();
         toast.success(response?.data?.Message || "Package saved successfully");
@@ -364,20 +374,19 @@ console.log('response',response)
                   )}
                 </FormControl>
               </div>
-              {/* <div class="col-xl-12 mb-3">
+              <div className="col-xl-12 mb-3">
                 <label className="form-label">Description<span className="text-danger">*</span></label>
-                <ReactQuill 
-                  theme="snow" 
-                  value={formData.Description} 
-                  onChange={handleDescriptionChange}
-                  style={{height: '200px', marginBottom: '50px'}}
-                />
-                {errors.Description && (
-                  <div className="text-danger small">{errors.Description}</div>
-                )}
-              </div> */}
+              </div>
+              <JoditEditor
+			ref={editor}
+			value={content}
+			config={config}
+			tabIndex={1} // tabIndex of textarea
+			onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+			onChange={newContent => {}}
+		/>
             </div>
-            <div style={{ textAlign: "end" }}>
+            <div style={{ textAlign: "end" }} className="mt-5">
               <button className="btn btn-primary me-1" onClick={handleSubmit}>
                 {selectedId === 0 ? "Add" : "Update"}
               </button>
@@ -555,6 +564,7 @@ console.log('response',response)
                                   PackageTypeId: emp.PackageTypeId,
                                   Description: emp.Description || "",
                                 });
+                                setContent(emp.Description || "");
                                 const offcanvasEl =
                                   document.getElementById("offcanvasExample");
                                 const bsOffcanvas = new Offcanvas(offcanvasEl);

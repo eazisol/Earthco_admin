@@ -141,7 +141,7 @@ const Topbar = () => (
                     const dropdown = document.querySelector(
                       ".header-profile2 .dropdown-menu"
                     );
-                    dropdown.classNameList.toggle("show");
+                    dropdown.classList.toggle("show");
                   }}
                 >
                   <div className="header-info2 d-flex align-items-center z-3">
@@ -149,8 +149,8 @@ const Topbar = () => (
                       <img src={avatar4} alt="" />
                     </div>
                     <div className="header-info">
-                      <h6>Thomas Fleming</h6>
-                      <p>info@gmail.com</p>
+                      <h6 className="text-white">Thomas Fleming</h6>
+                      <p className="text-white">info@gmail.com</p>
                     </div>
                   </div>
                 </a>
@@ -195,7 +195,7 @@ const Topbar = () => (
 
                         <span className="ms-2">Profile </span>
                       </a>
-                      <a href="" className="dropdown-item ai-icon ">
+                      {/* <a href="" className="dropdown-item ai-icon ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="19"
@@ -216,8 +216,8 @@ const Topbar = () => (
                         <span className="badge badge-sm badge-secondary light rounded-circle text-white ms-2">
                           4
                         </span>
-                      </a>
-                      <a href="" className="dropdown-item ai-icon ">
+                      </a> */}
+                      {/* <a href="" className="dropdown-item ai-icon ">
                         <svg
                           width="20"
                           height="20"
@@ -244,8 +244,8 @@ const Topbar = () => (
                         </svg>
 
                         <span className="ms-2">Message </span>
-                      </a>
-                      <a href="" className="dropdown-item ai-icon ">
+                      </a> */}
+                      {/* <a href="" className="dropdown-item ai-icon ">
                         <svg
                           width="20"
                           height="20"
@@ -272,10 +272,10 @@ const Topbar = () => (
                         </svg>
 
                         <span className="ms-2">Notification </span>
-                      </a>
+                      </a> */}
                     </div>
                     <div className="card-footer px-0 py-2">
-                      <a href="" className="dropdown-item ai-icon ">
+                      {/* <a href="" className="dropdown-item ai-icon ">
                         <svg
                           width="20"
                           height="20"
@@ -304,7 +304,7 @@ const Topbar = () => (
                         </svg>
 
                         <span className="ms-2">Settings </span>
-                      </a>
+                      </a> */}
                       <a href="" className="dropdown-item ai-icon">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
