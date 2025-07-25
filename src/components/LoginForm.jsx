@@ -5,6 +5,8 @@ import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField 
 import { getPackages } from "../APIS/packages";
 import { getTenantRole } from "../APIS/auth";
 import { RegisterTenant } from "../APIS/auth";
+import { IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +15,7 @@ export const LoginForm = () => {
     CompanyName: "",
     PhoneNo: "",
     RoleId: 1,
-    PackageId: 0,
+    PackageId: "", // Changed to empty string for no default selection
     SubDomain: "",
     Email: "",
     Password: "",
@@ -21,6 +23,8 @@ export const LoginForm = () => {
     SubDomain: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [role, setRole] = useState([]);
@@ -29,6 +33,84 @@ export const LoginForm = () => {
  console.log('packagesData',packagesData)
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Special validation for FirstName and LastName
+    if (name === "FirstName" || name === "LastName") {
+      // Only allow letters and spaces and max 50 chars
+      if (!/^[a-zA-Z\s]*$/.test(value)) {
+        setErrors(prev => ({
+          ...prev,
+          [name]: "Only letters and spaces are allowed"
+        }));
+        return;
+      }
+      
+      if (value.length > 50) {
+        setErrors(prev => ({
+          ...prev,
+          [name]: "Maximum 50 characters allowed"
+        }));
+        return;
+      }
+
+      // Clear error if valid
+      setErrors(prev => ({
+        ...prev,
+        [name]: ""
+      }));
+    }
+
+    // Special validation for SubDomain
+    if (name === "SubDomain") {
+      // Check if starts with letter and contains only letters, numbers and underscore
+      if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(value)) {
+        setErrors(prev => ({
+          ...prev,
+          [name]: "Username must start with a letter and can only contain letters, numbers and underscore"
+        }));
+        return;
+      }
+
+      if (value.length > 50) {
+        setErrors(prev => ({
+          ...prev,
+          [name]: "Maximum 50 characters allowed"
+        }));
+        return;
+      }
+      
+      // Clear error if valid
+      setErrors(prev => ({
+        ...prev,
+        [name]: ""
+      }));
+    }
+
+    // Phone number validation
+    if (name === "PhoneNo") {
+      if (!/^\d*$/.test(value)) {
+        setErrors(prev => ({
+          ...prev,
+          [name]: "Only numbers are allowed"
+        }));
+        return;
+      }
+
+      if (value.length > 15) {
+        setErrors(prev => ({
+          ...prev,
+          [name]: "Phone number cannot exceed 15 digits"
+        }));
+        return;
+      }
+
+      // Clear error if valid
+      setErrors(prev => ({
+        ...prev,
+        [name]: ""
+      }));
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -44,11 +126,26 @@ export const LoginForm = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    // Name validation
-    if (!formData.Name.trim()) {
-      newErrors.Name = "Name is required";
-    } else if (formData.Name.trim().length < 2) {
-      newErrors.Name = "Name must be at least 2 characters long";
+    // FirstName validation
+    if (!formData.FirstName.trim()) {
+      newErrors.FirstName = "First name is required";
+    } else if (formData.FirstName.trim().length < 2) {
+      newErrors.FirstName = "First name must be at least 2 characters long";
+    } else if (formData.FirstName.trim().length > 50) {
+      newErrors.FirstName = "First name cannot exceed 50 characters";
+    } else if (!/^[a-zA-Z\s]*$/.test(formData.FirstName)) {
+      newErrors.FirstName = "First name can only contain letters and spaces";
+    }
+
+    // LastName validation  
+    if (!formData.LastName.trim()) {
+      newErrors.LastName = "Last name is required";
+    } else if (formData.LastName.trim().length < 2) {
+      newErrors.LastName = "Last name must be at least 2 characters long";
+    } else if (formData.LastName.trim().length > 50) {
+      newErrors.LastName = "Last name cannot exceed 50 characters";  
+    } else if (!/^[a-zA-Z\s]*$/.test(formData.LastName)) {
+      newErrors.LastName = "Last name can only contain letters and spaces";
     }
 
     // Email validation
@@ -57,6 +154,20 @@ export const LoginForm = () => {
       newErrors.Email = "Email is required";
     } else if (!emailRegex.test(formData.Email)) {
       newErrors.Email = "Please enter a valid email address";
+    }
+
+    // Company name validation
+    if (!formData.CompanyName.trim()) {
+      newErrors.CompanyName = "Company name is required";
+    }
+
+    // Phone validation
+    if (!formData.PhoneNo) {
+      newErrors.PhoneNo = "Phone number is required";
+    } else if (formData.PhoneNo.length < 7 || formData.PhoneNo.length > 15) {
+      newErrors.PhoneNo = "Phone number must be between 7 and 15 digits";
+    } else if (!/^\d+$/.test(formData.PhoneNo)) {
+      newErrors.PhoneNo = "Phone number can only contain digits";
     }
 
     // Password validation
@@ -75,11 +186,23 @@ export const LoginForm = () => {
 
     // SubDomain validation
     if (!formData.SubDomain.trim()) {
-      newErrors.SubDomain = "Entity Name is required";
+      newErrors.SubDomain = "Username is required";
     } else if (formData.SubDomain.trim().length < 3) {
-      newErrors.SubDomain = "Entity Name must be at least 3 characters long";
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(formData.SubDomain.trim())) {
-      newErrors.SubDomain = "Entity Name can only contain letters, numbers, hyphens, and underscores";
+      newErrors.SubDomain = "Username must be at least 3 characters long";
+    } else if (formData.SubDomain.trim().length > 50) {
+      newErrors.SubDomain = "Username cannot exceed 50 characters";
+    } else if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(formData.SubDomain.trim())) {
+      newErrors.SubDomain = "Username must start with a letter and can only contain letters, numbers and underscore";
+    }
+
+    // Package validation
+    if (!formData.PackageId) {
+      newErrors.PackageId = "Please select a package";
+    }
+
+    // Role validation  
+    if (!formData.RoleId) {
+      newErrors.RoleId = "Please select a role";
     }
 
     setErrors(newErrors);
@@ -121,9 +244,9 @@ export const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 console.log('formData',formData)
-    // if (!validateForm()) {
-    //   return;
-    // }
+    if (!validateForm()) {
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -346,6 +469,7 @@ if (data?.data?.PaymentLink) {
                     value={formData.RoleId}
                     onChange={handleInputChange}
                     style={{ height: "2.5rem" }}
+                    error={!!errors.RoleId}
                   >
                     {role?.map((option) => (
                       <MenuItem
@@ -356,6 +480,9 @@ if (data?.data?.PaymentLink) {
                       </MenuItem>
                     ))}
                   </Select>
+                  {errors.RoleId && (
+                    <div className="text-danger small">{errors.RoleId}</div>
+                  )}
                 </FormControl>
               </div>
               <div className="col-xl-6 mb-3">
@@ -368,7 +495,10 @@ if (data?.data?.PaymentLink) {
                     value={formData.PackageId}
                     onChange={handleInputChange}
                     style={{ height: "2.5rem" }}
+                    displayEmpty
+                    error={!!errors.PackageId}
                   >
+                    <MenuItem value="" disabled>Select a package</MenuItem>
                     {packages?.map((option) => (
                       <MenuItem
                         key={option.PackageId}
@@ -378,40 +508,65 @@ if (data?.data?.PaymentLink) {
                       </MenuItem>
                     ))}
                   </Select>
+                  {errors.PackageId && (
+                    <div className="text-danger small">{errors.PackageId}</div>
+                  )}
                 </FormControl>
               </div>
               <div className="form-group col-md-6">
                 <label htmlFor="Password">
                   Password <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="password"
-                  name="Password"
-                  className={`form-control ${errors.Password ? "is-invalid" : ""}`}
-                  id="Password"
-                  value={formData.Password}
-                  onChange={handleInputChange}
-                  placeholder="Enter your password"
-                />
+                <div className="input-group">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="Password"
+                    className={`form-control ${errors.Password ? "is-invalid" : ""}`}
+                    id="Password"
+                    value={formData.Password}
+                    onChange={handleInputChange}
+                    placeholder="Enter your password"
+                  />
+                  <div className="input-group-append">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                      style={{ position: 'absolute', right: '10px', zIndex: '999',top:"3px" }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </div>
+                </div>
                 {errors.Password && (
-                  <div className="invalid-feedback">{errors.Password}</div>
+                  <div className="invalid-feedback" style={{display: 'block'}}>{errors.Password}</div>
                 )}
               </div>
               <div className="form-group col-md-6">
                 <label htmlFor="confirmPassword">
                   Confirm Password <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}`}
-                  id="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  placeholder="Confirm your password"
-                />
+                <div className="input-group">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}`}
+                    id="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    placeholder="Confirm your password"
+                  />
+                  <div className="input-group-append">
+                    <IconButton
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                      style={{ position: 'absolute', right: '10px', zIndex: '999',top:"3px" }}
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </div>
+                </div>
                 {errors.confirmPassword && (
-                  <div className="invalid-feedback">{errors.confirmPassword}</div>
+                  <div className="invalid-feedback" style={{display: 'block'}}>{errors.confirmPassword}</div>
                 )}
               </div>
             </div>

@@ -23,7 +23,7 @@ const pricingPlans = [
     delay: 100,
   },
   {
-    name: "Standard",
+    name: "Standard", 
     price: 29,
     features: [
       { label: "3 Company Accounts", available: true },
@@ -67,10 +67,21 @@ function Branding() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'name' && value.length >= 50) {
+      return;
+    }
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
   const validateForm = () => {
@@ -81,6 +92,8 @@ function Branding() {
       newErrors.name = "Name is required";
     } else if (formData.name.trim().length < 2) {
       newErrors.name = "Name must be at least 2 characters long";
+    } else if (formData.name.trim().length >= 50) {
+      newErrors.name = "Name cannot exceed 50 characters";
     }
 
     // Email validation
@@ -89,6 +102,16 @@ function Branding() {
       newErrors.email = "Email is required";
     } else if (!emailRegex.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
+    }
+
+    // Subject validation
+    if (!formData.subject.trim()) {
+      newErrors.subject = "Subject is required";
+    }
+
+    // Message validation
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required";
     }
 
     setErrors(newErrors);
@@ -270,7 +293,7 @@ const handleSubscription=(priceId)=>{
         </section>
 
         {/* ======= Cta Section ======= */}
-        <section id="cta" className="cta">
+        <section id="cta" className="cta mt-5">
           <div className="container" data-aos="zoom-in">
             <div className="row">
               <div className="col-lg-9 text-center text-lg-start">
@@ -380,9 +403,7 @@ const handleSubscription=(priceId)=>{
               <div className="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch text-start">
                 <form
                   onSubmit={handleSubmit}
-                 
                   className="php-email-form"
-                  
                 >
                   <div className="row">
                     <div className="form-group col-md-6">
@@ -392,13 +413,12 @@ const handleSubscription=(priceId)=>{
                       <input
                         type="text"
                         name="name"
-                        className={`form-control ${
-                          errors.name ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.name ? "is-invalid" : ""}`}
                         id="name"
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="Enter your full name"
+                        maxLength={50}
                       />
                       {errors.name && (
                         <div className="invalid-feedback">{errors.name}</div>
@@ -409,11 +429,9 @@ const handleSubscription=(priceId)=>{
                         Your Email <span className="text-danger">*</span>
                       </label>
                       <input
-                        type="email"
+                        type="test"
                         name="email"
-                        className={`form-control ${
-                          errors.email ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.email ? "is-invalid" : ""}`}
                         id="email"
                         value={formData.email}
                         onChange={handleChange}
@@ -425,23 +443,37 @@ const handleSubscription=(priceId)=>{
                     </div>
                   </div>
                   <div className="form-group">
-                    <label htmlFor="subject">Subject</label>
+                    <label htmlFor="subject">
+                      Subject <span className="text-danger">*</span>
+                    </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className={`form-control ${errors.subject ? "is-invalid" : ""}`}
                       name="subject"
                       id="subject"
-                    
+                      value={formData.subject}
+                      onChange={handleChange}
+                      placeholder="Enter subject"
                     />
+                    {errors.subject && (
+                      <div className="invalid-feedback">{errors.subject}</div>
+                    )}
                   </div>
                   <div className="form-group">
-                    <label htmlFor="message">Message</label>
+                    <label htmlFor="message">
+                      Message <span className="text-danger">*</span>
+                    </label>
                     <textarea
-                      className="form-control"
+                      className={`form-control ${errors.message ? "is-invalid" : ""}`}
                       name="message"
                       rows="10"
-                 
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder="Enter your message"
                     ></textarea>
+                    {errors.message && (
+                      <div className="invalid-feedback">{errors.message}</div>
+                    )}
                   </div>
                   <div className="my-3">
                     <div className="loading">Loading</div>
@@ -452,9 +484,7 @@ const handleSubscription=(priceId)=>{
                   </div>
                   <div className="text-center">
                     <CustomButtonGreen
-                      text={
-                        isSubmitting ? "Creating Account..." : "Contact Us"
-                      }
+                      text={isSubmitting ? "Creating Account..." : "Contact Us"}
                       type="submit"
                       disabled={isSubmitting}
                     />

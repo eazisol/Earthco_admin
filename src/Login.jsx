@@ -65,7 +65,7 @@ export const LoginScreen = ({ onClose }) => {
 
   return (
     <div className="  login-screen" tabIndex="-1" >
-      <div className="card" style={{width: "28%"}} >
+      <div className="card" style={{width: "28%",border:"none",boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"}} >
         <div className="text-center">
           <h4 className="pt-2 pb-2 mt-3">Login</h4>
         </div>
@@ -74,7 +74,7 @@ export const LoginScreen = ({ onClose }) => {
             <div className="mb-3">
               <label htmlFor="loginEmail" className="form-label">Email</label>
               <input
-                type="email"
+                type="test"
                 className={`form-control ${errors.Email ? "is-invalid" : ""}`}
                 id="loginEmail"
                 name="Email"

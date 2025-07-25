@@ -35,6 +35,8 @@
 
 .card {
   padding: 2em;
+  border: none !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .read-the-docs {
@@ -60,4 +62,9 @@
   overflow-y: auto;
   height: 100%;
   padding-bottom: 20px;
+}
+/* Remove the default Bootstrap exclamation icon in invalid input */
+input.form-control.is-invalid {
+  background-image: none !important;
+  padding-right: 0.75rem !important; /* adjust padding if needed */
 }
