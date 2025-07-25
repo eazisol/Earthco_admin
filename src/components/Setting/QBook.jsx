@@ -9,18 +9,47 @@ export const QBookScreen = () => {
   const [formData, setFormData] = useState({
     QBProductionClientId: "",
     QBProductionClientSecret: "",
-    QBSandBoxClientId: "",
+    QBSandBoxClientId: "", 
     QBSandBoxClientSecret: "",
     QBMode: 1
   });
-  console.log("🚀 ~ QBookScreen ~ formData:", formData)
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const validateField = (name, value) => {
+    switch(name) {
+      case 'QBProductionClientId':
+      case 'QBSandBoxClientId':
+        if(value.length < 15 || value.length > 50) {
+          return 'Must be between 15-50 characters';
+        }
+        if(!/^[a-zA-Z0-9-]+$/.test(value)) {
+          return 'Only alphanumeric characters and dashes allowed';
+        }
+        break;
+      case 'QBProductionClientSecret':
+      case 'QBSandBoxClientSecret':
+        if(value.length < 20 || value.length > 100) {
+          return 'Must be between 20-100 characters';
+        }
+        break;
+      default:
+        return '';
+    }
+    return '';
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+    
+    const error = validateField(name, value);
+    setErrors(prev => ({
+      ...prev,
+      [name]: error
     }));
   };
 
@@ -52,10 +81,19 @@ export const QBookScreen = () => {
     e.preventDefault();
     setLoading(true);
 
-    if (!formData.QBProductionClientId || !formData.QBProductionClientSecret || 
-        !formData.QBSandBoxClientId || !formData.QBSandBoxClientSecret) {
-      toast.error("Please fill in all required fields");
+    // Validate all fields
+    const newErrors = {};
+    Object.keys(formData).forEach(key => {
+      if (key !== 'QBMode') {
+        const error = validateField(key, formData[key]);
+        if (error) newErrors[key] = error;
+      }
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       setLoading(false);
+      toast.error("Please fix the validation errors");
       return;
     }
 
@@ -137,17 +175,22 @@ export const QBookScreen = () => {
                             onChange={handleInputChange}
                             size="small"
                             fullWidth
+                            error={!!errors.QBProductionClientId}
+                            helperText={errors.QBProductionClientId}
                           />
                         </div>
 
                         <div className="col-xl-6 mb-3">
                           <label className="form-label">Production Client Secret<span className="text-danger">*</span></label>
                           <TextField
+                            type="password"
                             name="QBProductionClientSecret"
                             value={formData.QBProductionClientSecret}
                             onChange={handleInputChange}
                             size="small"
                             fullWidth
+                            error={!!errors.QBProductionClientSecret}
+                            helperText={errors.QBProductionClientSecret}
                           />
                         </div>
 
@@ -159,17 +202,22 @@ export const QBookScreen = () => {
                             onChange={handleInputChange}
                             size="small"
                             fullWidth
+                            error={!!errors.QBSandBoxClientId}
+                            helperText={errors.QBSandBoxClientId}
                           />
                         </div>
 
                         <div className="col-xl-6 mb-3">
                           <label className="form-label">Sandbox Client Secret<span className="text-danger">*</span></label>
                           <TextField
+                            type="password"
                             name="QBSandBoxClientSecret"
                             value={formData.QBSandBoxClientSecret}
                             onChange={handleInputChange}
                             size="small"
                             fullWidth
+                            error={!!errors.QBSandBoxClientSecret}
+                            helperText={errors.QBSandBoxClientSecret}
                           />
                         </div>
 
@@ -191,7 +239,7 @@ export const QBookScreen = () => {
                               }}
                             />
                             <label className="form-check-label">
-                              {parseInt(formData.QBMode) === 0 ? "Test" : "Live"}
+                              {parseInt(formData.QBMode) === 0 ? "Sandbox" : "Production"}
                             </label>
                           </div>
                         </div>
