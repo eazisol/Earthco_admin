@@ -13,11 +13,11 @@
         </a>
     )
 }
- export const CustomButtonGreen = ({ text = "Get Started", onClick, className, type = "button" }) => {
+ export const CustomButtonGreen = ({ text = "Get Started", onClick, className, type = "button",btnSize='large' }) => {
   return (
     <button
       type={type} // "submit", "button", or "reset"
-      className={`btn-outlined scrollto ${className}`}
+        className={`btn-outlined ${btnSize} scrollto ${className}`}
       onClick={onClick}
     >
       {text}

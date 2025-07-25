@@ -114,3 +114,27 @@ export const RegisterTenant = async (obj) => {
     return error;
   }
 };
+export const forgotPassword = async (obj) => {
+  try {
+    const data  = await axios.post(`${apiUrl}Accounts/ForgetPassword`, obj);
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+export const verifyOTP = async (obj) => {
+  try {
+    const data  = await axios.get(`${apiUrl}Accounts/VerifyForgetPasswordCode?Email=${obj.Email}&Code=${obj.Code}`);
+    return data;
+  } catch (error) {
+    return error;
+    }
+  };
+  export const resetPassword = async (obj) => {
+    try {
+      const data  = await axios.post(`${apiUrl}Accounts/ChangeForgetPassword`,obj);
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };

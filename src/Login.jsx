@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CustomButtonGreen } from "./components/CustomButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "./APIS/auth";
 import { toast } from "react-toastify";
 
@@ -106,6 +106,9 @@ export const LoginScreen = ({ onClose }) => {
                 placeholder="Enter your password"
               />
               {errors.Password && <div className="invalid-feedback">{errors.Password}</div>}
+            </div>
+            <div className="mb-3 text-end">
+              <Link to="/forgot-password">Forgot Password?</Link>
             </div>
             {apiError && <div className="alert alert-danger text-center">{apiError}</div>}
             <div className="d-grid gap-2">

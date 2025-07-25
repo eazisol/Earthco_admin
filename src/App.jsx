@@ -14,6 +14,7 @@ import { CompanyScreen } from './components/Setting/Company'
 import { GoogleSetting } from './components/Setting/googleMap';
 import { StripeSetting } from './components/Setting/StripeSetting';
 import { CompaniesScreen } from './components/Comanies';
+import ForgotPassword from './components/ForgotPassword'
 
 function Layout({ children }) {
   const location = useLocation();
@@ -291,6 +292,7 @@ function App() {
               <CompaniesScreen />
             </ProtectedRoute>
           } />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </Layout>
     </Router>

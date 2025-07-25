@@ -20,7 +20,6 @@ export const LoginForm = () => {
     Email: "",
     Password: "",
     confirmPassword: "",
-    SubDomain: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
