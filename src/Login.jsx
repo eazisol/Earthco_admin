@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { CustomButtonGreen } from "./components/CustomButton";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "./APIS/auth";
+import { toast } from "react-toastify";
 
 export const LoginScreen = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -49,11 +50,19 @@ export const LoginScreen = ({ onClose }) => {
         Password: formData.Password,
       },
     });
+    console.log("🚀 ~ handleSubmit ~ response:", response?.status)
+    if(response?.status === 'success'){
+
+      toast.success(response?.response?.data );
+      navigate("/dashboard");
+    }else{
+      toast.error(response?.response?.data );
+    }
     if (response?.error) {
       throw new Error(response.message || "Login failed");
     }
-    if (onClose) onClose();
-    navigate("/dashboard");
+    // if (onClose) onClose();
+    // navigate("/dashboard");
 
   } catch (error) {
     setApiError(error.message || "Something went wrong");

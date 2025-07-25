@@ -246,15 +246,51 @@ function App() {
               <Dashboard />
             </ProtectedRoute>
           } />
-          <Route path="/package" element={ <PackagesScreen /> } />
-          <Route path="/tenant" element={ <TenantScreen /> } />
-          <Route path="/transaction" element={ <TransactionsScreen /> } />
-          <Route path="/email" element={ <EmailScreen /> } />
-          <Route path="/qb" element={ <QBookScreen /> } />
-          <Route path="/company" element={ <CompanyScreen /> } />
-          <Route path="/google-map" element={ <GoogleSetting /> } />
-          <Route path="/stripe" element={ <StripeSetting /> } />
-          <Route path="/companies" element={ <CompaniesScreen /> } />
+          <Route path="/package" element={
+            <ProtectedRoute>
+              <PackagesScreen />
+            </ProtectedRoute>
+          } />
+          <Route path="/tenant" element={
+            <ProtectedRoute>
+              <TenantScreen />
+            </ProtectedRoute>
+          } />
+          <Route path="/transaction" element={
+            <ProtectedRoute>
+              <TransactionsScreen />
+            </ProtectedRoute>
+          } />
+          <Route path="/email" element={
+            <ProtectedRoute>
+              <EmailScreen />
+            </ProtectedRoute>
+          } />
+          <Route path="/qb" element={
+            <ProtectedRoute>
+              <QBookScreen />
+            </ProtectedRoute>
+          } />
+          <Route path="/company" element={
+            <ProtectedRoute>
+              <CompanyScreen />
+            </ProtectedRoute>
+          } />
+          <Route path="/google-map" element={
+            <ProtectedRoute>
+              <GoogleSetting />
+            </ProtectedRoute>
+          } />
+          <Route path="/stripe" element={
+            <ProtectedRoute>
+              <StripeSetting />
+            </ProtectedRoute>
+          } />
+          <Route path="/companies" element={
+            <ProtectedRoute>
+              <CompaniesScreen />
+            </ProtectedRoute>
+          } />
         </Routes>
       </Layout>
     </Router>

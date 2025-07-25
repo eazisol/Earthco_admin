@@ -7,6 +7,7 @@ import {
 } from "./components/CustomButton";
 import { useNavigate } from "react-router";
 import HeroSection from "./components/HeroSection";
+import { getPackages } from "./APIS/packages";
 const pricingPlans = [
   {
     name: "Basic",
@@ -55,6 +56,7 @@ const pricingPlans = [
 
 function Branding() {
   let navigate = useNavigate();
+  const [packages,setPackages] = useState([])
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -127,6 +129,19 @@ function Branding() {
 
     setIsSubmitting(true);
   };
+  const fetchPackages = async (searchValue = '', pageValue = 1, pageSizeValue = 10) => {
+  
+    const response = await getPackages({
+      Search: searchValue || "",
+      DisplayStart: pageValue,
+      DisplayLength: pageSizeValue,
+    });
+    setPackages(response?.Data)
+   
+  };
+  useEffect(() => {
+    fetchPackages();
+  }, []);
 const handleSubscription=(priceId)=>{
  navigate("/register")
 }
@@ -316,11 +331,11 @@ const handleSubscription=(priceId)=>{
 
         {/* ======= Pricing Section ======= */}
      
-<section id="pricing" className="pricing">
+<section id="pricing" className="pricing" style={{ padding: '60px 0'}}>
   <div className="container" data-aos="fade-up">
     <div className="section-title">
       <h2>Pricing</h2>
-      <p>
+      <p >
         At Earthco, we believe in honest pricing with no hidden fees.
         Our flexible service packages are designed to give you the best
         value — whether you're managing a single business or multiple
@@ -328,40 +343,47 @@ const handleSubscription=(priceId)=>{
       </p>
     </div>
 
-    <div className="row">
-      {pricingPlans.map((plan, index) => {
-        const ButtonComponent = plan.buttonComponent === "CustomButtonGreen" ? CustomButtonGreen : CustomButton;
-        return (
-          <div
-            key={plan.name}
-            className={`col-lg-4 mt-4 mt-lg-0 text-start`}
-            data-aos="fade-up"
-            data-aos-delay={plan.delay}
+    <div className="row justify-content-center align-items-end" style={{gap: '24px'}}>
+      {packages?.map((plan, index) => (
+        <div
+          key={plan.PackageId}
+          className="col-lg-3 col-md-6 d-flex align-items-stretch"
+          style={{ minWidth: 300, maxWidth: 350 }}
+        >
+           <div
+            style={{
+              background: '#fff',
+              borderRadius: '20px',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+              padding: '32px 24px',
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              minHeight: 466,
+            }}
           >
-            <div className={`box ${plan.featured ? "featured" : ""}`}>
-              <h3>{plan.name}</h3>
-              <h4>
-                <sup>$</sup>
-                {plan.price}
-                <span className="per-month">per month</span>
-              </h4>
-              <ul>
-                {plan.features.map((feature, i) => (
-                  <li key={i} className={feature.available ? "" : "na"}>
-                    <i className={`bx ${feature.available ? "bx-check" : "bx-x"}`}></i>{" "}
-                    <span>{feature.label}</span>
-                  </li>
-                ))}
-              </ul>
-              <ButtonComponent onClick={()=>handleSubscription(plan.priceId)} />
+            <h5 style={{ color: '#6DA34D', fontWeight: 700, letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }}>{plan.Name}</h5>
+            <div style={{ fontSize: 36, fontWeight: 800, color: '#6DA34D', marginBottom: 0 }}>
+              ${plan.Price}
             </div>
+            <div style={{ color: '#888', fontSize: 16, marginBottom: 24 }}>/ Month</div>
+            <div style={{ width: '100%', height: 6, background: '#f5f5f5', borderRadius: 3, margin: '16px 0 24px 0' }}>
+              <div style={{ width: '100%', height: '100%', background: '#6DA34D', borderRadius: 3 }}></div>
+            </div>
+            <div dangerouslySetInnerHTML={{__html: plan.Description}}></div>
+            <div className="mt-auto">
+
+            <CustomButton onClick={()=>handleSubscription(plan.priceId)} />
+              </div>
           </div>
-        );
-      })}
+        </div>
+      ))}
     </div>
   </div>
 </section>
 
+          
         {/* ======= Contact Section ======= */}
 
         <section id="contact" className="contact">
@@ -376,7 +398,7 @@ const handleSubscription=(priceId)=>{
             </div>
             <div className="row">
               <div className="col-lg-5 d-flex align-items-stretch">
-                <div className="info text-start">
+                <div className="info text-start h-100">
                   <div className="address">
                     <i className="bi bi-geo-alt"></i>
                     <h4>Location:</h4>
@@ -403,7 +425,7 @@ const handleSubscription=(priceId)=>{
               <div className="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch text-start">
                 <form
                   onSubmit={handleSubmit}
-                  className="php-email-form"
+                  className="php-email-form w-100"
                 >
                   <div className="row">
                     <div className="form-group col-md-6">
