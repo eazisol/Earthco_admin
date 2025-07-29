@@ -186,7 +186,7 @@ const Sidebar = () => {
   }, [location.pathname]);
 
   return (
-    <div className="deznav">
+    <div className="deznav position-fixed">
       <div className="deznav-scroll">
         <ul className="metismenu" id="menu">
           {/* <li className="menu-title" style={{marginLeft:"30px",fontSize:"15px"}}>Earthco</li> */}

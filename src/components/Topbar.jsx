@@ -19,68 +19,16 @@ useEffect(() => {
     toast.success('Logged out successfully');
   }
     return (  
-  <div className="header">
+  <div className="header ">
     <div className="header-content">
       <nav className="navbar navbar-expand">
         <div className="collapse navbar-collapse justify-content-between">
           <div className="header-left">
-            {/* <div className="input-group search-area">
-                     <span className="input-group-text">
-                       <a href="javascript:void(0)">
-                         <svg
-                           width="19"
-                           height="19"
-                           viewBox="0 0 19 19"
-                           fill="none"
-                           xmlns="http://www.w3.org/2000/svg"
-                         >
-                           <circle
-                             cx="8.78605"
-                             cy="8.78605"
-                             r="8.23951"
-                             stroke="white"
-                             strokeLinecap="round"
-                             strokeLinejoin="round"
-                           />
-                           <path
-                             d="M14.5168 14.9447L17.7471 18.1667"
-                             stroke="white"
-                             strokeLinecap="round"
-                             strokeLinejoin="round"
-                           />
-                         </svg>
-                       </a>
-                     </span>
-                     <input
-                       type="text"
-                       className="form-control"
-                       placeholder="Search"
-                     />
-                   </div> */}
+           
           </div>
           <ul className="navbar-nav header-right">
            
-            {/* <li className="nav-item dropdown notification_dropdown">
-              <a
-                className="nav-link"
-                href="javascript:void(0);"
-                role="button"
-                data-bs-toggle="dropdown"
-              >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  width="24" 
-                  height="24" 
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M19 4H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zm0 14H5V8l7 4 7-4v10zm-7-5L5 9h14l-7 4z"
-                    fill="white"
-                  />
-                </svg>
-              </a>
-            </li> */}
+           
             <li className="nav-item ps-3">
               <div className="dropdown header-profile2">
                 <a

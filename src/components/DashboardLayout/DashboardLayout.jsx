@@ -65,7 +65,7 @@ export default function DashboardLayout({ children, onLogout }) {
           id="main-wrapper-dashboard"
           className={`show w-100 ${menuOpen ? "menu-toggle" : ""}`}
         >
-          <div className="nav-header">
+          <div className="nav-header position-fixed">
             <img
               src={logo}
               alt="logo"
