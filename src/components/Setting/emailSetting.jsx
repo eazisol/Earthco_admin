@@ -196,6 +196,7 @@ export const EmailScreen = () => {
         getSetting();
       }
     } catch (error) {
+      setLoading(false);
       toast.error("Failed to save email settings");
     } finally {
       setLoading(false);
@@ -231,12 +232,13 @@ export const EmailScreen = () => {
               <div className="card">
                 <div className="card-body">
                   <h4 className="card-title mb-4">Email Settings</h4>
-              {loading ? <div className="text-center">
+              {/* {loading ? <div className="text-center">
             <div className="spinner-border" role="status">
               <span className="visually-hidden"><CircularProgress /></span>
             </div>
            </div> 
-           :  <>
+           :   */}
+           <>
                  <div className="row">
                     <div className="col-xl-6 mb-3">
                       <label className="form-label">Email Address<span className="text-danger">*</span></label>
@@ -393,7 +395,7 @@ export const EmailScreen = () => {
                     {loading ? "Updating..." : "Update Settings"}
                   </button>
                 </div></>
-                }
+                {/* } */}
 
                 
                 </div>

@@ -8,9 +8,10 @@ import { AddTenant, deleteTenant, getTenant, getTenantRole } from "../../APIS/au
 import { toast } from "react-toastify";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import Pagination from '@mui/material/Pagination';
+import { useAppContext } from "../../context/AppContext";
 
 export const TenantScreen = () => {
- 
+  
   const [tenantData, setTenantData] = useState([]);
   // Pagination and search state
   const [search, setSearch] = useState("");

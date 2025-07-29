@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import DashboardLayout from "./components/DashboardLayout/DashboardLayout";
 import { getTenantById } from "./APIS/auth";
 function Dashboard() {
-  const { user, logout } = useAppContext();
+  const { user, logout,loginUser } = useAppContext();
+  console.log("🚀 ~ Dashboard ~ loginUser:", loginUser)
   const navigate = useNavigate();
   const [tenant, setTenant] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -83,19 +84,19 @@ useEffect(() => {
             Here’s your tenant information:
           </p>
           <div style={{ marginBottom: "12px" }}>
-            <strong>Name:</strong> {tenant?.CompanyName }
+            <strong>Name:</strong> {loginUser?.Data?.CompanyName }
           </div>
-          {tenant?.SubDomain ? (
+          {loginUser?.Data?.SubDomain ? (
             <button
               onClick={() =>
                 window.open(
-                  `https://${tenant?.SubDomain}.earthcoapp.com`,
+                  `https://${loginUser?.Data?.SubDomain}.earthcoapp.com`,
                   "_blank",
                   "noopener,noreferrer"
                 )
               }
               style={{
-                background: "#1976d2",
+                background: "#7b9b43",
                 color: "#fff",
                 border: "none",
                 borderRadius: "22px",

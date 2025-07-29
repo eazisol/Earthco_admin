@@ -171,7 +171,8 @@ const Sidebar = () => {
         { label: "QB", href: "/qb" },
         { label: "Company", href: "/company" },
         { label: "Google Map", href: "/google-map" },
-        { label: "Stripe", href: "/stripe" }
+        { label: "Stripe", href: "/stripe" },
+        { label: "Term And Privacy", href: "/term-and-privacy" }
       ],
     },
   ];
@@ -231,7 +232,7 @@ const Sidebar = () => {
                   }}
                 >
                  <span style={{marginLeft:"8px"}}> {item.icon(inactiveColor)}
-                  <span style={{marginLeft:"7px"}} className="menu-title">{item.label}</span></span>
+                  <span style={{marginLeft:"7px"}} className="menu-title text-white" >{item.label}</span></span>
                 </div>
                 {isOpen && (
                   <ul>

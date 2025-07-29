@@ -15,6 +15,8 @@ import { GoogleSetting } from './components/Setting/googleMap';
 import { StripeSetting } from './components/Setting/StripeSetting';
 import { CompaniesScreen } from './components/Comanies';
 import ForgotPassword from './components/ForgotPassword'
+import { TermAndPrivacy } from './components/Setting/termAndPrivacy'
+import ProfilePage from './components/Profile/ProfilePage'
 
 function Layout({ children }) {
   const location = useLocation();
@@ -93,6 +95,7 @@ function Layout({ children }) {
                 <li><a className="nav-link scrollto" href="/#pricing">Pricing</a></li>
                 <li><a className="nav-link scrollto" href="/#contact">Contact</a></li>
                 <li><a className="nav-link" href="/register">Register</a></li>
+                
               </ul>
               <i
                 className={`bi ${mobileMenuOpen ? 'bi-x' : 'bi-list'} mobile-nav-toggle`}
@@ -257,6 +260,11 @@ function App() {
               <TenantScreen />
             </ProtectedRoute>
           } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
           <Route path="/transaction" element={
             <ProtectedRoute>
               <TransactionsScreen />
@@ -287,12 +295,18 @@ function App() {
               <StripeSetting />
             </ProtectedRoute>
           } />
-          <Route path="/companies" element={
-            <ProtectedRoute>
-              <CompaniesScreen />
-            </ProtectedRoute>
-          } />
+              <Route path="/companies" element={
+                <ProtectedRoute>
+                  <CompaniesScreen />
+                </ProtectedRoute>
+              } />
+              <Route path="/term-and-privacy" element={
+                <ProtectedRoute>
+                  <TermAndPrivacy />
+                </ProtectedRoute>
+              } />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+         
         </Routes>
       </Layout>
     </Router>

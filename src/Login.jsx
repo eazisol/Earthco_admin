@@ -55,7 +55,6 @@ export const LoginScreen = ({ onClose }) => {
           Password: formData.Password,
         },
       });
-      console.log("🚀 ~ handleSubmit ~ response:", response?.status)
       if(response?.status === 'success'){
         toast.success(response?.response?.data );
         navigate("/dashboard");

@@ -14,8 +14,8 @@ export const LoginForm = () => {
     LastName: "",
     CompanyName: "",
     PhoneNo: "",
-    RoleId: 1,
-    PackageId: "", // Changed to empty string for no default selection
+    RoleId: 2,
+    PackageId: "", 
     SubDomain: "",
     Email: "",
     Password: "",
@@ -458,7 +458,7 @@ if (data?.data?.PaymentLink) {
               </div>
             </div>
             <div className="row">
-              <div className="col-xl-6 mb-3">
+              {/* <div className="col-xl-6 mb-3">
                 <FormControl fullWidth>
                   <label className="form-label">
                     Role <span className="text-danger">*</span>
@@ -483,7 +483,7 @@ if (data?.data?.PaymentLink) {
                     <div className="text-danger small">{errors.RoleId}</div>
                   )}
                 </FormControl>
-              </div>
+              </div> */}
               <div className="col-xl-6 mb-3">
                 <FormControl fullWidth>
                   <label className="form-label">

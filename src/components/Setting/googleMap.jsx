@@ -63,8 +63,7 @@ export const GoogleSetting = () => {
         ...response?.data,
       });
     } catch (error) {
-      console.error("Error fetching settings:", error);
-      toast.error("Failed to fetch settings");
+    
     } finally {
       setLoading(false);
     } 
