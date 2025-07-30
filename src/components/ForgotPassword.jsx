@@ -3,8 +3,9 @@ import { forgotPassword, verifyOTP, resetPassword } from "../APIS/auth";
 import { toast } from "react-toastify";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import earthcoLogo from "../assets/img/earthco_logo.png";
+import forgotPasswordImage from "../assets/img/loginForm.jpg";
 
 const ForgotPassword = () => {
   const [Email, setEmail] = useState("");
@@ -96,127 +97,174 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
-      <div className="card" style={{ width: "28%", border: "none", boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}>
-        <div className="text-center mt-4 mb-2">
-          <img src={earthcoLogo} alt="earthco logo" style={{ width: 170, marginBottom: 8 }} />
-        </div>
-       
-        <div className="card-body">
-     
-          <h4 style={{marginLeft:"15px"}}>
+    <section className="contact">
+      <div className="container" data-aos="fade-up">
+        <div className="section-title" style={{marginTop: "7%"}}> 
+          <h2>
             {!showOTP && !showNewPassword 
               ? "Forgot Password" 
               : showOTP 
                 ? "Enter OTP" 
                 : "Reset Password"}
-          </h4>
-      
-          <form onSubmit={handleSubmit} className="px-3 pb-3">
-            <div className="mb-3">
-              {!showOTP && !showNewPassword ? (
-                <>
-                  <label htmlFor="forgotEmail" className="form-label">Email</label>
-                  <input
-                    type="type"
-                    className={`form-control ${error ? "is-invalid" : ""}`}
-                    id="forgotEmail"
-                    name="Email"
-                    value={Email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    autoFocus
-                  />
-                  {error && <div className="invalid-feedback">{error}</div>}
-                </>
-              ) : showOTP ? (
-                <>
-                  <label htmlFor="otp" className="form-label">Enter OTP</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="otp"
-                    name="otp"
-                    value={otp}
-                    onChange={e => setOTP(e.target.value)}
-                    placeholder="Enter OTP sent to your email"
-                    autoFocus
-                  />
-                </>
-              ) : (
-                <>
-                  <div className="mb-3">
-                    <label htmlFor="newPassword" className="form-label">New Password</label>
-                    <div className="input-group">
+          </h2>
+          <p>
+            {!showOTP && !showNewPassword 
+              ? "Enter your email address to receive a password reset code." 
+              : showOTP 
+                ? "Enter the verification code sent to your email." 
+                : "Create your new password."}
+          </p>
+        </div>
+
+        <div
+          className="d-flex"
+          style={{
+            width: "100%",
+            alignItems: "stretch",
+          }}
+        >
+          {/* Left side - Image */}
+          <div
+            className="login-image-container"
+            style={{
+              width: "40%",
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src={forgotPasswordImage}
+              alt="Forgot Password"
+              className="img-fluid shadow"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "0",
+              }}
+            />
+          </div>
+
+          {/* Right side - Form */}
+         
+            
+
+              <form onSubmit={handleSubmit} className="php-email-form"  s style={{
+                  width: "60%",
+                  padding: "20px",
+                  minHeight: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}>
+                  <div  className="w-100 d-flex flex-column align-items-center justify-content-center"
+                  style={{ maxWidth: 437 }}>
+                <div className="mb-3 w-100">
+                  {!showOTP && !showNewPassword ? (
+                    <>
+                     
                       <input
-                        type={showNewPasswordField ? "text" : "password"}
-                        className={`form-control ${passwordError ? "is-invalid" : ""}`}
-                        id="newPassword"
-                        value={newPassword}
-                        onChange={e => setNewPassword(e.target.value)}
-                        placeholder="Enter new password"
+                        type="email"
+                        className={`form-control ${error ? "is-invalid" : ""}`}
+                        id="forgotEmail"
+                        name="Email"
+                        value={Email}
+                        onChange={e => setEmail(e.target.value)}
+                        placeholder="Enter your email"
                         autoFocus
+                        style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                       />
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowNewPasswordField(!showNewPasswordField)}
-                          edge="end"
-                          style={{position: 'absolute', right: '10px',top:'1px', zIndex: '999', height: '100%'}}
-                        >
-                          {showNewPasswordField ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    </div>
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
-                    <div className="input-group">
+                      {error && <div className="invalid-feedback">{error}</div>}
+                    </>
+                  ) : showOTP ? (
+                    <>
+                     
                       <input
-                        type={showConfirmPasswordField ? "text" : "password"}
-                        className={`form-control ${passwordError ? "is-invalid" : ""}`}
-                        id="confirmPassword"
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                        placeholder="Confirm new password"
+                        type="text"
+                        className="form-control"
+                        id="otp"
+                        name="otp"
+                        value={otp}
+                        onChange={e => setOTP(e.target.value)}
+                        placeholder="Enter OTP sent to your email"
+                        autoFocus
+                        style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                       />
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowConfirmPasswordField(!showConfirmPasswordField)}
-                          edge="end"
-                          style={{position: 'absolute', right: '10px',top:'1px', zIndex: '999', height: '100%'}}
-                        >
-                          {showConfirmPasswordField ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    </div>
-                    {passwordError && <div className="invalid-feedback">{passwordError}</div>}
-                  </div>
-                </>
-              )}
-            </div>
-            <div className="d-flex justify-content-between gap-2">
-              <button
-                type="button"
-                className="btn btn-success"
-                style={{ background: '#7a9c3a', border: 'none' }}
-                onClick={() => window.history.back()}
-                disabled={isLoading}
-              >
-                Back
-              </button>
-              <button
-                type="submit"
-                className="btn btn-success"
-                style={{ background: '#7a9c3a', border: 'none' }}
-                disabled={isLoading}
-              >
-                {isLoading ? "Loading..." : (showNewPassword ? "Update Password" : (showOTP ? "Verify OTP" : "Submit"))}
-              </button>
-            </div>
-          </form>
+                    </>
+                  ) : (
+                    <>
+                      <div className="mb-3">
+                     
+                        <div className="input-group">
+                          <input
+                            type={showNewPasswordField ? "text" : "password"}
+                            className={`form-control ${passwordError ? "is-invalid" : ""}`}
+                            id="newPassword"
+                            value={newPassword}
+                            onChange={e => setNewPassword(e.target.value)}
+                            placeholder="Enter new password"
+                            autoFocus
+                            style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
+                          />
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowNewPasswordField(!showNewPasswordField)}
+                              edge="end"
+                              style={{position: 'absolute', right: '10px',top:'1px', zIndex: '999', height: '100%'}}
+                            >
+                              {showNewPasswordField ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        </div>
+                      </div>
+                      <div className="mb-3">
+                      
+                        <div className="input-group">
+                          <input
+                            type={showConfirmPasswordField ? "text" : "password"}
+                            className={`form-control ${passwordError ? "is-invalid" : ""}`}
+                            id="confirmPassword"
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                            placeholder="Confirm new password"
+                            style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
+                          />
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowConfirmPasswordField(!showConfirmPasswordField)}
+                              edge="end"
+                              style={{position: 'absolute', right: '10px',top:'1px', zIndex: '999', height: '100%'}}
+                            >
+                              {showConfirmPasswordField ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        </div>
+                        {passwordError && <div className="invalid-feedback" style={{display: 'block'}}>{passwordError}</div>}
+                      </div>
+                    </>
+                  )}
+                </div>
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    style={{
+                      background: "#7a9c3a",
+                      border: "none",
+                      width: "100%",
+                      alignSelf: "center",
+                    }}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Loading..." : (showNewPassword ? "Update Password" : (showOTP ? "Verify OTP" : "Submit"))}
+                  </button>
+              
+                <div className="text-center mt-3">
+                  <p>Remember your password? <Link to="/login" style={{ color: '#6DA34D' }}>Login</Link></p>
+                </div>
+                </div>
+              </form>
+            
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

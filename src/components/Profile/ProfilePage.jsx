@@ -16,7 +16,6 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [transactionId, setTransactionId] = useState(null);
-  console.log("🚀 ~ ProfilePage ~ transactionId:", transactionId?.SubscriptionId)
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -190,7 +189,7 @@ useEffect(() => {
         <div className="container-fluid">
  
             
-              <div className="card">
+              <div className="card table-space">
                 <div className="card-body">
               <h4 className="card-title mb-4">Profile Settings</h4>
                   {loading ? (
@@ -322,7 +321,7 @@ useEffect(() => {
                   )}
                 </div>
               </div>
-              <div className="card">
+              <div className="card table-space">
                 <div className="card-body">
                   <h4 className="card-title mb-4 "  style={{marginLeft: "8px"}}>Active Package</h4>
                   <div className="table-responsive">

@@ -1,14 +1,15 @@
 import React, { useState,useEffect } from "react";
 import { CustomButtonGreen } from "./CustomButton";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import { getPackages } from "../APIS/packages";
-import { getTenantRole } from "../APIS/auth";
+import {  getPackageById } from "../APIS/packages";
 import { RegisterTenant } from "../APIS/auth";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { toast } from "react-toastify";
 
 export const LoginForm = () => {
+  const [searchParams] = useSearchParams();
   const [formData, setFormData] = useState({
     FirstName: "",
     LastName: "",
@@ -26,10 +27,34 @@ export const LoginForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [role, setRole] = useState([]);
-  const [packages, setpackegs] = useState([]);
-  const [packagesData, setPackagesdata] = useState(null);
- console.log('packagesData',packagesData)
+  const [selectedPackageDetails, setSelectedPackageDetails] = useState(null);
+
+
+  // Fetch package details by ID when component mounts
+  useEffect(() => {
+    const packageId = searchParams.get('packageId');
+    if (packageId) {
+      fetchPackageById(packageId);
+    }
+  }, [searchParams]);
+
+  const fetchPackageById = async (packageId) => {
+    try {
+      const response = await getPackageById(packageId);
+      
+      if (response) {
+        setSelectedPackageDetails(response);
+        setFormData(prev => ({
+          ...prev,
+          PackageId: response.PackageId
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching package details:', error);
+    } finally {
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -115,11 +140,7 @@ export const LoginForm = () => {
       [name]: value,
     }));
 
-    // Optional: if you want to save full selected object too
-    if (name === "PackageId") {
-      const selectedPackage = packages.find((pkg) => pkg.PackageId === value);
-      setPackagesdata(selectedPackage);
-    }
+   
   };
 
   const validateForm = () => {
@@ -194,55 +215,27 @@ export const LoginForm = () => {
       newErrors.SubDomain = "Username must start with a letter and can only contain letters, numbers and underscore";
     }
 
-    // Package validation
+    // Package validation - only if no package is pre-selected
     if (!formData.PackageId) {
+      toast.error("Please select a package");
       newErrors.PackageId = "Please select a package";
     }
 
-    // Role validation  
-    if (!formData.RoleId) {
-      newErrors.RoleId = "Please select a role";
-    }
+   
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  const fetchPackages = async () => {
-    const response = await getPackages({
-      Search: "",
-      DisplayStart: 1,
-      DisplayLength: 10,
-    });
 
-    setpackegs(response?.Data);
-  };
-  const getRole = async () => {
-    const response = await getTenantRole();
-    setRole(response?.data);
-  };
-  useEffect(() => {
-    fetchPackages();
-    getRole();
-  }, []);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
 
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
-  };
+ 
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-console.log('formData',formData)
+    console.log('formData',formData)
+
     if (!validateForm()) {
       return;
     }
@@ -250,6 +243,8 @@ console.log('formData',formData)
     setIsSubmitting(true);
 
     try {
+      const packageToUse = selectedPackageDetails 
+      
       // Prepare data for API call (remove confirmPassword as it's not needed on backend)
       const { confirmPassword, ...registerData } = formData;
       const obj = {
@@ -265,31 +260,35 @@ console.log('formData',formData)
         tblUserpackages: [
           {
             UserPackageId:0,
-            PackageId:packagesData?.PackageId,
+            PackageId: packageToUse?.PackageId,
             TenantId: 0,
-            Name: packagesData?.Name,
-            PackageTypeId: packagesData?.PackageTypeId,
-            MaxUsers: packagesData?.MaxUser,
-            MaxStorageMB: packagesData?.MaxStorageMB,
-            MaxCompanies: packagesData?.MaxCompanies,
-            Price: packagesData?.Price,
+            Name: packageToUse?.Name,
+            PackageTypeId: packageToUse?.PackageTypeId,
+            MaxUsers: packageToUse?.MaxUser,
+            MaxStorageMB: packageToUse?.MaxStorageMB,
+            MaxCompanies: packageToUse?.MaxCompanies,
+            Price: packageToUse?.Price,
             
           }
         ]
       };
       const data = await RegisterTenant(obj);
-      console.log('data.data',data.data)
-if (data?.data?.PaymentLink) {
-  window.open(data.data.PaymentLink, '_blank');
-}
+      console.log("🚀 ~ handleSubmit ~ data:", data)
+      if (data?.data?.PaymentLink) {
+        window.open(data.data.PaymentLink, '_blank');
+      }
 
       // Reset form after successful submission
       setFormData({
-        Name: "",
         Email: "",
         Password: "",
         confirmPassword: "",
         SubDomain: "",
+        FirstName: "",
+        LastName: "",
+        CompanyName: "",
+        PhoneNo: "",
+        RoleId: 2,
       });
 
     } catch (error) {
@@ -323,7 +322,7 @@ if (data?.data?.PaymentLink) {
           <div
             className="login-image-container"
             style={{
-              width: "40%",
+              width: "50%",
               overflow: "hidden",
             }}
           >
@@ -347,74 +346,85 @@ if (data?.data?.PaymentLink) {
             onSubmit={handleSubmit}
             className="php-email-form"
             style={{
-              width: "60%",
+              width: "50%",
               padding: "20px", // Add some space if needed
             }}
           >
+            {/* Display selected package info if available */}
+            {selectedPackageDetails && (
+              <div className="mb-4 p-3" style={{ background: '#f8f9fa', borderRadius: '8px', border: '1px solid #e9ecef' }}>
+                <h6 style={{ color: '#6DA34D', marginBottom: '8px' }}>Selected Package: {selectedPackageDetails.Name}</h6>
+                <p style={{ margin: '0', fontSize: '14px', color: '#666' }}>
+                  Price: ${selectedPackageDetails.Price}/month
+                </p>
+                {selectedPackageDetails.Description && (
+                  <div style={{ marginTop: '8px', fontSize: '13px', color: '#666' }}>
+                    {selectedPackageDetails.Description.replace(/<[^>]*>/g, '  ')}
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="row">
-              <div className="form-group col-md-6">
-                <label htmlFor="FirstName">
-                  First Name <span className="text-danger">*</span>
-                </label>
+              <div className="form-group col-md-12">
+                
                 <input
                   type="text"
                   name="FirstName"
-                  className={`form-control ${errors.FirstName ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.FirstName ? "is-invalid" : ""} `}
                   id="FirstName"
                   value={formData.FirstName}
                   onChange={handleInputChange}
-                  placeholder="Enter your first name"
+                  placeholder="First name"
+                  style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                 />
                 {errors.FirstName && (
                   <div className="invalid-feedback">{errors.FirstName}</div>
                 )}
               </div>
-              <div className="form-group col-md-6">
-                <label htmlFor="LastName">
-                  Last Name <span className="text-danger">*</span>
-                </label>
+              <div className="form-group col-md-12">
+                
                 <input
                   type="text"
                   name="LastName"
-                  className={`form-control ${errors.LastName ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.LastName ? "is-invalid" : ""} mt-2`}
                   id="LastName"
                   value={formData.LastName}
                   onChange={handleInputChange}
-                  placeholder="Enter your last name"
+                  placeholder="Last name"
+                  style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                 />
                 {errors.LastName && (
                   <div className="invalid-feedback">{errors.LastName}</div>
                 )}
               </div>
-              <div className="form-group col-md-6">
-                <label htmlFor="Email">
-                  Email <span className="text-danger">*</span>
-                </label>
+              <div className="form-group col-md-12">
+                
                 <input
-                  type="email"
+                  type="text"
                   name="Email"
-                  className={`form-control ${errors.Email ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.Email ? "is-invalid" : ""} mt-2`}
                   id="Email"
                   value={formData.Email}
                   onChange={handleInputChange}
-                  placeholder="Enter your email"
+                  placeholder="Email"
+                  style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                 />
                 {errors.Email && (
                   <div className="invalid-feedback">{errors.Email}</div>
                 )}
               </div>
-              <div className="form-group col-md-6">
-                <label htmlFor="CompanyName">
-                  Company Name <span className="text-danger">*</span>
-                </label>
+              <div className="form-group col-md-12">
+                
                 <input
                   type="text"
                   name="CompanyName"
-                  className={`form-control ${errors.CompanyName ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.CompanyName ? "is-invalid" : ""} mt-2`}
                   id="CompanyName"
                   value={formData.CompanyName}
                   onChange={handleInputChange}
-                  placeholder="Enter your company name"
+                  placeholder="Company name"
+                  style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                 />
                 {errors.CompanyName && (
                   <div className="invalid-feedback">{errors.CompanyName}</div>
@@ -422,35 +432,33 @@ if (data?.data?.PaymentLink) {
               </div>
             </div>
             <div className="row">
-              <div className="form-group col-md-6">
-                <label htmlFor="PhoneNo">
-                  Phone Number <span className="text-danger">*</span>
-                </label>
+              <div className="form-group col-md-12">
+                
                 <input
                   type="tel"
                   name="PhoneNo"
-                  className={`form-control ${errors.PhoneNo ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.PhoneNo ? "is-invalid" : ""} mt-2`}
                   id="PhoneNo"
                   value={formData.PhoneNo}
                   onChange={handleInputChange}
-                  placeholder="Enter your phone number"
+                  placeholder="Phone number"
+                  style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                 />
                 {errors.PhoneNo && (
                   <div className="invalid-feedback">{errors.PhoneNo}</div>
                 )}
               </div>
-              <div className="form-group col-md-6">
-                <label htmlFor="SubDomain">
-                  Username <span className="text-danger">*</span>
-                </label>
+                <div className="form-group col-md-12">
+                
                 <input
                   type="text"
                   name="SubDomain"
-                  className={`form-control ${errors.SubDomain ? "is-invalid" : ""}`}
+                  className={`form-control ${errors.SubDomain ? "is-invalid" : ""} mt-2`}
                   id="SubDomain"
                   value={formData.SubDomain}
                   onChange={handleInputChange}
-                  placeholder="Enter your username"
+                  placeholder="Username"
+                  style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                 />
                 {errors.SubDomain && (
                   <div className="invalid-feedback">{errors.SubDomain}</div>
@@ -484,47 +492,36 @@ if (data?.data?.PaymentLink) {
                   )}
                 </FormControl>
               </div> */}
-              <div className="col-xl-6 mb-3">
-                <FormControl fullWidth>
-                  <label className="form-label">
-                    Package <span className="text-danger">*</span>
-                  </label>
-                  <Select
-                    name="PackageId"
-                    value={formData.PackageId}
-                    onChange={handleInputChange}
-                    style={{ height: "2.5rem" }}
-                    displayEmpty
-                    error={!!errors.PackageId}
-                  >
-                    <MenuItem value="" disabled>Select a package</MenuItem>
-                    {packages?.map((option) => (
-                      <MenuItem
-                        key={option.PackageId}
-                        value={option.PackageId}
-                      >
-                        {option.Name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {errors.PackageId && (
-                    <div className="text-danger small">{errors.PackageId}</div>
-                  )}
-                </FormControl>
-              </div>
-              <div className="form-group col-md-6">
-                <label htmlFor="Password">
-                  Password <span className="text-danger">*</span>
-                </label>
+              {/* Package dropdown removed - package is pre-selected */}
+              <div className="form-group col-md-12">
                 <div className="input-group">
                   <input
                     type={showPassword ? "text" : "password"}
                     name="Password"
-                    className={`form-control ${errors.Password ? "is-invalid" : ""}`}
+                    className={`form-control ${errors.Password ? "is-invalid" : ""} mt-2`}
                     id="Password"
                     value={formData.Password}
-                    onChange={handleInputChange}
-                    placeholder="Enter your password"
+                    onChange={e => {
+                      const value = e.target.value;
+                      handleInputChange(e);
+
+                      // Password validation
+                      let errorMsg = "";
+                      if (value.length < 8) {
+                        errorMsg = "Password must be at least 8 characters.";
+                      } else if (!/\d/.test(value)) {
+                        errorMsg = "Password must contain at least 1 number.";
+                      } else if (!/[A-Z]/.test(value)) {
+                        errorMsg = "Password must contain at least 1 upper case letter.";
+                      }
+                      // Set error for Password field
+                      setErrors(prev => ({
+                        ...prev,
+                        Password: errorMsg
+                      }));
+                    }}
+                    placeholder="Password"
+                    style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                   />
                   <div className="input-group-append">
                     <IconButton
@@ -540,19 +537,30 @@ if (data?.data?.PaymentLink) {
                   <div className="invalid-feedback" style={{display: 'block'}}>{errors.Password}</div>
                 )}
               </div>
-              <div className="form-group col-md-6">
-                <label htmlFor="confirmPassword">
-                  Confirm Password <span className="text-danger">*</span>
-                </label>
+              <div className="form-group col-md-12">
                 <div className="input-group">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
-                    className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}`}
+                    className={`form-control ${errors.confirmPassword ? "is-invalid" : ""} mt-2`}
                     id="confirmPassword"
                     value={formData.confirmPassword}
-                    onChange={handleInputChange}
-                    placeholder="Confirm your password"
+                    onChange={e => {
+                      const value = e.target.value;
+                      handleInputChange(e);
+
+                      // Confirm password validation
+                      let errorMsg = "";
+                      if (value !== formData.Password) {
+                        errorMsg = "Passwords do not match.";
+                      }
+                      setErrors(prev => ({
+                        ...prev,
+                        confirmPassword: errorMsg
+                      }));
+                    }}
+                    placeholder="Confirm password"
+                    style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                   />
                   <div className="input-group-append">
                     <IconButton
@@ -578,8 +586,9 @@ if (data?.data?.PaymentLink) {
                 {registerError}
               </div>
             )} */}
-            <div className="text-center">
+            <div className="mt-2">
               <CustomButtonGreen
+              className="w-100"
                 text={
                   isSubmitting 
                   ? "Creating Account..."
@@ -589,7 +598,12 @@ if (data?.data?.PaymentLink) {
                 disabled={isSubmitting }
               />
              <p className="text-center mt-2">
-  Already user? <Link to="/login">Login</Link>
+  Already user? <Link 
+    to="/login" 
+    style={{ color: '#6DA34D', fontWeight: 500, textDecoration: 'none', transition: 'color 0.2s' }}
+    onMouseOver={e => e.target.style.color = '#55842A'}
+    onMouseOut={e => e.target.style.color = '#6DA34D'}
+  >Login</Link>
 </p>
             </div>
           </form>

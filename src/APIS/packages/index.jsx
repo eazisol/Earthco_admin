@@ -76,3 +76,20 @@ export const getPackages = async ({ Search = "", DisplayStart = 0, DisplayLength
     };
   }
 };
+  export const getPackageById = async (PackageId) => {
+  const token = JSON.parse(localStorage.getItem("user"));
+  try {
+    const { data } = await axios.get(`${apiUrl}Packages/GetPackage?id=${PackageId}`, {
+      headers: {
+        Authorization: `Bearer ${token?.token?.data}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return data;
+  } catch (error) {
+    return {
+      error: true,
+      message: error?.response ,
+    };
+  }
+};

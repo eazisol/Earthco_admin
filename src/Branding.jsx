@@ -8,51 +8,7 @@ import {
 import { useNavigate } from "react-router";
 import HeroSection from "./components/HeroSection";
 import { getPackages } from "./APIS/packages";
-const pricingPlans = [
-  {
-    name: "Basic",
-    price: 15,
-    priceId:'prod_SgRIbITKi179cC',
-    features: [
-      { label: "1 Company Account", available: true },
-      { label: "1 QuickBooks Integration", available: true },
-      { label: "Access to Core Features", available: true },
-      { label: "Multi-Company Dashboard", available: false },
-      { label: "Advanced Reporting Tools", available: false },
-    ],
-    buttonComponent: "CustomButton",
-    delay: 100,
-  },
-  {
-    name: "Standard", 
-    price: 29,
-    features: [
-      { label: "3 Company Accounts", available: true },
-      { label: "3 QuickBooks Integrations", available: true },
-      { label: "Access to All Core Features", available: true },
-      { label: "Multi-Company Dashboard", available: true },
-      { label: "Priority Support", available: false },
-    ],
-    featured: true,
-    buttonComponent: "CustomButtonGreen",
-    delay: 200,
-    priceId:'prod_SgRIbITKi179cC',
-  },
-  {
-    name: "Premium",
-    price: 49,
-    priceId:'prod_SgRIbITKi179cC',
-    features: [
-      { label: "5 Company Accounts", available: true },
-      { label: "5 QuickBooks Integrations", available: true },
-      { label: "All Features from Standard", available: true },
-      { label: "Advanced Reporting Tools", available: true },
-      { label: "Priority Support", available: true },
-    ],
-    buttonComponent: "CustomButton",
-    delay: 300,
-  },
-];
+
 
 function Branding() {
   let navigate = useNavigate();
@@ -142,8 +98,8 @@ function Branding() {
   useEffect(() => {
     fetchPackages();
   }, []);
-const handleSubscription=(priceId)=>{
- navigate("/register")
+const handleSubscription=(packageId)=>{
+ navigate(`/register?packageId=${packageId}`)
 }
   useEffect(() => {
     const preloader = document.getElementById("preloader");
@@ -374,7 +330,7 @@ const handleSubscription=(priceId)=>{
             <div dangerouslySetInnerHTML={{__html: plan.Description}}></div>
             <div className="mt-auto">
 
-            <CustomButton onClick={()=>handleSubscription(plan.priceId)} />
+            <CustomButton onClick={()=>handleSubscription(plan.PackageId)} />
               </div>
           </div>
         </div>

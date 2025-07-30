@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import earthcoLogo from "./assets/img/earthco_logo.png";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import loginImage from "./assets/img/loginForm.jpg";
 
 export const LoginScreen = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -90,80 +91,150 @@ export const LoginScreen = ({ onClose }) => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh", background: "#f8f9fa" }}>
-      <div className="card" style={{ width: "500px", border: "none", boxShadow: "0 2px 16px rgba(100, 100, 111, 0.2)" }}>
-        <div className="text-center mt-4 mb-2">
-          <img src={earthcoLogo} alt="earthco logo" style={{ width: 170, marginBottom: 8 }} />
+    <section className="contact">
+      <div className="container" data-aos="fade-up">
+        <div className="section-title" style={{marginTop: "7%"}}> 
+          <h2>Login to Your Account</h2>
+          <p>
+            Access your Earthco account to manage your landscaping services, view project updates, and more.
+          </p>
         </div>
-        <div className="px-4 pb-4">
-          <h5 className="mb-1" style={{ fontWeight: 600 }}>Personal Information</h5>
-          <p className="" style={{ color: '#888', fontSize: 14 }}>Enter your e-mail address and your password.</p>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <input
-                type="email"
-                className={`form-control ${errors.Email ? "is-invalid" : ""}`}
-                id="loginEmail"
-                name="Email"
-                value={formData.Email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-                autoFocus
-                style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
-              />
-              {errors.Email && <div className="invalid-feedback">{errors.Email}</div>}
-            </div>
-            <div className="mb-3 position-relative">
-              <div className="input-group">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className={`form-control ${errors.Password ? "is-invalid" : ""}`}
-                  id="loginPassword"
-                  name="Password"
-                  value={formData.Password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                  style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
-                />
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                    style={{position: 'absolute', right: '10px', top:'2px', zIndex: '999', height: '100%'}}
+
+        <div
+          className="d-flex"
+          style={{
+            width: "100%",
+            alignItems: "stretch",
+          }}
+        >
+          {/* Left side - Image */}
+          <div
+            className="login-image-container"
+            style={{
+              width: "50%",
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src={loginImage}
+              alt="Login"
+              className="img-fluid shadow"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "0",
+              }}
+            />
+          </div>
+
+         
+           
+         
+           
+              <form
+                onSubmit={handleSubmit}
+                className="php-email-form d-flex flex-column align-items-center justify-content-center"
+                style={{
+                  width: "50%",
+                  padding: "20px",
+                  minHeight: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  className="w-100 d-flex flex-column align-items-center"
+                  style={{ maxWidth: 437 }}
+                >
+                  <div className="mb-3 w-100">
+                    <input
+                      type="email"
+                      className={`form-control ${errors.Email ? "is-invalid" : ""}`}
+                      id="loginEmail"
+                      name="Email"
+                      value={formData.Email}
+                      onChange={handleChange}
+                      placeholder="Enter your email"
+                      autoFocus
+                      style={{
+                        background: "#f4f7fa",
+                        border: "1px solid #e0e0e0",
+                      }}
+                    />
+                    {errors.Email && (
+                      <div className="invalid-feedback text-center">{errors.Email}</div>
+                    )}
+                  </div>
+                  <div className="mb-3 position-relative w-100">
+                    <div className="input-group">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        className={`form-control ${errors.Password ? "is-invalid" : ""}`}
+                        id="loginPassword"
+                        name="Password"
+                        value={formData.Password}
+                        onChange={handleChange}
+                        placeholder="Enter your password"
+                        style={{
+                          background: "#f4f7fa",
+                          border: "1px solid #e0e0e0",
+                        }}
+                      />
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                          style={{
+                            position: "absolute",
+                            right: "10px",
+                            top: "2px",
+                            zIndex: "999",
+                            height: "100%",
+                          }}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    </div>
+                    {errors.Password && (
+                      <div className="invalid-feedback text-center">{errors.Password}</div>
+                    )}
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-4 w-100">
+                    <div className="form-check"></div>
+                    <Link
+                      to="/forgot-password"
+                      style={{
+                        fontSize: 14,
+                        color: "#6DA34D",
+                        textDecoration: "none",
+                        marginLeft: "auto",
+                      }}
+                    >
+                      Forgot Password ?
+                    </Link>
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    className="btn btn-success mb-2 "
+                    style={{
+                      background: "#7a9c3a",
+                      border: "none",
+                      width: "100%",
+                      // maxWidth: 250,
+                      alignSelf: "center",
+                    }}
+                    disabled={isSubmitting}
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              </div>
-              {errors.Password && <div className="invalid-feedback">{errors.Password}</div>}
-            </div>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <div className="form-check">
-                {/* <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="rememberMe"
-                  checked={rememberMe}
-                  onChange={() => setRememberMe(!rememberMe)}
-                />
-                <label className="form-check-label" htmlFor="rememberMe" style={{ fontSize: 14 }}>
-                  Remember me
-                </label> */}
-              </div>
-              <Link to="/forgot-password" style={{ fontSize: 14, color: '#6DA34D', textDecoration: 'none' }}>Forgot Password ?</Link>
-            </div>
-            {/* {apiError && <div className="alert alert-danger text-center">{apiError}</div>} */}
-            <button
-              type="submit"
-              className="btn btn-success w-100 mb-2"
-              style={{ background: '#7a9c3a', border: 'none', }}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "SIGNING IN..." : "SIGN ME IN"}
-            </button>
-          </form>
+                    {isSubmitting ? "SIGNING IN..." : "SIGN ME IN"}
+                  </button>
+                </div>
+              </form>
+       
         </div>
       </div>
-    </div>
+    </section>
   );
 };

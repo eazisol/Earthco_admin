@@ -68,11 +68,12 @@ function Layout({ children }) {
   }, [location]);
 
   const hideNavFooter = location.pathname.startsWith('/dashboard');
-  const showNavFooter = location.pathname === '/' || location.pathname === '/register';
+  const showNavFooter = location.pathname === '/' || location.pathname === '/register' || location.pathname === '/login' || location.pathname === '/forgot-password';
 
   // Add this line to detect register page
   const isRegisterPage = location.pathname === '/register';
-
+  const isLoginPage = location.pathname === '/login';
+  const isForgotPasswordPage = location.pathname === '/forgot-password';
   const handleMobileToggle = () => {
     setMobileMenuOpen((prev) => !prev);
   };
@@ -80,7 +81,7 @@ function Layout({ children }) {
   return (
     <>
       {showNavFooter && (
-        <header id="header" className={`fixed-top${isRegisterPage ? ' register-navbar' : ''}`}>
+        <header id="header" className={`fixed-top${isRegisterPage || isLoginPage || isForgotPasswordPage ? ' register-navbar' : ''}`}>
           <div className="container d-flex align-items-center">
             <h1 className="logo me-auto">
               <a href="/#hero" className="logo me-auto">
@@ -94,8 +95,15 @@ function Layout({ children }) {
                 <li><a className="nav-link scrollto" href="/#services">Services</a></li>
                 <li><a className="nav-link scrollto" href="/#pricing">Pricing</a></li>
                 <li><a className="nav-link scrollto" href="/#contact">Contact</a></li>
-                <li><a className="nav-link" href="/register">Register</a></li>
-                <li><a className="nav-link" href="/login">Login</a></li>
+                <li>
+                  <button
+                    className="btn btn-success nav-link "
+                    style={{ background: "#48301f", border: "none", color: "#fff", padding: "6px 22px", borderRadius: "6px", marginLeft: "15px" }}
+                    onClick={() => window.location.href = "/login"}
+                  >
+                    Login
+                  </button>
+                </li>
                 
               </ul>
               <i
@@ -174,7 +182,7 @@ function Layout({ children }) {
                     </li>
                     <li>
                       <i className="bx bx-chevron-right"></i>{" "}
-                      <a href="/register">Register</a>
+                      <a href="/login">Login</a>
                     </li>
                   </ul>
                 </div>

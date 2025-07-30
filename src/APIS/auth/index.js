@@ -65,7 +65,6 @@ export const getTenantRole = async () => {
 };
 export const getTenant = async ({ Search = "", DisplayStart = 1, DisplayLength = 10 } = {}) => {
   const token = JSON.parse(localStorage.getItem("user"));
-console.log("🚀 ~ getTenant ~ Search:",typeof Search)
   try {
     const { data } = await axios.get(
       `${apiUrl}Tenant/GetTenantServerSideList?Search="${Search}"&DisplayStart=${DisplayStart}&DisplayLength=${DisplayLength}`,
@@ -101,13 +100,9 @@ export const deleteTenant=async(id )=>{
 };
 // /Accounts/RegisterTenant
 export const RegisterTenant = async (obj) => {
-  const token = JSON.parse(localStorage.getItem("user"));
   try {
     const data  = await axios.post(`${apiUrl}Accounts/RegisterTenant`, obj, {
-      headers: {
-        Authorization: `Bearer ${token.token.data}`,
-        "Content-Type": "application/json",
-      },
+    
     });
     return data;
   } catch (error) {
@@ -133,6 +128,20 @@ export const verifyOTP = async (obj) => {
   export const resetPassword = async (obj) => {
     try {
       const data  = await axios.post(`${apiUrl}Accounts/ChangeForgetPassword`,obj);
+      return data;
+    } catch (error) {
+      return error;
+    }
+    };
+  export const updateTenantStatus = async (obj) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("user"));
+      const data  = await axios.get(`${apiUrl}Tenant/UpdateTenantStatus?id=${obj.id}&Active=${obj.Active}`,{
+        headers: {
+          Authorization: `Bearer ${token.token.data}`,
+          "Content-Type": "application/json",
+        },
+      });
       return data;
     } catch (error) {
       return error;

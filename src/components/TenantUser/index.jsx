@@ -4,7 +4,7 @@ import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField 
 import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
 import { getPackages } from "../../APIS/packages";
-import { AddTenant, deleteTenant, getTenant, getTenantRole } from "../../APIS/auth";
+import { AddTenant, deleteTenant, getTenant, getTenantRole, updateTenantStatus } from "../../APIS/auth";
 import { toast } from "react-toastify";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import Pagination from '@mui/material/Pagination';
@@ -202,7 +202,7 @@ export const TenantScreen = () => {
                           <th className="text-center">Email Address</th>
                           <th className="text-center">Phone No</th>
                           <th className="text-center">Role</th>
-                          {/* <th className="text-center">Status</th> */}
+                          <th className="text-center">Status</th>
                           <th className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -234,14 +234,35 @@ export const TenantScreen = () => {
                             <td className="text-center">
                               <h6>{emp.Role}</h6>
                             </td>
-                              {/* <td className="text-center">
+                           
+                              <td className="text-center">
                                 <button 
-                                  className={`btn btn-sm ${!emp.Status ? 'btn-success' : 'btn-danger'}`}
+                                  onClick={async () => {
+                                    setModalOpen(true);
+                                    setModalConfig({
+                                      title: "Confirmation",
+                                      description: `Are you sure you want to ${emp.isActive ? "Inactivate" : "activate"} this tenant?`,
+                                      onConfirm: async () => {
+                                      const data= await updateTenantStatus({ id: emp.TenantId, Active: emp.isActive ? false : true });
+                                      if(data?.status == 200){
+                                        toast.success(data?.data?.Message || "Tenant status updated successfully");
+                                        fetchTenants();
+                                        setModalOpen(false);
+                                      }else{
+                                        toast.error(data?.Message || "Tenant status updated failed");
+                                      }
+                                       
+                                      },
+                                      confirmText: emp.isActive ? "Inactivate" : "Activate",
+                                      cancelText: "Cancel",
+                                    });
+                                  }}
+                                  className={`btn btn-sm ${emp.isActive ? 'btn-primary' : 'btn-danger'}`}
                                   style={{minWidth: '80px'}}
                                 >
-                                  {!emp.Status ? "Active" : "Inactive"}
+                                  {emp.isActive ? "Active" : "Inactive"}
                                 </button>
-                              </td> */}
+                              </td>
                             <td className="text-center">
                               <i 
                                 className="fa-solid fa-trash text-danger cursor-pointer" 

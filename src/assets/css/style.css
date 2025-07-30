@@ -1655,10 +1655,10 @@ font-size: 20px;
 .contact .php-email-form button[type="submit"] {
   background: var(--primary-green);
   border: 0;
-  padding: 12px 34px;
+  padding: 10px 34px;
   color: #fff;
   transition: 0.4s;
-  border-radius: 50px;
+  border-radius: 6px;
 }
 
 .contact .php-email-form button[type="submit"]:hover {

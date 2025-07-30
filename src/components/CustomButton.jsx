@@ -17,7 +17,7 @@
   return (
     <button
       type={type} // "submit", "button", or "reset"
-        className={`btn-outlined ${btnSize} scrollto ${className}`}
+        className={`btn-outlined ${btnSize} scrollto ${className} `}
       onClick={onClick}
     >
       {text}

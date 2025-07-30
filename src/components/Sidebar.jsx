@@ -30,7 +30,7 @@ const Sidebar = () => {
         </svg>
       ),
     },
-    ...(loginUser?.Data?.RoleId !== 2 ? [
+    // ...(loginUser?.Data?.RoleId !== 2 ? [
       {
         key: "packages",
         label: "Packages",
@@ -87,7 +87,7 @@ const Sidebar = () => {
           </svg>
         ),
       },
-    ] : []),
+    // ] : []),
     {
       key: "companies",
       label: "Companies",
