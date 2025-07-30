@@ -3,6 +3,7 @@ import Branding from './Branding'
 import Register from './Register'
 import Dashboard from './Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
+import RoleBasedRoute from './components/RoleBasedRoute'
 import { useEffect, useState } from 'react'
 import { LoginScreen } from './Login'
 import { PackagesScreen } from './components/Packages'
@@ -17,6 +18,7 @@ import { CompaniesScreen } from './components/Comanies';
 import ForgotPassword from './components/ForgotPassword'
 import { TermAndPrivacy } from './components/Setting/termAndPrivacy'
 import ProfilePage from './components/Profile/ProfilePage'
+import { AppProvider } from './context/AppContext'
 
 function Layout({ children }) {
   const location = useLocation();
@@ -97,12 +99,30 @@ function Layout({ children }) {
                 <li><a className="nav-link scrollto" href="/#contact">Contact</a></li>
                 <li>
                   <button
-                    className="btn btn-success nav-link "
-                    style={{ background: "#48301f", border: "none", color: "#fff", padding: "6px 22px", borderRadius: "6px", marginLeft: "15px" }}
+                    className="btn btn-success nav-link custom-login-btn"
+                    style={{
+                      background: "#fff",
+                      border: "1px solid #6da34d",
+                      color: "#6da34d",
+                      padding: "10px 28px",
+                      borderRadius: "6px",
+                      marginLeft: "15px",
+                      fontSize: "20px",
+                      transition: "background 0.2s, color 0.2s"
+                    }}
                     onClick={() => window.location.href = "/login"}
                   >
                     Login
                   </button>
+                  <style>
+                    {`
+                      .custom-login-btn:hover {
+                        background: #6da34d !important;
+                        color: #fff !important; 
+                        border: 1px solid #ffffff !important;
+                      }
+                    `}
+                  </style>
                 </li>
                 
               </ul>
@@ -248,9 +268,10 @@ function Layout({ children }) {
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
+    <AppProvider>
+      <Router>
+        <Layout>
+          <Routes>
           <Route path="/" element={<Branding />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<LoginScreen />} />
@@ -260,14 +281,14 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path="/package" element={
-            <ProtectedRoute>
+            <RoleBasedRoute>
               <PackagesScreen />
-            </ProtectedRoute>
+            </RoleBasedRoute>
           } />
           <Route path="/tenant" element={
-            <ProtectedRoute>
+            <RoleBasedRoute>
               <TenantScreen />
-            </ProtectedRoute>
+            </RoleBasedRoute>
           } />
           <Route path="/profile" element={
             <ProtectedRoute>
@@ -300,9 +321,9 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path="/stripe" element={
-            <ProtectedRoute>
+            <RoleBasedRoute>
               <StripeSetting />
-            </ProtectedRoute>
+            </RoleBasedRoute>
           } />
               <Route path="/companies" element={
                 <ProtectedRoute>
@@ -319,6 +340,7 @@ function App() {
         </Routes>
       </Layout>
     </Router>
+    </AppProvider>
   )
 }
 

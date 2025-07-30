@@ -30,7 +30,7 @@ const Sidebar = () => {
         </svg>
       ),
     },
-    // ...(loginUser?.Data?.RoleId !== 2 ? [
+    ...(loginUser?.Data?.RoleId !== 2 ? [
       {
         key: "packages",
         label: "Packages",
@@ -87,28 +87,30 @@ const Sidebar = () => {
           </svg>
         ),
       },
-    // ] : []),
-    {
-      key: "companies",
-      label: "Companies",
-      href: "/companies",
-      icon: (color) => (
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <path
-            d="M10.99 14.07C7.44 14.07 4.41 14.6 4.41 16.75C4.41 18.9 7.42 19.45 10.99 19.45C14.53 19.45 17.56 18.91 17.56 16.77C17.56 14.62 14.55 14.07 10.99 14.07Z"
-            stroke={color}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M10.99 11C13.31 11 15.2 9.12 15.2 6.79C15.2 4.47 13.31 2.58 10.99 2.58C8.66 2.58 6.77 4.47 6.77 6.79C6.76 9.11 8.64 11 10.96 11H10.99Z"
-            stroke={color}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      ),
-    },
+    ] : []),
+   
+      {
+        key: "companies",
+        label: "Companies",
+        href: "/companies",
+        icon: (color) => (
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path
+              d="M10.99 14.07C7.44 14.07 4.41 14.6 4.41 16.75C4.41 18.9 7.42 19.45 10.99 19.45C14.53 19.45 17.56 18.91 17.56 16.77C17.56 14.62 14.55 14.07 10.99 14.07Z"
+              stroke={color}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M10.99 11C13.31 11 15.2 9.12 15.2 6.79C15.2 4.47 13.31 2.58 10.99 2.58C8.66 2.58 6.77 4.47 6.77 6.79C6.76 9.11 8.64 11 10.96 11H10.99Z"
+              stroke={color}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        ),
+      },
+  
     {
       key: "transaction",
       label: "Transaction",

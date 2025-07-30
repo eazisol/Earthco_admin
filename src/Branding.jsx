@@ -330,7 +330,7 @@ const handleSubscription=(packageId)=>{
             <div dangerouslySetInnerHTML={{__html: plan.Description}}></div>
             <div className="mt-auto">
 
-            <CustomButton onClick={()=>handleSubscription(plan.PackageId)} />
+            <CustomButton className={'packagesButton'} onClick={()=>handleSubscription(plan.PackageId)} />
               </div>
           </div>
         </div>

@@ -1808,7 +1808,10 @@ font-size: 20px;
   font-weight: 600;
   color: #37517e;
 }
-
+.packagesButton{
+ width: 100%;
+ border-radius: 6px !important; 
+}
 #footer .footer-top .footer-contact p {
   font-size: 14px;
   line-height: 24px;

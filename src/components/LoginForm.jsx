@@ -32,6 +32,9 @@ export const LoginForm = () => {
 
   // Fetch package details by ID when component mounts
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+    
     const packageId = searchParams.get('packageId');
     if (packageId) {
       fetchPackageById(packageId);
@@ -527,7 +530,7 @@ export const LoginForm = () => {
                     <IconButton
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end"
-                      style={{ position: 'absolute', right: '10px', zIndex: '999',top:"3px" }}
+                      style={{ position: 'absolute', right: '18px', zIndex: '999',top:"10px" }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -566,7 +569,7 @@ export const LoginForm = () => {
                     <IconButton
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       edge="end"
-                      style={{ position: 'absolute', right: '10px', zIndex: '999',top:"3px" }}
+                      style={{ position: 'absolute', right: '18px', zIndex: '999',top:"10px" }}
                     >
                       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>

@@ -13,7 +13,7 @@ const HeroSection = () => {
           data-aos="fade-up"
           data-aos-delay="200"
         >
-          <h1>Transforming Outdoor Spaces with Excellence</h1>
+          <h1 >Transforming Outdoor Spaces with Excellence</h1>
           <h2 style={{color:"white"}}>
             We are Earthco — experts in landscape design, maintenance, and
             beautification for commercial and residential properties.
