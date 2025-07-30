@@ -5,7 +5,6 @@ import DashboardLayout from "./components/DashboardLayout/DashboardLayout";
 import { getTenantById } from "./APIS/auth";
 function Dashboard() {
   const { user, logout,loginUser } = useAppContext();
-  console.log("🚀 ~ Dashboard ~ loginUser:", loginUser)
   const navigate = useNavigate();
   const [tenant, setTenant] = useState(null);
   const [loading, setLoading] = useState(true);

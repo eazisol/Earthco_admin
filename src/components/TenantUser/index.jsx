@@ -88,7 +88,7 @@ export const TenantScreen = () => {
         setTotalCount(response?.totalRecords || 0);
       }
     } catch (error) {
-      toast.error("Failed to fetch tenants");
+      // toast.error("Failed to fetch tenants");
       setTenantData([]);
       setTotalCount(0);
     } finally {
@@ -118,9 +118,9 @@ export const TenantScreen = () => {
     const response = await getTenantRole();
     setRole(response?.data);
   };
-  const tenantDelete = async () => {
+  const tenantDelete = async (id) => {
     try {
-      const response = await deleteTenant(selectedId);
+      const response = await deleteTenant(id);
       if (response?.error) {
         toast.error(response.message || "Error deleting tenant");
       } else {
@@ -202,6 +202,7 @@ export const TenantScreen = () => {
                           <th className="text-center">Email Address</th>
                           <th className="text-center">Phone No</th>
                           <th className="text-center">Role</th>
+                          {/* <th className="text-center">Status</th> */}
                           <th className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -233,6 +234,14 @@ export const TenantScreen = () => {
                             <td className="text-center">
                               <h6>{emp.Role}</h6>
                             </td>
+                              {/* <td className="text-center">
+                                <button 
+                                  className={`btn btn-sm ${!emp.Status ? 'btn-success' : 'btn-danger'}`}
+                                  style={{minWidth: '80px'}}
+                                >
+                                  {!emp.Status ? "Active" : "Inactive"}
+                                </button>
+                              </td> */}
                             <td className="text-center">
                               <i 
                                 className="fa-solid fa-trash text-danger cursor-pointer" 
@@ -246,7 +255,7 @@ export const TenantScreen = () => {
                                     description: "Are you sure you want to delete this tenant?",
                                     onConfirm: () => {
                                       setSelectedId(emp.TenantId);
-                                      tenantDelete();
+                                      tenantDelete(emp.TenantId);
                                       setModalOpen(false);
                                     },
                                     confirmText: "Delete",

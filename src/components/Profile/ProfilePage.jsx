@@ -7,22 +7,33 @@ import { CircularProgress, TextField,  InputAdornment, IconButton } from "@mui/m
 import { toast } from "react-toastify";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { cancelSubscription, getTransactionById, resumeSubscription  } from "../../APIS/transactions";
+import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 
 const ProfilePage = () => {
   const { loginUser } = useAppContext();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [transactionId, setTransactionId] = useState(null);
+  console.log("🚀 ~ ProfilePage ~ transactionId:", transactionId?.SubscriptionId)
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     FirstName: "",
     LastName: "",
     Password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    tblUserPackages: []
   });
-  console.log("🚀 ~ ProfilePage ~ formData:", formData)
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    description: "",
+    onConfirm: () => {},
+    confirmText: "Confirm",
+    cancelText: "Cancel"
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +74,6 @@ const ProfilePage = () => {
       // Remove confirmPassword as it's not needed for API
       delete updatedData.confirmPassword;
         const response = await AddTenant(updatedData);
-      console.log("🚀 ~ handleSubmit ~ response:", response)
       if(response) {
         toast.success("Profile updated successfully");
       }
@@ -72,8 +82,25 @@ const ProfilePage = () => {
       toast.error("Error updating profile data");
     }
   };
-
+  const handleCancelSubscription = async () => {
+    if(transactionId?.Status=='incomplete_expired') {
+      const response = await resumeSubscription(transactionId?.SubscriptionId, loginUser?.token?.data);
+      if(response) {
+        toast.success("Subscription resumed successfully");
+        setModalOpen(false);
+      }
+    }else{
+        const response = await cancelSubscription(transactionId?.SubscriptionId, loginUser?.token?.data);
+        console.log("🚀 ~ handleCancelSubscription ~ response:", response)
+        if(response) {
+          toast.success("Subscription cancelled successfully");
+          setModalOpen(false);
+        }
+    }
+    
+  }
   useEffect(() => {
+   
     const fetchTenantProfile = async () => {
       setLoading(true);
       setError(null);
@@ -88,7 +115,7 @@ const ProfilePage = () => {
         }
 
         const response = await getTenantById(tenantId, user?.token?.data);
-        
+
 
         if (response?.data && !response.error) {
             setFormData(response.data);
@@ -109,8 +136,20 @@ const ProfilePage = () => {
     };
 
     fetchTenantProfile();
+ 
   }, [searchParams, loginUser]);
-
+useEffect(() => {
+    const fetchTransactionId = async () => {
+        if (formData?.tblUserPackages?.length > 0) {
+          const response = await getTransactionById(formData.tblUserPackages[0].UserPackagesId, loginUser?.token?.data);
+       
+          if(response) {
+            setTransactionId(response);
+          }
+        }
+      }
+  fetchTransactionId()
+}, [formData?.tblUserPackages])
   if (loading) {
     return (
       <DashboardLayout>
@@ -123,6 +162,15 @@ const ProfilePage = () => {
 
   return (
     <DashboardLayout>
+          <ConfirmationModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        title={modalConfig.title}
+        description={modalConfig.description}
+        onConfirm={modalConfig.onConfirm}
+        confirmText={modalConfig.confirmText}
+        cancelText={modalConfig.cancelText}
+      />
       <div className="content-body">
         <div className="page-titles">
           <ol className="breadcrumb">
@@ -276,33 +324,45 @@ const ProfilePage = () => {
               </div>
               <div className="card">
                 <div className="card-body">
-                  <h4 className="card-title mb-4">Active Package</h4>
+                  <h4 className="card-title mb-4 "  style={{marginLeft: "8px"}}>Active Package</h4>
                   <div className="table-responsive">
-                    <table className="table table-bordered">
+                    <table className="table table-responsive-md">
+                      <thead>
+                        <tr>
+                          <th >Package Name</th>
+                          <th style={{textAlign: "center"}}>Price</th>
+                          <th style={{textAlign: "center"}}>Max Companies</th>
+                          <th style={{textAlign: "center"}}>Max Users</th>
+                          <th style={{textAlign: "center"}}>Max Storage (MB)</th>
+                          <th style={{textAlign: "center"}}>Expiry Date</th>
+                          <th style={{textAlign: "center"}}>Action</th>
+                        </tr>
+                      </thead>
                       <tbody>
                         <tr>
-                          <td><strong>Package Name</strong></td>
-                          <td>{formData?.tblUserPackages[0]?.Name}</td>
-                        </tr>
-                        <tr>
-                          <td><strong>Price</strong></td>
-                          <td>${formData?.tblUserPackages[0]?.Price}</td>
-                        </tr>
-                        <tr>
-                          <td><strong>Max Companies</strong></td>
-                          <td>{formData?.tblUserPackages[0]?.MaxCompanies}</td>
-                        </tr>
-                        <tr>
-                          <td><strong>Max Users</strong></td>
-                          <td>{formData?.tblUserPackages[0]?.MaxUsers}</td>
-                        </tr>
-                        <tr>
-                          <td><strong>Max Storage (MB)</strong></td>
-                          <td>{formData?.tblUserPackages[0]?.MaxStorageMB}</td>
-                        </tr>
-                        <tr>
-                          <td><strong>Expiry Date</strong></td>
-                          <td>{new Date(formData?.tblUserPackages[0]?.ExpiryDate).toLocaleDateString()}</td>
+                          <td >{formData?.tblUserPackages[0]?.Name}</td>
+                          <td style={{textAlign: "center"}}>${formData?.tblUserPackages[0]?.Price}</td>
+                          <td style={{textAlign: "center"}}>{formData?.tblUserPackages[0]?.MaxCompanies}</td>
+                          <td style={{textAlign: "center"}}>{formData?.tblUserPackages[0]?.MaxUsers}</td>
+                          <td style={{textAlign: "center"}}>{formData?.tblUserPackages[0]?.MaxStorageMB}</td>
+                          <td style={{textAlign: "center"}}>{new Date(formData?.tblUserPackages[0]?.ExpiryDate).toLocaleDateString()}</td>
+                          <td style={{textAlign: "center"}}>
+                            <button 
+                              className={`btn ${transactionId?.Status=='incomplete_expired' ? "btn-primary" : "btn-danger"} btn-sm`}
+                              onClick={() => {
+                                setModalOpen(true);
+                                setModalConfig({
+                                  title: "Cancel Subscription",
+                                  description: "Are you sure you want to cancel your subscription?",
+                                  onConfirm: () => {
+                                 handleCancelSubscription()
+                                  }
+                                });
+                              }}
+                            >
+                            {transactionId?.Status=='incomplete_expired' ? "Resume Subscription":"Cancel Subscription" }
+                            </button>
+                          </td>
                         </tr>
                       </tbody>
                     </table>

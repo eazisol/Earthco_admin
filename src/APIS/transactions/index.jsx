@@ -17,3 +17,47 @@ export const getTenantServerSideList = async (search='', displayStart=1, display
     throw error;
   }
 };
+export const getTransactionById = async (id,token) => {
+    try {
+        const response = await axios.get(`${apiUrl}Transactions/GetTransaction?id=0&PackageId=0&UserPackageId=${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+//Cancel Subscription
+export const cancelSubscription = async (id,token) => {
+    try {
+        const response = await axios.get(`${apiUrl}Transactions/CancelStripeSubscription?SubscriptionId=${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+//resume subscription
+export const resumeSubscription = async (id,token) => {
+    try {
+        const response = await axios.get(`${apiUrl}Transactions/ResumeStripeSubscription?SubscriptionId=${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

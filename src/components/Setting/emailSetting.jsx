@@ -391,8 +391,10 @@ export const EmailScreen = () => {
                     </div>
                   </div>
                     <div className="mt-3 d-flex justify-content-end">
-                    <button className="btn btn-primary btn-sm" onClick={handleSubmit} disabled={loading}>
-                    {loading ? "Updating..." : "Update Settings"}
+                    <button className="btn btn-primary btn-sm" onClick={handleSubmit}>
+                
+                    {/* {loading ? "Updating..." : "Update Settings"} */}
+                     Update Settings
                   </button>
                 </div></>
                 {/* } */}

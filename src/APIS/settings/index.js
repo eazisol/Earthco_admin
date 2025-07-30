@@ -30,3 +30,20 @@ export const getEmailSetting = async (id) => {
     throw error;
   }
 };
+export const SettingPrivacyAndTerms = async (data) => {
+  const token = JSON.parse(localStorage.getItem("user"));
+  try {
+      const response = await axios.post(`${apiUrl}Settings/AddSettingPrivacyAndTerms`, data, {
+          headers: {
+              Authorization: `Bearer ${token.token.data}`,
+              "Content-Type": "application/json",
+          },
+      });
+      return response;
+  } catch (error) {
+      return {
+          error: true,
+          message: error.response?.data?.message || "Failed to get company setting",
+      };
+  }
+};

@@ -18,6 +18,21 @@ export const LoginScreen = ({ onClose }) => {
   const [apiError, setApiError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  // Check for existing token on component mount
+  React.useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      try {
+        const parsedUser = JSON.parse(user);
+        if (parsedUser?.token?.data) {
+          navigate('/dashboard');
+        }
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        localStorage.removeItem('user');
+      }
+    }
+  }, [navigate]);
 
   const validateForm = () => {
     const newErrors = {};

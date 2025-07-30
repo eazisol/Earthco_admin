@@ -1,11 +1,13 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import image from "../../assets/img/team/team-1.jpg";
 import { CircularProgress,  TextField } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Offcanvas } from "bootstrap";
-import { getEmailSetting, addEmailSetting } from "../../APIS/settings";
+import { getEmailSetting, addEmailSetting, SettingPrivacyAndTerms } from "../../APIS/settings";
 import { toast } from "react-toastify";
 import imagePathCorrector from "../Reuseable/imagePathCorrector";
+import { useAppContext } from "../../context/AppContext";
+import JoditEditor from 'jodit-react';
 
 export const CompanyScreen = () => {
   const [settingData, setSettingData] = useState({});
@@ -16,7 +18,18 @@ export const CompanyScreen = () => {
   });
   const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
+  const { loginUser } = useAppContext();
+  const [content, setContent] = useState("");
 
+  const [privacyContent, setPrivacyContent] = useState("");
+  const config = useMemo(() => ({
+readonly: false,
+placeholder: ''
+}),
+[]
+);
+  const editor = useRef(null);
+  const editorPrivacy = useRef(null);
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === "file") {
@@ -40,19 +53,21 @@ export const CompanyScreen = () => {
       [name]: value,
     }));
   };
-
+  
   const getSettings = async () => {
     setLoading(true);
     const user=JSON.parse(localStorage.getItem('user'));
     try {
       const response = await getEmailSetting(user?.Data?.TenantId);
-      console.log('response company ',response);
       setSettingData(response?.data);
       setFormData({
         PrimeryColor: response?.data?.PrimeryColor || "",
         SecondaryColor: response?.data?.SecondaryColor || "",
-        File: response?.File || null
+        File: response?.File || null,
+      
       });
+      setContent(response?.data?.TermsAndCondition || "");
+      setPrivacyContent(response?.data?.PrivacyPolicy || "");
     } catch (error) {
       // toast.error("Failed to fetch settings");
     } finally {
@@ -73,8 +88,16 @@ export const CompanyScreen = () => {
     const settingDataToSend = {
       ...settingData,
       PrimeryColor: formData.PrimeryColor,
-      SecondaryColor: formData.SecondaryColor
+      SecondaryColor: formData.SecondaryColor,
+      TermsAndCondition: undefined,
+      PrivacyPolicy: undefined
     };
+
+    const companySettingData = {
+      SettingId: settingData?.SettingId,
+      TermsAndCondition: content,
+      PrivacyPolicy: privacyContent
+    }
 
     if (!formData.PrimeryColor || !formData.SecondaryColor) {
       toast.error("Please fill in all required fields");
@@ -83,10 +106,17 @@ export const CompanyScreen = () => {
 
     try {
       formDataToSend.append('SettingData', JSON.stringify(settingDataToSend));
-      const response = await addEmailSetting(formDataToSend);
-      console.log('response company ',response);
-      if(response) {
-        toast.success(response?.Message);
+
+      // Call both APIs in parallel using Promise.all
+      const emailSettingResponse = await addEmailSetting(formDataToSend);
+      if (emailSettingResponse) {
+        await SettingPrivacyAndTerms(companySettingData);
+      }
+
+      console.log("🚀 ~ handleSubmit ~ emailSettingResponse:", emailSettingResponse)
+      if (emailSettingResponse) {
+
+        toast.success(emailSettingResponse?.Message);
         getSettings();
       }
     } catch (error) {
@@ -144,7 +174,7 @@ export const CompanyScreen = () => {
         </div>
         <div className="container-fluid">
           <div className="row table-space">
-            <div className="col-xl-4">
+            <div className="col-xl-12">
               <div className="card">
                 <div className="card-body">
                   <h4 className="card-title mb-4">Company Settings</h4>
@@ -155,7 +185,28 @@ export const CompanyScreen = () => {
                        </div> 
                            :  <>
                   <div className="row">
-                    <div className="col-xl-6"><label className="form-label">Primary Color<span className="text-danger">*</span></label>
+                  <div className="col-6">
+           <div className="col-xl-12 ">
+              <label className="form-label">Terms And Conditions<span className="text-danger">*</span></label>
+              </div>
+                  <JoditEditor
+			ref={editor} value={content} config={config} tabIndex={2} onBlur={newContent => setContent(newContent)} onChange={newContent => {}}
+		/>
+           </div>
+           <div className="col-6">
+           <div className="col-xl-12 ">
+                <label className="form-label">Privacy Policy<span className="text-danger">*</span></label>
+              </div>
+           <JoditEditor
+			ref={editorPrivacy}
+			value={privacyContent}
+			config={config}
+			tabIndex={2} // tabIndex of textarea
+			onBlur={newContent => setPrivacyContent(newContent)} // preferred to use only this option to update the content for performance reasons
+			onChange={newContent => {}}
+		/>
+           </div>
+                    <div className="col-xl-2 mt-4"><label className="form-label">Primary Color<span className="text-danger">*</span></label>
                     <div >
                       <input
                         type="color"
@@ -167,7 +218,7 @@ export const CompanyScreen = () => {
                       /></div>
                       
                     </div>
-                    <div className="col-xl-6">
+                    <div className="col-xl-2 mt-4">
                       <label className="form-label">Secondary Color<span className="text-danger">*</span></label>
                     <div >
                       <input
@@ -181,7 +232,7 @@ export const CompanyScreen = () => {
                     </div></div>
             
                   </div>  
-                
+                 
                     <div className="col-xl-6 mb-3 mt-3">
                       {/* <label className="form-label">Logo</label> */}
                       <div className="d-flex align-items-center">

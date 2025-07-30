@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-
+import { useAppContext } from "../context/AppContext";
 const Sidebar = () => {
   const location = useLocation();
   const [openSubmenu, setOpenSubmenu] = useState(null);
-
+  const {loginUser} = useAppContext();
   const activeColor = "#77993d";
   const inactiveColor = "#888";
 
@@ -30,62 +30,64 @@ const Sidebar = () => {
         </svg>
       ),
     },
-    {
-      key: "packages",
-      label: "Packages",
-      href: "/package",
-      icon: (color) => (
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M13.5 2.53H7.41C5.5 2.52 3.94 4.04 3.9 5.95V15.77C3.85 17.71 5.39 19.31 7.33 19.36H14.73C16.65 19.28 18.17 17.69 18.15 15.77V7.37L13.5 2.53Z"
-            stroke={color}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M13.27 2.52V5.19C13.27 6.49 14.32 7.54 15.62 7.55H18.15"
-            stroke={color}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M13.1 14.08H8.15"
-            stroke={color}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M11.22 10.64H8.15"
-            stroke={color}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      ),
-    },
-    {
-      key: "tenant",
-      label: "Tenant",
-      href: "/tenant",
-      icon: (color) => (
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-          <path
-            d="M10.99 14.07C7.44 14.07 4.41 14.6 4.41 16.75C4.41 18.9 7.42 19.45 10.99 19.45C14.53 19.45 17.56 18.91 17.56 16.77C17.56 14.62 14.55 14.07 10.99 14.07Z"
-            stroke={color}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M10.99 11C13.31 11 15.2 9.12 15.2 6.79C15.2 4.47 13.31 2.58 10.99 2.58C8.66 2.58 6.77 4.47 6.77 6.79C6.76 9.11 8.64 11 10.96 11H10.99Z"
-            stroke={color}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      ),
-    },
+    ...(loginUser?.Data?.RoleId !== 2 ? [
+      {
+        key: "packages",
+        label: "Packages",
+        href: "/package",
+        icon: (color) => (
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M13.5 2.53H7.41C5.5 2.52 3.94 4.04 3.9 5.95V15.77C3.85 17.71 5.39 19.31 7.33 19.36H14.73C16.65 19.28 18.17 17.69 18.15 15.77V7.37L13.5 2.53Z"
+              stroke={color}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M13.27 2.52V5.19C13.27 6.49 14.32 7.54 15.62 7.55H18.15"
+              stroke={color}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M13.1 14.08H8.15"
+              stroke={color}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M11.22 10.64H8.15"
+              stroke={color}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        ),
+      },
+      {
+        key: "tenant",
+        label: "Tenant",
+        href: "/tenant",
+        icon: (color) => (
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path
+              d="M10.99 14.07C7.44 14.07 4.41 14.6 4.41 16.75C4.41 18.9 7.42 19.45 10.99 19.45C14.53 19.45 17.56 18.91 17.56 16.77C17.56 14.62 14.55 14.07 10.99 14.07Z"
+              stroke={color}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M10.99 11C13.31 11 15.2 9.12 15.2 6.79C15.2 4.47 13.31 2.58 10.99 2.58C8.66 2.58 6.77 4.47 6.77 6.79C6.76 9.11 8.64 11 10.96 11H10.99Z"
+              stroke={color}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        ),
+      },
+    ] : []),
     {
       key: "companies",
       label: "Companies",
@@ -171,8 +173,8 @@ const Sidebar = () => {
         { label: "QB", href: "/qb" },
         { label: "Company", href: "/company" },
         { label: "Google Map", href: "/google-map" },
-        { label: "Stripe", href: "/stripe" },
-        { label: "Term And Privacy", href: "/term-and-privacy" }
+        ...(loginUser?.Data?.RoleId === 1 ? [{ label: "Stripe", href: "/stripe" }] : []),
+        // { label: "Term And Privacy", href: "/term-and-privacy" }
       ],
     },
   ];

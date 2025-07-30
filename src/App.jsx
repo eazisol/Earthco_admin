@@ -95,6 +95,7 @@ function Layout({ children }) {
                 <li><a className="nav-link scrollto" href="/#pricing">Pricing</a></li>
                 <li><a className="nav-link scrollto" href="/#contact">Contact</a></li>
                 <li><a className="nav-link" href="/register">Register</a></li>
+                <li><a className="nav-link" href="/login">Login</a></li>
                 
               </ul>
               <i

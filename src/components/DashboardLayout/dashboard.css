@@ -9759,10 +9759,12 @@ label {
   padding-left: 15rem;
   padding-top: 0rem;
   transition: all .2s ease;
+}
   /* &.is-fixed{
 		background-color: #36246514;
 		backdrop-filter: blur(6px);
-	} */ }
+	} 
+  } */  
   .header .header-content {
     height: 100%;
     padding-left: 3.1rem;
@@ -9943,9 +9945,9 @@ svg.pulse-svg {
     padding-left: 2.5rem; }
 
 [data-header-position="fixed"] .header {
-  position: fixed;
-  top: 0;
-  width: 100%; }
+  position: fixed !important;
+  top: 0 !important;
+  width: 100% ; }
 
 [data-header-position="fixed"] .content-body {
   padding-top: 3.125rem;
