@@ -353,6 +353,10 @@ export const LoginForm = () => {
               padding: "20px", // Add some space if needed
             }}
           >
+            <h4 style={{ color: '#6DA34D', marginBottom: '24px', textAlign: 'center', fontWeight:"bold",fontSize:"24px"}}>
+           Register Now
+            </h4>
+           
             {/* Display selected package info if available */}
             {selectedPackageDetails && (
               <div className="mb-4 p-3" style={{ background: '#f8f9fa', borderRadius: '8px', border: '1px solid #e9ecef' }}>
@@ -369,7 +373,7 @@ export const LoginForm = () => {
             )}
 
             <div className="row">
-              <div className="form-group col-md-12">
+              <div className="form-group col-md-6">
                 
                 <input
                   type="text"
@@ -378,30 +382,30 @@ export const LoginForm = () => {
                   id="FirstName"
                   value={formData.FirstName}
                   onChange={handleInputChange}
-                  placeholder="First name"
+                  placeholder="First Name"
                   style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                 />
                 {errors.FirstName && (
                   <div className="invalid-feedback">{errors.FirstName}</div>
                 )}
               </div>
-              <div className="form-group col-md-12">
+              <div className="form-group col-md-6">
                 
                 <input
                   type="text"
                   name="LastName"
-                  className={`form-control ${errors.LastName ? "is-invalid" : ""} mt-2`}
+                  className={`form-control ${errors.LastName ? "is-invalid" : ""} `}
                   id="LastName"
                   value={formData.LastName}
                   onChange={handleInputChange}
-                  placeholder="Last name"
+                  placeholder="Last Name"
                   style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                 />
                 {errors.LastName && (
                   <div className="invalid-feedback">{errors.LastName}</div>
                 )}
               </div>
-              <div className="form-group col-md-12">
+              <div className="form-group col-md-6">
                 
                 <input
                   type="text"
@@ -417,7 +421,7 @@ export const LoginForm = () => {
                   <div className="invalid-feedback">{errors.Email}</div>
                 )}
               </div>
-              <div className="form-group col-md-12">
+              <div className="form-group col-md-6">
                 
                 <input
                   type="text"
@@ -426,7 +430,7 @@ export const LoginForm = () => {
                   id="CompanyName"
                   value={formData.CompanyName}
                   onChange={handleInputChange}
-                  placeholder="Company name"
+                  placeholder="Company Name"
                   style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                 />
                 {errors.CompanyName && (
@@ -435,7 +439,7 @@ export const LoginForm = () => {
               </div>
             </div>
             <div className="row">
-              <div className="form-group col-md-12">
+              <div className="form-group col-md-6">
                 
                 <input
                   type="tel"
@@ -444,14 +448,14 @@ export const LoginForm = () => {
                   id="PhoneNo"
                   value={formData.PhoneNo}
                   onChange={handleInputChange}
-                  placeholder="Phone number"
+                  placeholder="Phone Number"
                   style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                 />
                 {errors.PhoneNo && (
                   <div className="invalid-feedback">{errors.PhoneNo}</div>
                 )}
               </div>
-                <div className="form-group col-md-12">
+                  <div className="form-group col-md-6">
                 
                 <input
                   type="text"
@@ -468,7 +472,7 @@ export const LoginForm = () => {
                 )}
               </div>
             </div>
-            <div className="row">
+            <div className="row mt-2">
               {/* <div className="col-xl-6 mb-3">
                 <FormControl fullWidth>
                   <label className="form-label">
@@ -496,12 +500,12 @@ export const LoginForm = () => {
                 </FormControl>
               </div> */}
               {/* Package dropdown removed - package is pre-selected */}
-              <div className="form-group col-md-12">
+              <div className="form-group col-md-6">
                 <div className="input-group">
                   <input
                     type={showPassword ? "text" : "password"}
                     name="Password"
-                    className={`form-control ${errors.Password ? "is-invalid" : ""} mt-2`}
+                    className={`form-control ${errors.Password ? "is-invalid" : ""} `}
                     id="Password"
                     value={formData.Password}
                     onChange={e => {
@@ -540,12 +544,12 @@ export const LoginForm = () => {
                   <div className="invalid-feedback" style={{display: 'block'}}>{errors.Password}</div>
                 )}
               </div>
-              <div className="form-group col-md-12">
+              <div className="form-group col-md-6">
                 <div className="input-group">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
-                    className={`form-control ${errors.confirmPassword ? "is-invalid" : ""} mt-2`}
+                    className={`form-control ${errors.confirmPassword ? "is-invalid" : ""} `}
                     id="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={e => {
@@ -562,7 +566,7 @@ export const LoginForm = () => {
                         confirmPassword: errorMsg
                       }));
                     }}
-                    placeholder="Confirm password"
+                    placeholder="Confirm Password"
                     style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                   />
                   <div className="input-group-append">

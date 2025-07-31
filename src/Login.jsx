@@ -94,10 +94,7 @@ export const LoginScreen = ({ onClose }) => {
     <section className="contact">
       <div className="container" data-aos="fade-up">
         <div className="section-title" style={{marginTop: "7%"}}> 
-          <h2>Login to Your Account</h2>
-          <p>
-            Access your Earthco account to manage your landscaping services, view project updates, and more.
-          </p>
+       
         </div>
 
         <div
@@ -139,14 +136,23 @@ export const LoginScreen = ({ onClose }) => {
                   width: "50%",
                   padding: "20px",
                   minHeight: "100%",
-                  display: "flex",
-                  justifyContent: "center",
+                
                 }}
               >
+                
                 <div
                   className="w-100 d-flex flex-column align-items-center"
-                  style={{ maxWidth: 437 }}
+                  style={{ maxWidth: 545 }}
                 >
+                  <h4 style={{ color: '#6DA34D', textAlign: 'left',width:"100%",fontWeight:"bold",fontSize:"24px" }}>
+                    Welome Back!
+                   </h4>
+            
+                   <p style={{ fontSize: 12,
+                        color: "#909090", marginBottom: '24px', textAlign: 'left',width:"100%" }}>
+            Access your Earthco account to manage your landscaping services, view project updates, and more.
+          </p>
+                   
                   <div className="mb-3 w-100">
                     <input
                       type="email"
@@ -166,7 +172,7 @@ export const LoginScreen = ({ onClose }) => {
                       <div className="invalid-feedback text-center">{errors.Email}</div>
                     )}
                   </div>
-                  <div className="mb-3 position-relative w-100">
+                  <div className=" position-relative w-100">
                     <div className="input-group">
                       <input
                         type={showPassword ? "text" : "password"}
@@ -225,10 +231,11 @@ export const LoginScreen = ({ onClose }) => {
                       width: "100%",
                       // maxWidth: 250,
                       alignSelf: "center",
+                      fontSize: "16px",
                     }}
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "SIGNING IN..." : "SIGN ME IN"}
+                    {isSubmitting ? "SIGNING IN..." : "Sign In"}
                   </button>
                 </div>
               </form>

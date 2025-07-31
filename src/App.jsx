@@ -19,7 +19,9 @@ import ForgotPassword from './components/ForgotPassword'
 import { TermAndPrivacy } from './components/Setting/termAndPrivacy'
 import ProfilePage from './components/Profile/ProfilePage'
 import { AppProvider } from './context/AppContext'
-
+import { Button } from '@mui/material'
+import LogoutIcon from '@mui/icons-material/Logout';  
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -98,7 +100,7 @@ function Layout({ children }) {
                 <li><a className="nav-link scrollto" href="/#pricing">Pricing</a></li>
                 <li><a className="nav-link scrollto" href="/#contact">Contact</a></li>
                 <li>
-                  <button
+                  {/* <button
                     className="btn btn-success nav-link custom-login-btn"
                     style={{
                       background: "#fff",
@@ -113,7 +115,33 @@ function Layout({ children }) {
                     onClick={() => window.location.href = "/login"}
                   >
                     Login
-                  </button>
+                  </button> */}
+                     <Button
+                      onClick={() => window.location.href = "/login"}
+                    variant="contained"
+                    endIcon={<LogoutIcon />}
+                    style={{
+                      background: "#fff",
+                      color: "#6DA34D",
+                      borderRadius: "6px",
+                      padding: "3px 24px",
+                      marginLeft: "28px",
+                      fontSize: "20px",
+                      textTransform: "none",
+                    }}
+                    onMouseOver={e => {
+                      e.currentTarget.style.background = "#6DA34D";
+                      e.currentTarget.style.color = "#fff";
+                      e.currentTarget.style.border = "2px solid #fff";
+                    }}
+                    onMouseOut={e => {
+                      e.currentTarget.style.background = "#fff";
+                      e.currentTarget.style.color = "#6DA34D";
+                      e.currentTarget.style.border = "2px solid transparent";
+                    }}
+                  >
+                    Login
+                  </Button>
                   <style>
                     {`
                       .custom-login-btn:hover {

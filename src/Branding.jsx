@@ -8,9 +8,20 @@ import {
 import { useNavigate } from "react-router";
 import HeroSection from "./components/HeroSection";
 import { getPackages } from "./APIS/packages";
+import { ConfirmationModal } from "./components/Reuseable/ConfirmationModal";
+import { checkPackageStatus } from "./APIS/auth";
 
 
 function Branding() {
+  const [loginUser,setLoginUser] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    description: "",
+    onConfirm: () => {},
+    confirmText: "",
+    cancelText: "",
+  });
   let navigate = useNavigate();
   const [packages,setPackages] = useState([])
   const [formData, setFormData] = useState({
@@ -19,7 +30,12 @@ function Branding() {
     subject: "",
     message: "",
   });
-
+useEffect(()=>{
+  const user = localStorage.getItem("user")
+  if(user){
+    setLoginUser(JSON.parse(user))
+  }
+},[])
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -98,8 +114,29 @@ function Branding() {
   useEffect(() => {
     fetchPackages();
   }, []);
-const handleSubscription=(packageId)=>{
- navigate(`/register?packageId=${packageId}`)
+// const handleSubscription=async(packageId)=>{
+//   if(loginUser?.status=='success'){
+//     const data = await checkPackageStatus();
+//     if(data?.status==200){
+//     setModalOpen(true);
+//     setModalConfig({
+//       title: "Confirmation",
+//       description: "Are you sure you want to subscribe to this package?",
+//       onConfirm: async() => {
+       
+//       },
+//       confirmText: "Subscribe",
+//       cancelText: "Cancel",
+//     });}
+//   }else{
+//     navigate(`/register?packageId=${packageId}`)
+
+//   }
+// }
+const handleSubscription=async(packageId)=>{
+  
+    navigate(`/register?packageId=${packageId}`)
+  
 }
   useEffect(() => {
     const preloader = document.getElementById("preloader");
@@ -129,7 +166,16 @@ const handleSubscription=(packageId)=>{
     <>
       {/* ======= Hero Section ======= */}
       <HeroSection />
-
+      <ConfirmationModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        title={modalConfig.title}
+        description={modalConfig.description}
+        onConfirm={modalConfig.onConfirm}
+        confirmText={modalConfig.confirmText}
+        cancelText={modalConfig.cancelText}
+      />
+  
       <main id="main">
         {/* ======= About Us Section ======= */}
         <section id="about" className="about">

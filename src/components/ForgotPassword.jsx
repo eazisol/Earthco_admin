@@ -100,7 +100,7 @@ const ForgotPassword = () => {
     <section className="contact">
       <div className="container" data-aos="fade-up">
         <div className="section-title" style={{marginTop: "7%"}}> 
-          <h2>
+          {/* <h2>
             {!showOTP && !showNewPassword 
               ? "Forgot Password" 
               : showOTP 
@@ -113,7 +113,7 @@ const ForgotPassword = () => {
               : showOTP 
                 ? "Enter the verification code sent to your email." 
                 : "Create your new password."}
-          </p>
+          </p> */}
         </div>
 
         <div
@@ -127,7 +127,7 @@ const ForgotPassword = () => {
           <div
             className="login-image-container"
             style={{
-              width: "40%",
+              width: "50%",
               overflow: "hidden",
             }}
           >
@@ -149,14 +149,28 @@ const ForgotPassword = () => {
             
 
               <form onSubmit={handleSubmit} className="php-email-form"  s style={{
-                  width: "60%",
+                  width: "50%",
                   padding: "20px",
                   minHeight: "100%",
                   display: "flex",
                   justifyContent: "center",
                 }}>
                   <div  className="w-100 d-flex flex-column align-items-center justify-content-center"
-                  style={{ maxWidth: 437 }}>
+                  style={{ maxWidth: 545 }}>
+                  <h4 style={{ color: '#6DA34D',  textAlign: 'left',width:"100%",fontWeight:"bold",fontSize:"24px" }}>
+                  {!showOTP && !showNewPassword 
+              ? "Forgot Password" 
+              : showOTP 
+                ? "Enter OTP" 
+                : "Reset Password"}
+                   </h4>
+                    <p style={{ color: '#909090', marginBottom: '24px', textAlign: 'left',width:"100%",fontSize:"12px" }}>
+            {!showOTP && !showNewPassword 
+              ? "Enter your email address to receive a password reset code." 
+              : showOTP 
+                ? "Enter the verification code sent to your email." 
+                : "Create your new password."}
+          </p>
                 <div className="mb-3 w-100">
                   {!showOTP && !showNewPassword ? (
                     <>
@@ -184,7 +198,7 @@ const ForgotPassword = () => {
                         name="otp"
                         value={otp}
                         onChange={e => setOTP(e.target.value)}
-                        placeholder="Enter OTP sent to your email"
+                        placeholder="Enter Verification Code"
                         autoFocus
                         style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                       />
@@ -200,7 +214,7 @@ const ForgotPassword = () => {
                             id="newPassword"
                             value={newPassword}
                             onChange={e => setNewPassword(e.target.value)}
-                            placeholder="Enter new password"
+                            placeholder="Enter New Password"
                             autoFocus
                             style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                           />
@@ -208,7 +222,7 @@ const ForgotPassword = () => {
                             <IconButton
                               onClick={() => setShowNewPasswordField(!showNewPasswordField)}
                               edge="end"
-                              style={{position: 'absolute', right: '10px',top:'1px', zIndex: '999', height: '100%'}}
+                              style={{position: 'absolute', right: '18px',top:'1px', zIndex: '999', height: '100%'}}
                             >
                               {showNewPasswordField ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
@@ -224,14 +238,14 @@ const ForgotPassword = () => {
                             id="confirmPassword"
                             value={confirmPassword}
                             onChange={e => setConfirmPassword(e.target.value)}
-                            placeholder="Confirm new password"
+                            placeholder="Confirm New Password"
                             style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                           />
                           <InputAdornment position="end">
                             <IconButton
                               onClick={() => setShowConfirmPasswordField(!showConfirmPasswordField)}
                               edge="end"
-                              style={{position: 'absolute', right: '10px',top:'1px', zIndex: '999', height: '100%'}}
+                              style={{position: 'absolute', right: '18px',top:'1px', zIndex: '999', height: '100%'}}
                             >
                               {showConfirmPasswordField ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
@@ -250,10 +264,11 @@ const ForgotPassword = () => {
                       border: "none",
                       width: "100%",
                       alignSelf: "center",
+                      fontSize: "16px",
                     }}
                     disabled={isLoading}
                   >
-                    {isLoading ? "Loading..." : (showNewPassword ? "Update Password" : (showOTP ? "Verify OTP" : "Submit"))}
+                    {isLoading ? "Loading..." : (showNewPassword ? "Update Password" :'Submit')}
                   </button>
               
                 <div className="text-center mt-3">

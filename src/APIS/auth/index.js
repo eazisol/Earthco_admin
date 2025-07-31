@@ -147,3 +147,17 @@ export const verifyOTP = async (obj) => {
       return error;
     }
   };
+  export const checkPackageStatus=async()=>{
+    const token = JSON.parse(localStorage.getItem("user"));
+    try {
+      const data  = await axios.get(`${apiUrl}Tenant/CheckAnyActivePackage`,{
+        headers: {
+          Authorization: `Bearer ${token.token.data}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };

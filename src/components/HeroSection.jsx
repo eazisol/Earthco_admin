@@ -19,7 +19,7 @@ const HeroSection = () => {
             beautification for commercial and residential properties.
           </h2>
           <div className="d-flex justify-content-center justify-content-lg-start">
-            <CustomButton  onClick={()=> navigate("/register")}/>
+            <CustomButton  onClick={()=> navigate("/#pricing")}/>
           </div>
         </div>
         {/* No right column image, background is set via CSS */}
