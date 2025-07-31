@@ -9,6 +9,8 @@ import { useNavigate } from "react-router";
 import HeroSection from "./components/HeroSection";
 import { getPackages } from "./APIS/packages";
 import { ConfirmationModal } from "./components/Reuseable/ConfirmationModal";
+import { AddContactMessage } from "./APIS/auth";
+import { toast } from "react-toastify";
 
 
 function Branding() {
@@ -24,10 +26,10 @@ function Branding() {
   let navigate = useNavigate();
   const [packages,setPackages] = useState([])
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+    Name: "",
+    Email: "",
+    Subject: "",
+    Message: "",
   });
 useEffect(()=>{
   const user = localStorage.getItem("user")
@@ -37,7 +39,7 @@ useEffect(()=>{
 },[])
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+const [isLoading,setIsLoading] = useState(false)
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'name' && value.length >= 50) {
@@ -61,44 +63,52 @@ useEffect(()=>{
     const newErrors = {};
 
     // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = "Name must be at least 2 characters long";
-    } else if (formData.name.trim().length >= 50) {
-      newErrors.name = "Name cannot exceed 50 characters";
+    if (!formData.Name.trim()) {
+      newErrors.Name = "Name is required";
+    } else if (formData.Name.trim().length < 2) {
+      newErrors.Name = "Name must be at least 2 characters long";
+    } else if (formData.Name.trim().length >= 50) {
+      newErrors.Name = "Name cannot exceed 50 characters";
     }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
+    if (!formData.Email) {
+      newErrors.Email = "Email is required";
+    } else if (!emailRegex.test(formData.Email)) {
+      newErrors.Email = "Please enter a valid email address";
     }
 
     // Subject validation
-    if (!formData.subject.trim()) {
-      newErrors.subject = "Subject is required";
+    if (!formData.Subject.trim()) {
+      newErrors.Subject = "Subject is required";
     }
 
     // Message validation
-    if (!formData.message.trim()) {
-      newErrors.message = "Message is required";
+    if (!formData.Message.trim()) {
+      newErrors.Message = "Message is required";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-
     if (!validateForm()) {
       return;
-    }
-
-    setIsSubmitting(true);
+    } setIsSubmitting(true);
+    setIsLoading(true)
+   const data = await AddContactMessage(formData)
+   toast.success(data?.Message)
+   setIsSubmitting(false);
+   setFormData({
+    Name: "",
+    Email: "",
+    Subject: "",
+    Message: "",
+   })
+   setIsLoading(false)
   };
   const fetchPackages = async (searchValue = '', pageValue = 1, pageSizeValue = 10) => {
   
@@ -430,76 +440,76 @@ const handleSubscription=async(packageId)=>{
                 >
                   <div className="row">
                     <div className="form-group col-md-6">
-                      <label htmlFor="name">
+                      <label htmlFor="Name">
                         Your Name <span className="text-danger">*</span>
                       </label>
                       <input
                         type="text"
-                        name="name"
-                        className={`form-control ${errors.name ? "is-invalid" : ""}`}
-                        id="name"
-                        value={formData.name}
+                        name="Name"
+                        className={`form-control ${errors.Name ? "is-invalid" : ""}`}
+                        id="Name"
+                        value={formData.Name}
                         onChange={handleChange}
-                        placeholder="Enter your full name"
+                        placeholder="Enter Your Full Name"
                         maxLength={50}
                       />
-                      {errors.name && (
-                        <div className="invalid-feedback">{errors.name}</div>
+                      {errors.Name && (
+                        <div className="invalid-feedback">{errors.Name}</div>
                       )}
                     </div>
                     <div className="form-group col-md-6">
-                      <label htmlFor="email">
+                      <label htmlFor="Email">
                         Your Email <span className="text-danger">*</span>
                       </label>
                       <input
-                        type="test"
-                        name="email"
-                        className={`form-control ${errors.email ? "is-invalid" : ""}`}
-                        id="email"
-                        value={formData.email}
+                        type="text"
+                        name="Email"
+                        className={`form-control ${errors.Email ? "is-invalid" : ""}`}
+                        id="Email"
+                        value={formData.Email}
                         onChange={handleChange}
-                        placeholder="Enter your email address"
+                        placeholder="Enter Your Email Address"
                       />
-                      {errors.email && (
-                        <div className="invalid-feedback">{errors.email}</div>
+                      {errors.Email && (
+                        <div className="invalid-feedback">{errors.Email}</div>
                       )}
                     </div>
                   </div>
                   <div className="form-group">
-                    <label htmlFor="subject">
+                    <label htmlFor="Subject">
                       Subject <span className="text-danger">*</span>
                     </label>
                     <input
                       type="text"
-                      className={`form-control ${errors.subject ? "is-invalid" : ""}`}
-                      name="subject"
-                      id="subject"
-                      value={formData.subject}
+                      className={`form-control ${errors.Subject ? "is-invalid" : ""}`}
+                      name="Subject"
+                      id="Subject"
+                      value={formData.Subject}
                       onChange={handleChange}
-                      placeholder="Enter subject"
+                      placeholder="Enter Subject"
                     />
-                    {errors.subject && (
-                      <div className="invalid-feedback">{errors.subject}</div>
+                    {errors.Subject && (
+                      <div className="invalid-feedback">{errors.Subject}</div>
                     )}
                   </div>
                   <div className="form-group">
-                    <label htmlFor="message">
+                    <label htmlFor="Message">
                       Message <span className="text-danger">*</span>
                     </label>
                     <textarea
-                      className={`form-control ${errors.message ? "is-invalid" : ""}`}
-                      name="message"
+                      className={`form-control ${errors.Message ? "is-invalid" : ""}`}
+                      name="Message"
                       rows="10"
-                      value={formData.message}
+                      value={formData.Message}
                       onChange={handleChange}
-                      placeholder="Enter your message"
+                      placeholder="Enter Your Message"
                     ></textarea>
-                    {errors.message && (
-                      <div className="invalid-feedback">{errors.message}</div>
+                    {errors.Message && (
+                      <div className="invalid-feedback">{errors.Message}</div>
                     )}
                   </div>
                   <div className="my-3">
-                    <div className="loading">Loading</div>
+                    <div className="loading">{isLoading ? "Sending..." : "Sending..."}  </div>
                     <div className="error-message"></div>
                     <div className="sent-message">
                       Your message has been sent. Thank you!
@@ -507,9 +517,10 @@ const handleSubscription=async(packageId)=>{
                   </div>
                   <div className="text-center">
                     <CustomButtonGreen
-                      text={isSubmitting ? "Creating Account..." : "Contact Us"}
+                      text={isLoading ? "Sending..." : "Contact Us"}
+                     
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={isLoading}
                     />
                   </div>
                 </form>

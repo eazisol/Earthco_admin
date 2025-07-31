@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { CustomButtonGreen } from "./CustomButton";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import {  getPackageById } from "../APIS/packages";
 import { RegisterTenant } from "../APIS/auth";
@@ -22,13 +22,15 @@ export const LoginForm = () => {
     Password: "",
     confirmPassword: "",
   });
+  console.log("🚀 ~ LoginForm ~ formData:", formData)
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedPackageDetails, setSelectedPackageDetails] = useState(null);
-
+  console.log("🚀 ~ LoginForm ~ selectedPackageDetails:", selectedPackageDetails)
+  const navigate = useNavigate();
 
   // Fetch package details by ID when component mounts
   useEffect(() => {
@@ -276,25 +278,34 @@ export const LoginForm = () => {
         ]
       };
       const data = await RegisterTenant(obj);
-      console.log("🚀 ~ handleSubmit ~ data:", data)
+      if(data?.status==200){
+        toast.success(data?.data?.Message)
+        setFormData({
+          Email: "",
+          Password: "",
+          confirmPassword: "",
+          SubDomain: "",
+          FirstName: "",
+          LastName: "",
+          CompanyName: "",
+          PhoneNo: "",
+          RoleId: 2,
+        });
+      }else if(data?.status==409){
+        toast.error(data?.response?.data)
+      }else{
+        toast.error(data?.data?.Message)
+      }
+
       if (data?.data?.PaymentLink) {
         window.open(data.data.PaymentLink, '_blank');
       }
 
       // Reset form after successful submission
-      setFormData({
-        Email: "",
-        Password: "",
-        confirmPassword: "",
-        SubDomain: "",
-        FirstName: "",
-        LastName: "",
-        CompanyName: "",
-        PhoneNo: "",
-        RoleId: 2,
-      });
+      
 
     } catch (error) {
+      toast.error(error?.response?.data)
       console.error("Registration error:", error);
     } finally {
       setIsSubmitting(false);
@@ -534,7 +545,7 @@ export const LoginForm = () => {
                     <IconButton
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end"
-                      style={{ position: 'absolute', right: '18px', zIndex: '999',top:"10px" }}
+                      style={{ position: 'absolute', right: '18px', zIndex: '999',top:"3px" }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -573,7 +584,7 @@ export const LoginForm = () => {
                     <IconButton
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       edge="end"
-                      style={{ position: 'absolute', right: '18px', zIndex: '999',top:"10px" }}
+                      style={{ position: 'absolute', right: '18px', zIndex: '999',top:"3px" }}
                     >
                       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>

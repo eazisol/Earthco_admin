@@ -23,10 +23,14 @@ import { Button } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';  
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
+import { AddNewsletter } from './APIS/auth';
+import { toast } from 'react-toastify';
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const [Email,setEmail] = useState("")
+  const [isLoading,setIsLoading] = useState(false)
   useEffect(() => {
 
     const selectHeader = document.querySelector('#header');
@@ -83,6 +87,24 @@ function Layout({ children }) {
     setMobileMenuOpen((prev) => !prev);
   };
 
+  const handleSubscribe = async(e)=>{
+    e.preventDefault()
+    setIsLoading(true)
+    if(!Email){
+      toast.error("Please enter your email")
+      setIsLoading(false)
+      return
+    } 
+    const data = await AddNewsletter({Email})
+    if(data?.Message){
+      toast.success(data?.Message)
+      setEmail("")
+    }else{
+      toast.error(data?.Message)
+      setEmail("")
+    }
+    setIsLoading(false)
+  }
   return (
     <>
       {showNavFooter && (
@@ -180,9 +202,9 @@ function Layout({ children }) {
                     Join our newsletter to get landscaping tips, seasonal updates,
                     and exclusive offers from Earthco — straight to your inbox.
                   </p>
-                  <form >
-                    <input type="email" name="email" />
-                    <input type="submit" value="Subscribe" />
+                  <form onSubmit={handleSubscribe}>
+                    <input type="email" name="Email" placeholder='Enter Your Email' value={Email} onChange={(e)=>setEmail(e.target.value)} />
+                    <input type="submit" value={isLoading ? "Subscribing..." : "Subscribe"}  />
                   </form>
                 </div>
               </div>

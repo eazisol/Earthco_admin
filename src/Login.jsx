@@ -235,7 +235,7 @@ export const LoginScreen = ({ onClose }) => {
                     }}
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "SIGNING IN..." : "Sign In"}
+                    {isSubmitting ? "Signing In..." : "Sign In"}
                   </button>
                 </div>
               </form>

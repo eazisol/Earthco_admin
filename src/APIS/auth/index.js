@@ -10,6 +10,32 @@ export const loginUser = async ({ body }) => {
     return error;
   }
 };
+//Add ContactMessage
+export const AddContactMessage = async (obj) => {
+  try {
+    const { data } = await axios.post(`${apiUrl}Accounts/AddContactMessage`, obj,{
+      headers: {
+        "Content-Type": "application/json",
+      },
+  });
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+//newsletter
+export const AddNewsletter = async (obj) => {
+  try {
+      const { data } = await axios.post(`${apiUrl}Accounts/AddNewsletterSubscriber`, obj, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+      });
+    return data;
+  } catch (error) {
+    return error; 
+  }
+};
 export const AddTenant = async (obj) => {
     const token = JSON.parse(localStorage.getItem("user"));
   try {
