@@ -354,42 +354,38 @@ const handleSubscription=async(packageId)=>{
       </p>
     </div>
 
-    <div className="row justify-content-center align-items-end" style={{gap: '24px'}}>
-      {packages?.map((plan, index) => (
-        <div
-          key={plan.PackageId}
-          className="col-lg-3 col-md-6 d-flex align-items-stretch"
-          style={{ minWidth: 300, maxWidth: 350 }}
-        >
-           <div
-            style={{
-              background: '#fff',
-              borderRadius: '20px',
-              boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
-              padding: '32px 24px',
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              minHeight: 466,
-            }}
+    <div className="row justify-content-center align-items-end" >
+    
+      {packages.map((plan, index) => {
+        return (
+          <div
+            key={index}
+            className={`col-lg-4 mt-4 mt-lg-0 text-start `}
+            data-aos="fade-up"
+            data-aos-delay={plan.delay}
+            style={{marginBottom:"20px"}}
           >
-            <h5 style={{ color: '#6DA34D', fontWeight: 700, letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }}>{plan.Name}</h5>
-            <div style={{ fontSize: 36, fontWeight: 800, color: '#6DA34D', marginBottom: 0 }}>
-              ${plan.Price}
+            <div className={`box featured`}>
+              <h3>{plan.Name}</h3>
+              <h4>
+                <sup>$</sup>
+                {plan.Price}
+                <span className="per-month">per month</span>
+              </h4>
+              <ul>
+              
+                <li><i class="bx bx-check"></i>{`Limited to ${plan.MaxCompanies} company and ${plan?.MaxUser} users`}</li>
+                <li><i class="bx bx-check"></i>{`${plan.MaxStorageMB} MB storage capacity`}</li>
+                <li><i class="bx bx-check"></i>{`Affordable pricing for basic needs`}</li>
+                <li><i class="bx bx-check"></i>{`Email support only`}</li>
+              </ul>
+        
+              <CustomButton onClick={() => handleSubscription(plan.PackageId)}/>
             </div>
-            <div style={{ color: '#888', fontSize: 16, marginBottom: 24 }}>/ Month</div>
-            <div style={{ width: '100%', height: 6, background: '#f5f5f5', borderRadius: 3, margin: '16px 0 24px 0' }}>
-              <div style={{ width: '100%', height: '100%', background: '#6DA34D', borderRadius: 3 }}></div>
-            </div>
-            <div dangerouslySetInnerHTML={{__html: plan.Description}}></div>
-            <div className="mt-auto">
-
-            <CustomButton className={'packagesButton'} onClick={()=>handleSubscription(plan.PackageId)} />
-              </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
+   
     </div>
   </div>
 </section>
@@ -450,7 +446,6 @@ const handleSubscription=async(packageId)=>{
                         id="Name"
                         value={formData.Name}
                         onChange={handleChange}
-                        placeholder="Enter Your Full Name"
                         maxLength={50}
                       />
                       {errors.Name && (
@@ -468,7 +463,6 @@ const handleSubscription=async(packageId)=>{
                         id="Email"
                         value={formData.Email}
                         onChange={handleChange}
-                        placeholder="Enter Your Email Address"
                       />
                       {errors.Email && (
                         <div className="invalid-feedback">{errors.Email}</div>
@@ -486,7 +480,6 @@ const handleSubscription=async(packageId)=>{
                       id="Subject"
                       value={formData.Subject}
                       onChange={handleChange}
-                      placeholder="Enter Subject"
                     />
                     {errors.Subject && (
                       <div className="invalid-feedback">{errors.Subject}</div>
@@ -499,10 +492,10 @@ const handleSubscription=async(packageId)=>{
                     <textarea
                       className={`form-control ${errors.Message ? "is-invalid" : ""}`}
                       name="Message"
-                      rows="10"
+                      rows="11"
                       value={formData.Message}
                       onChange={handleChange}
-                      placeholder="Enter Your Message"
+                    
                     ></textarea>
                     {errors.Message && (
                       <div className="invalid-feedback">{errors.Message}</div>
@@ -515,10 +508,10 @@ const handleSubscription=async(packageId)=>{
                       Your message has been sent. Thank you!
                     </div>
                   </div>
-                  <div className="text-center">
+                  <div className="text-center mt-2">
                     <CustomButtonGreen
                       text={isLoading ? "Sending..." : "Contact Us"}
-                     
+                    
                       type="submit"
                       disabled={isLoading}
                     />

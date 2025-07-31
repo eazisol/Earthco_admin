@@ -14,7 +14,7 @@
   --nav-active-color: #BFFF00; */
   --primary-green: #6DA34D;       /* Deep Leaf Green */
 --navbar-bg: rgba(20, 40, 10, 0.9); /* Darker Olive */
---nav-active-color: 	#B5FF75;    /* Soft Lime Green */
+--nav-active-color: 	#43291c;    /* Soft Lime Green */
   --button-color: white;
   --nav-text-color: white;
   --error-message: #dc3545;
@@ -182,7 +182,14 @@ a:hover {
   list-style: none;
   align-items: center;
 }
-
+.custom-login-btn{
+  padding: 8px 20px !important;
+  margin-left: 30px !important;
+  border-radius: 50px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-width: 2px !important;
+}
 .navbar li {
   position: relative;
 }
@@ -192,7 +199,7 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   padding: 10px 0 10px 30px;
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 500;
   font-family: "Poppins", sans-serif;
   color: var(--nav-text-color);
@@ -451,17 +458,17 @@ a:hover {
   padding: 10px 28px 11px 28px;
   border-radius: 50px;
   transition: 0.5s;
-  margin: 10px 0 0 0;
-  color: var(--primary-green);
-  background: var(--button-color);
-  border: 1px solid var(--primary-green);
+  /* margin: 10px 0 0 0; */
+  color: var(--button-color);
+  background: var(--primary-green);
+  border: 1px solid var(--nav-active-color);
 }
 
  .btn-get-started:hover {
-  background: var(--primary-green);
+  background: var(--nav-active-color);
   color: var(--button-color);
   border-radius: 50px;
-  border:1px solid var(--button-color);
+  border:1px solid var(--nav-active-color);
 }
  .btn-outlined {
   font-family: "Poppins", sans-serif;
@@ -589,9 +596,7 @@ a:hover {
   scroll-margin-top: 80px; 
 } */
 
-.section-bg {
-  background-color: #f3f5fa;
-}
+
 
 .section-title {
   text-align: center;
@@ -667,6 +672,10 @@ a:hover {
 /*--------------------------------------------------------------
 # About Us
 --------------------------------------------------------------*/
+.about{
+  background-color: #fff;
+  padding: 37px 0px
+}
 .about .content h3 {
   font-weight: 600;
   font-size: 26px;
@@ -945,12 +954,12 @@ a:hover {
   transition: ease-in-out 0.3s;
 }
 .services .section-title p {
-font-size: 20px;
+font-size: 17px;
 }
 
 .services .icon-box p {
-  line-height: 24px;
-  font-size: 14px;
+  line-height: 25px;
+  /* font-size: 14px; */
   margin-bottom: 0;
 }
 
@@ -1292,7 +1301,7 @@ font-size: 20px;
 }
 .pricing .section-title p {
  
-  font-size: 20px;
+  font-size: 17px;
 }
 
 .pricing h4 {
@@ -1486,6 +1495,10 @@ font-size: 20px;
 /*--------------------------------------------------------------
 # Contact
 --------------------------------------------------------------*/
+.contact{
+  background-color: #fff;
+  padding: 37px 0px
+}
 .contact .info {
   border-top: 3px solid var(--primary-green);
   border-bottom: 3px solid var(--primary-green);
@@ -1496,7 +1509,7 @@ font-size: 20px;
 }
 .contact .section-title p {
  
-  font-size: 20px;
+  font-size: 17px;
 }
 
 .contact .info i {
@@ -1625,13 +1638,13 @@ font-size: 20px;
   animation: animate-loading 1s linear infinite;
 }
 
-/* .contact .php-email-form .form-group {
+.contact .php-email-form .form-group {
   margin-bottom: 20px;
-} */
+}
 
-/* .contact .php-email-form label {
+.contact .php-email-form label {
   padding-bottom: 8px;
-} */
+}
 
 .contact .php-email-form input, .contact .php-email-form textarea {
   border-radius: 0;
@@ -1658,7 +1671,7 @@ font-size: 20px;
   padding: 10px 34px;
   color: #fff;
   transition: 0.4s;
-  border-radius: 6px;
+  border-radius: 50px;
 }
 
 .contact .php-email-form button[type="submit"]:hover {

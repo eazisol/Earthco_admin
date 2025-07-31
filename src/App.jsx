@@ -25,6 +25,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { AddNewsletter } from './APIS/auth';
 import { toast } from 'react-toastify';
+import { CustomButton } from './components/CustomButton'
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -139,41 +140,9 @@ function Layout({ children }) {
                   >
                     Login
                   </button> */}
-                     <Button
-                      onClick={() => navigate("/login")}
-                    variant="contained"
-                    endIcon={<LogoutIcon />}
-                    style={{
-                      background: "#fff",
-                      color: "#6DA34D",
-                      borderRadius: "6px",
-                      padding: "3px 24px",
-                      marginLeft: "28px",
-                      fontSize: "20px",
-                      textTransform: "none",
-                    }}
-                    onMouseOver={e => {
-                      e.currentTarget.style.background = "#6DA34D";
-                      e.currentTarget.style.color = "#fff";
-                      e.currentTarget.style.border = "2px solid #fff";
-                    }}
-                    onMouseOut={e => {
-                      e.currentTarget.style.background = "#fff";
-                      e.currentTarget.style.color = "#6DA34D";
-                      e.currentTarget.style.border = "2px solid transparent";
-                    }}
-                  >
-                    Login
-                  </Button>
-                  <style>
-                    {`
-                      .custom-login-btn:hover {
-                        background: #6da34d !important;
-                        color: #fff !important; 
-                        border: 1px solid #ffffff !important;
-                      }
-                    `}
-                  </style>
+                     <CustomButton text="Login" onClick={() => navigate("/login")} className='custom-login-btn' />
+                    
+              
                 </li>
                 
               </ul>
