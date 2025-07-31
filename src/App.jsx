@@ -124,26 +124,8 @@ function Layout({ children }) {
                 <li><a className="nav-link scrollto" href="/#pricing">Pricing</a></li>
                 <li><a className="nav-link scrollto" href="/#contact">Contact</a></li>
                 <li>
-                  {/* <button
-                    className="btn btn-success nav-link custom-login-btn"
-                    style={{
-                      background: "#fff",
-                      border: "1px solid #6da34d",
-                      color: "#6da34d",
-                      padding: "10px 28px",
-                      borderRadius: "6px",
-                      marginLeft: "15px",
-                      fontSize: "20px",
-                      transition: "background 0.2s, color 0.2s"
-                    }}
-                    onClick={() => window.location.href = "/login"}
-                  >
-                    Login
-                  </button> */}
-                     <CustomButton text="Login" onClick={() => navigate("/login")} className='custom-login-btn' />
-                    
-              
-                </li>
+                   <CustomButton text="Login" onClick={() => navigate("/login")} className='custom-login-btn' />
+                  </li>
                 
               </ul>
               <i

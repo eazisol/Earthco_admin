@@ -97,7 +97,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <section className="contact">
+    <section className="contact" style={{paddingBottom:"85px"}}>
       <div className="container" data-aos="fade-up">
         <div className="section-title" style={{marginTop: "7%"}}> 
           {/* <h2>
@@ -150,13 +150,13 @@ const ForgotPassword = () => {
 
               <form onSubmit={handleSubmit} className="php-email-form"  s style={{
                   width: "50%",
-                  padding: "20px",
+                  padding: "40px",
                   minHeight: "100%",
                   display: "flex",
                   justifyContent: "center",
                 }}>
                   <div  className="w-100 d-flex flex-column align-items-center justify-content-center"
-                  style={{ maxWidth: 545 }}>
+                >
                   <h4 style={{ color: '#6DA34D',  textAlign: 'left',width:"100%",fontWeight:"bold",fontSize:"24px" }}>
                   {!showOTP && !showNewPassword 
               ? "Forgot Password" 

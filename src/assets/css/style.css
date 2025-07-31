@@ -140,7 +140,7 @@ a:hover {
 #header {
   transition: all 0.5s;
   z-index: 997;
-  padding: 0px 0;
+  padding: 10px;
 }
 
 #header.header-scrolled, #header.header-inner-pages {
@@ -480,9 +480,9 @@ a:hover {
   border-radius: 50px;
   transition: 0.5s;
   /* margin: 10px 0 0 0; */
-  color: var(--nav-active-color) !important;
-  background: var(--button-color) !important;
-  border: 1px solid var(--nav-active-color) !important;
+  color: var(--button-color) !important;
+  background: transparent !important;
+  border: 1px solid #86eb0b !important;
 }
 
  .custom-login-btn:hover {

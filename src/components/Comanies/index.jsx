@@ -17,7 +17,7 @@ import {
   getPackagesType,
 } from "../../APIS/packages";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
-import { addCompany,deleteCompany,getCompanyList } from "../../APIS/companies";
+import { addCompany, deleteCompany, getCompanyList } from "../../APIS/companies";
 
 export const CompaniesScreen = () => {
   const [packageOptions, setPackageOptions] = useState([]);
@@ -51,6 +51,11 @@ export const CompaniesScreen = () => {
       ...prevData,
       [name]: value,
     }));
+    // Remove error for the field as user types
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: undefined,
+    }));
   };
 
   const validateEmail = (email) => {
@@ -60,8 +65,8 @@ export const CompaniesScreen = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoader(true);
 
+    // Validate required fields before setting loader
     const newErrors = {};
     if (!formData.CompanyName.trim()) newErrors.CompanyName = "Company Name is required";
     if (!formData.CompanyRealmId.trim()) newErrors.CompanyRealmId = "Company Realm ID is required";
@@ -76,54 +81,55 @@ export const CompaniesScreen = () => {
     }
 
     // Check if email already exists
-    const emailExists = employeesData.some(company => 
-      company.Email?.toLowerCase() === formData.Email.toLowerCase() && 
+    const emailExists = employeesData.some(company =>
+      company.Email?.toLowerCase() === formData.Email.toLowerCase() &&
       company.CompanyId !== selectedId
     );
-    
+
     if (emailExists) {
       newErrors.Email = "This email is already registered with another company";
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setLoader(false);
+      // Don't set loader if there are errors
       return;
     }
 
+    setLoader(true);
     setErrors({});
 
     const obj = {
       ...formData,
       CompanyId: selectedId,
     };
-console.log(obj,'obj');
+    // console.log(obj, 'obj');
     try {
       const response = await addCompany(obj);
-      console.log(response,'response');
-        if (response.status === 200) {
-            const offcanvasEl = document.getElementById("offcanvasExample");
-            const bsOffcanvas =
-              Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
-            bsOffcanvas.hide();
+      // console.log(response, 'response');
+      if (response.status === 200) {
+        const offcanvasEl = document.getElementById("offcanvasExample");
+        const bsOffcanvas =
+          Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
+        bsOffcanvas.hide();
 
-            setOpenForm(false);
-            setFormData({
-              CompanyName: "",
-              CompanyRealmId: "",
-              DsiplayName: "",
-              Address: "",
-              PhoneNo: "",
-              Website: "",
-              SecondPhoneNo: "",
-              Email: "",
-            });
-            setSelectedId(0);
-            fetchCompanies();
-            toast.success(response?.data?.Message);
-          } else {
-            toast.error("Error adding company");
-          }
+        setOpenForm(false);
+        setFormData({
+          CompanyName: "",
+          CompanyRealmId: "",
+          DsiplayName: "",
+          Address: "",
+          PhoneNo: "",
+          Website: "",
+          SecondPhoneNo: "",
+          Email: "",
+        });
+        setSelectedId(0);
+        fetchCompanies();
+        toast.success(response?.data?.Message);
+      } else {
+        toast.error("Error adding company");
+      }
     } catch (error) {
       toast.error("Error adding company");
     } finally {
@@ -134,7 +140,7 @@ console.log(obj,'obj');
   const fetchCompanies = async () => {
     setLoader(true);
     const response = await getCompanyList();
-    console.log(response,'response');
+    // console.log(response, 'response');
     setEmployeesData(response?.data?.Data);
     setLoader(false);
   };
@@ -146,7 +152,7 @@ console.log(obj,'obj');
       try {
         const data = await getPackagesType(user.token.data);
         setPackageOptions(data);
-      } catch (err) {}
+      } catch (err) { }
     };
 
     if (user.token.data) {
@@ -157,7 +163,7 @@ console.log(obj,'obj');
   const handleDelete = async (id) => {
     try {
       const response = await deleteCompany(id);
-      console.log('response',response);
+      // console.log('response', response);
       if (response?.status == 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
         const bsOffcanvas =
@@ -188,12 +194,12 @@ console.log(obj,'obj');
       />
       <div
         class="offcanvas offcanvas-end customeoff"
-        tabindex="-1"
+        tabIndex="-1"
         id="offcanvasExample"
       >
         <div class="offcanvas-header">
           <h5 class="modal-title" id="#gridSystemModal">
-           {selectedId === 0 ? "Add Company" : "Edit Company"}
+            {selectedId === 0 ? "Add Company" : "Edit Company"}
           </h5>
           <button
             type="button"
@@ -226,7 +232,9 @@ console.log(obj,'obj');
           <div class="container-fluid">
             <div class="row">
               <div className="col-xl-6 mb-3">
-                <label className="form-label">Company Name<span class="text-danger">*</span></label>
+                <label className="form-label">
+                  Company Name<span class="text-danger">*</span>
+                </label>
                 <TextField
                   className="form-control form-control-sm"
                   name="CompanyName"
@@ -239,7 +247,9 @@ console.log(obj,'obj');
                 />
               </div>
               <div class="col-xl-6 mb-3">
-                <label class="form-label">Company Realm ID<span class="text-danger">*</span></label>
+                <label class="form-label">
+                  Company Realm ID<span class="text-danger">*</span>
+                </label>
                 <TextField
                   className="form-control form-control-sm"
                   name="CompanyRealmId"
@@ -265,11 +275,13 @@ console.log(obj,'obj');
               </div>
 
               <div class="col-xl-6 mb-3">
-                <label class="form-label">Email<span class="text-danger">*</span></label>
+                <label class="form-label">
+                  Email<span class="text-danger">*</span>
+                </label>
                 <TextField
                   className="form-control form-control-sm"
                   name="Email"
-                  type="email" 
+                  type="email"
                   value={formData.Email}
                   onChange={handleInputChange}
                   size="small"
@@ -280,7 +292,9 @@ console.log(obj,'obj');
               </div>
 
               <div class="col-xl-6 mb-3">
-                <label class="form-label">Phone Number<span class="text-danger">*</span></label>
+                <label class="form-label">
+                  Phone Number<span class="text-danger">*</span>
+                </label>
                 <TextField
                   className="form-control form-control-sm"
                   name="PhoneNo"
@@ -359,8 +373,6 @@ console.log(obj,'obj');
               >
                 Cancel
               </button>
-
-              
             </div>
           </div>
         </div>
@@ -410,7 +422,7 @@ console.log(obj,'obj');
           </ol>
         </div>
         <div className="container-fluid">
-          <div className="row table-space" >
+          <div className="row table-space">
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body p-0">
@@ -431,6 +443,7 @@ console.log(obj,'obj');
                             SecondPhoneNo: "",
                             Email: "",
                           });
+                          setErrors({}); // Clear errors when opening the form
 
                           const offcanvasEl =
                             document.getElementById("offcanvasExample");
@@ -459,7 +472,7 @@ console.log(obj,'obj');
                               <CircularProgress />
                             </td>
                           </tr>
-                        ) : employeesData?.length == 0 ? (
+                        ) : employeesData?.length == 0 || employeesData == undefined ? (
                           <tr>
                             <td colSpan={6} className="text-center">
                               No data found
@@ -483,6 +496,7 @@ console.log(obj,'obj');
                                   Address: emp.Address || "",
                                   Website: emp.Website || "",
                                 });
+                                setErrors({}); // Clear errors when editing
 
                                 const offcanvasEl =
                                   document.getElementById("offcanvasExample");
@@ -513,10 +527,10 @@ console.log(obj,'obj');
                                   title="Delete Company"
                                   style={{ cursor: 'pointer' }}
                                   onClick={(e) => {
-                                    e.stopPropagation(); 
+                                    e.stopPropagation();
                                     setModalOpen(true);
                                     setModalConfig({
-                                      title: "Confirmation", 
+                                      title: "Confirmation",
                                       description: "Are you sure you want to delete this company?",
                                       onConfirm: () => {
                                         handleDelete(emp.CompanyId);

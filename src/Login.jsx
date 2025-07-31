@@ -91,7 +91,7 @@ export const LoginScreen = ({ onClose }) => {
   };
 
   return (
-    <section className="contact">
+    <section className="contact" style={{paddingBottom:"85px"}}>
       <div className="container" data-aos="fade-up">
         <div className="section-title" style={{marginTop: "7%"}}> 
        
@@ -121,6 +121,7 @@ export const LoginScreen = ({ onClose }) => {
                 height: "100%",
                 objectFit: "cover",
                 borderRadius: "0",
+              
               }}
             />
           </div>
@@ -134,7 +135,7 @@ export const LoginScreen = ({ onClose }) => {
                 className="php-email-form d-flex flex-column align-items-center justify-content-center"
                 style={{
                   width: "50%",
-                  padding: "20px",
+                  padding: "40px",
                   minHeight: "100%",
                 
                 }}
@@ -142,7 +143,7 @@ export const LoginScreen = ({ onClose }) => {
                 
                 <div
                   className="w-100 d-flex flex-column align-items-center"
-                  style={{ maxWidth: 545 }}
+                 
                 >
                   <h4 style={{ color: '#6DA34D', textAlign: 'left',width:"100%",fontWeight:"bold",fontSize:"24px" }}>
                     Welome Back!

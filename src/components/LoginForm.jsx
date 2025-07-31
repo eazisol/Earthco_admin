@@ -7,7 +7,7 @@ import { RegisterTenant } from "../APIS/auth";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { toast } from "react-toastify";
-
+import image from "../assets/img/loginForm.jpg"
 export const LoginForm = () => {
   const [searchParams] = useSearchParams();
   const [formData, setFormData] = useState({
@@ -341,7 +341,7 @@ export const LoginForm = () => {
             }}
           >
             <img
-                              src="/assets/img/loginForm.jpg"
+                              src={image}
               alt="Registration"
               className="img-fluid  shadow"
               style={{

@@ -132,7 +132,6 @@ export const PackagesScreen = () => {
       const response = await addPackage({
         ...formData,
         PackageId: selectedId,
-        Description: content
       });
 console.log('response',response)
       if (response?.status === 200) {
@@ -389,7 +388,7 @@ console.log('response',response)
              
             </div>
             <div style={{ textAlign: "end" }} className="mt-5">
-              <button className="btn btn-primary me-1" onClick={handleSubmit}>
+              <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loader}>
                 {selectedId === 0 ? "Add" : "Update"}
               </button>
              
