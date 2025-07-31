@@ -22,10 +22,11 @@ import { AppProvider } from './context/AppContext'
 import { Button } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';  
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNavigate } from 'react-router-dom';
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
 
     const selectHeader = document.querySelector('#header');
@@ -89,7 +90,7 @@ function Layout({ children }) {
           <div className="container d-flex align-items-center">
             <h1 className="logo me-auto">
               <a href="/#hero" className="logo me-auto">
-                <img src="/src/assets/img/favicon.svg" alt="" className="img-fluid" />
+                <img src="/assets/img/favicon.svg" alt="" className="img-fluid" />
               </a>
             </h1>
             <nav id="navbar" className={`navbar${mobileMenuOpen ? ' navbar-mobile' : ''}`}>
@@ -117,7 +118,7 @@ function Layout({ children }) {
                     Login
                   </button> */}
                      <Button
-                      onClick={() => window.location.href = "/login"}
+                      onClick={() => navigate("/login")}
                     variant="contained"
                     endIcon={<LogoutIcon />}
                     style={{
@@ -193,7 +194,7 @@ function Layout({ children }) {
                 <div className="col-lg-4 col-md-6 footer-contact">
                   <a href="" className="logo me-auto">
                     <img
-                      src="/src/assets/img/favicon.png"
+                      src="/assets/img/favicon.png"
                       alt=""
                       className="footer-image"
                     />

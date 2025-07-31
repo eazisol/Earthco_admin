@@ -330,7 +330,7 @@ export const LoginForm = () => {
             }}
           >
             <img
-              src="/src/assets/img/loginForm.jpg"
+                              src="/assets/img/loginForm.jpg"
               alt="Registration"
               className="img-fluid  shadow"
               style={{

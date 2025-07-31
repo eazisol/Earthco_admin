@@ -9,7 +9,6 @@ import { useNavigate } from "react-router";
 import HeroSection from "./components/HeroSection";
 import { getPackages } from "./APIS/packages";
 import { ConfirmationModal } from "./components/Reuseable/ConfirmationModal";
-import { checkPackageStatus } from "./APIS/auth";
 
 
 function Branding() {
