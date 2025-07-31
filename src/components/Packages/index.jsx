@@ -1,5 +1,4 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
-import image from "../../assets/img/team/team-1.jpg";
 import {
   CircularProgress,
   FormControl,
@@ -18,7 +17,6 @@ import {
 } from "../../APIS/packages";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import Pagination from '@mui/material/Pagination';
-import JoditEditor from 'jodit-react';
 
 export const PackagesScreen = () => {
   const [packageOptions, setPackageOptions] = useState([]);
@@ -103,7 +101,6 @@ export const PackagesScreen = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-console.log('formData',formData)
     const newErrors = {};
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
@@ -120,12 +117,12 @@ console.log('formData',formData)
     if (!formData.Price) newErrors.Price = "Price is required";
     if (!formData.maxCompanies) newErrors.maxCompanies = "Max Companies is required";
     if (!formData.PackageTypeId) newErrors.PackageTypeId = "Package Type is required";
-    // if (!formData.Description) newErrors.Description = "Description is required";
+    if (!formData.Description) newErrors.Description = "Description is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setLoader(false);
-      toast.error("Please fill all required fields");
+      // toast.error("Please fill all required fields");
       return;
     }
 
@@ -351,7 +348,7 @@ console.log('response',response)
               <div class="col-xl-6 mb-3">
                 <FormControl fullWidth>
                   <label className="form-label">
-                    Package<span className="text-danger">*</span>
+                    Type<span className="text-danger">*</span>
                   </label>
                   <Select
                     name="PackageTypeId"
@@ -375,16 +372,21 @@ console.log('response',response)
                 </FormControl>
               </div>
               <div className="col-xl-12 mb-3">
-                <label className="form-label">Description<span className="text-danger">*</span></label>
+                <label className="form-label">
+                  Description<span className="text-danger">*</span>
+                </label>
+                <textarea
+                  className={`form-control form-control-sm ${errors.Description ? "is-invalid" : ""}`}
+                  name="Description"
+                  rows="7"
+                  value={formData.Description}
+                  onChange={handleInputChange}
+                ></textarea>
+                {errors.Description && (
+                  <div className="text-danger small">{errors.Description}</div>
+                )}
               </div>
-              <JoditEditor
-			ref={editor}
-			value={content}
-			config={config}
-			tabIndex={1} // tabIndex of textarea
-			onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-			onChange={newContent => {}}
-		/>
+             
             </div>
             <div style={{ textAlign: "end" }} className="mt-5">
               <button className="btn btn-primary me-1" onClick={handleSubmit}>
@@ -392,23 +394,7 @@ console.log('response',response)
               </button>
              
 
-              {/* {selectedId !== 0 && (
-                <button className="btn btn-danger ms-2" onClick={()=>{
-                  setModalOpen(true);
-                  setModalConfig({
-                    title: "Confirmation",
-                    description: "Are you sure you want to delete this package?",
-                    onConfirm: () => {
-                      handleDelete();
-                      setModalOpen(false);
-                    },
-                    confirmText: "Delete",
-                    cancelText: "Cancel",
-                  });
-                  }}>
-                  Delete
-                  </button>
-              )} */}
+            
                <button
                 className="btn btn-danger light ms-1 cancel-btn"
                 onClick={() => {
