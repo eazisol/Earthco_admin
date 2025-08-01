@@ -1,5 +1,5 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
-import { CircularProgress, FormControl, MenuItem, Select, TextField, IconButton, InputAdornment } from "@mui/material";
+import { CircularProgress, FormControl, MenuItem, Select, TextField, IconButton, InputAdornment, Alert, AlertTitle } from "@mui/material";
 import { useEffect, useState } from "react";
 import { addEmailSetting, getEmailSetting } from "../../APIS/settings";
 import { toast } from "react-toastify";
@@ -231,7 +231,32 @@ export const EmailScreen = () => {
             <div className="col-xl-6">
               <div className="card">
                 <div className="card-body">
-                  <h4 className="card-title mb-4">Email Settings</h4>
+                  <div className="row">
+                    <h4 className="card-title mb-4 col-xl-9">Email Settings</h4>
+                    <div className="col-xl-3 mb-3 ">
+                   
+                      <label className="form-label">Mode</label>
+                      <div className="form-check form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="EmailMode" 
+                          checked={formData.EmailMode == 2}
+                          onChange={(e) => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              EmailMode: e.target.checked ? 2 : 1
+                            }))
+                          }}
+                        />
+                        <label className="form-check-label">
+                          {formData.EmailMode == 2 ? "Production" : "Sandbox"}
+                        </label>
+                      </div>
+                    </div>
+                
+                  </div>
+             
               {/* {loading ? <div className="text-center">
             <div className="spinner-border" role="status">
               <span className="visually-hidden"><CircularProgress /></span>
@@ -254,7 +279,7 @@ export const EmailScreen = () => {
                     </div>
 
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">App password<span className="text-danger">*</span></label>
+                      <label className="form-label">Password<span className="text-danger">*</span></label>
                       <TextField
                         name="EmailPassword"
                         type={showPassword ? "text" : "password"}
@@ -299,7 +324,7 @@ export const EmailScreen = () => {
 
                     <div className="col-xl-6 mb-3">
                       <FormControl fullWidth>
-                        <label className="form-label">Use SSL/TLS<span className="text-danger">*</span></label>
+                        <label className="form-label">SSL/TLS<span className="text-danger">*</span></label>
                         <Select
                           name="EmailSSL"
                           value={formData.EmailSSL ? "true" : "false"}
@@ -330,9 +355,38 @@ export const EmailScreen = () => {
                         placeholder="e.g., smtp.gmail.com"
                       />
                     </div>
-
-                    <div className="col-xl-6 mb-3">
-                      <label className="form-label">OAuth Client ID</label>
+                    <Alert severity="info" className="mb-4">
+                    <AlertTitle>Info</AlertTitle>
+                    <strong>How to set up your email settings:</strong>
+                    <ol style={{ marginLeft: 16 }}>
+                   
+                      <li>
+                        If you are using OAuth (advanced), you need to provide <b>Client ID</b> and <b>Client Secret</b>.<br />
+                        <span style={{ fontSize: "0.95em" }}>
+                          To get your Client ID and Client Secret for Gmail:
+                          <ol style={{ marginLeft: 16 }}>
+                            <li>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
+                            <li>Create a new project or select an existing one.</li>
+                            <li>Enable the Gmail API for your project.</li>
+                            <li>Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
+                            <li>Configure the consent screen if prompted.</li>
+                            <li>Select "Web application" and set the authorized redirect URIs as needed.</li>
+                            <li>After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
+                          </ol>
+                        </span>
+                      </li>
+                      {/* <li>
+                        Choose the <b>Email Mode</b> (1 for SMTP, 2 for OAuth).
+                      </li> */}
+                      <li>
+                        Click <b>Save</b> to apply your settings.
+                      </li>
+                    </ol>
+                  
+                  
+                  </Alert>
+                    <div className="col-xl-12 mb-3">
+                      <label className="form-label">Client ID</label>
                       <TextField
                         name="EmailClientId"
                         value={formData.EmailClientId}
@@ -345,8 +399,8 @@ export const EmailScreen = () => {
                       />
                     </div>
 
-                    <div className="col-xl-6 mb-3">
-                      <label className="form-label">OAuth Client Secret</label>
+                    <div className="col-xl-12 mb-3">
+                      <label className="form-label">Client Secret</label>
                       <TextField
                         name="EmailClientSecret"
                         type={showClientSecret ? "text" : "password"}
@@ -369,26 +423,7 @@ export const EmailScreen = () => {
                       />
                     </div>
 
-                    <div className="col-xl-6 mb-3">
-                      <label className="form-label">Mode</label>
-                      <div className="form-check form-switch">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="EmailMode" 
-                          checked={formData.EmailMode == 2}
-                          onChange={(e) => {
-                            setFormData((prev) => ({
-                              ...prev,
-                              EmailMode: e.target.checked ? 2 : 1
-                            }))
-                          }}
-                        />
-                        <label className="form-check-label">
-                          {formData.EmailMode == 2 ? "Production" : "Sandbox"}
-                        </label>
-                      </div>
-                    </div>
+                  
                   </div>
                     <div className="mt-3 d-flex justify-content-end">
                     <button className="btn btn-primary btn-sm" onClick={handleSubmit}>

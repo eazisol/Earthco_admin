@@ -1,5 +1,5 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
-import { CircularProgress, TextField } from "@mui/material";
+import { CircularProgress, TextField, Alert, AlertTitle  } from "@mui/material";
 import { useState, useEffect } from "react";
 import { addEmailSetting, getEmailSetting } from "../../APIS/settings";
 import { toast } from "react-toastify";
@@ -9,34 +9,59 @@ export const QBookScreen = () => {
   const [formData, setFormData] = useState({
     QBProductionClientId: "",
     QBProductionClientSecret: "",
-    QBSandBoxClientId: "", 
+    QBSandBoxClientId: "",
     QBSandBoxClientSecret: "",
-    QBMode: 1
+    QBMode: 1 // 1 = Production, 0 = Sandbox
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // Helper to determine if current mode is production
+  const isProduction = parseInt(formData.QBMode) === 1;
+
+  // Validation function, now mode-aware
   const validateField = (name, value) => {
-    switch(name) {
-      case 'QBProductionClientId':
-      case 'QBSandBoxClientId':
-        if(value.length < 15 || value.length > 50) {
-          return 'Must be between 15-50 characters';
+    // Only validate fields relevant to the current mode
+    if (isProduction) {
+      if (
+        name === "QBProductionClientId" ||
+        name === "QBProductionClientSecret"
+      ) {
+        if (!value || value.trim() === "") {
+          return "This field is required in Production mode";
         }
-        if(!/^[a-zA-Z0-9-]+$/.test(value)) {
-          return 'Only alphanumeric characters and dashes allowed';
+      }
+    } else {
+      if (
+        name === "QBSandBoxClientId" ||
+        name === "QBSandBoxClientSecret"
+      ) {
+        if (!value || value.trim() === "") {
+          return "This field is required in Sandbox mode";
+        }
+      }
+    }
+
+    switch (name) {
+      case "QBProductionClientId":
+      case "QBSandBoxClientId":
+        if (value && (value.length < 15 || value.length > 50)) {
+          return "Must be between 15-50 characters";
+        }
+        if (value && !/^[a-zA-Z0-9-]+$/.test(value)) {
+          return "Only alphanumeric characters and dashes allowed";
         }
         break;
-      case 'QBProductionClientSecret':
-      case 'QBSandBoxClientSecret':
-        if(value.length < 20 || value.length > 100) {
-          return 'Must be between 20-100 characters';
+      case "QBProductionClientSecret":
+      case "QBSandBoxClientSecret":
+        if (value && (value.length < 20 || value.length > 100)) {
+          return "Must be between 20-100 characters";
         }
         break;
       default:
-        return '';
+        return "";
     }
-    return '';
+    return "";
   };
 
   const handleInputChange = (e) => {
@@ -45,17 +70,18 @@ export const QBookScreen = () => {
       ...prevData,
       [name]: value,
     }));
-    
+
+    // Validate only the changed field
     const error = validateField(name, value);
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [name]: error
+      [name]: error,
     }));
   };
 
   const getSettings = async () => {
     setLoading(true);
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user"));
     try {
       const response = await getEmailSetting(user?.Data?.TenantId);
       setSettingData(response?.data || {});
@@ -64,7 +90,7 @@ export const QBookScreen = () => {
         QBProductionClientSecret: response?.data?.QBProductionClientSecret || "",
         QBSandBoxClientId: response?.data?.QBSandBoxClientId || "",
         QBSandBoxClientSecret: response?.data?.QBSandBoxClientSecret || "",
-        QBMode: response?.data?.QBMode || 1
+        QBMode: response?.data?.QBMode ?? 1,
       });
     } catch (error) {
       console.error("Error fetching settings:", error);
@@ -75,18 +101,34 @@ export const QBookScreen = () => {
 
   useEffect(() => {
     getSettings();
+    // eslint-disable-next-line
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // Validate all fields
+    // Mode-aware validation
     const newErrors = {};
-    Object.keys(formData).forEach(key => {
-      if (key !== 'QBMode') {
+    if (isProduction) {
+      // Production fields required
+      ["QBProductionClientId", "QBProductionClientSecret"].forEach((key) => {
         const error = validateField(key, formData[key]);
         if (error) newErrors[key] = error;
+      });
+    } else {
+      // Sandbox fields required
+      ["QBSandBoxClientId", "QBSandBoxClientSecret"].forEach((key) => {
+        const error = validateField(key, formData[key]);
+        if (error) newErrors[key] = error;
+      });
+    }
+
+    // Validate all fields for format, but only require relevant ones
+    Object.keys(formData).forEach((key) => {
+      if (key !== "QBMode") {
+        const error = validateField(key, formData[key]);
+        if (error && !newErrors[key]) newErrors[key] = error;
       }
     });
 
@@ -98,8 +140,8 @@ export const QBookScreen = () => {
     }
 
     const formDataToSend = new FormData();
-    formDataToSend.append('Files', null);
-    
+    formDataToSend.append("Files", null);
+
     const settingDataToSend = {
       ...settingData,
       Email: settingData?.Email || null,
@@ -123,15 +165,15 @@ export const QBookScreen = () => {
       StripeSandboxSecretId: settingData?.StripeSandboxSecretId || null,
       StripeMode: settingData?.StripeMode || null,
       PrimeryColor: settingData?.PrimeryColor || null,
-      SecondaryColor: settingData?.SecondaryColor || null
+      SecondaryColor: settingData?.SecondaryColor || null,
     };
 
     try {
-      formDataToSend.append('SettingData', JSON.stringify(settingDataToSend));
+      formDataToSend.append("SettingData", JSON.stringify(settingDataToSend));
       const response = await addEmailSetting(formDataToSend);
       
       if(response) {
-        toast.success(response?.Message);
+        toast.success(response?.Message|| "Settings updated successfully");
         getSettings();
       }
     } catch (error) {
@@ -157,92 +199,158 @@ export const QBookScreen = () => {
             <div className="col-xl-6">
               <div className="card">
                 <div className="card-body">
-                  <h4 className="card-title mb-4">QuickBooks Settings</h4>
+                  <div className="row">
+                    <h4 className="card-title mb-4 col-xl-9">
+                      QuickBooks Settings
+                    </h4>
+                    <div className="col-xl-3 mb-3 " >
+                     
+                      <label className="form-label">Mode</label>
+                      <div className="form-check form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="QBMode"
+                          checked={parseInt(formData.QBMode) === 0}
+                          onChange={(e) => {
+                            // 0 = Sandbox, 1 = Production
+                            handleInputChange({
+                              target: {
+                                name: "QBMode",
+                                value: e.target.checked ? 0 : 1,
+                              },
+                            });
+                            // Clear errors when mode changes
+                            setErrors({});
+                          }}
+                        />
+                        <label className="form-check-label">
+                          {parseInt(formData.QBMode) === 0
+                            ? "Sandbox"
+                            : "Production"}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
                   {loading ? (
                     <div className="text-center">
                       <div className="spinner-border" role="status">
-                        <span className="visually-hidden"><CircularProgress /></span>
+                        <span className="visually-hidden">
+                          <CircularProgress />
+                        </span>
                       </div>
                     </div>
                   ) : (
                     <>
                       <div className="row">
-                        <div className="col-xl-6 mb-3">
-                          <label className="form-label">Production Client ID<span className="text-danger">*</span></label>
-                          <TextField
-                            name="QBProductionClientId"
-                            value={formData.QBProductionClientId}
-                            onChange={handleInputChange}
-                            size="small"
-                            fullWidth
-                            error={!!errors.QBProductionClientId}
-                            helperText={errors.QBProductionClientId}
-                          />
-                        </div>
+                        <Alert severity="info" className="mb-4">
+                          <AlertTitle>Info</AlertTitle>
+                          <strong>How to set up your QuickBooks settings:</strong>
+                          <ol style={{ marginLeft: 16 }}>
+                            <li>
+                              If you are using <b>Production</b> mode, you need to provide <b>Production Client ID</b> and <b>Production Client Secret</b>.<br />
+                              <span style={{ fontSize: "0.95em" }}>
+                                To get your Production credentials:
+                                <ol style={{ marginLeft: 16 }}>
+                                  <li>Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
+                                  <li>Sign in and create a new app or select an existing one.</li>
+                                  <li>Navigate to "Keys & OAuth".</li>
+                                  <li>Switch to "Production" tab to view your <b>Client ID</b> and <b>Client Secret</b>.</li>
+                                </ol>
+                              </span>
+                            </li>
+                            <li>
+                              If you are using <b>Sandbox</b> mode, you need to provide <b>Sandbox Client ID</b> and <b>Sandbox Client Secret</b>.<br />
+                              <span style={{ fontSize: "0.95em" }}>
+                                To get your Sandbox credentials:
+                                <ol style={{ marginLeft: 16 }}>
+                                  <li>Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
+                                  <li>Sign in and create a new app or select an existing one.</li>
+                                  <li>Navigate to "Keys & OAuth".</li>
+                                  <li>Use the "Development" tab to view your <b>Client ID</b> and <b>Client Secret</b> for Sandbox.</li>
+                                </ol>
+                              </span>
+                            </li>
+                            <li>
+                              Click <b>Save</b> to apply your settings.
+                            </li>
+                          </ol>
+                        </Alert>
+                        {isProduction && (
+                          <>
+                            <div className="col-xl-12 mb-3">
+                              <label className="form-label">
+                                Production Client ID
+                                <span className="text-danger">*</span>
+                              </label>
+                              <TextField
+                                name="QBProductionClientId"
+                                value={formData.QBProductionClientId}
+                                onChange={handleInputChange}
+                                size="small"
+                                fullWidth
+                                error={!!errors.QBProductionClientId}
+                                helperText={errors.QBProductionClientId}
+                              />
+                            </div>
 
-                        <div className="col-xl-6 mb-3">
-                          <label className="form-label">Production Client Secret<span className="text-danger">*</span></label>
-                          <TextField
-                            type="password"
-                            name="QBProductionClientSecret"
-                            value={formData.QBProductionClientSecret}
-                            onChange={handleInputChange}
-                            size="small"
-                            fullWidth
-                            error={!!errors.QBProductionClientSecret}
-                            helperText={errors.QBProductionClientSecret}
-                          />
-                        </div>
+                            <div className="col-xl-12 mb-3">
+                              <label className="form-label">
+                                Production Client Secret
+                                <span className="text-danger">*</span>
+                              </label>
+                              <TextField
+                                type="password"
+                                name="QBProductionClientSecret"
+                                value={formData.QBProductionClientSecret}
+                                onChange={handleInputChange}
+                                size="small"
+                                fullWidth
+                                error={!!errors.QBProductionClientSecret}
+                                helperText={errors.QBProductionClientSecret}
+                              />
+                            </div>
+                          </>
+                        )}
 
-                        <div className="col-xl-6 mb-3">
-                          <label className="form-label">Sandbox Client ID<span className="text-danger">*</span></label>
-                          <TextField
-                            name="QBSandBoxClientId"
-                            value={formData.QBSandBoxClientId}
-                            onChange={handleInputChange}
-                            size="small"
-                            fullWidth
-                            error={!!errors.QBSandBoxClientId}
-                            helperText={errors.QBSandBoxClientId}
-                          />
-                        </div>
+                        {/* Sandbox Fields */}
+                        {!isProduction && (
+                          <>
+                            <div className="col-xl-12 mb-3">
+                              <label className="form-label">
+                                Sandbox Client ID
+                                <span className="text-danger">*</span>
+                              </label>
+                              <TextField
+                                name="QBSandBoxClientId"
+                                value={formData.QBSandBoxClientId}
+                                onChange={handleInputChange}
+                                size="small"
+                                fullWidth
+                                error={!!errors.QBSandBoxClientId}
+                                helperText={errors.QBSandBoxClientId}
+                              />
+                            </div>
 
-                        <div className="col-xl-6 mb-3">
-                          <label className="form-label">Sandbox Client Secret<span className="text-danger">*</span></label>
-                          <TextField
-                            type="password"
-                            name="QBSandBoxClientSecret"
-                            value={formData.QBSandBoxClientSecret}
-                            onChange={handleInputChange}
-                            size="small"
-                            fullWidth
-                            error={!!errors.QBSandBoxClientSecret}
-                            helperText={errors.QBSandBoxClientSecret}
-                          />
-                        </div>
-
-                        <div className="col-xl-6 mb-3">
-                          <label className="form-label">Mode</label>
-                          <div className="form-check form-switch">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              name="QBMode"
-                              checked={parseInt(formData.QBMode) === 0}
-                              onChange={(e) => {
-                                handleInputChange({
-                                  target: {
-                                    name: "QBMode",
-                                    value: e.target.checked ? 0 : 1
-                                  }
-                                });
-                              }}
-                            />
-                            <label className="form-check-label">
-                              {parseInt(formData.QBMode) === 0 ? "Sandbox" : "Production"}
-                            </label>
-                          </div>
-                        </div>
+                            <div className="col-xl-12 mb-3">
+                              <label className="form-label">
+                                Sandbox Client Secret
+                                <span className="text-danger">*</span>
+                              </label>
+                              <TextField
+                                type="password"
+                                name="QBSandBoxClientSecret"
+                                value={formData.QBSandBoxClientSecret}
+                                onChange={handleInputChange}
+                                size="small"
+                                fullWidth
+                                error={!!errors.QBSandBoxClientSecret}
+                                helperText={errors.QBSandBoxClientSecret}
+                              />
+                            </div>
+                          </>
+                        )}
                       </div>
 
                       <div className="mt-3 d-flex justify-content-end">

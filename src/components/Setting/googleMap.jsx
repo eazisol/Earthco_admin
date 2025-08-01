@@ -1,5 +1,5 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
-  import { CircularProgress, TextField, FormControl, MenuItem, Select } from "@mui/material";
+  import { CircularProgress, TextField, FormControl, MenuItem, Select, Alert, AlertTitle } from "@mui/material";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { addEmailSetting, getEmailSetting } from "../../APIS/settings";
@@ -127,8 +127,32 @@ export const GoogleSetting = () => {
                   ) : (
                     <>
                       <div className="row">
-                        <div className="col-xl-6 mb-3">
-                          <label className="form-label">Google Client ID<span className="text-danger">*</span></label>
+                        <Alert severity="info" className="mb-4">
+                          <AlertTitle>Info</AlertTitle>
+                          <strong>How to set up your Google settings:</strong>
+                          <ol style={{ marginLeft: 16 }}>
+                            <li>
+                              You need to provide your <b>Google Client ID</b> and <b>Google Client Secret</b>.<br />
+                              <span style={{ fontSize: "0.95em" }}>
+                                To get your credentials:
+                                <ol style={{ marginLeft: 16 }}>
+                                  <li>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
+                                  <li>Create a new project or select an existing one.</li>
+                                  <li>Enable the relevant Google API (e.g., Maps, Places, etc.) for your project.</li>
+                                  <li>Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
+                                  <li>Configure the consent screen if prompted.</li>
+                                  <li>Select "Web application" and set the authorized redirect URIs as needed.</li>
+                                  <li>After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
+                                </ol>
+                              </span>
+                            </li>
+                            <li>
+                              Click <b>Update Settings</b> to apply your changes.
+                            </li>
+                          </ol>
+                        </Alert>
+                        <div className="col-xl-12 mb-3">
+                          <label className="form-label">Client ID<span className="text-danger">*</span></label>
                           <TextField
                             name="GoogelClientId"
                             value={formData.GoogelClientId}
@@ -139,8 +163,8 @@ export const GoogleSetting = () => {
                             helperText={errors.GoogelClientId}
                           />
                         </div>
-                        <div className="col-xl-6 mb-3">
-                          <label className="form-label">Google Client Secret<span className="text-danger">*</span></label>
+                        <div className="col-xl-12 mb-3">
+                          <label className="form-label">Client Secret<span className="text-danger">*</span></label>
                           <TextField
                             name="GoogleClientSecret"
                             value={formData.GoogleClientSecret}
