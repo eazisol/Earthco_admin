@@ -22,14 +22,12 @@ export const LoginForm = () => {
     Password: "",
     confirmPassword: "",
   });
-  console.log("🚀 ~ LoginForm ~ formData:", formData)
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedPackageDetails, setSelectedPackageDetails] = useState(null);
-  console.log("🚀 ~ LoginForm ~ selectedPackageDetails:", selectedPackageDetails)
   const navigate = useNavigate();
 
   // Fetch package details by ID when component mounts
@@ -361,7 +359,7 @@ export const LoginForm = () => {
             className="php-email-form"
             style={{
               width: "50%",
-              padding: "20px", // Add some space if needed
+              padding: "40px", // Add some space if needed
             }}
           >
             <h4 style={{ color: '#6DA34D', marginBottom: '24px', textAlign: 'center', fontWeight:"bold",fontSize:"24px"}}>

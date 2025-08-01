@@ -1,8 +1,17 @@
 import React from 'react';
 import { CustomButton } from './CustomButton';
-import { useNavigate } from "react-router";
+
 const HeroSection = () => {
-   let navigate = useNavigate();
+  const scrollToPricing = () => {
+    const pricingSection = document.getElementById('pricing');
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return(
   
   <section id="hero" className="d-flex align-items-center">
@@ -19,7 +28,7 @@ const HeroSection = () => {
             beautification for commercial and residential properties.
           </h2>
           <div className="d-flex justify-content-center justify-content-lg-start">
-            <CustomButton  onClick={()=> navigate("/#pricing")}/>
+            <CustomButton onClick={scrollToPricing}/>
           </div>
         </div>
         {/* No right column image, background is set via CSS */}
