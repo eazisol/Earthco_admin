@@ -81,7 +81,7 @@ export const CompaniesScreen = () => {
     }
 
     // Check if email already exists
-    const emailExists = employeesData.some(company =>
+    const emailExists = employeesData?.some(company =>
       company.Email?.toLowerCase() === formData.Email.toLowerCase() &&
       company.CompanyId !== selectedId
     );

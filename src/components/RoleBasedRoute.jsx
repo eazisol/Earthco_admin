@@ -14,11 +14,11 @@ const RoleBasedRoute = ({ children }) => {
   // Check if user has admin role (RoleId !== 2)
   if (loginUser?.Data?.RoleId === 2) {
     // Show toast notification and redirect to dashboard
-    useEffect(() => {
-      toast.error("Access denied. You don't have permission to view this page.");
-    }, []);
+    // useEffect(() => {
+    //   toast.error("Access denied. You don't have permission to view this page.");
+    // }, []);
     
-    return <Navigate to="/dashboard" replace />;
+    return;
   }
 
   // User has admin access, render the component
