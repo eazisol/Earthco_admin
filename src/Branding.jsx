@@ -342,7 +342,7 @@ const handleSubscription=async(packageId)=>{
 
         {/* ======= Pricing Section ======= */}
      
-<section id="pricing" className="pricing" style={{ padding: '60px 0'}}>
+<section id="pricing" className="pricing" >
   <div className="container" data-aos="fade-up">
     <div className="section-title">
       <h2>Pricing</h2>

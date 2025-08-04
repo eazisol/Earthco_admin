@@ -112,7 +112,10 @@
 .upperBox h6 {
     margin-left: 5px;
   }
-  
+  .linkSide{
+    max-height: 40px;
+    min-height: 40px;
+  }
 
 .addborder {
     border: 1px solid #7b9b43;
@@ -2048,8 +2051,7 @@ textarea.form-control-lg {
     cursor: default;
     opacity: 0.5; }
 
-.form-switch {
-  padding-left: 2.5em; }
+
   .form-switch .form-check-input {
     width: 2em;
     margin-left: -2.5em;
@@ -9623,7 +9625,7 @@ label {
   font-size: 1.4rem;
   padding: 0.125rem 0.5rem 0;
   border-radius: 0.125rem;
-  background-color: var(--primary);
+  /* background-color: var(--primary); */
   width: 3.063rem;
   height: 3.063rem; }
   @media only screen and (max-width: 47.9375rem) {
@@ -9728,9 +9730,10 @@ label {
   width: 220px;
   transition: width 0.3s ease;
   overflow: hidden;
+  background-color: #181818 !important;
 }
 .menu-toggle .deznav .menu-title {
-  display: none;
+  display: none;;
 }
 
 /* Collapsed state (only icons visible) */
@@ -12594,9 +12597,17 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   margin-left: 15px;
 }
 
+
 .submenu-link:hover .subMenu,
 .submenu-link.active .subMenu {
   width: 10%;
+  
+}
+.layoutColor{
+   background: "#181818" !important;
+}
+.subMenu-text:hover{
+  color: var(--primary) !important;
 }
 
 .bell img {
@@ -12916,9 +12927,12 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     .deznav .metismenu li {
       position: relative; }
     .deznav .metismenu .menu-title {
-      font-size: 0.75rem;
+      font-size: 13px;
       font-weight: 400;
-      
+background-color: transparent !important;
+     }
+    .deznav .metismenu .menu-title:hover {
+     color: var(--primary) !important;
      }
       .deznav .metismenu .menu-title:not(:first-child) {
         margin-top: 10px; }
@@ -23579,7 +23593,7 @@ input#checkAll.form-check-input:checked {
 .c3 .c3-axis-y line,
 .tick text {
   stroke: #fff; }
-
+ 
 .flot-chart {
   height: 15.7rem; }
 
@@ -25689,9 +25703,9 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 .deznav .metismenu ul a.active {
   color: #fff !important;
 }
-.deznav .metismenu > li.mm-active > a {
+/* .deznav .metismenu > li.mm-active > a {
   background-color: #242424 !important;
-}
+} */
 /* Submenu inactive text */
 .deznav .metismenu ul a,
 .deznav .metismenu ul a .menu-title {
@@ -25702,7 +25716,8 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 .deznav .metismenu ul a.active,
 .deznav .metismenu ul a.active .menu-title {
   color: #77993d !important;
-  font-weight: bold;
+  font-weight: 400 !important;
+  background-color: rgba(13, 153, 255, 0.05) !important;
 }
 
 /* Sidebar inactive text */
@@ -25715,7 +25730,8 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 .deznav .metismenu > li > a.active,
 .deznav .metismenu > li > a.active .menu-title {
   color: #77993d !important;
-  font-weight: bold;
+  font-weight: 400 !important;
+  background-color: rgba(13, 153, 255, 0.05);
 }
 
 .cancel-btn{

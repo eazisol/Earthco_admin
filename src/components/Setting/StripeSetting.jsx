@@ -201,9 +201,11 @@ export const StripeSetting = () => {
                 <div className="card-body">
                   <div className="row">
                     <h4 className="card-title mb-4 col-xl-9">Stripe Settings</h4>
-                    <div className="col-xl-3 mb-3 ">
-                    <label className="form-label">Mode</label>
-                          <div className="form-check form-switch">
+                    <div className="col-xl-3 mb-3 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
+                      <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
+                        <label className="form-check-label mb-0 me-2" style={{ whiteSpace: "nowrap" }}>
+                              {isProduction ? "Production" : "Sandbox"}
+                            </label>
                             <input
                               className="form-check-input"
                               type="checkbox"
@@ -220,10 +222,9 @@ export const StripeSetting = () => {
                                 // Clear errors when mode changes
                                 setErrors({});
                               }}
+                              style={{ marginLeft: "12px" }}
                             />
-                            <label className="form-check-label">
-                              {isProduction ? "Production" : "Sandbox"}
-                            </label>
+                        
                           </div>
                     </div>
                   </div>
@@ -238,7 +239,10 @@ export const StripeSetting = () => {
                   ) : (
                     <>
                       <div className="row">
-                        <Alert severity="info" className="mb-4">
+                        <div style={{ width: "100%" }}>
+                        <Alert   severity="info"
+                        className="mb-4"
+                        style={{ width: "100%" }}>
                           <AlertTitle>Info</AlertTitle>
                           <strong>How to set up your Stripe settings:</strong>
                           <ol style={{ marginLeft: 16 }}>
@@ -269,7 +273,7 @@ export const StripeSetting = () => {
                             </li>
                           </ol>
                         </Alert>
-
+                        </div>
                         {/* Mode Switch */}
                       
 

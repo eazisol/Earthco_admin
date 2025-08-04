@@ -1,13 +1,14 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import Box from "@mui/material/Box";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import logo from "../../assets/img/favicon.svg";
+import logo from "../../assets/img/dashbaordLogo.png";
 import "./dashboard.css";
 
 import Sidebar from "../Sidebar";
 import Topbar from "../Topbar";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { NavLink } from "react-router-dom";
 
 // Snackbar context for children
 const SnackbarContext = createContext();
@@ -66,14 +67,16 @@ export default function DashboardLayout({ children, onLogout }) {
           className={`show w-100 ${menuOpen ? "menu-toggle" : ""}`}
         >
           <div className="nav-header position-fixed">
-            <img
+            {/* <img
               src={logo}
               alt="logo"
               width={70}
               className="sidebar-logo"
               style={{ marginLeft: "22%", marginTop: "4px" }}
-            />
-
+            /> */}
+   <NavLink className="brand-logo " >
+          <img style={{ width: "70%", marginLeft: "20%" }} src={logo} alt="" />
+        </NavLink>
         {!isMobile&&  <div className="nav-control">
             <div
               className={`hamburger ${menuOpen ? "is-active" : ""}`}

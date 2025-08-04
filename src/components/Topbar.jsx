@@ -8,6 +8,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { Tooltip } from "@mui/material";
 const Topbar = () => {
   const { loginUser, setLoginUser } = useAppContext();
+  console.log("🚀 ~ Topbar ~ loginUser:", loginUser)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -60,15 +61,13 @@ const Topbar = () => {
   }, [isDropdownOpen]);
 
     return (  
-  <div className="header ">
+  <div className="header " >
     <div className="header-content">
       <nav className="navbar navbar-expand">
-        <div className="collapse navbar-collapse justify-content-between">
-          <div className="header-left">
-           
-          </div>
+        <div className="collapse navbar-collapse justify-content-end">
+        
           <ul className="navbar-nav header-right">
-          <li className="nav-item" style={{marginRight:"20px"}}>
+          <li className="nav-item" >
             <Tooltip title="Open Website" placement="bottom">
               <button 
                 className="btn btn-link p-0 border-0"
@@ -92,18 +91,18 @@ const Topbar = () => {
                   >
                     <div className="header-info2 d-flex align-items-center z-3">
                       <div className="header-media">
-                        <img 
-                          src={avatar4} 
-                          alt={`${loginUser?.Data?.FirstName || 'User'} avatar`}
-                          className="rounded-circle"
-                          style={{ width: '30px', height: '30px', objectFit: 'cover' }}
-                        />
+                        <div 
+                          className="rounded-circle d-flex align-items-center justify-content-center bg-primary text-white"
+                          style={{ width: '30px', height: '30px',  }}
+                        >
+                          {loginUser?.Data?.CompanyName?.charAt(0) }
+                        </div>
                       </div>
-                      <div className="header-info">
-                        <h6 className="text-white mb-0">
-                          {loginUser?.Data?.FirstName} {loginUser?.Data?.LastName}
+                      <div className="header-info text-left">
+                        <h6 className="text-white mb-0" style={{textAlign:"left"}}>
+                          {loginUser?.Data?.CompanyName}
                         </h6>
-                        <p className="text-white mb-0 small">
+                        <p className="text-white mb-0 small ">
                           {loginUser?.Data?.Email}
                         </p>
                       </div>
@@ -113,7 +112,7 @@ const Topbar = () => {
                     className={`dropdown-menu dropdown-menu-end ${isDropdownOpen ? 'show' : ''}`}
                     style={{
                       position: "absolute",
-                      top: "100%",
+                      top: "133%",
                       right: 0,
                       zIndex: 1000,
                       minWidth: "200px"

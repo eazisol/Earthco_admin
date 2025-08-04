@@ -94,20 +94,12 @@ const Sidebar = () => {
         label: "Companies",
         href: "/companies",
         icon: (color) => (
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <path
-              d="M10.99 14.07C7.44 14.07 4.41 14.6 4.41 16.75C4.41 18.9 7.42 19.45 10.99 19.45C14.53 19.45 17.56 18.91 17.56 16.77C17.56 14.62 14.55 14.07 10.99 14.07Z"
-              stroke={color}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M10.99 11C13.31 11 15.2 9.12 15.2 6.79C15.2 4.47 13.31 2.58 10.99 2.58C8.66 2.58 6.77 4.47 6.77 6.79C6.76 9.11 8.64 11 10.96 11H10.99Z"
-              stroke={color}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M6.46932 12.2102H0.693665" stroke={color} stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M9.04547 3.32535H14.8211" stroke={color} stroke-linecap="round" stroke-linejoin="round"/>
+							<path fill-rule="evenodd" clip-rule="evenodd" d="M4.99912 3.27573C4.99912 2.08805 4.02914 1.125 2.8329 1.125C1.63667 1.125 0.666687 2.08805 0.666687 3.27573C0.666687 4.46342 1.63667 5.42647 2.8329 5.42647C4.02914 5.42647 4.99912 4.46342 4.99912 3.27573Z" stroke={color} stroke-linecap="round" stroke-linejoin="round"/>
+							<path fill-rule="evenodd" clip-rule="evenodd" d="M15.3333 12.1743C15.3333 10.9866 14.3641 10.0235 13.1679 10.0235C11.9709 10.0235 11.0009 10.9866 11.0009 12.1743C11.0009 13.3619 11.9709 14.325 13.1679 14.325C14.3641 14.325 15.3333 13.3619 15.3333 12.1743Z" stroke={color} stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
         ),
       },
   
@@ -190,7 +182,7 @@ const Sidebar = () => {
   }, [location.pathname]);
 
   return (
-    <div className="deznav position-fixed">
+    <div className="deznav position-fixed" >
       <div className="deznav-scroll">
         <ul className="metismenu" id="menu">
           {/* <li className="menu-title" style={{marginLeft:"30px",fontSize:"15px"}}>Earthco</li> */}
@@ -203,7 +195,7 @@ const Sidebar = () => {
 
             if (!item.submenu) {
               return (
-                <li key={item.key} >
+                <li key={item.key} className="linkSide">
                   <Link
                     to={item.href}
                     onClick={() => setOpenSubmenu(null)}
@@ -215,7 +207,7 @@ const Sidebar = () => {
                       gap: "5px",
                     }}
                   >
-                  <span style={{marginLeft:"8px"}}>  {item.icon(isActive ? activeColor : inactiveColor)}
+                  <span style={{marginLeft:"8px",marginRight:"8px"}}>  {item.icon(isActive ? activeColor : inactiveColor)}
                     <span className="menu-title">{item.label}</span></span>
                   </Link>
                 </li>
@@ -238,12 +230,12 @@ const Sidebar = () => {
                  <span style={{marginLeft:"8px"}}> {item.icon(inactiveColor)}
                   <span style={{marginLeft:"7px"}} className="menu-title text-white" >{item.label}</span></span>
                 </div>
-                {isOpen && (
+                {/* {isOpen && ( */}
                   <ul>
                     {item.submenu.map((sub) => {
                       const subActive = location.pathname === sub.href;
                       return (
-                        <li key={sub.href}>
+                        <li key={sub.href} className="linkSide">
                           <Link
                             to={sub.href}
                             className={`submenu-link ${subActive ? "active" : ""}`}
@@ -257,13 +249,13 @@ const Sidebar = () => {
                             }}
                           >
                             <div className="subMenu" />
-                            {sub.label}
+                        <span className="subMenu-text">    {sub.label}</span>
                           </Link>
                         </li>
                       );
                     })}
                   </ul>
-                )}
+                {/* )} */}
               </li>
             );
           })}

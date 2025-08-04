@@ -232,15 +232,16 @@ export const EmailScreen = () => {
               <div className="card">
                 <div className="card-body">
                   <div className="row">
-                    <h4 className="card-title mb-4 col-xl-9">Email Settings</h4>
-                    <div className="col-xl-3 mb-3 ">
-                   
-                      <label className="form-label">Mode</label>
-                      <div className="form-check form-switch">
+                    <h4 className="card-title mb-4 col-xl-8">Email Settings</h4>
+                    <div className="col-xl-4 mb-3 ml-2 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
+                      <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
+                        <label className="form-check-label mb-0 me-2" style={{ whiteSpace: "nowrap" }}>
+                          {formData.EmailMode == 2 ? "Production" : "Sandbox"}
+                        </label>
                         <input
                           className="form-check-input"
                           type="checkbox"
-                          name="EmailMode" 
+                          name="EmailMode"
                           checked={formData.EmailMode == 2}
                           onChange={(e) => {
                             setFormData((prev) => ({
@@ -248,10 +249,8 @@ export const EmailScreen = () => {
                               EmailMode: e.target.checked ? 2 : 1
                             }))
                           }}
+                          style={{ marginLeft: "12px" }}
                         />
-                        <label className="form-check-label">
-                          {formData.EmailMode == 2 ? "Production" : "Sandbox"}
-                        </label>
                       </div>
                     </div>
                 
@@ -355,36 +354,39 @@ export const EmailScreen = () => {
                         placeholder="e.g., smtp.gmail.com"
                       />
                     </div>
-                    <Alert severity="info" className="mb-4">
-                    <AlertTitle>Info</AlertTitle>
-                    <strong>How to set up your email settings:</strong>
-                    <ol style={{ marginLeft: 16 }}>
-                   
-                      <li>
-                        If you are using OAuth (advanced), you need to provide <b>Client ID</b> and <b>Client Secret</b>.<br />
-                        <span style={{ fontSize: "0.95em" }}>
-                          To get your Client ID and Client Secret for Gmail:
-                          <ol style={{ marginLeft: 16 }}>
-                            <li>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
-                            <li>Create a new project or select an existing one.</li>
-                            <li>Enable the Gmail API for your project.</li>
-                            <li>Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
-                            <li>Configure the consent screen if prompted.</li>
-                            <li>Select "Web application" and set the authorized redirect URIs as needed.</li>
-                            <li>After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
-                          </ol>
-                        </span>
-                      </li>
-                      {/* <li>
-                        Choose the <b>Email Mode</b> (1 for SMTP, 2 for OAuth).
-                      </li> */}
-                      <li>
-                        Click <b>Save</b> to apply your settings.
-                      </li>
-                    </ol>
-                  
-                  
-                  </Alert>
+                    <div style={{ width: "100%" }}>
+                      <Alert
+                        severity="info"
+                        className="mb-4"
+                        style={{ width: "100%" }}
+                      >
+                        <AlertTitle>Info</AlertTitle>
+                        <strong>How to set up your email settings:</strong>
+                        <ol style={{ marginLeft: 16 }}>
+                          <li>
+                            If you are using OAuth (advanced), you need to provide <b>Client ID</b> and <b>Client Secret</b>.<br />
+                            <span style={{ fontSize: "0.95em" }}>
+                              To get your Client ID and Client Secret for Gmail:
+                              <ol style={{ marginLeft: 16 }}>
+                                <li>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
+                                <li>Create a new project or select an existing one.</li>
+                                <li>Enable the Gmail API for your project.</li>
+                                <li>Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
+                                <li>Configure the consent screen if prompted.</li>
+                                <li>Select "Web application" and set the authorized redirect URIs as needed.</li>
+                                <li>After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
+                              </ol>
+                            </span>
+                          </li>
+                          {/* <li>
+                            Choose the <b>Email Mode</b> (1 for SMTP, 2 for OAuth).
+                          </li> */}
+                          <li>
+                            Click <b>Save</b> to apply your settings.
+                          </li>
+                        </ol>
+                      </Alert>
+                    </div>
                     <div className="col-xl-12 mb-3">
                       <label className="form-label">Client ID</label>
                       <TextField

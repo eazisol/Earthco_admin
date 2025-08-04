@@ -203,32 +203,25 @@ export const QBookScreen = () => {
                     <h4 className="card-title mb-4 col-xl-9">
                       QuickBooks Settings
                     </h4>
-                    <div className="col-xl-3 mb-3 " >
-                     
-                      <label className="form-label">Mode</label>
-                      <div className="form-check form-switch">
+                    <div className="col-xl-3 mb-3 ml-2 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
+                      <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
+                        <label className="form-check-label mb-0 me-2" style={{ whiteSpace: "nowrap" }}>
+                          {formData.QBMode == 2 ? "Production" : "Sandbox"}
+                        </label>
+                       
                         <input
                           className="form-check-input"
                           type="checkbox"
                           name="QBMode"
-                          checked={parseInt(formData.QBMode) === 0}
+                          checked={formData.QBMode == 2}
                           onChange={(e) => {
-                            // 0 = Sandbox, 1 = Production
-                            handleInputChange({
-                              target: {
-                                name: "QBMode",
-                                value: e.target.checked ? 0 : 1,
-                              },
-                            });
-                            // Clear errors when mode changes
-                            setErrors({});
+                            setFormData((prev) => ({
+                              ...prev,
+                              QBMode: e.target.checked ? 2 : 1
+                            }))
                           }}
+                          style={{ marginLeft: "12px" }}
                         />
-                        <label className="form-check-label">
-                          {parseInt(formData.QBMode) === 0
-                            ? "Sandbox"
-                            : "Production"}
-                        </label>
                       </div>
                     </div>
                   </div>
@@ -244,7 +237,12 @@ export const QBookScreen = () => {
                   ) : (
                     <>
                       <div className="row">
-                        <Alert severity="info" className="mb-4">
+                        <div style={{ width: "100%" }}>
+                          
+                      
+                        <Alert   severity="info"
+                        className="mb-4"
+                        style={{ width: "100%" }}>
                           <AlertTitle>Info</AlertTitle>
                           <strong>How to set up your QuickBooks settings:</strong>
                           <ol style={{ marginLeft: 16 }}>
@@ -277,6 +275,7 @@ export const QBookScreen = () => {
                             </li>
                           </ol>
                         </Alert>
+                        </div>
                         {isProduction && (
                           <>
                             <div className="col-xl-12 mb-3">

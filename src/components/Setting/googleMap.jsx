@@ -127,7 +127,10 @@ export const GoogleSetting = () => {
                   ) : (
                     <>
                       <div className="row">
-                        <Alert severity="info" className="mb-4">
+                        <div style={{ width: "100%" }}>
+                        <Alert   severity="info"
+                        className="mb-4"
+                        style={{ width: "100%" }}>
                           <AlertTitle>Info</AlertTitle>
                           <strong>How to set up your Google settings:</strong>
                           <ol style={{ marginLeft: 16 }}>
@@ -151,6 +154,8 @@ export const GoogleSetting = () => {
                             </li>
                           </ol>
                         </Alert>
+                        </div>
+                      
                         <div className="col-xl-12 mb-3">
                           <label className="form-label">Client ID<span className="text-danger">*</span></label>
                           <TextField
