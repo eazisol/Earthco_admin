@@ -50,13 +50,14 @@ export const AddTenant = async (obj) => {
     return error;
   }
 };
-export const getTenantById = async (id,token) => {
+export const getTenantById = async (id) => {
+  const token = JSON.parse(localStorage.getItem("user"));
   try {
     const  data  = await axios.get(
       `${apiUrl}Tenant/GetTenant?id=${id}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token.token.data}`, 
           "Content-Type": "application/json", 
         },
       }

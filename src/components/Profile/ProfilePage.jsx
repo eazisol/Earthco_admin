@@ -26,6 +26,7 @@ const ProfilePage = () => {
     confirmPassword: "",
     tblUserPackages: []
   });
+  console.log("🚀 ~ ProfilePage ~ formData:", formData)
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "",
@@ -58,12 +59,24 @@ const ProfilePage = () => {
           toast.error("Passwords do not match");
           return;
         }
-        if (formData.Password.length < 6) {
-          toast.error("Password must be at least 6 characters");
+        if (formData.Password.length < 8) {
+          toast.error("Password must be at least 8 characters");
           return;
         }
+        if (!/[A-Z]/.test(formData.Password)) {
+          toast.error("Password must contain at least one uppercase letter");
+          return;
+        }
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.Password)) {
+          toast.error("Password must contain at least one special character");
+          return;
+        }
+      
       }
-
+if (!formData.PhoneNo || formData.PhoneNo.length < 10 || formData.PhoneNo.length > 15) {
+  toast.error("Phone number is required and must be between 10 to 15 digits");
+  return;
+}
       // Keep existing data and only update first name, last name and password
       const updatedData = {
         ...formData,
@@ -117,7 +130,7 @@ const ProfilePage = () => {
           return;
         }
 
-        const response = await getTenantById(tenantId, user?.token?.data);
+        const response = await getTenantById(tenantId);
 
 
         if (response?.data && !response.error) {
@@ -311,7 +324,7 @@ useEffect(() => {
                   {/* )} */}
                 </div>
               </div>
-       {loginUser?.Data?.RoleId==2&&<div className="card table-space">
+       {formData?.RoleId==2&&<div className="card table-space">
                 <div className="card-body">
                   <h4 className="card-title mb-4 "  style={{marginLeft: "8px"}}>Active Package</h4>
                   <div className="table-responsive">
@@ -329,12 +342,12 @@ useEffect(() => {
                       </thead>
                       <tbody>
                         <tr>
-                          <td >{formData?.tblUserPackages[0]?.Name}</td>
-                          <td style={{textAlign: "center"}}>${formData?.tblUserPackages[0]?.Price}</td>
-                          <td style={{textAlign: "center"}}>{formData?.tblUserPackages[0]?.MaxCompanies}</td>
-                          <td style={{textAlign: "center"}}>{formData?.tblUserPackages[0]?.MaxUsers}</td>
-                          <td style={{textAlign: "center"}}>{formData?.tblUserPackages[0]?.MaxStorageMB}</td>
-                          <td style={{textAlign: "center"}}>{new Date(formData?.tblUserPackages[0]?.ExpiryDate).toLocaleDateString()}</td>
+                          <td >{formData?.tblUserPackages[0]?.Name??'No Package'}</td>
+                          <td style={{textAlign: "center"}}>${formData?.tblUserPackages[0]?.Price??0}</td>
+                          <td style={{textAlign: "center"}}>{formData?.tblUserPackages[0]?.MaxCompanies??0 }</td>
+                          <td style={{textAlign: "center"}}>{formData?.tblUserPackages[0]?.MaxUsers??0}</td>
+                          <td style={{textAlign: "center"}}>{formData?.tblUserPackages[0]?.MaxStorageMB??0}</td>
+                          <td style={{textAlign: "center"}}>{new Date(formData?.tblUserPackages[0]?.ExpiryDate).toLocaleDateString()??0}</td>
                           <td style={{textAlign: "center"}}>
                             <button 
                               className={`btn ${transactionId?.Status=='incomplete_expired' ? "btn-primary" : "btn-danger"} btn-sm`}

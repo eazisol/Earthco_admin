@@ -10,9 +10,10 @@ import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import Pagination from '@mui/material/Pagination';
 import { useAppContext } from "../../context/AppContext";
 import TitleBar from "../TitleBar";
+import { useNavigate } from "react-router-dom";
 
 export const TenantScreen = () => {
-  
+  const navigate = useNavigate();
   const [tenantData, setTenantData] = useState([]);
   // Pagination and search state
   const [search, setSearch] = useState("");
@@ -208,7 +209,8 @@ export const TenantScreen = () => {
                           <tr>
                             <td colSpan={6} className="text-center">No data found</td>
                           </tr>
-                        ) : tenantData?.map((emp, index) =>{
+                        ) : tenantData?.filter(emp=>emp.RoleId==2)?.map((emp, index) =>{
+                          
                           return (
                           <tr key={index}>
                             <td>
@@ -218,7 +220,12 @@ export const TenantScreen = () => {
                               <span>{emp.SubDomain}</span>
                             </td>
                             <td className="text-center">
-                              <span className="text-primary">{emp.Email}</span>
+                              <span 
+                                className="text-primary "  style={{cursor:"pointer"}}
+                                onClick={() => navigate(`/profile?id=${emp.TenantId}`)}
+                              >
+                                {emp.Email}
+                              </span>
                             </td>
                             <td className="text-center">
                               <span>{emp.PhoneNo}</span>

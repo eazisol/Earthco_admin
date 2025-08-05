@@ -187,9 +187,9 @@ export const TransactionsScreen = () => {
                              
                               <td>
                                 <span style={{padding:"0px 5px"}} className={`badge ${transaction.Status === 'paid' ? 'badge-success' :
-            transaction.Status === 'Pending' ? 'badge-warning' :
-                transaction.Status === 'Failed' ? 'badge-danger' :
-                    'badge-secondary'}`}>
+                                transaction.Status === 'Pending' ? 'badge-warning' :
+                                transaction.Status === 'Failed' ? 'badge-danger' :
+                                'badge-secondary'}`}>
                                   {transaction.Status}
                                 </span>
                               </td>

@@ -19,7 +19,7 @@ useEffect(() => {
     setError(null);
 
     try {
-      const data = await getTenantById(user?.Data?.TenantId, user.token.data);
+      const data = await getTenantById(user?.Data?.TenantId);
 
       if (!data.error) {
         setTenant(data);

@@ -18,6 +18,7 @@ import { CompaniesScreen } from './components/Comanies';
 import ForgotPassword from './components/ForgotPassword'
 import { TermAndPrivacy } from './components/Setting/termAndPrivacy'
 import ProfilePage from './components/Profile/ProfilePage'
+import ChangePassword from './components/ChangePassword'
 import { AppProvider } from './context/AppContext'
 import { Button } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';  
@@ -295,6 +296,11 @@ function App() {
           <Route path="/profile" element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/change-password" element={
+            <ProtectedRoute>
+              <ChangePassword />
             </ProtectedRoute>
           } />
           <Route path="/transaction" element={
