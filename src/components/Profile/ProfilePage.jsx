@@ -10,7 +10,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { cancelSubscription, getTransactionById, resumeSubscription  } from "../../APIS/transactions";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import TitleBar from "../TitleBar";
-
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 const ProfilePage = () => {
   const { loginUser } = useAppContext();
   const [searchParams] = useSearchParams();
@@ -26,7 +26,6 @@ const ProfilePage = () => {
     confirmPassword: "",
     tblUserPackages: []
   });
-  console.log("🚀 ~ ProfilePage ~ formData:", formData)
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "",
@@ -315,11 +314,29 @@ useEffect(() => {
                           }}
                         />
                       </div>
-                      <div style={{ textAlign: "end" }}>
-                        <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loading}>
-                          {loading?"Updating...":"Update"}
-                        </button>
-                      </div>
+                      
+                    
+                    </div>
+                    <div className="row align-items-center">
+                        <div className="col-xl-6 d-flex align-items-center " style={{textAlign: "start",paddingLeft: "25px"}}>
+                          <IconButton 
+                            onClick={() => window.history.back()} 
+                            edge="start" 
+                            style={{
+                              marginRight: "10px",
+                              border: "1px solid rgb(182, 180, 180)",
+                              borderRadius: "10%",
+                              padding: "5px 15px"
+                            }}
+                          >
+                            <KeyboardBackspaceIcon />
+                          </IconButton>
+                        </div>
+                        <div className="col-xl-6 " style={{ textAlign: "end",paddingRight: "10px" }}>
+                          <button className="btn btn-primary" onClick={handleSubmit} disabled={loading}>
+                            {loading ? "Updating..." : "Update"}
+                          </button>
+                        </div>
                     </div>
                   {/* )} */}
                 </div>

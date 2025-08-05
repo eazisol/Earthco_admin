@@ -41,9 +41,35 @@ export const SettingPrivacyAndTerms = async (data) => {
       });
       return response;
   } catch (error) {
-      return {
-          error: true,
-          message: error.response?.data?.message || "Failed to get company setting",
-      };
+    throw error;
   }
 };
+//Contact us
+export const contactUs=async(data)=>{
+  const token = JSON.parse(localStorage.getItem("user"));
+  try {
+    const response = await axios.get(`${apiUrl}Settings/GetContactMessagesServerSideList?Search=""&DisplayStart=${data?.DisplayStart}&DisplayLength=${data?.DisplayLength}`, {
+      headers: {
+        Authorization: `Bearer ${token.token.data}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+//Delete contact us
+export const deleteContactUs=async(id)=>{
+  const token = JSON.parse(localStorage.getItem("user"));
+  try {
+    const response = await axios.get(`${apiUrl}Settings/DeleteContactMessage?id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${token.token.data}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }}

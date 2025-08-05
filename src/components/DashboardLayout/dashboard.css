@@ -12611,6 +12611,15 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   color: var(--primary) !important;
 }
 
+.submenu-line {
+  height: 2px;
+  width: 24px;
+  background: var(--primary)  ;
+  margin: 8px 0;
+  border-radius: 1px;
+  /* margin-left: 8px; */
+}
+
 .bell img {
   -webkit-animation: ring 8s .7s ease-in-out infinite;
   -webkit-transform-origin: 50% 0.25rem;

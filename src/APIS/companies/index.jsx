@@ -11,10 +11,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
     });
     return data;
   } catch (error) {
-    return {
-      error: true,
-      message: error.response?.data?.message || "Failed to fetch tenant",
-    };
+    throw error;
   }
 };
 export const addCompany = async (body) => {
@@ -28,10 +25,7 @@ export const addCompany = async (body) => {
         });
         return data;
     } catch (error) {
-        return {
-            error: true,
-            message: error.response?.data?.message || "Failed to add company",
-        };
+        throw error;
     }
 };
 export const deleteCompany = async (id) => {
@@ -46,9 +40,6 @@ export const deleteCompany = async (id) => {
         });
         return data;
     } catch (error) {
-        return {
-            error: true,
-            message: error.response?.data?.message || "Failed to delete company",
-        };
+        throw error;
     }
 };

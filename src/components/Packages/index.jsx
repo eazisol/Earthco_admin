@@ -139,7 +139,6 @@ export const PackagesScreen = () => {
         ...formData,
         PackageId: selectedId,
       });
-console.log('response',response)
       if (response?.status === 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
         const bsOffcanvas = Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
@@ -393,16 +392,20 @@ console.log('response',response)
                   <div className="text-danger small">{errors.Description}</div>
                 )}
               </div>
-              <div className="mb-3 " >
+            
+            </div>
+           <div className="row align-items-center">
+            <div className="col-xl-6">
+            <div className="mt-5 " >
                       <div className="form-check form-switch" >
                         <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
-                          {formData.isActive ? "Active" : "Inactive"}
+                          {formData.isActive==null ?"Inactive" : formData.isActive ? "Active" : "Inactive"}
                         </label>
                         <input
                           className="form-check-input"
                           type="checkbox"
-                          name="Active"
-                          checked={formData.isActive}
+                          name="isActive"
+                          checked={formData.isActive==null ? false : formData.isActive}
                           onChange={(e) => {
                             setFormData((prev) => ({
                               ...prev,
@@ -414,6 +417,7 @@ console.log('response',response)
                       </div>
                     </div>
             </div>
+            <div className="col-xl-6">
             <div style={{ textAlign: "end" }} className="mt-5"> 
               <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loader}>
                 {selectedId === 0 ? "Add" : "Update"}
@@ -447,6 +451,10 @@ console.log('response',response)
                 Cancel
               </button>
             </div>
+            </div>
+                   
+           </div>
+         
           </div>
         </div>
       </div>

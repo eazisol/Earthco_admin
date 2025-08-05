@@ -8,7 +8,6 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { Tooltip } from "@mui/material";
 const Topbar = () => {
   const { loginUser, setLoginUser } = useAppContext();
-  console.log("🚀 ~ Topbar ~ loginUser:", loginUser)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 

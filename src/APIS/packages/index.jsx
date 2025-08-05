@@ -13,10 +13,7 @@ export const getPackagesType = async (token) => {
     );
     return data;
   } catch (error) {
-    return {
-      error: true,
-      message: error.response?.data?.message || "Failed to fetch tenant",
-    };
+    throw error;
   }
 };
 export const deletePackage = async (id) => {
@@ -33,10 +30,7 @@ export const deletePackage = async (id) => {
     );
     return data;
   } catch (error) {
-    return {
-      error: true,
-      message: error.response?.data?.message || "Failed to fetch tenant",
-    };
+    throw error;
   }
 };
 export const addPackage = async (body) => {
@@ -51,7 +45,7 @@ export const addPackage = async (body) => {
       
     return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 export const getPackages = async ({ Search = "", DisplayStart = 0, DisplayLength = 10 } = {}) => {
@@ -70,10 +64,7 @@ export const getPackages = async ({ Search = "", DisplayStart = 0, DisplayLength
     );
     return data;
   } catch (error) {
-    return {
-      error: true,
-      message: error?.response ,
-    };
+    throw error;
   }
 };
   export const getPackageById = async (PackageId) => {
@@ -87,9 +78,6 @@ export const getPackages = async ({ Search = "", DisplayStart = 0, DisplayLength
     });
     return data;
   } catch (error) {
-    return {
-      error: true,
-      message: error?.response ,
-    };
+    throw error;
   }
 };

@@ -1,6 +1,6 @@
-import { Box, Button, Fade, Modal, Typography } from "@mui/material";
+import { Box, Fade, Modal, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-
+import Button from '@mui/material/Button'
 export const ConfirmationModal = ({
   modalOpen,
   setModalOpen,

@@ -122,7 +122,7 @@ export const TransactionsScreen = () => {
                   <div className="table-responsive active-projects style-1">
                     <div className="tbl-caption d-flex justify-content-between align-items-center">
                       <h4 className="heading mb-0">Transactions</h4>
-                      {/* Search Field */}
+                     
                       <TextField
                         size="small"
                         placeholder="Search..."
@@ -132,7 +132,7 @@ export const TransactionsScreen = () => {
                       />
                     </div>
                     <table id="employees-tblwrapper" className="table">
-                    {/* loginUser?.Data?.RoleId */}
+                    
                       <thead>
                         <tr>
                           <th>Invoice Number</th>
@@ -141,9 +141,7 @@ export const TransactionsScreen = () => {
                           <th>Paid Date</th>
                           <th>Package Name</th>
                         
-                        {/* {loginUser?.Data?.RoleId === 1 && <th>Subscription ID</th>}
-                          <th>Transaction Date</th>
-                        */}
+                       
                          
                           <th>Status</th>
                           <th>Links</th>
@@ -176,22 +174,21 @@ export const TransactionsScreen = () => {
                               <td>
                                 <span>{transaction.Name}</span>
                               </td>
-                           {/* {loginUser?.Data?.RoleId === 1 && <td>
-                                <span>{transaction.SubscriptionId}</span>
-                              </td>}
-                              <td>
-                                <span>{new Date(transaction.TransactionDate).toLocaleDateString()}</span>
-                              </td> */}
+                        
                            
                             
                              
                               <td>
-                                <span style={{padding:"0px 5px"}} className={`badge ${transaction.Status === 'paid' ? 'badge-success' :
-                                transaction.Status === 'Pending' ? 'badge-warning' :
-                                transaction.Status === 'Failed' ? 'badge-danger' :
-                                'badge-secondary'}`}>
-                                  {transaction.Status}
+                                <span style={{padding:"2px 10px",fontSize:"11px", borderRadius: "12px", backgroundColor: transaction.Status === 'paid' ?'#c2ded1' :
+                                transaction.Status === 'Pending' ? '#fff3cd' :
+                                transaction.Status === 'incomplete' ? '#f8d7da' :
+                                '#e2e3e5', color: transaction.Status === 'paid' ? '#03543f' :
+                                transaction.Status === 'Pending' ? '#664d03' :
+                                transaction.Status === 'incomplete' ? '#842029' :
+                                '#41464b'}}>
+                                  {transaction.Status.charAt(0).toUpperCase() + transaction.Status.slice(1)}
                                 </span>
+                            
                               </td>
                               <td>
                                 <div>
@@ -215,7 +212,7 @@ export const TransactionsScreen = () => {
                         )}
                       </tbody>
                     </table>
-                    {/* Pagination Controls */}
+                    
                     <div className="d-flex justify-content-end align-items-center p-3">
                       <Pagination
                         count={Math.ceil(totalCount / pageSize)}

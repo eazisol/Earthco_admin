@@ -5,9 +5,11 @@ import DashboardLayout from '../DashboardLayout/DashboardLayout';
 import TitleBar from '../TitleBar';
 import { getTenantById } from '../../APIS/auth';
 import { AddTenant } from '../../APIS/auth';
+import { toast } from 'react-toastify';
 
 const DemoPasswordFields = () => {
     const [tenant, setTenant] = useState(null);
+    console.log("🚀 ~ DemoPasswordFields ~ tenant:", tenant)
 
     const [formData, setFormData] = useState({
         oldPassword: '',
@@ -100,13 +102,20 @@ const DemoPasswordFields = () => {
     };
 
     const handleSubmit = async () => {
-        console.log("🚀 ~ handleSubmit ~ formData:", formData)
         const data = {
             TenantId: tenant?.data?.TenantId,
-            Password: formData.Password,
+            FirstName: tenant?.data?.FirstName,
+            LastName: tenant?.data?.LastName,
+            Email:tenant?.data?.Email,
+            Password:formData.Password,
+            SubDomain: tenant?.data?.SubDomain,
+            CompanyName:tenant?.data?.CompanyName,
+            PhoneNo: tenant?.data?.PhoneNo,
+            RoleId: tenant?.data?.RoleId,
+        
         }
        const response=await AddTenant(data)
-       console.log("🚀 ~ handleSubmit ~ data:", response)
+       toast.success('Password updated successfully.')
     }
 
     return (
@@ -124,6 +133,7 @@ const DemoPasswordFields = () => {
                   <div className="container-fluid">
                     <div className="col-xl-12 mb-4">
                         <label className="form-label">Current Password</label>
+                        
                         <TextField
                             className="form-control form-control-sm"
                             name="oldPassword"

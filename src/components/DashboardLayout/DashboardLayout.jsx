@@ -75,7 +75,7 @@ export default function DashboardLayout({ children, onLogout }) {
               style={{ marginLeft: "22%", marginTop: "4px" }}
             /> */}
    <NavLink className="brand-logo " >
-          <img style={{ width: "70%", marginLeft: "20%" }} src={logo} alt="" />
+          <img style={{ width: "70%"}} src={logo} alt="" />
         </NavLink>
         {!isMobile&&  <div className="nav-control" style={{zIndex:1000}}>
             <div
@@ -92,7 +92,7 @@ export default function DashboardLayout({ children, onLogout }) {
 
         <Topbar />
         </div>
-        <Sidebar />
+        <Sidebar isSidebarOpen={!menuOpen} />
         {/* Overlay for mobile/tablet when sidebar is open */}
         {isMobile && menuOpen && (
           <div

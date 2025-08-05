@@ -27,6 +27,7 @@ import { useNavigate } from 'react-router-dom';
 import { AddNewsletter } from './APIS/auth';
 import { toast } from 'react-toastify';
 import { CustomButton } from './components/CustomButton'
+import { ContactUs } from './components/Setting/ContactUs'
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -344,7 +345,7 @@ function App() {
                 </ProtectedRoute>
               } />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-         
+          <Route path="/contact-us" element={<ContactUs />} />
         </Routes>
       </Layout>
     </Router>

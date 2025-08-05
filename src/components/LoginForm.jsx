@@ -28,6 +28,7 @@ export const LoginForm = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedPackageDetails, setSelectedPackageDetails] = useState(null);
+  console.log("🚀 ~ LoginForm ~ selectedPackageDetails:", selectedPackageDetails)
   const navigate = useNavigate();
 
   // Fetch package details by ID when component mounts
@@ -237,7 +238,6 @@ export const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('formData',formData)
 
     if (!validateForm()) {
       return;
@@ -296,7 +296,9 @@ export const LoginForm = () => {
       }
 
       if (data?.data?.PaymentLink) {
+
         window.open(data.data.PaymentLink, '_blank');
+        navigate("/login")
       }
 
       // Reset form after successful submission

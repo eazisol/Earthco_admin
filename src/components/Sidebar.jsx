@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
-const Sidebar = () => {
+const Sidebar = ({ isSidebarOpen = true }) => {
   const location = useLocation();
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const {loginUser} = useAppContext();
@@ -164,9 +164,10 @@ const Sidebar = () => {
       ),
       submenu: [
         { label: "Email", href: "/email" },
-        { label: "QB", href: "/qb" },
+        { label: "QuickBook ", href: "/qb" },
         { label: "Company", href: "/company" },
-        { label: "Google Map", href: "/google-map" },
+        { label: "Google Maps", href: "/google-map" },
+        ...(loginUser?.Data?.RoleId === 1 ? [{ label: "Contact Us", href: "/contact-us" }] : []),
         ...(loginUser?.Data?.RoleId === 1 ? [{ label: "Stripe", href: "/stripe" }] : []),
         // { label: "Term And Privacy", href: "/term-and-privacy" }
       ],
@@ -208,7 +209,7 @@ const Sidebar = () => {
                     }}
                   >
                   <span style={{marginLeft:"8px",marginRight:"8px"}}>  {item.icon(isActive ? activeColor : inactiveColor)}
-                    <span className="menu-title">{item.label}</span></span>
+                    {isSidebarOpen && <span className="menu-title">{item.label}</span>}</span>
                   </Link>
                 </li>
               );
@@ -228,7 +229,7 @@ const Sidebar = () => {
                   }}
                 >
                  <span style={{marginLeft:"8px"}}> {item.icon(inactiveColor)}
-                  <span style={{marginLeft:"7px"}} className="menu-title text-white" >{item.label}</span></span>
+                  {isSidebarOpen && <span style={{marginLeft:"7px"}} className="menu-title text-white" >{item.label}</span>}</span>
                 </div>
                 {/* {isOpen && ( */}
                   <ul>
@@ -248,8 +249,13 @@ const Sidebar = () => {
                               position: "relative",
                             }}
                           >
+                            {isSidebarOpen ? (
+                              <>
                             <div className="subMenu" />
-                        <span className="subMenu-text">    {sub.label}</span>
+                              <span className="subMenu-text">{sub.label}</span></>
+                            ) : (
+                              <div className="submenu-line" title={sub.label}></div>
+                            )}
                           </Link>
                         </li>
                       );

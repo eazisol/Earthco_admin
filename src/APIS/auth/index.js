@@ -20,7 +20,7 @@ export const AddContactMessage = async (obj) => {
   });
     return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 //newsletter
@@ -33,7 +33,7 @@ export const AddNewsletter = async (obj) => {
       });
     return data;
   } catch (error) {
-    return error; 
+    throw error; 
   }
 };
 export const AddTenant = async (obj) => {
@@ -47,7 +47,7 @@ export const AddTenant = async (obj) => {
       });
     return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 export const getTenantById = async (id) => {
@@ -64,10 +64,7 @@ export const getTenantById = async (id) => {
     );
     return data;
   } catch (error) {
-    return {
-      error: true,
-      message: error.response?.data?.message || "Failed to fetch tenant",
-    };
+    throw error;
   }
 };
 export const getTenantRole = async () => {
@@ -83,11 +80,8 @@ export const getTenantRole = async () => {
       }
     );
     return data;
-  } catch (error) {
-    return {
-      error: true,
-      message: error.response?.data?.message || "Failed to fetch tenant",
-    };
+  }catch (error) {
+    throw error;
   }
 };
 export const getTenant = async ({ Search = "", DisplayStart = 1, DisplayLength = 10 } = {}) => {
@@ -105,10 +99,7 @@ export const getTenant = async ({ Search = "", DisplayStart = 1, DisplayLength =
     );
     return data;
   } catch (error) {
-    return {
-      error: true,
-      message: error?.response ,
-    };
+    throw error;
   }
 };
 export const deleteTenant=async(id )=>{
@@ -122,7 +113,7 @@ export const deleteTenant=async(id )=>{
     });
     return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 // /Accounts/RegisterTenant
@@ -133,7 +124,7 @@ export const RegisterTenant = async (obj) => {
     });
     return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 export const forgotPassword = async (obj) => {
@@ -141,7 +132,7 @@ export const forgotPassword = async (obj) => {
     const data  = await axios.post(`${apiUrl}Accounts/ForgetPassword`, obj);
     return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 export const verifyOTP = async (obj) => {
@@ -149,7 +140,7 @@ export const verifyOTP = async (obj) => {
     const data  = await axios.get(`${apiUrl}Accounts/VerifyForgetPasswordCode?Email=${obj.Email}&Code=${obj.Code}`);
     return data;
   } catch (error) {
-    return error;
+    throw error;
     }
   };
   export const resetPassword = async (obj) => {
@@ -157,7 +148,7 @@ export const verifyOTP = async (obj) => {
       const data  = await axios.post(`${apiUrl}Accounts/ChangeForgetPassword`,obj);
       return data;
     } catch (error) {
-      return error;
+        throw error;
     }
     };
   export const updateTenantStatus = async (obj) => {
@@ -171,7 +162,7 @@ export const verifyOTP = async (obj) => {
       });
       return data;
     } catch (error) {
-      return error;
+      throw error;
     }
   };
   export const checkPackageStatus=async()=>{
@@ -185,6 +176,22 @@ export const verifyOTP = async (obj) => {
       });
       return data;
     } catch (error) {
-      return error;
+      throw error;
     }
   };
+  //Update tenant package
+  export const updateTenantPackage=async(obj)=>{
+    const token = JSON.parse(localStorage.getItem("user"));
+    try {
+      const data  = await axios.post(`${apiUrl}Tenant/UpdateTenantPackage`, obj, {
+        headers: {
+          Authorization: `Bearer ${token.token.data}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 import HeroSection from "./components/HeroSection";
 import { getPackages } from "./APIS/packages";
 import { ConfirmationModal } from "./components/Reuseable/ConfirmationModal";
-import { AddContactMessage } from "./APIS/auth";
+import { AddContactMessage, checkPackageStatus, updateTenantPackage } from "./APIS/auth";
 import { toast } from "react-toastify";
 
 
@@ -124,32 +124,70 @@ const [isLoading,setIsLoading] = useState(false)
   useEffect(() => {
     fetchPackages();
   }, []);
-// const handleSubscription=async(packageId)=>{
-//   if(loginUser?.token?.data){
-//     setModalOpen(true);
-//     setModalConfig({
-//       title: "Confirmation",
-//       description: "Are you sure you want to subscribe to this package?",
-//       onConfirm: async() => {
-       
-//       },
-//       confirmText: "Subscribe",
-//       cancelText: "Cancel",
-//     });
-//   //   const data = await checkPackageStatus();
-//   //   console.log("🚀 ~ handleSubscription ~ data:", data)
-//   //   if(data?.status==200){
-//   //  }
-//   }else{
-//     navigate(`/register?packageId=${packageId}`)
+  const updateTenantPackageApi=async(plan)=>{
+    let obj={
+      UserPackageId: 0,
+      PackageId: plan?.PackageId,
+      TenantId:loginUser?.Data?.TenantId,
+      Name: plan?.Name,
+      PackageTypeId: plan?.PackageTypeId,
+      MaxUsers: plan?.MaxUser,
+      MaxStorageMB: plan?.MaxStorageMB,
+      MaxCompanies: plan?.MaxCompanies,
+      Price: plan?.Price,
+     
+  }
+    const data = await updateTenantPackage(obj)
+    if(data?.status==200){
+      if (data?.data?.PaymentLink) {
+        window.open(data.data.PaymentLink, '_blank');
+      }
 
-//   }
-// }
-const handleSubscription=async(packageId)=>{
-  
-    navigate(`/register?packageId=${packageId}`)
-  
+
+      toast.success(data?.Message)
+    }else{
+      toast.error(data?.Message)
+    }
+  }
+const handleSubscription=async(plan)=>{
+  if(loginUser?.token?.data){
+       const data = await checkPackageStatus();
+    if(data?.data?.Status){
+      setModalOpen(true);
+      setModalConfig({
+        title: "Confirmation",
+        description: 'You currently have an active package. Please be advised that proceeding with this action will result in the removal of your existing package details. Kindly confirm if you wish to continue with the new package subscription.',
+        onConfirm: async() => {
+          await updateTenantPackageApi(plan)
+        },
+        confirmText: "Subscribe",
+        cancelText: "Cancel",
+      });
+    }else{
+      setModalOpen(true);
+    setModalConfig({
+      title: "Confirmation",
+      description: "Are you sure you want to proceed with this package? This action will ensure you receive the package benefits.",
+      onConfirm: async() => {
+        await updateTenantPackageApi(plan)
+      },
+      confirmText: "Subscribe",
+      cancelText: "Cancel",
+    });
+    }
+    
+
+  }else{
+    let id=plan?.PackageId
+    navigate(`/register?packageId=${id}`)
+
+  }
 }
+// const handleSubscription=async(packageId)=>{
+  
+//     navigate(`/register?packageId=${packageId}`)
+  
+// }
   useEffect(() => {
     const preloader = document.getElementById("preloader");
     if (preloader) {
@@ -359,7 +397,7 @@ const handleSubscription=async(packageId)=>{
 
     <div className="row justify-content-center align-items-end" >
     
-      {packages.map((plan, index) => {
+      {packages?.filter(plan=>plan?.isActive).map((plan, index) => {
         return (
           <div
             key={index}
@@ -384,7 +422,7 @@ const handleSubscription=async(packageId)=>{
                 <li><i class="bx bx-check"></i>{`Email support only`}</li>
               </ul>
         
-              <CustomButton onClick={() => handleSubscription(plan.PackageId)}/>
+              <CustomButton onClick={() => handleSubscription(plan)}/>
             </div>
           </div>
         );
