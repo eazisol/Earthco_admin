@@ -375,7 +375,7 @@ export const LoginForm = () => {
                 </p>
                 {selectedPackageDetails.Description && (
                   <div style={{ marginTop: '8px', fontSize: '13px', color: '#666' }}>
-                    {selectedPackageDetails.Description.replace(/<[^>]*>/g, '  ')}
+                    {selectedPackageDetails.Description}
                   </div>
                 )}
               </div>

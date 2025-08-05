@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 
 function Branding() {
   const [loginUser,setLoginUser] = useState(null)
+  
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "",
@@ -124,9 +125,7 @@ const [isLoading,setIsLoading] = useState(false)
     fetchPackages();
   }, []);
 // const handleSubscription=async(packageId)=>{
-//   if(loginUser?.status=='success'){
-//     const data = await checkPackageStatus();
-//     if(data?.status==200){
+//   if(loginUser?.token?.data){
 //     setModalOpen(true);
 //     setModalConfig({
 //       title: "Confirmation",
@@ -136,7 +135,11 @@ const [isLoading,setIsLoading] = useState(false)
 //       },
 //       confirmText: "Subscribe",
 //       cancelText: "Cancel",
-//     });}
+//     });
+//   //   const data = await checkPackageStatus();
+//   //   console.log("🚀 ~ handleSubscription ~ data:", data)
+//   //   if(data?.status==200){
+//   //  }
 //   }else{
 //     navigate(`/register?packageId=${packageId}`)
 
@@ -372,6 +375,7 @@ const handleSubscription=async(packageId)=>{
                 {plan.Price}
                 <span className="per-month">per month</span>
               </h4>
+              <p>{plan?.Description}</p>
               <ul>
               
                 <li><i class="bx bx-check"></i>{`Limited to ${plan.MaxCompanies} company and ${plan?.MaxUser} users`}</li>

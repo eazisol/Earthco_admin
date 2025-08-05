@@ -135,7 +135,7 @@ const Sidebar = () => {
     },
     {
       key: "setting",
-      label: "Setting",
+      label: "Settings",
       icon: (color) => (
         <svg
                   width="24"

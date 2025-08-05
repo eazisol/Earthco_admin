@@ -35,6 +35,7 @@ export const PackagesScreen = () => {
     maxCompanies: "",
     PackageTypeId: 0,
     Description: "",
+    isActive: true,
   });
   const editor = useRef(null);
 	const [content, setContent] = useState('');
@@ -118,7 +119,11 @@ export const PackagesScreen = () => {
     if (!formData.Price) newErrors.Price = "Price is required";
     if (!formData.maxCompanies) newErrors.maxCompanies = "Max Companies is required";
     if (!formData.PackageTypeId) newErrors.PackageTypeId = "Package Type is required";
-    if (!formData.Description) newErrors.Description = "Description is required";
+    if (!formData.Description) {
+      newErrors.Description = "Description is required";
+    } else if (formData.Description.length > 200) {
+      newErrors.Description = "Description must be less than 200 characters";
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -149,6 +154,7 @@ console.log('response',response)
           maxCompanies: "",
           PackageTypeId: 0,
           Description: "",
+          isActive: true,
         });
         setContent('');
         setSelectedId(0);
@@ -268,6 +274,7 @@ console.log('response',response)
                 monthlyPrice: "",
                 maxCompanies: "",
                 Description: "",
+                isActive: true,
               });
             }}
           >
@@ -389,17 +396,17 @@ console.log('response',response)
               <div className="mb-3 " >
                       <div className="form-check form-switch" >
                         <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
-                          {formData.Active == 2 ? "Active" : "Inactive"}
+                          {formData.isActive ? "Active" : "Inactive"}
                         </label>
                         <input
                           className="form-check-input"
                           type="checkbox"
                           name="Active"
-                          checked={formData.Active == 2}
+                          checked={formData.isActive}
                           onChange={(e) => {
                             setFormData((prev) => ({
                               ...prev,
-                              Active: e.target.checked ? 2 : 1
+                              isActive: e.target.checked
                             }))
                           }}
                        
@@ -433,6 +440,7 @@ console.log('response',response)
                     monthlyPrice: "",
                     maxCompanies: "",
                     Description: "",
+                    isActive: true,
                   });
                 }}
               >
@@ -500,6 +508,7 @@ console.log('response',response)
                             Price: "",
                             maxCompanies: "",
                             Description: "",
+                            isActive: true,
                           });
                           const offcanvasEl =
                             document.getElementById("offcanvasExample");
@@ -553,7 +562,8 @@ console.log('response',response)
                                   maxCompanies: emp.MaxCompanies || "",
                                   PackageTypeId: emp.PackageTypeId,
                                   Description: emp.Description || "",
-                                });
+                                  isActive: emp.isActive,
+                                  });
                                 setContent(emp.Description || "");
                                 const offcanvasEl =
                                   document.getElementById("offcanvasExample");

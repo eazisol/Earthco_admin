@@ -73,8 +73,8 @@ const ProfilePage = () => {
         }
       
       }
-if (!formData.PhoneNo || formData.PhoneNo.length < 10 || formData.PhoneNo.length > 15) {
-  toast.error("Phone number is required and must be between 10 to 15 digits");
+if (!formData.PhoneNo || formData.PhoneNo.length < 7 || formData.PhoneNo.length > 15) {
+  toast.error("Phone number is required and must be between 7 to 15 digits");
   return;
 }
       // Keep existing data and only update first name, last name and password
@@ -246,7 +246,7 @@ useEffect(() => {
                         />
                       </div>
                       <div className="col-xl-3 mb-3">
-                        <label className="form-label">Mobile<span className="text-danger">*</span></label>
+                        <label className="form-label">Phone no.<span className="text-danger">*</span></label>
                         <TextField
                           className="form-control form-control-sm"
                           name="PhoneNo"
