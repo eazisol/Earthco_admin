@@ -3,6 +3,7 @@ import { CircularProgress, TextField, Alert, AlertTitle  } from "@mui/material";
 import { useState, useEffect } from "react";
 import { addEmailSetting, getEmailSetting } from "../../APIS/settings";
 import { toast } from "react-toastify";
+import TitleBar from "../TitleBar";
 
 export const QBookScreen = () => {
   const [settingData, setSettingData] = useState({});
@@ -186,13 +187,7 @@ export const QBookScreen = () => {
   return (
     <DashboardLayout>
       <div className="content-body">
-        <div className="page-titles">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="javascript:void(0)">QuickBooks Settings</a>
-            </li>
-          </ol>
-        </div>
+       <TitleBar title="QuickBooks Settings" />
 
         <div className="container-fluid">
           <div className="row table-space">

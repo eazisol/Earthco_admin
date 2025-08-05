@@ -17,6 +17,7 @@ import {
 } from "../../APIS/packages";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import Pagination from '@mui/material/Pagination';
+import TitleBar from "../TitleBar";
 
 export const PackagesScreen = () => {
   const [packageOptions, setPackageOptions] = useState([]);
@@ -385,9 +386,28 @@ console.log('response',response)
                   <div className="text-danger small">{errors.Description}</div>
                 )}
               </div>
-             
+              <div className="mb-3 " >
+                      <div className="form-check form-switch" >
+                        <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
+                          {formData.Active == 2 ? "Active" : "Inactive"}
+                        </label>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="Active"
+                          checked={formData.Active == 2}
+                          onChange={(e) => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              Active: e.target.checked ? 2 : 1
+                            }))
+                          }}
+                       
+                        />
+                      </div>
+                    </div>
             </div>
-            <div style={{ textAlign: "end" }} className="mt-5">
+            <div style={{ textAlign: "end" }} className="mt-5"> 
               <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loader}>
                 {selectedId === 0 ? "Add" : "Update"}
               </button>
@@ -423,49 +443,34 @@ console.log('response',response)
         </div>
       </div>
       <div className="content-body">
-        <div className="page-titles">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="javascript:void(0)">
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 22 22"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M13.5096 2.53165H7.41104C5.50437 2.52432 3.94146 4.04415 3.89654 5.9499V15.7701C3.85437 17.7071 5.38979 19.3121 7.32671 19.3552C7.35512 19.3552 7.38262 19.3561 7.41104 19.3552H14.7343C16.6538 19.2773 18.1663 17.6915 18.1525 15.7701V7.36798L13.5096 2.53165Z"
-                    stroke="#888888"
-                    strokeRinecap="round"
-                    strokeRinejoin="round"
-                  />
-                  <path
-                    d="M13.2688 2.52084V5.18742C13.2688 6.48909 14.3211 7.54417 15.6228 7.54784H18.1482"
-                    stroke="#888888"
-                    strokeRinecap="round"
-                    strokeRinejoin="round"
-                  />
-                  <path
-                    d="M13.0974 14.0786H8.1474"
-                    stroke="#888888"
-                    strokeRinecap="round"
-                    strokeRinejoin="round"
-                  />
-                  <path
-                    d="M11.2229 10.6388H8.14655"
-                    stroke="#888888"
-                    strokeRinecap="round"
-                    strokeRinejoin="round"
-                  />
-                </svg>
-                Packages{" "}
-              </a>
-            </li>
-          </ol>
-        </div>
+ <TitleBar icon={ <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M13.5 2.53H7.41C5.5 2.52 3.94 4.04 3.9 5.95V15.77C3.85 17.71 5.39 19.31 7.33 19.36H14.73C16.65 19.28 18.17 17.69 18.15 15.77V7.37L13.5 2.53Z"
+              stroke='#888888'
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M13.27 2.52V5.19C13.27 6.49 14.32 7.54 15.62 7.55H18.15"
+              stroke='#888888'
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M13.1 14.08H8.15"
+              stroke='#888888'
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M11.22 10.64H8.15"
+              stroke='#888888'
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>} title="Packages" />
         <div className="container-fluid">
           <div className="row table-space" >
             <div className="col-xl-12">
@@ -516,7 +521,7 @@ console.log('response',response)
                           <th className="text-center">max Storage(MB) </th>
                           <th className="text-center">Monthly Price</th>
                           <th className="text-center">Max Companies</th>
-                          <th className="text-center">Action</th>
+                          {/* <th className="text-center">Action</th> */}
                         </tr>
                       </thead>
                       <tbody>
@@ -573,7 +578,7 @@ console.log('response',response)
                               <td className="text-center">
                                 <span>{emp.MaxCompanies ?? 0}</span>
                               </td>
-                              <td className="text-center">
+                              {/* <td className="text-center">
                                 <i
                                   className="fa-solid fa-trash text-danger cursor-pointer delete-icon"
                                   title="Delete Package"
@@ -593,7 +598,7 @@ console.log('response',response)
                                     });
                                   }}
                                 ></i>
-                              </td>
+                              </td> */}
                             </tr>
                           ))
                         )}

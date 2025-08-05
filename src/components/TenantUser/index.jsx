@@ -1,6 +1,6 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import image from "../../assets/img/team/team-1.jpg";
-import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { CircularProgress,  TextField,Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
 import { getPackages } from "../../APIS/packages";
@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import Pagination from '@mui/material/Pagination';
 import { useAppContext } from "../../context/AppContext";
+import TitleBar from "../TitleBar";
 
 export const TenantScreen = () => {
   
@@ -144,11 +145,7 @@ export const TenantScreen = () => {
       />
   
       <div className="content-body">
-        <div className="page-titles">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="javascript:void(0)">
-                <svg
+      <TitleBar icon={   <svg
                   width="22"
                   height="22"
                   viewBox="0 0 22 22"
@@ -171,12 +168,7 @@ export const TenantScreen = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
-                </svg>
-                <span style={{  marginLeft:'8px'}}>Tenant</span>
-              </a>
-            </li>
-          </ol>
-        </div>
+                </svg>} title="Tenant List" />
         <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-12">
@@ -201,9 +193,9 @@ export const TenantScreen = () => {
                           <th className="text-center">Username</th>
                           <th className="text-center">Email Address</th>
                           <th className="text-center">Phone No</th>
-                          <th className="text-center">Role</th>
+                          {/* <th className="text-center">Role</th> */}
                           <th className="text-center">Status</th>
-                          <th className="text-center">Action</th>
+                          {/* <th className="text-center">Action</th> */}
                         </tr>
                       </thead>
                       <tbody>
@@ -231,39 +223,42 @@ export const TenantScreen = () => {
                             <td className="text-center">
                               <span>{emp.PhoneNo}</span>
                             </td>
-                            <td className="text-center">
+                            {/* <td className="text-center">
                               <h6>{emp.Role}</h6>
-                            </td>
+                            </td> */}
                            
                               <td className="text-center">
-                                <button 
-                                  onClick={async () => {
-                                    setModalOpen(true);
-                                    setModalConfig({
-                                      title: "Confirmation",
-                                      description: `Are you sure you want to ${emp.isActive ? "Inactivate" : "activate"} this tenant?`,
-                                      onConfirm: async () => {
-                                      const data= await updateTenantStatus({ id: emp.TenantId, Active: emp.isActive ? false : true });
-                                      if(data?.status == 200){
-                                        toast.success(data?.data?.Message || "Tenant status updated successfully");
-                                        fetchTenants();
-                                        setModalOpen(false);
-                                      }else{
-                                        toast.error(data?.Message || "Tenant status updated failed");
-                                      }
-                                       
-                                      },
-                                      confirmText: emp.isActive ? "Inactivate" : "Activate",
-                                      cancelText: "Cancel",
-                                    });
-                                  }}
-                                  className={`btn btn-sm ${emp.isActive ? 'btn-primary' : 'btn-danger'}`}
-                                  style={{minWidth: '80px'}}
-                                >
-                                  {emp.isActive ? "Active" : "Inactive"}
-                                </button>
+                                <div className="form-check form-switch d-flex align-items-center justify-content-center" style={{ width: "fit-content" }}>
+                                  <Tooltip title={emp.isActive ? "Activate Tenant" : "Inactivate Tenant"} arrow>
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      checked={emp.isActive}
+                                      onChange={() => {
+                                        setModalOpen(true);
+                                        setModalConfig({
+                                          title: "Confirmation",
+                                          description: `Are you sure you want to ${emp.isActive ? "Inactivate" : "activate"} this tenant?`,
+                                          onConfirm: async () => {
+                                            const data = await updateTenantStatus({ id: emp.TenantId, Active: emp.isActive ? false : true });
+                                            if (data?.status == 200) {
+                                              toast.success(data?.data?.Message || "Tenant status updated successfully");
+                                              fetchTenants();
+                                              setModalOpen(false);
+                                            } else {
+                                              toast.error(data?.Message || "Tenant status update failed");
+                                            }
+                                          },
+                                          confirmText: emp.isActive ? "Inactivate" : "Activate",
+                                          cancelText: "Cancel",
+                                        });
+                                      }}
+                                      style={{ marginLeft: "12px" }}
+                                    />
+                                  </Tooltip>
+                                </div>
                               </td>
-                            <td className="text-center">
+                            {/* <td className="text-center">
                               <i 
                                 className="fa-solid fa-trash text-danger cursor-pointer" 
                                 title="Delete Tenant"
@@ -284,7 +279,7 @@ export const TenantScreen = () => {
                                   });
                                 }}
                               ></i>
-                            </td>
+                            </td> */}
                           </tr>
                         )})}
                       </tbody>

@@ -183,14 +183,14 @@ a:hover {
   list-style: none;
   align-items: center;
 }
-.custom-login-btn{
+/* .custom-login-btn{
   padding: 8px 20px !important;
   margin-left: 30px !important;
   border-radius: 50px !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   border-width: 2px !important;
-}
+} */
 .navbar li {
   position: relative;
 }
@@ -428,7 +428,7 @@ a:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(77, 102, 18, 0.5);
+ 
   z-index: 1;
 }
 
@@ -476,6 +476,7 @@ a:hover {
   font-weight: 500;
   font-size: 16px;
   letter-spacing: 1px;
+  margin-left: 30px !important;
   display: inline-block;
   padding: 10px 28px 11px 28px;
   border-radius: 50px;
@@ -483,7 +484,7 @@ a:hover {
   /* margin: 10px 0 0 0; */
   color: var(--button-color) !important;
   background: transparent !important;
-  border: 1px solid #86eb0b !important;
+  border: 1px solid #7b9b43 !important;
 }
 
  .custom-login-btn:hover {

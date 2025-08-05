@@ -109,7 +109,7 @@ function Layout({ children }) {
   return (
     <>
       {showNavFooter && (
-        <header id="header" className={`fixed-top${isRegisterPage || isLoginPage || isForgotPasswordPage ? ' register-navbar' : ''}`}>
+        <header id="header" className='fixed-top register-navbar'>
           <div className="container d-flex align-items-center">
             <h1 className="logo me-auto">
               <a href="/#hero" className="logo me-auto">

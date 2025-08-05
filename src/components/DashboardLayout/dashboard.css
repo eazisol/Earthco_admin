@@ -2051,7 +2051,8 @@ textarea.form-control-lg {
     cursor: default;
     opacity: 0.5; }
 
-
+.form-switch {
+  padding-left: 2.5em; }
   .form-switch .form-check-input {
     width: 2em;
     margin-left: -2.5em;
@@ -3211,14 +3212,14 @@ textarea.form-control-lg {
   padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
   font-size: var(--bs-nav-link-font-size);
   font-weight: var(--bs-nav-link-font-weight);
-  color: var(--bs-nav-link-color);
+  color: #7b9b43;
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out; }
   @media (prefers-reduced-motion: reduce) {
     .nav-link {
       transition: none; } }
   .nav-link:hover, .nav-link:focus {
-    color: var(--bs-nav-link-hover-color); }
+    color: #7b9b43; }
   .nav-link.disabled {
     color: var(--bs-nav-link-disabled-color);
     pointer-events: none;
@@ -3293,11 +3294,11 @@ textarea.form-control-lg {
 
 .tab-content > .active {
   display: block; }
-@media screen and (min-width: 1400px) {
+/* @media screen and (min-width: 1400px) {
   .table-space {
     margin-left: 1%;
   }
-}
+} */
 .navbar {
   --bs-navbar-padding-x: 0;
   --bs-navbar-padding-y: 0.5rem;

@@ -9,6 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { cancelSubscription, getTransactionById, resumeSubscription  } from "../../APIS/transactions";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
+import TitleBar from "../TitleBar";
 
 const ProfilePage = () => {
   const { loginUser } = useAppContext();
@@ -43,6 +44,7 @@ const ProfilePage = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       // Validate required fields
       if (!formData.FirstName || !formData.LastName) {
@@ -79,7 +81,9 @@ const ProfilePage = () => {
     } catch (error) {
       console.error("Error updating tenant profile:", error);
       toast.error("Error updating profile data");
-    }
+    }finally{
+      setLoading(false);
+      }
   };
   const handleCancelSubscription = async () => {
     if(transactionId?.Status=='incomplete_expired') {
@@ -149,15 +153,15 @@ useEffect(() => {
       }
   fetchTransactionId()
 }, [formData?.tblUserPackages])
-  if (loading) {
-    return (
-      <DashboardLayout>
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "400px" }}>
-          <CircularProgress />
-        </div>
-      </DashboardLayout>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <DashboardLayout>
+  //       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "400px" }}>
+  //         <CircularProgress />
+  //       </div>
+  //     </DashboardLayout>
+  //   );
+  // }
 
   return (
     <DashboardLayout>
@@ -171,34 +175,20 @@ useEffect(() => {
         cancelText={modalConfig.cancelText}
       />
       <div className="content-body">
-        <div className="page-titles">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="javascript:void(0)">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M13.5096 2.53165H7.41104C5.50437 2.52432 3.94146 4.04415 3.89654 5.9499V15.7701C3.85437 17.7071 5.38979 19.3121 7.32671 19.3552C7.35512 19.3552 7.38262 19.3561 7.41104 19.3552H14.7343C16.6538 19.2773 18.1663 17.6915 18.1525 15.7701V7.36798L13.5096 2.53165Z" stroke="#888888" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M13.2688 2.52084V5.18742C13.2688 6.48909 14.3211 7.54417 15.6228 7.54784H18.1482" stroke="#888888" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M13.0974 14.0786H8.1474" stroke="#888888" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M11.2229 10.6388H8.14655" stroke="#888888" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                Profile Settings
-              </a>
-            </li>
-          </ol>
-        </div>
+       <TitleBar title="Profile Settings" />
         <div className="container-fluid">
  
             
               <div className="card table-space">
                 <div className="card-body">
               <h4 className="card-title mb-4">Profile Settings</h4>
-                  {loading ? (
+                  {/* {loading ? (
                     <div className="text-center">
                       <div className="spinner-border" role="status">
                         <span className="visually-hidden"><CircularProgress /></span>
                       </div>
                     </div>
-                  ) : (
+                  ) : ( */}
                     <div className="row">
                       <div className="col-xl-3 mb-3">
                         <label className="form-label">First Name<span className="text-danger">*</span></label>
@@ -267,7 +257,7 @@ useEffect(() => {
                       </div>
                     
                       <div className="col-xl-3 mb-3">
-                        <label className="form-label">Password<span className="text-danger">*</span></label>
+                        <label className="form-label">Password</label>
                         <TextField
                           className="form-control form-control-sm"
                           name="Password"
@@ -290,7 +280,7 @@ useEffect(() => {
                         />
                       </div>
                         <div className="col-xl-3 mb-3">
-                        <label className="form-label">Confirm Password<span className="text-danger">*</span></label>
+                        <label className="form-label">Confirm Password</label>
                         <TextField
                           className="form-control form-control-sm"
                           name="confirmPassword"
@@ -313,15 +303,15 @@ useEffect(() => {
                         />
                       </div>
                       <div style={{ textAlign: "end" }}>
-                        <button className="btn btn-primary me-1" onClick={handleSubmit}>
-                          Update
+                        <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loading}>
+                          {loading?"Updating...":"Update"}
                         </button>
                       </div>
                     </div>
-                  )}
+                  {/* )} */}
                 </div>
               </div>
-              <div className="card table-space">
+       {loginUser?.Data?.RoleId==2&&<div className="card table-space">
                 <div className="card-body">
                   <h4 className="card-title mb-4 "  style={{marginLeft: "8px"}}>Active Package</h4>
                   <div className="table-responsive">
@@ -367,7 +357,7 @@ useEffect(() => {
                     </table>
                   </div>
                 </div>
-              </div>
+              </div>}
            
         </div>
       </div>

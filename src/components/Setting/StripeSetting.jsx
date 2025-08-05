@@ -3,6 +3,7 @@ import { CircularProgress, TextField, Alert, AlertTitle } from "@mui/material";
 import { useState, useEffect } from "react";
 import { getEmailSetting, addEmailSetting } from "../../APIS/settings";
 import { toast } from "react-toastify";
+import TitleBar from "../TitleBar";
 
 export const StripeSetting = () => {
   const [settingData, setSettingData] = useState({});
@@ -186,13 +187,7 @@ export const StripeSetting = () => {
   return (
     <DashboardLayout>
       <div className="content-body">
-        <div className="page-titles">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="javascript:void(0)">Stripe Settings</a>
-            </li>
-          </ol>
-        </div>
+      <TitleBar  title="Stripe Settings" />
 
         <div className="container-fluid">
           <div className="row table-space">

@@ -88,7 +88,10 @@ export default function DashboardLayout({ children, onLogout }) {
             </div>
           </div>}
         </div>
+        <div style={{ position: "fixed", top: "0", left: "0", right: "0", zIndex: 1000 }}>
+
         <Topbar />
+        </div>
         <Sidebar />
         {/* Overlay for mobile/tablet when sidebar is open */}
         {isMobile && menuOpen && (
@@ -106,7 +109,7 @@ export default function DashboardLayout({ children, onLogout }) {
             onClick={handleDrawerToggle} // Changed to handleDrawerToggle to close sidebar
           />
         )}
-        <div>
+        <div style={{ marginTop: "50px" }}>
           {children}
         </div>
         {/* MUI Snackbar */}

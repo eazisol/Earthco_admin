@@ -18,6 +18,7 @@ import {
 } from "../../APIS/packages";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import { addCompany, deleteCompany, getCompanyList } from "../../APIS/companies";
+import TitleBar from "../TitleBar";
 
 export const CompaniesScreen = () => {
   const [packageOptions, setPackageOptions] = useState([]);
@@ -140,7 +141,7 @@ export const CompaniesScreen = () => {
   const fetchCompanies = async () => {
     setLoader(true);
     const response = await getCompanyList();
-    // console.log(response, 'response');
+    console.log(response, 'response');
     setEmployeesData(response?.data?.Data);
     setLoader(false);
   };
@@ -378,51 +379,14 @@ export const CompaniesScreen = () => {
         </div>
       </div>
       <div className="content-body">
-        <div className="page-titles">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="javascript:void(0)">
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 22 22"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M13.5096 2.53165H7.41104C5.50437 2.52432 3.94146 4.04415 3.89654 5.9499V15.7701C3.85437 17.7071 5.38979 19.3121 7.32671 19.3552C7.35512 19.3552 7.38262 19.3561 7.41104 19.3552H14.7343C16.6538 19.2773 18.1663 17.6915 18.1525 15.7701V7.36798L13.5096 2.53165Z"
-                    stroke="#888888"
-                    strokeRinecap="round"
-                    strokeRinejoin="round"
-                  />
-                  <path
-                    d="M13.2688 2.52084V5.18742C13.2688 6.48909 14.3211 7.54417 15.6228 7.54784H18.1482"
-                    stroke="#888888"
-                    strokeRinecap="round"
-                    strokeRinejoin="round"
-                  />
-                  <path
-                    d="M13.0974 14.0786H8.1474"
-                    stroke="#888888"
-                    strokeRinecap="round"
-                    strokeRinejoin="round"
-                  />
-                  <path
-                    d="M11.2229 10.6388H8.14655"
-                    stroke="#888888"
-                    strokeRinecap="round"
-                    strokeRinejoin="round"
-                  />
-                </svg>
-                Companies{" "}
-              </a>
-            </li>
-          </ol>
-        </div>
+ <TitleBar icon={  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M6.46932 12.2102H0.693665" stroke='#888888' stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M9.04547 3.32535H14.8211" stroke='#888888' stroke-linecap="round" stroke-linejoin="round"/>
+							<path fill-rule="evenodd" clip-rule="evenodd" d="M4.99912 3.27573C4.99912 2.08805 4.02914 1.125 2.8329 1.125C1.63667 1.125 0.666687 2.08805 0.666687 3.27573C0.666687 4.46342 1.63667 5.42647 2.8329 5.42647C4.02914 5.42647 4.99912 4.46342 4.99912 3.27573Z" stroke='#888888' stroke-linecap="round" stroke-linejoin="round"/>
+							<path fill-rule="evenodd" clip-rule="evenodd" d="M15.3333 12.1743C15.3333 10.9866 14.3641 10.0235 13.1679 10.0235C11.9709 10.0235 11.0009 10.9866 11.0009 12.1743C11.0009 13.3619 11.9709 14.325 13.1679 14.325C14.3641 14.325 15.3333 13.3619 15.3333 12.1743Z" stroke='#888888' stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>} title="Companies" />
         <div className="container-fluid">
-          <div className="row table-space">
+          <div className="row ">
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body p-0">

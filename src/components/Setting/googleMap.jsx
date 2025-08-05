@@ -3,6 +3,7 @@ import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { addEmailSetting, getEmailSetting } from "../../APIS/settings";
+import TitleBar from "../TitleBar";
 
 export const GoogleSetting = () => {
   const [loading, setLoading] = useState(false);
@@ -105,13 +106,7 @@ export const GoogleSetting = () => {
   return (
     <DashboardLayout>
       <div className="content-body">
-        <div className="page-titles">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="javascript:void(0)">Google Settings</a>
-            </li>
-          </ol>
-        </div>
+      <TitleBar  title="Google Settings" />
         <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-6">
