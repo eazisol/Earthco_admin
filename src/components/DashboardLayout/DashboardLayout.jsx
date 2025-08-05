@@ -66,7 +66,7 @@ export default function DashboardLayout({ children, onLogout }) {
           id="main-wrapper-dashboard"
           className={`show w-100 ${menuOpen ? "menu-toggle" : ""}`}
         >
-          <div className="nav-header position-fixed">
+          <div className="nav-header position-fixed" style={{zIndex:1000}}>
             {/* <img
               src={logo}
               alt="logo"
@@ -77,7 +77,7 @@ export default function DashboardLayout({ children, onLogout }) {
    <NavLink className="brand-logo " >
           <img style={{ width: "70%", marginLeft: "20%" }} src={logo} alt="" />
         </NavLink>
-        {!isMobile&&  <div className="nav-control">
+        {!isMobile&&  <div className="nav-control" style={{zIndex:1000}}>
             <div
               className={`hamburger ${menuOpen ? "is-active" : ""}`}
               onClick={handleDrawerToggle}
@@ -88,7 +88,7 @@ export default function DashboardLayout({ children, onLogout }) {
             </div>
           </div>}
         </div>
-        <div style={{ position: "fixed", top: "0", left: "0", right: "0", zIndex: 1000 }}>
+        <div style={{ position: "fixed", top: "0", left: "0", right: "0", zIndex: 999 }}>
 
         <Topbar />
         </div>
