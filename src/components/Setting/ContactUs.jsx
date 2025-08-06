@@ -125,19 +125,9 @@ export const ContactUs = () => {
                             <div className="card">
                                 <div className="card-body p-0">
                                     <div className="table-responsive active-projects style-1">
-                                        <div className="tbl-caption d-flex justify-content-between align-items-center">
-                                            <h4 className="heading mb-0">Contact Us</h4>
-                                           
-                                            {/* <TextField
-                                                size="small"
-                                                placeholder="Search..."
-                                                value={search}
-                                                onChange={handleSearchChange}
-                                                style={{ minWidth: 200 }}
-                                            /> */}
-                                        </div>
+                                       
                                         <table id="employees-tblwrapper" className="table">
-                                            {/* loginUser?.Data?.RoleId */}
+                                           
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
@@ -154,7 +144,7 @@ export const ContactUs = () => {
                                                 ) : (
                                                     transactionsData?.map((transaction, index) => {
 
-                                                        return (<tr key={index}>
+                                                        return (<tr key={index} className="hover-effect">
                                                             <td>
                                                                 <span>{transaction.Name}</span><br />
                                                                 <span>{transaction.Email}</span>
@@ -194,6 +184,7 @@ export const ContactUs = () => {
                                                 )}
                                             </tbody>
                                         </table>
+                                      
                                         {/* Pagination Controls */}
                                         <div className="d-flex justify-content-end align-items-center p-3">
                                             <Pagination

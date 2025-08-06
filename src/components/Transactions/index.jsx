@@ -120,15 +120,15 @@ export const TransactionsScreen = () => {
               <div className="card">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
-                    <div className="tbl-caption d-flex justify-content-between align-items-center">
-                      <h4 className="heading mb-0">Transactions</h4>
-                     
+                    <div className="d-flex justify-content-between align-items-center mb-2 pt-3">
+                      <h4 className="heading mb-0"></h4>
                       <TextField
+                        className="ml-3"
                         size="small"
                         placeholder="Search..."
                         value={search}
                         onChange={handleSearchChange}
-                        style={{ minWidth: 200 }}
+                        style={{ minWidth: 200, marginRight: "15px" }}
                       />
                     </div>
                     <table id="employees-tblwrapper" className="table">

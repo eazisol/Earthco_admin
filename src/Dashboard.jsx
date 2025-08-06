@@ -4,10 +4,68 @@ import { useNavigate } from "react-router-dom";
 import DashboardLayout from "./components/DashboardLayout/DashboardLayout";
 import { getTenantById } from "./APIS/auth";
 import TitleBar from "./components/TitleBar";
+
+// Custom styles for the tenant table
+const tenantTableStyles = {
+  tableHeader: {
+    backgroundColor: '#f8f9fa',
+    borderBottom: '2px solid #dee2e6',
+    fontWeight: '600',
+    color: '#495057',
+    textTransform: 'uppercase',
+    fontSize: '0.875rem',
+    letterSpacing: '0.5px'
+  },
+  sectionHeader: {
+    backgroundColor: '#e3f2fd',
+    borderLeft: '4px solid #7b9b43',
+    fontWeight: '600',
+    color: '#7b9b43',
+    fontSize: '1rem'
+  },
+  fieldName: {
+    fontWeight: '600',
+    color: '#495057',
+    backgroundColor: '#f8f9fa',
+    borderRight: '1px solid #dee2e6'
+  },
+  // valueCell: {
+  //   backgroundColor: '#ffffff',
+  //   color: '#212529'
+  // },
+  statusCell: {
+    textAlign: 'center',
+    verticalAlign: 'middle'
+  },
+  badge: {
+    fontSize: '0.75rem',
+    fontWeight: '500',
+    padding: '0.375rem 0.75rem'
+  },
+  code: {
+    backgroundColor: '#f1f3f4',
+    color: '#d73a49',
+    padding: '0.25rem 0.5rem',
+    borderRadius: '0.25rem',
+    fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+    fontSize: '0.875rem'
+  },
+  link: {
+    color: '#7b9b43',
+    textDecoration: 'none',
+    fontWeight: '500'
+  },
+  linkHover: {
+    color: '#0056b3',
+    textDecoration: 'underline'
+  }
+};
+
 function Dashboard() {
   const { user, logout,loginUser } = useAppContext();
   const navigate = useNavigate();
   const [tenant, setTenant] = useState(null);
+  console.log("🚀 ~ Dashboard ~ tenant:", tenant?.data)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -45,77 +103,55 @@ useEffect(() => {
     navigate("/");
   };
 
-  const handleGetStarted = () => {
-    // Example: scroll to tenant info or navigate
-    const infoSection = document.getElementById("tenant-info-section");
-    if (infoSection) {
-      infoSection.scrollIntoView({ behavior: "smooth" });
+  // Helper function to format date
+  const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  // Helper function to format storage size
+  const formatStorageSize = (sizeInMB) => {
+    if (sizeInMB >= 1024) {
+      return `${(sizeInMB / 1024).toFixed(1)} GB`;
+    }
+    return `${sizeInMB} MB`;
+  };
+
+  // Helper function to get status badge
+  const getStatusBadge = (isActive) => {
+    return (
+      <span className={`badge ${isActive ? 'bg-success' : 'bg-danger'} text-white px-3 py-1 rounded-pill`}>
+        {isActive ? 'Active' : 'Inactive'}
+      </span>
+    );
+  };
+
+  // Helper function to get expiry status
+  const getExpiryStatus = (expiryDate) => {
+    if (!expiryDate) return { status: 'unknown', badge: 'bg-secondary' };
+    
+    const now = new Date();
+    const expiry = new Date(expiryDate);
+    const daysUntilExpiry = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
+    
+    if (daysUntilExpiry < 0) {
+      return { status: 'Expired', badge: 'bg-danger' };
+    } else if (daysUntilExpiry <= 7) {
+      return { status: 'Expiring Soon', badge: 'bg-warning' };
+    } else {
+      return { status: 'Active', badge: 'bg-success' };
     }
   };
 
+ 
   return (
     <DashboardLayout onLogout={handleLogout}>
-      {/* <div
-        style={{
-          minHeight: "80vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          // background: '#f7f7f7',
-          padding: "0 0",
-        }}
-      >
-        <div
-          style={{
-            // background: '#fff',
-            borderRadius: "12px",
-            // boxShadow: '0 4px 16px rgba(0,0,0,0.07)',
-            padding: "40px 32px",
-            maxWidth: "600px",
-            width: "100%",
-            textAlign: "center",
-          }}
-        >
-          <h1 style={{ fontWeight: 600, fontSize: "2rem", marginBottom: 12 }}>
-            Welcome to your Dashboard!
-          </h1>
-          <p style={{ color: "#666", fontSize: "1.1rem", marginBottom: 28 }}>
-            Here’s your tenant information:
-          </p>
-          <div style={{ marginBottom: "12px" }}>
-            <strong>Name:</strong> {loginUser?.Data?.CompanyName }
-          </div>
-          {loginUser?.Data?.SubDomain ? (
-            <button
-              onClick={() =>
-                window.open(
-                  `https://${loginUser?.Data?.SubDomain}.earthcoapp.com`,
-                  "_blank",
-                  "noopener,noreferrer"
-                )
-              }
-              style={{
-                background: "#7b9b43",
-                color: "#fff",
-                border: "none",
-                borderRadius: "22px",
-                padding: "12px 32px",
-                fontSize: "1rem",
-                fontWeight: 500,
-                cursor: "pointer",
-                boxShadow: "0 2px 6px rgba(25, 118, 210, 0.08)",
-                marginBottom: 8,
-                transition: "background 0.2s",
-              }}
-            >
-              Sub Domain
-            </button>
-          ) : (
-            ""
-          )}
-        </div>
-      </div> */}
         <div class="content-body">
       <TitleBar icon={	<svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M2.125 6.375L8.5 1.41667L14.875 6.375V14.1667C14.875 14.5424 14.7257 14.9027 14.4601 15.1684C14.1944 15.4341 13.8341 15.5833 13.4583 15.5833H3.54167C3.16594 15.5833 2.80561 15.4341 2.53993 15.1684C2.27426 14.9027 2.125 14.5424 2.125 14.1667V6.375Z" stroke="#2C2C2C" stroke-linecap="round" stroke-linejoin="round"/>
@@ -123,7 +159,7 @@ useEffect(() => {
 						</svg>} title={'Dashboard'}/>
       <div className="container-fluid">
         
-            <div className="row">
+            {/* <div className="row">
               <div className="col-xl-3 col-sm-6">
                 <div className="card chart-grd same-card">
                   <div className="card-body depostit-card p-0">
@@ -142,34 +178,6 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
-              {/* <div className="col-xl-3 col-sm-6">
-                <div className="card same-card">
-                  <div className="card-body d-flex align-items-center py-2">
-                    <div id="AllProject"></div>
-                    <ul className="project-list">
-                      <li><h6>All Projects</h6></li>
-                      <li>
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect width="10" height="10" rx="3" fill="#3AC977"/>
-                        </svg>
-                        Compete
-                      </li>
-                      <li>
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect width="10" height="10" rx="3" fill="var(--primary)"/>
-                        </svg>
-                        Pending
-                      </li>
-                      <li>
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect width="10" height="10" rx="3" fill="var(--secondary)"/>
-                        </svg>
-                        Not Start
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div> */}
               <div className="col-xl-3 col-sm-6">
                 <div className="card chart-grd same-card">
                   <div className="card-body depostit-card p-0">
@@ -218,344 +226,264 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
-              {/* <div className="col-xl-8">
-                <div className="card overflow-hidden">
-                  <div className="card-header border-0 pb-0 flex-wrap">
-                    <h4 className="heading mb-0">Projects Overview</h4>
-                    <ul className="nav nav-pills mix-chart-tab" id="pills-tab" role="tablist">
-                      <li className="nav-item" role="presentation">
-                        <button className="nav-link active" data-series="week" id="pills-week-tab" data-bs-toggle="pill" data-bs-target="#pills-week" type="button" role="tab" aria-selected="true">Week</button>
-                      </li>
-                      <li className="nav-item" role="presentation">
-                        <button className="nav-link" data-series="month" id="pills-month-tab" data-bs-toggle="pill" data-bs-target="#pills-month" type="button" role="tab" aria-selected="false">Month</button>
-                      </li>
-                      <li className="nav-item" role="presentation">
-                        <button className="nav-link" data-series="year" id="pills-year-tab" data-bs-toggle="pill" data-bs-target="#pills-year" type="button" role="tab" aria-selected="false">Year</button>
-                      </li>
-                      <li className="nav-item" role="presentation">
-                        <button className="nav-link" data-series="all" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-selected="false">All</button>
-                      </li>
-                    </ul>
+            </div> */}
+
+            {/* Tenant Information Table */}
+            <div className="row ">
+              <div className="col-xl-12">
+                <div className="card">
+                  <div className="card-header border-0 pb-0">
+                    <div className="d-flex align-items-center mb-3" style={{width:"100%"}}>
+                      <h4 className="heading mb-0 me-auto">
+                        <i className="fas fa-building me-2 text-primary"></i>
+                        Tenant Information
+                      </h4>
+                      {loginUser?.Data?.SubDomain && (
+                        <button
+                          onClick={() =>
+                            window.open(
+                              `https://${loginUser?.Data?.SubDomain}.earthcoapp.com`,
+                              "_blank",
+                              "noopener,noreferrer"
+                            )
+                          }
+                          className="btn btn-primary btn-sm ms-auto"
+                          style={{
+                            background: "#7b9b43",
+                            border: "none",
+                            borderRadius: "22px",
+                            padding: "8px 20px",
+                            fontSize: "0.875rem",
+                            fontWeight: 500,
+                            cursor: "pointer",
+                            boxShadow: "0 2px 6px rgba(25, 118, 210, 0.08)",
+                            transition: "background 0.2s",
+                          }}
+                        >
+                          <i className="fas fa-external-link-alt me-1"></i>
+                          Visit Sub Domain
+                        </button>
+                      )}
+                    </div>
                   </div>
                   <div className="card-body p-0">
-                    <div id="overiewChart"></div>
-                    <div className="ttl-project">
-                      <div className="pr-data">
-                        <h5>12,721</h5>
-                        <span>Number of Projects</span>
+                    {loading ? (
+                      <div className="text-center py-5">
+                        <div className="spinner-border text-primary" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        <p className="mt-2 text-muted">Loading tenant information...</p>
                       </div>
-                      <div className="pr-data">
-                        <h5 className="text-primary">721</h5>
-                        <span>Active Projects</span>
+                    ) : error ? (
+                      <div className="text-center py-5">
+                        <div className="alert alert-danger mx-3" role="alert">
+                          <i className="fas fa-exclamation-triangle me-2"></i>
+                          {error}
+                        </div>
                       </div>
-                      <div className="pr-data">
-                        <h5>$2,50,523</h5>
-                        <span>Revenue</span>
+                    ) : tenant?.data ? (
+                      <div className="table-responsive">
+                        <table className="table table-hover mb-0" style={{borderCollapse: 'separate', borderSpacing: 0}}>
+                          <thead>
+                            <tr>
+                              <th style={{...tenantTableStyles.tableHeader, width: '200px'}}>Field</th>
+                              <th style={tenantTableStyles.tableHeader}>Value</th>
+                              <th style={{...tenantTableStyles.tableHeader, width: '150px'}}>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {/* Company Information */}
+                            <tr>
+                              <td colSpan="3" style={tenantTableStyles.sectionHeader}>
+                                <i className="fas fa-info-circle me-2"></i>
+                                Company Information
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style={tenantTableStyles.fieldName}>Company Name</td>
+                              <td className="fw-semibold">{tenant.data.CompanyName || '-'}</td>
+                              <td style={tenantTableStyles.statusCell}>{getStatusBadge(tenant.data.isActive)}</td>
+                            </tr>
+                            <tr>
+                              <td style={tenantTableStyles.fieldName}>Database Name</td>
+                              <td style={tenantTableStyles.valueCell}>
+                                <code style={tenantTableStyles.code}>{tenant.data.DatabaseName || '-'}</code>
+                              </td>
+                              <td style={tenantTableStyles.statusCell}>-</td>
+                            </tr>
+                            <tr>
+                              <td style={tenantTableStyles.fieldName}>Sub Domain</td>
+                              <td style={tenantTableStyles.valueCell}>
+                                {tenant.data.SubDomain ? (
+                                  <span style={{color: '#7b9b43', fontWeight: '600'}}>
+                                    {tenant.data.SubDomain}.earthcoapp.com
+                                  </span>
+                                ) : '-'}
+                              </td>
+                              <td style={tenantTableStyles.statusCell}>-</td>
+                            </tr>
+
+                            {/* Contact Information */}
+                            <tr>
+                              <td colSpan="3" style={tenantTableStyles.sectionHeader}>
+                                <i className="fas fa-address-book me-2"></i>
+                                Contact Information
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style={tenantTableStyles.fieldName}>Full Name</td>
+                              <td className="fw-semibold">{`${tenant.data.FirstName || ''} ${tenant.data.LastName || ''}`.trim() || '-'}</td>
+                              <td style={tenantTableStyles.statusCell}>-</td>
+                            </tr>
+                            <tr>
+                              <td style={tenantTableStyles.fieldName}>Email Address</td>
+                              <td style={tenantTableStyles.valueCell}>
+                                <a  style={tenantTableStyles.link}>
+                                  <i className="fas fa-envelope me-1" style={{color: '#7b9b43'}}></i>
+                                  {tenant.data.Email || '-'}
+                                </a>
+                              </td>
+                              <td style={tenantTableStyles.statusCell}>-</td>
+                            </tr>
+                            <tr>
+                              <td style={tenantTableStyles.fieldName}>Phone Number</td>
+                              <td style={tenantTableStyles.valueCell}>
+                                <a  style={tenantTableStyles.link}>
+                                  <i className="fas fa-phone me-1" style={{color: '#7b9b43'}}></i>
+                                  {tenant.data.PhoneNo || '-'}
+                                </a>
+                              </td>
+                              <td style={tenantTableStyles.statusCell}>-</td>
+                            </tr>
+
+                            {/* Package Information */}
+                            {tenant.data.tblUserPackages && tenant.data.tblUserPackages.length > 0 && (
+                              <>
+                                <tr>
+                                  <td colSpan="3" style={tenantTableStyles.sectionHeader}>
+                                    <i className="fas fa-box me-2"></i>
+                                    Package Information
+                                  </td>
+                                </tr>
+                                {tenant.data.tblUserPackages.map((pkg, index) => (
+                                  <React.Fragment key={index}>
+                                    <tr>
+                                      <td style={tenantTableStyles.fieldName}>Package Name</td>
+                                      <td style={tenantTableStyles.valueCell}>
+                                        <span className="badge bg-info text-white px-3 py-2 rounded-pill" style={tenantTableStyles.badge}>
+                                          <i className="fas fa-crown me-1"></i>
+                                          {pkg.Name || '-'}
+                                        </span>
+                                      </td>
+                                      <td style={tenantTableStyles.statusCell}>{getStatusBadge(pkg.isActive)}</td>
+                                    </tr>
+                                    <tr>
+                                      <td style={tenantTableStyles.fieldName}>Package Price</td>
+                                      <td style={tenantTableStyles.valueCell}>
+                                        <span className=" px-2 py-1 fw-semibold" >
+                                          ${pkg.Price || '0.00'}
+                                        </span>
+                                      </td>
+                                      <td style={tenantTableStyles.statusCell}>-</td>
+                                    </tr>
+                                    <tr>
+                                      <td style={tenantTableStyles.fieldName}>Max Users</td>
+                                      <td style={tenantTableStyles.valueCell}>
+                                        <span className=" px-2 py-1 fw-semibold" >
+                                          {pkg.MaxUsers || '0'} Users
+                                        </span>
+                                      </td>
+                                      <td style={tenantTableStyles.statusCell}>-</td>
+                                    </tr>
+                                    <tr>
+                                      <td style={tenantTableStyles.fieldName}>Max Companies</td>
+                                      <td style={tenantTableStyles.valueCell}>
+                                        <span className=" px-2 py-1 fw-semibold" >
+                                          {pkg.MaxCompanies || '0'} Companies
+                                        </span>
+                                      </td>
+                                      <td style={tenantTableStyles.statusCell}>-</td>
+                                    </tr>
+                                    <tr>
+                                      <td style={tenantTableStyles.fieldName}>Storage Limit</td>
+                                      <td>
+                                        <span className=" px-2 py-1">
+                                          <i className="fas fa-hdd me-1"></i>
+                                          {formatStorageSize(pkg.MaxStorageMB || 0)}
+                                        </span>
+                                      </td>
+                                      <td  style={tenantTableStyles.statusCell}>-</td>
+                                    </tr>
+                                    <tr>
+                                      <td style={tenantTableStyles.fieldName}>Expiry Date</td>
+                                      <td>
+                                        <span className="fw-semibold">
+                                          {formatDate(pkg.ExpiryDate)}
+                                        </span>
+                                      </td>
+                                      <td style={tenantTableStyles.statusCell}>
+                                        <span className={`badge ${getExpiryStatus(pkg.ExpiryDate).badge} text-white px-2 py-1`}>
+                                          {getExpiryStatus(pkg.ExpiryDate).status}
+                                        </span>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td style={tenantTableStyles.fieldName}>Created Date</td>
+                                      <td className="fw-semibold">{formatDate(pkg.CreatedDate)}</td>
+                                      <td  style={tenantTableStyles.statusCell}>-</td>
+                                    </tr>
+                                  </React.Fragment>
+                                ))}
+                              </>
+                            )}
+
+                            {/* System Information */}
+                            <tr>
+                              <td colSpan="3" style={tenantTableStyles.sectionHeader}>
+                                <i className="fas fa-cogs me-2"></i>
+                                System Information
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style={tenantTableStyles.fieldName}>Tenant ID</td>
+                              <td>
+                                <span className=" px-2 py-1  fw-semibold" >{tenant.data.TenantId || '-'}</span>
+                              </td>
+                              <td  style={tenantTableStyles.statusCell}>-</td>
+                            </tr>
+                            <tr>
+                              <td style={tenantTableStyles.fieldName}>Role ID</td>
+                              <td>
+                                <span className=" px-2 py-1 fw-semibold">
+                                  Role {tenant.data.RoleId || '-'}
+                                </span>
+                              </td>
+                              <td  style={tenantTableStyles.statusCell}>-</td>
+                            </tr>
+                            <tr>
+                              <td style={tenantTableStyles.fieldName}>Account Status</td>
+                              <td>
+                                <span className={`badge ${tenant.data.isActive ? 'bg-success' : 'bg-danger'} text-white px-3 py-2`}>
+                                  <i className={`fas ${tenant.data.isActive ? 'fa-check-circle' : 'fa-times-circle'} me-1`}></i>
+                                  {tenant.data.isActive ? 'Active' : 'Inactive'}
+                                </span>
+                              </td>
+                              <td  style={tenantTableStyles.statusCell}>-</td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                      <div className="pr-data">
-                        <h5 className="text-success">12,275h</h5>
-                        <span>Working Hours</span>
+                    ) : (
+                      <div className="text-center py-5">
+                        <div className="alert alert-info mx-3" role="alert">
+                          <i className="fas fa-info-circle me-2"></i>
+                          No tenant information available
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
-              <div className="col-xl-4">
-                <div className="card">
-                  <div className="card-header border-0">
-                    <h4 className="heading mb-0">My To Do Items</h4>
-                    <div>
-                      <a href="javascript:void(0);" className="text-primary me-2">View All</a>
-                      <a href="javascript:void(0);" className="text-black"> + Add To Do</a>
-                    </div>
-                  </div>
-                  <div className="card-body p-0">
-                    <div className="dt-do-bx">
-                      <div className="draggable-zone dropzoneContainer to-dodroup dz-scroll">
-                        <div className="sub-card draggable-handle draggable">
-                          <div className="d-items">
-                            <span className="text-warning dang d-block mb-2">
-                              <svg className="me-1" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M3.61051 15.3276H14.3978C15.5843 15.3276 16.329 14.0451 15.7395 13.0146L10.35 3.59085C9.75676 2.5536 8.26126 2.55285 7.66726 3.5901L2.26876 13.0139C1.67926 14.0444 2.42326 15.3276 3.61051 15.3276Z" stroke="#FF9F00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M9.00189 10.0611V7.7361" stroke="#FF9F00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M8.99625 12.375H9.00375" stroke="#FF9F00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              </svg>
-                              Latest to do's
-                            </span>
-                            <div className="d-flex justify-content-between flex-wrap">
-                              <div className="d-items-2">
-                                <div>
-                                  <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="1" height="1" fill="#888888"/>
-                                    <rect y="3" width="1" height="1" fill="#888888"/>
-                                    <rect y="6" width="1" height="1" fill="#888888"/>
-                                    <rect y="9" width="1" height="1" fill="#888888"/>
-                                    <rect y="12" width="1" height="1" fill="#888888"/>
-                                    <rect y="15" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="3" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="6" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="9" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="12" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="15" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="3" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="6" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="9" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="12" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="15" width="1" height="1" fill="#888888"/>
-                                  </svg>
-                                </div>
-                                <div>
-                                  <div className="form-check custom-checkbox">
-                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-                                    <label className="form-check-label" htmlFor="customCheckBox1">Compete this projects Monday</label>
-                                  </div>
-                                  <span>2023-12-26 07:15:00</span>
-                                </div>
-                              </div>
-                              <div>
-                                <div className="icon-box icon-box-md bg-danger-light me-1">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.8833 6.31213C12.8833 6.31213 12.5213 10.8021 12.3113 12.6935C12.2113 13.5968 11.6533 14.1261 10.7393 14.1428C8.99994 14.1741 7.25861 14.1761 5.51994 14.1395C4.64061 14.1215 4.09194 13.5855 3.99394 12.6981C3.78261 10.7901 3.42261 6.31213 3.42261 6.31213" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M13.8055 4.1598H2.50012" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M11.6271 4.1598C11.1037 4.1598 10.6531 3.7898 10.5504 3.27713L10.3884 2.46647C10.2884 2.09247 9.94974 1.8338 9.56374 1.8338H6.74174C6.35574 1.8338 6.01707 2.09247 5.91707 2.46647L5.75507 3.27713C5.65241 3.7898 5.20174 4.1598 4.67841 4.1598" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                                <div className="icon-box icon-box-md bg-primary-light">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.16492 13.6286H14" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path fillRule="evenodd" clipRule="evenodd" d="M8.52001 2.52986C9.0371 1.91186 9.96666 1.82124 10.5975 2.32782C10.6324 2.35531 11.753 3.22586 11.753 3.22586C12.446 3.64479 12.6613 4.5354 12.2329 5.21506C12.2102 5.25146 5.87463 13.1763 5.87463 13.1763C5.66385 13.4393 5.34389 13.5945 5.00194 13.5982L2.57569 13.6287L2.02902 11.3149C1.95244 10.9895 2.02902 10.6478 2.2398 10.3849L8.52001 2.52986Z" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M7.34723 4.00059L10.9821 6.79201" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                              </div>
-                            </div>  
-                          </div>
-                        </div>
-                        <div className="sub-card draggable-handle draggable">
-                          <div className="d-items">
-                            <span className="text-success dang d-block mb-2">
-                              <svg className="me-1" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15 4.5L6.75 12.75L3 9" stroke="#3AC977" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              </svg>
-                              Latest finished to do's
-                            </span>
-                            <div className="d-flex justify-content-between flex-wrap">
-                              <div className="d-items-2">
-                                <div>
-                                  <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="1" height="1" fill="#888888"/>
-                                    <rect y="3" width="1" height="1" fill="#888888"/>
-                                    <rect y="6" width="1" height="1" fill="#888888"/>
-                                    <rect y="9" width="1" height="1" fill="#888888"/>
-                                    <rect y="12" width="1" height="1" fill="#888888"/>
-                                    <rect y="15" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="3" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="6" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="9" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="12" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="15" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="3" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="6" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="9" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="12" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="15" width="1" height="1" fill="#888888"/>
-                                  </svg>
-                                </div>
-                                <div>
-                                  <div className="form-check custom-checkbox">
-                                    <input type="checkbox" className="form-check-input" id="customCheckBox2" required/>
-                                    <label className="form-check-label" htmlFor="customCheckBox2">Compete this projects Monday</label>
-                                  </div>
-                                  <span>2023-12-26 07:15:00</span>
-                                </div>
-                              </div>
-                              <div>
-                                <div className="icon-box icon-box-md bg-danger-light me-1">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.8833 6.31213C12.8833 6.31213 12.5213 10.8021 12.3113 12.6935C12.2113 13.5968 11.6533 14.1261 10.7393 14.1428C8.99994 14.1741 7.25861 14.1761 5.51994 14.1395C4.64061 14.1215 4.09194 13.5855 3.99394 12.6981C3.78261 10.7901 3.42261 6.31213 3.42261 6.31213" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M13.8055 4.1598H2.50012" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M11.6271 4.1598C11.1037 4.1598 10.6531 3.7898 10.5504 3.27713L10.3884 2.46647C10.2884 2.09247 9.94974 1.8338 9.56374 1.8338H6.74174C6.35574 1.8338 6.01707 2.09247 5.91707 2.46647L5.75507 3.27713C5.65241 3.7898 5.20174 4.1598 4.67841 4.1598" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                                <div className="icon-box icon-box-md bg-primary-light">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.16492 13.6286H14" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path fillRule="evenodd" clipRule="evenodd" d="M8.52001 2.52986C9.0371 1.91186 9.96666 1.82124 10.5975 2.32782C10.6324 2.35531 11.753 3.22586 11.753 3.22586C12.446 3.64479 12.6613 4.5354 12.2329 5.21506C12.2102 5.25146 5.87463 13.1763 5.87463 13.1763C5.66385 13.4393 5.34389 13.5945 5.00194 13.5982L2.57569 13.6287L2.02902 11.3149C1.95244 10.9895 2.02902 10.6478 2.2398 10.3849L8.52001 2.52986Z" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M7.34723 4.00059L10.9821 6.79201" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                              </div>
-                            </div>  
-                          </div>
-                        </div>
-                        <div className="sub-card draggable-handle draggable">
-                          <div className="d-items">
-                            <div className="d-flex justify-content-between flex-wrap">
-                              <div className="d-items-2">
-                                <div>
-                                  <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="1" height="1" fill="#888888"/>
-                                    <rect y="3" width="1" height="1" fill="#888888"/>
-                                    <rect y="6" width="1" height="1" fill="#888888"/>
-                                    <rect y="9" width="1" height="1" fill="#888888"/>
-                                    <rect y="12" width="1" height="1" fill="#888888"/>
-                                    <rect y="15" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="3" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="6" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="9" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="12" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="15" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="3" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="6" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="9" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="12" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="15" width="1" height="1" fill="#888888"/>
-                                  </svg>
-                                </div>
-                                <div>
-                                  <div className="form-check custom-checkbox">
-                                    <input type="checkbox" className="form-check-input" id="customCheckBox3" required/>
-                                    <label className="form-check-label" htmlFor="customCheckBox3">Compete this projects Monday</label>
-                                  </div>
-                                  <span>2023-12-26 07:15:00</span>
-                                </div>
-                              </div>
-                              <div>
-                                <div className="icon-box icon-box-md bg-danger-light me-1">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.8833 6.31213C12.8833 6.31213 12.5213 10.8021 12.3113 12.6935C12.2113 13.5968 11.6533 14.1261 10.7393 14.1428C8.99994 14.1741 7.25861 14.1761 5.51994 14.1395C4.64061 14.1215 4.09194 13.5855 3.99394 12.6981C3.78261 10.7901 3.42261 6.31213 3.42261 6.31213" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M13.8055 4.1598H2.50012" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M11.6271 4.1598C11.1037 4.1598 10.6531 3.7898 10.5504 3.27713L10.3884 2.46647C10.2884 2.09247 9.94974 1.8338 9.56374 1.8338H6.74174C6.35574 1.8338 6.01707 2.09247 5.91707 2.46647L5.75507 3.27713C5.65241 3.7898 5.20174 4.1598 4.67841 4.1598" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                                <div className="icon-box icon-box-md bg-primary-light">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.16492 13.6286H14" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path fillRule="evenodd" clipRule="evenodd" d="M8.52001 2.52986C9.0371 1.91186 9.96666 1.82124 10.5975 2.32782C10.6324 2.35531 11.753 3.22586 11.753 3.22586C12.446 3.64479 12.6613 4.5354 12.2329 5.21506C12.2102 5.25146 5.87463 13.1763 5.87463 13.1763C5.66385 13.4393 5.34389 13.5945 5.00194 13.5982L2.57569 13.6287L2.02902 11.3149C1.95244 10.9895 2.02902 10.6478 2.2398 10.3849L8.52001 2.52986Z" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M7.34723 4.00059L10.9821 6.79201" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                              </div>
-                            </div>  
-                          </div>
-                        </div>
-                        <div className="sub-card draggable-handle draggable">
-                          <div className="d-items">
-                            <div className="d-flex justify-content-between flex-wrap">
-                              <div className="d-items-2">
-                                <div>
-                                  <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="1" height="1" fill="#888888"/>
-                                    <rect y="3" width="1" height="1" fill="#888888"/>
-                                    <rect y="6" width="1" height="1" fill="#888888"/>
-                                    <rect y="9" width="1" height="1" fill="#888888"/>
-                                    <rect y="12" width="1" height="1" fill="#888888"/>
-                                    <rect y="15" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="3" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="6" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="9" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="12" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="15" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="3" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="6" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="9" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="12" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="15" width="1" height="1" fill="#888888"/>
-                                  </svg>
-                                </div>
-                                <div>
-                                  <div className="form-check custom-checkbox">
-                                    <input type="checkbox" className="form-check-input" id="customCheckBox4" required/>
-                                    <label className="form-check-label" htmlFor="customCheckBox4">Compete this projects Monday</label>
-                                  </div>
-                                  <span>2023-12-26 07:15:00</span>
-                                </div>
-                              </div>
-                              <div>
-                                <div className="icon-box icon-box-md bg-danger-light me-1">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.8833 6.31213C12.8833 6.31213 12.5213 10.8021 12.3113 12.6935C12.2113 13.5968 11.6533 14.1261 10.7393 14.1428C8.99994 14.1741 7.25861 14.1761 5.51994 14.1395C4.64061 14.1215 4.09194 13.5855 3.99394 12.6981C3.78261 10.7901 3.42261 6.31213 3.42261 6.31213" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M13.8055 4.1598H2.50012" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M11.6271 4.1598C11.1037 4.1598 10.6531 3.7898 10.5504 3.27713L10.3884 2.46647C10.2884 2.09247 9.94974 1.8338 9.56374 1.8338H6.74174C6.35574 1.8338 6.01707 2.09247 5.91707 2.46647L5.75507 3.27713C5.65241 3.7898 5.20174 4.1598 4.67841 4.1598" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                                <div className="icon-box icon-box-md bg-primary-light">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.16492 13.6286H14" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path fillRule="evenodd" clipRule="evenodd" d="M8.52001 2.52986C9.0371 1.91186 9.96666 1.82124 10.5975 2.32782C10.6324 2.35531 11.753 3.22586 11.753 3.22586C12.446 3.64479 12.6613 4.5354 12.2329 5.21506C12.2102 5.25146 5.87463 13.1763 5.87463 13.1763C5.66385 13.4393 5.34389 13.5945 5.00194 13.5982L2.57569 13.6287L2.02902 11.3149C1.95244 10.9895 2.02902 10.6478 2.2398 10.3849L8.52001 2.52986Z" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M7.34723 4.00059L10.9821 6.79201" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                              </div>
-                            </div>  
-                          </div>
-                        </div>
-                        <div className="sub-card draggable-handle draggable">
-                          <div className="d-items">
-                            <div className="d-flex justify-content-between flex-wrap">
-                              <div className="d-items-2">
-                                <div>
-                                  <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="1" height="1" fill="#888888"/>
-                                    <rect y="3" width="1" height="1" fill="#888888"/>
-                                    <rect y="6" width="1" height="1" fill="#888888"/>
-                                    <rect y="9" width="1" height="1" fill="#888888"/>
-                                    <rect y="12" width="1" height="1" fill="#888888"/>
-                                    <rect y="15" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="3" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="6" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="9" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="12" width="1" height="1" fill="#888888"/>
-                                    <rect x="4" y="15" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="3" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="6" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="9" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="12" width="1" height="1" fill="#888888"/>
-                                    <rect x="8" y="15" width="1" height="1" fill="#888888"/>
-                                  </svg>
-                                </div>
-                                <div>
-                                  <div className="form-check custom-checkbox">
-                                    <input type="checkbox" className="form-check-input" id="customCheckBox5" required/>
-                                    <label className="form-check-label" htmlFor="customCheckBox5">Compete this projects Monday</label>
-                                  </div>
-                                  <span>2023-12-26 07:15:00</span>
-                                </div>
-                              </div>
-                              <div>
-                                <div className="icon-box icon-box-md bg-danger-light me-1">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.8833 6.31213C12.8833 6.31213 12.5213 10.8021 12.3113 12.6935C12.2113 13.5968 11.6533 14.1261 10.7393 14.1428C8.99994 14.1741 7.25861 14.1761 5.51994 14.1395C4.64061 14.1215 4.09194 13.5855 3.99394 12.6981C3.78261 10.7901 3.42261 6.31213 3.42261 6.31213" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M13.8055 4.1598H2.50012" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M11.6271 4.1598C11.1037 4.1598 10.6531 3.7898 10.5504 3.27713L10.3884 2.46647C10.2884 2.09247 9.94974 1.8338 9.56374 1.8338H6.74174C6.35574 1.8338 6.01707 2.09247 5.91707 2.46647L5.75507 3.27713C5.65241 3.7898 5.20174 4.1598 4.67841 4.1598" stroke="#FF5E5E" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                                <div className="icon-box icon-box-md bg-primary-light">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.16492 13.6286H14" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path fillRule="evenodd" clipRule="evenodd" d="M8.52001 2.52986C9.0371 1.91186 9.96666 1.82124 10.5975 2.32782C10.6324 2.35531 11.753 3.22586 11.753 3.22586C12.446 3.64479 12.6613 4.5354 12.2329 5.21506C12.2102 5.25146 5.87463 13.1763 5.87463 13.1763C5.66385 13.4393 5.34389 13.5945 5.00194 13.5982L2.57569 13.6287L2.02902 11.3149C1.95244 10.9895 2.02902 10.6478 2.2398 10.3849L8.52001 2.52986Z" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M7.34723 4.00059L10.9821 6.79201" stroke="#0D99FF" strokeLinecap="round" strokeLinejoin="round"/>
-                                  </svg>
-                                </div>
-                              </div>
-                            </div>  
-                          </div>
-                        </div>
-                      </div>
-                    </div>  
-                  </div>
-                </div>
-              </div> */}
             </div>
             
         </div>

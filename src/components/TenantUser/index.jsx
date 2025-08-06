@@ -178,7 +178,7 @@ export const TenantScreen = () => {
                   <div className="table-responsive active-projects style-1">
                     {/* Search Field */}
                     <div className="d-flex justify-content-between align-items-center mb-2 pt-3">
-                      <h4 className="heading mb-0" style={{marginLeft:"15px"}}>Tenant List</h4>
+                      <h4 className="heading mb-0" style={{marginLeft:"15px"}}></h4>
                       <TextField
                         size="small"
                         placeholder="Search Tenant..."

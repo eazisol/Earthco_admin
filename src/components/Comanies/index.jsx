@@ -141,7 +141,7 @@ export const CompaniesScreen = () => {
   const fetchCompanies = async () => {
     setLoader(true);
     const response = await getCompanyList();
-    console.log(response, 'response');
+    
     setEmployeesData(response?.data?.Data);
     setLoader(false);
   };
@@ -149,6 +149,7 @@ export const CompaniesScreen = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     fetchCompanies();
+    setLoader(false);
     const fetchTenant = async () => {
       try {
         const data = await getPackagesType(user.token.data);
@@ -391,10 +392,11 @@ export const CompaniesScreen = () => {
               <div className="card">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
-                    <div className="tbl-caption">
-                      <h4 className="heading mb-0">Companies</h4>
+                    <div className="d-flex justify-content-between align-items-center mb-2 pt-3">
+                      <h4 className="heading mb-0"></h4>
                       <button
-                        className="btn btn-primary btn-sm"
+                        className="btn btn-primary btn-sm ml-3"
+                        style={{marginRight:"15px"}}
                         onClick={() => {
                           setSelectedId(0);
                           setFormData({

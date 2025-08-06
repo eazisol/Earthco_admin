@@ -560,8 +560,13 @@ caption {
 
 th {
   text-align: inherit;
-  text-align: -webkit-match-parent; }
-
+  text-align: -webkit-match-parent; 
+  background-color: #d3dee6 !important;
+  color: #000000de !important;
+  font-size: .9rem;
+  white-space: nowrap;
+}
+ 
 thead,
 tbody,
 tfoot,
@@ -1624,7 +1629,8 @@ progress {
   .table > tbody {
     vertical-align: inherit; }
   .table > thead {
-    vertical-align: bottom; }
+    vertical-align: bottom; 
+  }
 
 .table-group-divider {
   border-top: 2px solid currentcolor; }
