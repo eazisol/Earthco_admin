@@ -1,10 +1,10 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
-import { CircularProgress, TextField, Alert, AlertTitle  } from "@mui/material";
+import { CircularProgress, TextField, Alert, AlertTitle, IconButton, InputAdornment } from "@mui/material";
 import { useState, useEffect } from "react";
 import { addEmailSetting, getEmailSetting } from "../../APIS/settings";
 import { toast } from "react-toastify";
 import TitleBar from "../TitleBar";
-
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 export const QBookScreen = () => {
   const [settingData, setSettingData] = useState({});
   const [formData, setFormData] = useState({
@@ -16,7 +16,8 @@ export const QBookScreen = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
+  const [showSandboxSecret, setShowSandboxSecret] = useState(false);
+  const [showProductionSecret, setShowProductionSecret] = useState(false);
   // Helper to determine if current mode is production
   const isProduction = parseInt(formData.QBMode) === 1;
 
@@ -46,18 +47,14 @@ export const QBookScreen = () => {
     switch (name) {
       case "QBProductionClientId":
       case "QBSandBoxClientId":
-        if (value && (value.length < 15 || value.length > 50)) {
-          return "Must be between 15-50 characters";
-        }
+      
         if (value && !/^[a-zA-Z0-9-]+$/.test(value)) {
           return "Only alphanumeric characters and dashes allowed";
         }
         break;
       case "QBProductionClientSecret":
       case "QBSandBoxClientSecret":
-        if (value && (value.length < 20 || value.length > 100)) {
-          return "Must be between 20-100 characters";
-        }
+      
         break;
       default:
         return "";
@@ -92,6 +89,8 @@ export const QBookScreen = () => {
         QBSandBoxClientId: response?.data?.QBSandBoxClientId || "",
         QBSandBoxClientSecret: response?.data?.QBSandBoxClientSecret || "",
         QBMode: response?.data?.QBMode ?? 1,
+        TermsAndCondition: undefined,
+        PrivacyPolicy: undefined
       });
     } catch (error) {
       console.error("Error fetching settings:", error);
@@ -167,6 +166,8 @@ export const QBookScreen = () => {
       StripeMode: settingData?.StripeMode || null,
       PrimeryColor: settingData?.PrimeryColor || null,
       SecondaryColor: settingData?.SecondaryColor || null,
+      TermsAndCondition: undefined,
+      PrivacyPolicy: undefined
     };
 
     try {
@@ -295,7 +296,7 @@ export const QBookScreen = () => {
                                 <span className="text-danger">*</span>
                               </label>
                               <TextField
-                                type="password"
+                                type={showProductionSecret ? "text" : "password"}
                                 name="QBProductionClientSecret"
                                 value={formData.QBProductionClientSecret}
                                 onChange={handleInputChange}
@@ -303,6 +304,18 @@ export const QBookScreen = () => {
                                 fullWidth
                                 error={!!errors.QBProductionClientSecret}
                                 helperText={errors.QBProductionClientSecret}
+                                InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          onClick={() => setShowProductionSecret(!showProductionSecret)}
+                                          edge="end"
+                                        >
+                                          {showProductionSecret ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  }}
                               />
                             </div>
                           </>
@@ -332,16 +345,31 @@ export const QBookScreen = () => {
                                 Sandbox Client Secret
                                 <span className="text-danger">*</span>
                               </label>
-                              <TextField
-                                type="password"
-                                name="QBSandBoxClientSecret"
-                                value={formData.QBSandBoxClientSecret}
-                                onChange={handleInputChange}
-                                size="small"
-                                fullWidth
-                                error={!!errors.QBSandBoxClientSecret}
-                                helperText={errors.QBSandBoxClientSecret}
-                              />
+                              <div style={{ position: 'relative' }}>
+                                <TextField
+                                  type={showSandboxSecret ? "text" : "password"}
+                                  name="QBSandBoxClientSecret"
+                                  value={formData.QBSandBoxClientSecret}
+                                  onChange={handleInputChange}
+                                  size="small"
+                                  fullWidth
+                                  error={!!errors.QBSandBoxClientSecret}
+                                  helperText={errors.QBSandBoxClientSecret}
+                                      InputProps={{
+                                        endAdornment: (
+                                          <InputAdornment position="end">
+                                            <IconButton
+                                              onClick={() => setShowSandboxSecret(!showSandboxSecret)}
+                                              edge="end"
+                                            >
+                                              {showSandboxSecret ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                          </InputAdornment>
+                                        ),
+                                      }}
+                                />
+                              
+                              </div>
                             </div>
                           </>
                         )}

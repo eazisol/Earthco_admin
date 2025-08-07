@@ -1,10 +1,10 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
-import { CircularProgress, TextField, Alert, AlertTitle } from "@mui/material";
+import { CircularProgress, TextField, Alert, AlertTitle, IconButton, InputAdornment } from "@mui/material";
 import { useState, useEffect } from "react";
 import { getEmailSetting, addEmailSetting } from "../../APIS/settings";
 import { toast } from "react-toastify";
 import TitleBar from "../TitleBar";
-
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 export const StripeSetting = () => {
   const [settingData, setSettingData] = useState({});
   const [formData, setFormData] = useState({
@@ -17,7 +17,8 @@ export const StripeSetting = () => {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
+  const [showProductionSecret, setShowProductionSecret] = useState(false);
+  const [showSandboxSecret, setShowSandboxSecret] = useState(false);
   // Helper to determine if current mode is production
   const isProduction = parseInt(formData.StripeMode) === 1;
 
@@ -53,12 +54,7 @@ export const StripeSetting = () => {
         "StripeSandboxSecretId"
       ].includes(name)
     ) {
-      if (value && value.length < 32) {
-        return "Key must be at least 32 characters";
-      }
-      if (value && value.length > 50) {
-        return "Key cannot exceed 50 characters";
-      }
+      
     }
 
     // Uncomment for stricter key format validation
@@ -297,6 +293,7 @@ export const StripeSetting = () => {
                                 <span className="text-danger">*</span>
                               </label>
                               <TextField
+                                type={showProductionSecret ? "text" : "password"}
                                 name="StripeProductionSecretId"
                                 value={formData.StripeProductionSecretId}
                                 onChange={handleInputChange}
@@ -305,6 +302,18 @@ export const StripeSetting = () => {
                                 placeholder="sk_live_..."
                                 error={!!errors.StripeProductionSecretId}
                                 helperText={errors.StripeProductionSecretId}
+                                InputProps={{
+                                  endAdornment: (
+                                    <InputAdornment position="end">
+                                      <IconButton
+                                        onClick={() => setShowProductionSecret(!showProductionSecret)}
+                                        edge="end"
+                                      >
+                                        {showProductionSecret ? <VisibilityOff /> : <Visibility />}
+                                      </IconButton>
+                                    </InputAdornment>
+                                  ),
+                                }}
                               />
                             </div>
                           </>
@@ -335,7 +344,8 @@ export const StripeSetting = () => {
                                 <span className="text-danger">*</span>
                               </label>
                               <TextField
-                                name="StripeSandboxSecretId"
+                                type={showSandboxSecret ? "text" : "password"}
+                                  name="StripeSandboxSecretId"
                                 value={formData.StripeSandboxSecretId}
                                 onChange={handleInputChange}
                                 size="small"
@@ -343,6 +353,18 @@ export const StripeSetting = () => {
                                 placeholder="sk_test_..."
                                 error={!!errors.StripeSandboxSecretId}
                                 helperText={errors.StripeSandboxSecretId}
+                                InputProps={{
+                                  endAdornment: (
+                                    <InputAdornment position="end">
+                                      <IconButton
+                                        onClick={() => setShowSandboxSecret(!showSandboxSecret)}
+                                        edge="end"
+                                      >
+                                        {showSandboxSecret ? <VisibilityOff /> : <Visibility />}
+                                      </IconButton>
+                                    </InputAdornment>
+                                  ),
+                                }}
                               />
                             </div>
                           </>

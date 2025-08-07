@@ -156,7 +156,7 @@ const handleSubscription=async(plan)=>{
       setModalOpen(true);
       setModalConfig({
         title: "Confirmation",
-        description: 'You currently have an active package. Please be advised that proceeding with this action will result in the removal of your existing package details. Kindly confirm if you wish to continue with the new package subscription.',
+        description: 'This action will replace your current package (expired or active). Do you want to continue with the new subscription?',
         onConfirm: async() => {
           await updateTenantPackageApi(plan)
         },
@@ -167,7 +167,7 @@ const handleSubscription=async(plan)=>{
       setModalOpen(true);
     setModalConfig({
       title: "Confirmation",
-      description: "Are you sure you want to proceed with this package? This action will ensure you receive the package benefits.",
+      description: "This action will replace your current package (expired or active). Do you want to continue with the new subscription?",
       onConfirm: async() => {
         await updateTenantPackageApi(plan)
       },
@@ -226,9 +226,9 @@ const handleSubscription=async(plan)=>{
         cancelText={modalConfig.cancelText}
       />
   
-      <main id="main">
+      <main id="main" >
         {/* ======= About Us Section ======= */}
-        <section id="about" className="about">
+        <section id="about" className="about" >
           <div className="container" data-aos="fade-up">
             <div className="section-title">
               <h2>About Us</h2>

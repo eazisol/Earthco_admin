@@ -223,13 +223,13 @@ export const PackagesScreen = () => {
         setSelectedId(0);
         fetchPackages();
         setOpenForm(false);
-        toast.success(response?.data?.Message || "Package deleted successfully");
+        toast.success(response?.data?.Message );
       } else {
-        toast.error(response?.data?.Message || "Error deleting package");
+        toast.error(response?.data?.Message );
       }
     } catch (error) {
       console.error(error);
-      toast.error(error?.response?.data?.Message || "Error deleting package");
+      toast.error(error?.response?.data?.Message );
     }
   };
 

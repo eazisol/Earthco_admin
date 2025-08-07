@@ -7,7 +7,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
 import { toast } from "react-toastify";
 import {
@@ -19,8 +19,11 @@ import {
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import { addCompany, deleteCompany, getCompanyList } from "../../APIS/companies";
 import TitleBar from "../TitleBar";
+import { useAppContext } from "../../context/AppContext";
 
 export const CompaniesScreen = () => {
+  const { loginUser } = useAppContext();
+
   const [packageOptions, setPackageOptions] = useState([]);
   const [errors, setErrors] = useState({});
   const [employeesData, setEmployeesData] = useState([]);
@@ -107,6 +110,7 @@ export const CompaniesScreen = () => {
     // console.log(obj, 'obj');
     try {
       const response = await addCompany(obj);
+      console.log("🚀 ~ handleSubmit ~ response:", response)
       // console.log(response, 'response');
       if (response.status === 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
@@ -129,10 +133,11 @@ export const CompaniesScreen = () => {
         fetchCompanies();
         toast.success(response?.data?.Message);
       } else {
-        toast.error("Error adding company");
+        toast.error(response?.data?.Message );
       }
     } catch (error) {
-      toast.error("Error adding company");
+      
+      toast.error(error?.response?.data );
     } finally {
       setLoader(false);
     }
@@ -233,7 +238,7 @@ export const CompaniesScreen = () => {
         <div class="offcanvas-body">
           <div class="container-fluid">
             <div class="row">
-              <div className="col-xl-6 mb-3">
+              <div className="col-xl-6 mb-4">
                 <label className="form-label">
                   Company Name<span class="text-danger">*</span>
                 </label>
@@ -248,7 +253,7 @@ export const CompaniesScreen = () => {
                   inputProps={{ maxLength: 100 }}
                 />
               </div>
-              <div class="col-xl-6 mb-3">
+              <div class="col-xl-6 mb-4">
                 <label class="form-label">
                   Company Realm ID<span class="text-danger">*</span>
                 </label>
@@ -264,7 +269,7 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-3">
+              <div class="col-xl-6 mb-4">
                 <label class="form-label">Display Name</label>
                 <TextField
                   className="form-control form-control-sm"
@@ -276,7 +281,7 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-3">
+              <div class="col-xl-6 mb-4">
                 <label class="form-label">
                   Email<span class="text-danger">*</span>
                 </label>
@@ -293,7 +298,7 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-3">
+              <div class="col-xl-6 mb-4">
                 <label class="form-label">
                   Phone Number<span class="text-danger">*</span>
                 </label>
@@ -309,7 +314,7 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-3">
+              <div class="col-xl-6 mb-4">
                 <label class="form-label">Secondary Phone Number</label>
                 <TextField
                   className="form-control form-control-sm"
@@ -321,7 +326,7 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-3">
+              <div class="col-xl-6 mb-4">
                 <label class="form-label">Website</label>
                 <TextField
                   className="form-control form-control-sm"
@@ -333,7 +338,7 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-3">
+                <div class="col-xl-6 mb-4">
                 <label class="form-label">Address</label>
                 <TextField
                   className="form-control form-control-sm"
@@ -347,8 +352,9 @@ export const CompaniesScreen = () => {
             </div>
 
             <div style={{ textAlign: "end" }}>
-              <button className="btn btn-primary me-1" onClick={handleSubmit}>
-                {selectedId === 0 ? "Add" : "Update"}
+              <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loader}>
+                {
+                selectedId === 0 ? "Add" : "Update"}
               </button>
               <button
                 className="btn btn-danger light ms-1 cancel-btn"
@@ -428,7 +434,7 @@ export const CompaniesScreen = () => {
                           <th className="text-center">Phone</th>
                           <th className="text-center">Address</th>
                           <th className="text-center">Website</th>
-                          <th className="text-center">Action</th>
+                          {loginUser?.Data.roleId==1 && <th className="text-center">Action</th>}
                         </tr>
                       </thead>
                       <tbody>
@@ -487,7 +493,7 @@ export const CompaniesScreen = () => {
                               <td className="text-center">
                                 <span>{emp.Website ?? "-"}</span>
                               </td>
-                              <td className="text-center">
+                           {loginUser?.Data.roleId==1 &&   <td className="text-center">
                                 <i
                                   className="fa-solid fa-trash text-danger cursor-pointer delete-icon"
                                   title="Delete Company"
@@ -507,7 +513,7 @@ export const CompaniesScreen = () => {
                                     });
                                   }}
                                 ></i>
-                              </td>
+                              </td>}
                             </tr>
                           ))
                         )}

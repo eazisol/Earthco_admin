@@ -139,7 +139,9 @@ export const EmailScreen = () => {
       EmailHost: response?.data?.EmailHost || "",
       EmailClientId: response?.data?.EmailClientId || "",
       EmailClientSecret: response?.data?.EmailClientSecret || "",
-      EmailMode: response?.data?.EmailMode || 1
+      EmailMode: response?.data?.EmailMode || 1,
+      TermsAndCondition: undefined,
+      PrivacyPolicy: undefined
     });
     setLoading(false);
   };
@@ -181,6 +183,8 @@ export const EmailScreen = () => {
       EmailClientId: formData.EmailClientId,
       EmailClientSecret: formData.EmailClientSecret,
       EmailMode: formData.EmailMode,
+      TermsAndCondition: undefined,
+      PrivacyPolicy: undefined
     };
 
     if (!formData.Email || !formData.EmailPassword || !formData.EmailPort || !formData.EmailHost) {
@@ -416,7 +420,7 @@ export const EmailScreen = () => {
                   
                   </div>
                     <div className="mt-3 d-flex justify-content-end">
-                    <button className="btn btn-primary btn-sm" onClick={handleSubmit}>
+                    <button className="btn btn-primary btn-sm" onClick={handleSubmit} disabled={loading}>
                 
                     {/* {loading ? "Updating..." : "Update Settings"} */}
                      Update Settings

@@ -1,10 +1,10 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
-  import { CircularProgress, TextField, FormControl, MenuItem, Select, Alert, AlertTitle } from "@mui/material";
+  import { CircularProgress, TextField, FormControl, MenuItem, Select, Alert, AlertTitle, IconButton, InputAdornment } from "@mui/material";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { addEmailSetting, getEmailSetting } from "../../APIS/settings";
 import TitleBar from "../TitleBar";
-
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 export const GoogleSetting = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -16,17 +16,12 @@ export const GoogleSetting = () => {
   const [errors, setErrors] = useState({
     GoogelClientId: "",
     GoogleClientSecret: "",
-
+    
   });
+  const [showClientSecret, setShowClientSecret] = useState(false);
   const validateInput = (name, value) => {
     if (!value) {
       return "This field is required";
-    }
-    if (value.length < 32) {
-      return "Key must be at least 32 characters";
-    }
-    if (value.length > 50) {
-      return "Key cannot exceed 50 characters";
     }
     
     return "";
@@ -86,6 +81,8 @@ export const GoogleSetting = () => {
     formDataToSend.append('Files', null);
     const settingDataToSend = {
       ...formData,
+      TermsAndCondition: undefined,
+      PrivacyPolicy: undefined
     };
 
     formDataToSend.append('SettingData', JSON.stringify(settingDataToSend));
@@ -165,18 +162,32 @@ export const GoogleSetting = () => {
                         </div>
                         <div className="col-xl-12 mb-3">
                           <label className="form-label">Client Secret<span className="text-danger">*</span></label>
-                          <TextField
-                            name="GoogleClientSecret"
-                            value={formData.GoogleClientSecret}
-                            onChange={handleInputChange}
-                            size="small"
-                            fullWidth
-                            error={!!errors.GoogleClientSecret}
-                            helperText={errors.GoogleClientSecret}
-                          />
+                            <TextField
+                             type={showClientSecret ? "text" : "password"}
+                              name="GoogleClientSecret"
+                              value={formData.GoogleClientSecret}
+                              onChange={handleInputChange}
+                              size="small"
+                              fullWidth
+                              error={!!errors.GoogleClientSecret}
+                              helperText={errors.GoogleClientSecret}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      onClick={() => setShowClientSecret(!showClientSecret)}
+                                      edge="end"
+                                    >
+                                      {showClientSecret ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          </div>
                         </div>
                      
-                      </div>
+                    
                       <div className="mt-3 d-flex justify-content-end">
                         <button className="btn btn-primary btn-sm" onClick={handleSubmit} disabled={loading}>
                           {loading ? "Updating..." : "Update Settings"}
