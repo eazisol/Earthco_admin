@@ -1,7 +1,7 @@
  
- export const CustomButton=({text="Get Started", onClick, className})=>{
+ export const CustomButton=({text="Get Started", onClick, className,disabled=false})=>{
     return(
-        <button  className={`btn-get-started scrollto ${className}`} onClick={onClick}>
+        <button  className={`btn-get-started scrollto ${className}`} onClick={onClick} disabled={disabled}>
             {text}
         </button>
     )

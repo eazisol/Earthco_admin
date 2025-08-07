@@ -126,35 +126,31 @@ export const ContactUs = () => {
                                 <div className="card-body p-0">
                                     <div className="table-responsive active-projects style-1">
                                        
-                                        <table id="employees-tblwrapper" className="table">
-                                           
+                                        <table id="employees-tblwrapper" className="table" style={{width:"100%"}}>
                                             <thead>
                                                 <tr>
-                                                    <th>Name</th>
-                                                    <th>Message</th>
-                                                    <th>Date</th>
-                                                    <th>Action</th>
+                                                    <th style={{width:"20%"}}>Name</th>
+                                                    <th style={{width:"50%"}}>Message</th>
+                                                    <th style={{width:"10%"}}>Date</th>
+                                                    <th style={{width:"10%"}}>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {loading ? (
-                                                    <tr><td colSpan={10} className="text-center">Loading...</td></tr>
+                                                    <tr><td colSpan={4} className="text-center">Loading...</td></tr>
                                                 ) : transactionsData?.length === 0 ? (
-                                                    <tr><td colSpan={10} className="text-center">No data found</td></tr>
+                                                    <tr><td colSpan={4} className="text-center">No data found</td></tr>
                                                 ) : (
-                                                    transactionsData?.map((transaction, index) => {
-
-                                                        return (<tr key={index} className="hover-effect">
-                                                            <td>
+                                                    transactionsData?.map((transaction, index) => (
+                                                        <tr key={index} className="hover-effect">
+                                                            <td >
                                                                 <span>{transaction.Name}</span><br />
                                                                 <span>{transaction.Email}</span>
                                                             </td>
-
-
-                                                            <td>
-                                                                <span className="text-center"> {`${transaction.Message}`}</span>
+                                                            <td style={{textWrap:"wrap"}}>
+                                                               {transaction.Message}
                                                             </td>
-                                                            <td>
+                                                            <td >
                                                                 <span>{transaction.CreatedDate
                                                                     ? new Date(transaction.CreatedDate).toLocaleDateString() : '-'}</span>
                                                             </td>
@@ -179,8 +175,8 @@ export const ContactUs = () => {
                                                                     }}
                                                                 ></i>
                                                             </td>
-                                                        </tr>);
-                                                    })
+                                                        </tr>
+                                                    ))
                                                 )}
                                             </tbody>
                                         </table>

@@ -28,32 +28,34 @@ import { AddNewsletter } from './APIS/auth';
 import { toast } from 'react-toastify';
 import { CustomButton } from './components/CustomButton'
 import { ContactUs } from './components/Setting/ContactUs'
+import { RoleAndPermission } from './components/Setting/roleandpersmission'
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const [Email,setEmail] = useState("")
-  const [isLoading,setIsLoading] = useState(false)
-  useEffect(() => {
+  const [Email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginUser, setLoginUser] = useState(null);
 
-    const selectHeader = document.querySelector('#header');
+  useEffect(() => {
+    const selectHeader = document.querySelector("#header");
     if (selectHeader) {
       let headerOffset = selectHeader.offsetTop;
       let nextElement = selectHeader.nextElementSibling;
       const headerScrolled = () => {
         if (window.pageYOffset > headerOffset) {
-          selectHeader.classList.add('header-scrolled');
+          selectHeader.classList.add("header-scrolled");
         } else {
-          selectHeader.classList.remove('header-scrolled');
+          selectHeader.classList.remove("header-scrolled");
         }
       };
-      window.addEventListener('load', headerScrolled);
-      window.addEventListener('scroll', headerScrolled);
+      window.addEventListener("load", headerScrolled);
+      window.addEventListener("scroll", headerScrolled);
     }
 
     // Highlight active nav link on scroll
     const handleScroll = () => {
-      const sections = ['hero', 'about', 'services', 'contact','pricing'];
+      const sections = ["hero", "about", "services", "contact", "pricing"];
       const scrollPos = window.scrollY + 120; // 120px offset for header
       sections.forEach((id) => {
         const section = document.getElementById(id);
@@ -63,51 +65,60 @@ function Layout({ children }) {
             scrollPos >= section.offsetTop &&
             scrollPos < section.offsetTop + section.offsetHeight
           ) {
-            navLink.classList.add('active');
+            navLink.classList.add("active");
           } else {
-            navLink.classList.remove('active');
+            navLink.classList.remove("active");
           }
         }
       });
     };
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('load', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("load", handleScroll);
     setMobileMenuOpen(false); // Close mobile menu on route change
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('load', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("load", handleScroll);
     };
   }, [location]);
 
-  const hideNavFooter = location.pathname.startsWith('/dashboard');
-  const showNavFooter = location.pathname === '/' || location.pathname === '/register' || location.pathname === '/login' || location.pathname === '/forgot-password';
+  useEffect(() => {
+    const loginUser = localStorage.getItem("user");
+    setLoginUser(JSON.parse(loginUser));
+  }, [location]);
+
+  const hideNavFooter = location.pathname.startsWith("/dashboard");
+  const showNavFooter =
+    location.pathname === "/" ||
+    location.pathname === "/register" ||
+    location.pathname === "/login" ||
+    location.pathname === "/forgot-password";
 
   // Add this line to detect register page
-  const isRegisterPage = location.pathname === '/register';
-  const isLoginPage = location.pathname === '/login';
-  const isForgotPasswordPage = location.pathname === '/forgot-password';
+  const isRegisterPage = location.pathname === "/register";
+  const isLoginPage = location.pathname === "/login";
+  const isForgotPasswordPage = location.pathname === "/forgot-password";
   const handleMobileToggle = () => {
     setMobileMenuOpen((prev) => !prev);
   };
 
-  const handleSubscribe = async(e)=>{
-    e.preventDefault()
-    setIsLoading(true)
-    if(!Email){
-      toast.error("Please enter your email")
-      setIsLoading(false)
-      return
-    } 
-    const data = await AddNewsletter({Email})
-    if(data?.Message){
-      toast.success(data?.Message)
-      setEmail("")
-    }else{
-      toast.error(data?.Message)
-      setEmail("")
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    if (!Email) {
+      toast.error("Please enter your email");
+      setIsLoading(false);
+      return;
     }
-    setIsLoading(false)
-  }
+    const data = await AddNewsletter({ Email });
+    if (data?.Message) {
+      toast.success(data?.Message);
+      setEmail("");
+    } else {
+      toast.error(data?.Message);
+      setEmail("");
+    }
+    setIsLoading(false);
+  };
   return (
     <>
       {showNavFooter && (
@@ -126,7 +137,7 @@ function Layout({ children }) {
                 <li><a className="nav-link scrollto" href="/#pricing">Pricing</a></li>
                 <li><a className="nav-link scrollto" href="/#contact">Contact</a></li>
                 <li>
-                   <CustomButton text="Login" onClick={() => navigate("/login")} className='custom-login-btn' />
+                   <CustomButton text={loginUser?.Data ? "Dashboard" : "Login"} onClick={() => navigate(loginUser?.Data ? "/dashboard" : "/login")} className='custom-login-btn' />
                   </li>
                 
               </ul>
@@ -157,7 +168,7 @@ function Layout({ children }) {
                   </p>
                   <form onSubmit={handleSubscribe}>
                     <input type="email" name="Email" placeholder='Enter Your Email' value={Email} onChange={(e)=>setEmail(e.target.value)} />
-                    <input type="submit" value={isLoading ? "Subscribing..." : "Subscribe"}  />
+                    <input type="submit" value={isLoading ? "Subscribing..." : "Subscribe"} />
                   </form>
                 </div>
               </div>
@@ -346,6 +357,7 @@ function App() {
               } />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/role-and-permission" element={<RoleAndPermission />} />
         </Routes>
       </Layout>
     </Router>

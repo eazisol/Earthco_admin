@@ -422,7 +422,7 @@ const handleSubscription=async(plan)=>{
                 <li><i class="bx bx-check"></i>{`Email support only`}</li>
               </ul>
         
-              <CustomButton onClick={() => handleSubscription(plan)}/>
+              <CustomButton onClick={() =>loginUser?.Data?.RoleId === 1 ? null: handleSubscription(plan)} disabled={loginUser?.Data?.RoleId === 1} />
             </div>
           </div>
         );
