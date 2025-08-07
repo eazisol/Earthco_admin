@@ -12597,6 +12597,32 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 .menu-toggle .content-body {
   margin-left: 60px;
 }
+
+/* Maintain consistent spacing for large screens (1600px and above) */
+@media only screen and (min-width: 1600px) {
+  .content-body .container-fluid, 
+  .content-body .container-sm, 
+  .content-body .container-md, 
+  .content-body .container-lg, 
+  .content-body .container-xl, 
+  .content-body .container-xxl {
+    padding-top: 1.875rem;
+    padding-right: 1.875rem;
+    padding-left: 1.875rem;
+    max-width: calc(100% - 3.75rem); /* Maintain consistent gap from sidebar */
+  }
+  
+  /* Ensure consistent margin from sidebar */
+  .content-body {
+    margin-left: 210px;
+    transition: all 0.3s ease;
+  }
+  
+  /* When sidebar is collapsed on large screens */
+  .menu-toggle .content-body {
+    margin-left: 60px;
+  }
+}
 .subMenu {
   height: 2px;
   width: 5%;

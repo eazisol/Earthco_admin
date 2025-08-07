@@ -169,7 +169,7 @@ const Sidebar = ({ isSidebarOpen = true }) => {
         { label: "Google Maps", href: "/google-map" },
         ...(loginUser?.Data?.RoleId === 1 ? [{ label: "Contact Us", href: "/contact-us" }] : []),
         ...(loginUser?.Data?.RoleId === 1 ? [{ label: "Stripe", href: "/stripe" }] : []),
-        // ...(loginUser?.Data?.RoleId === 1 ? [{ label: "Roles And Permissions", href: "/role-and-permission" }] : []),
+        ...(loginUser?.Data?.RoleId === 1 ? [{ label: "Roles And Permissions", href: "/role-and-permission" }] : []),
         // { label: "Term And Privacy", href: "/term-and-privacy" }
       ],
     },

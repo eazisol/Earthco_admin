@@ -1,323 +1,176 @@
+import { useEffect, useState } from "react";
 import DashboardLayout from "../DashboardLayout/DashboardLayout"
 import TitleBar from "../TitleBar"
-
+import { createRole, createRolePermission, 	getRolePermission, getTenantRole } from "../../APIS/auth";
+import { toast } from "react-toastify";
 
 export const RoleAndPermission = () => {
-    return (
-        <DashboardLayout>
-                 <div className="content-body">
-       <TitleBar title="Roles And Permissions" />
+	const [roleName, setRoleName] = useState("");
+	const [roles, setRoles] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [getRolesLoading, setGetRolesLoading] = useState(false);
+	const [getPermissionLoading, setGetPermissionLoading] = useState(false);
+	const [rolePermission, setRolePermission] = useState([]);
+	const [accessLoading, setAccessLoading] = useState(false);
+	const [roleId, setRoleId] = useState(0);
+	const getRoles = async () => {
+		setGetRolesLoading(true);
+		const response = await getTenantRole();
+		setRoles(response.data);
+		setGetRolesLoading(false);
+	}
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		const response = await createRole({ RoleId: 0, Role: roleName ,isActive:true});
+		setLoading(false);
+		if (response.status === 200) {
+			toast.success(response.data.Message);
+			await getRoles();
+			setRoleName("");
+		} else if (response.status == 409) {
+			toast.error(response.response.data);
+			setLoading(false);
+		}
+	};
 
-       <div class="container-fluid">
-				<div class="row">
-					<div class="col-xl-3 col-xxl-4">
-						<div class="card h-auto">
-							<div class="card-header">
-								<h4 class="heading mb-0">Add New Account </h4>
-							</div>
-							<div class="card-body">
-								<form class="finance-hr">
-									<div class="form-group mb-3">
-										<label class="text-secondary font-w500"> Account Title<span class="text-danger">*</span>
-									  </label>
-									  <input type="text" class="form-control"  placeholder="Account Title" />
-									</div>
-									<div class="form-group mb-3">
-									  <label> Amount<span class="text-danger">*</span>
-									  </label>
-									  <div class="input-group">
-										<div class="input-group-text">$</div>
-										<input type="text" class="form-control" placeholder="Initial Balance" />
-									  </div>
-									</div>
-									<div class="form-group mb-3">
-										<label class="text-secondary"> Account No<span class="text-danger">*</span>
-									  </label>
-									  <input type="text" class="form-control"  placeholder="Account Title" />
-									</div>
-									<div class="form-group mb-3">
-										<label class="text-secondary">Branch Code<span class="text-danger">*</span>
-									  </label>
-									  <input type="text" class="form-control"  placeholder="Branch Code" />
-									</div>
-									<div class="form-group mb-3">
-										<label class="text-secondary">Branch Name<span class="text-danger">*</span>
-									  </label>
-									  <input type="text" class="form-control"  placeholder="Branch Name" />
-									</div>
-									<button type="submit" class="btn btn-primary mb-3">Confirm</button>
-								</form>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-9 col-xxl-8">
-						<div class="card">
-							<div class="card-body p-0">
-								<div class="table-responsive active-projects manage-client">
-								<div class="tbl-caption">
-									<h4 class="heading mb-0">Finance</h4>
+	useEffect(() => {
+		
+		getRoles();
+	}, []);
+
+	const getRolePermissionData = async (id) => {
+		setGetPermissionLoading(true);
+		const response = await getRolePermission(id);
+		setRolePermission(response?.data);
+		setGetPermissionLoading(false);
+	}
+
+	const handleSendPermission = async (e) => {
+		e.preventDefault();
+		setAccessLoading(true);
+		const menuList = rolePermission?.SelectedMenuAccess;
+		const payload = menuList
+			.filter(menu => document.getElementById(`customCheckBox${menu.menuid}2`).checked)
+			.map(menu => ({
+				AccessId: 0,
+				EditAccess: false,
+				DeleteAccess: false,
+				CreateAccess: false,
+				MenuId: menu.menuid,
+				RoleId: roleId,
+				isActive: true
+			}));
+				const response = await createRolePermission(payload);
+				if(response.status === 200){
+					toast.success(response.data.Message);
+				}else{
+					toast.error(response.response.data);
+				}
+				setAccessLoading(false);
+	}
+
+	
+
+	return (
+		<DashboardLayout>
+			<div className="content-body">
+				<TitleBar title="Roles And Permissions" />
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xl-3 col-xxl-4">
+							<div class="card h-auto">
+								<div class="card-header">
+									<h4 class="heading mb-0">Role </h4>
 								</div>
-									<table id="empoloyees-tbl1" class="table">
-										<thead>
-											<tr>
-												<th>Account Title</th>
-												<th>Amount</th>
-												<th>Account No</th>
-												<th>Branch Code</th>
-												<th>Branch Name</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Saving</a>
-												</td>
-												<td><span>500 $</span></td>
-												<td>
-													<span>1234500000000</span>
-												</td>
-												<td>
-													<span>1234</span>
-												</td>
-												<td>
-													<span>Bank Of Uk</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Salary </a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Fixed deposit</a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Recurring deposit</a>
-												</td>
-												<td><span>6000 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of India</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Saving</a>
-												</td>
-												<td><span>500 $</span></td>
-												<td>
-													<span>1234500000000</span>
-												</td>
-												<td>
-													<span>1234</span>
-												</td>
-												<td>
-													<span>Bank Of Uk</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Salary </a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Fixed deposit</a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Fixed deposit</a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Salary </a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Fixed deposit</a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Fixed deposit</a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Recurring deposit</a>
-												</td>
-												<td><span>6000 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of India</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Recurring deposit</a>
-												</td>
-												<td><span>6000 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of India</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Fixed deposit</a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Salary </a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="javascript:void(0)" class="text-primary">Fixed deposit</a>
-												</td>
-												<td><span>700 $</span></td>
-												<td>
-													<span>678900000000</span>
-												</td>
-												<td>
-													<span>5678</span>
-												</td>
-												<td>
-													<span>Bank Of Lundon</span>
-												</td>
-											</tr>
-										</tbody>
-										
-									</table>
+								<div class="card-body">
+									<form class="finance-hr row" onSubmit={handleSubmit} style={{ display: "flex", alignItems: "center" }}>
+										<div class="form-group mb-3 col-8">
+											<label class="text-secondary font-w500">Add New Role<span class="text-danger">*</span>
+											</label>
+											<input type="text" class="form-control" placeholder="Role Name" value={roleName} onChange={(e) => setRoleName(e.target.value)} />
+										</div>
+										<div class="form-group  col-4">
+											
+											<button type="submit" class="btn btn-primary " disabled={!roleName || loading}>{loading ? "Loading..." : "Confirm"}</button>
+										</div>
+
+									</form>
+									{getRolesLoading ? (
+										<div>Loading...</div>
+									) : roles.length === 0 ? (
+										<div>No Roles Found</div>
+									) : (
+										<div class="card-body px-0 pt-0">
+										<ul class="personal-info">
+											{roles.map((role) => (
+													<li 
+														key={role.RoleId} 
+														onClick={() => {
+															getRolePermissionData(role.RoleId);
+															setRoleId(role.RoleId);
+														}}
+														className={roleId === role.RoleId ? "active-role" : ""}
+														style={roleId === role.RoleId ? { backgroundColor: "#f0f0f0", borderRadius: "5px" ,cursor:"pointer"} : {cursor:"pointer"}}
+														onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#e0e0e0"}
+														onMouseLeave={(e) => e.currentTarget.style.backgroundColor = roleId === role.RoleId ? "#f0f0f0" : ""}
+													>
+														{role.Role}
+													</li>
+											))}
+										</ul>
+									</div>
+									
+									)}
 								</div>
 							</div>
 						</div>
+						<div class="col-xl-8">
+								<div class="card">
+									<div class="card-body">
+										<table className="table">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Assign</th>
+												</tr>
+											</thead>
+											<tbody>
+												{getPermissionLoading ? (
+													<tr>
+														<td colSpan="2" style={{ textAlign: "center" }}>Loading...</td>
+													</tr>
+												) : rolePermission?.SelectedMenuAccess?.length == 0 || rolePermission?.SelectedMenuAccess == null ? (
+													<tr>
+														<td colSpan="2" style={{ textAlign: "center" }}>Select a role to view permissions</td>
+													</tr>
+												) : (
+													rolePermission?.SelectedMenuAccess?.map((menu,index) => (
+														<tr key={index}>
+															<td>{menu?.menu?.Name}</td>
+															<td>
+																<div className="form-check custom-checkbox checkbox-primary ">
+																	<input type="checkbox" className="form-check-input" id={`customCheckBox${menu.menuid}2`} checked={menu.isactive} />
+																</div>
+															</td>
+														</tr>
+													))
+												)}
+											{rolePermission?.SelectedMenuAccess?.length >= 1 &&	<tr>
+													<td colSpan="2" style={{ textAlign: "right",borderBottom:"none" }}>
+														<button className="btn btn-primary" style={{padding:"10px"}} onClick={handleSendPermission} disabled={accessLoading}>{accessLoading ? "Loading..." : "Submit"}	</button>
+													</td>
+												</tr>}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						
 					</div>
 				</div>
 			</div>
-      </div>
-        </DashboardLayout>
-    )
+		</DashboardLayout>
+	)
 }

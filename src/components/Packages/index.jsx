@@ -500,12 +500,12 @@ export const PackagesScreen = () => {
                         placeholder="Search Packages..."
                         value={search}
                         onChange={handleSearchChange}
-                        style={{ minWidth: 200, marginLeft: "15px" }}
+                        style={{ minWidth: 200 }}
                       />
                    
                   
                  
-                     <button style={{marginRight:"15px"}}
+                     <button 
                         className="btn btn-primary btn-sm add-package-btn"
                         onClick={() => {
                           setSelectedId(0);

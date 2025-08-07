@@ -194,4 +194,48 @@ export const verifyOTP = async (obj) => {
       throw error;
     }
   };
-  
+  //Create Role 
+  export const createRole = async (obj) => {
+    const token = JSON.parse(localStorage.getItem("user"));
+    try {
+      const data  = await axios.post(`${apiUrl}Tenant/CreateRole`, obj, {
+        headers: {
+          Authorization: `Bearer ${token.token.data}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+ //Role Persmission get
+ export const getRolePermission = async (id) => {
+  const token = JSON.parse(localStorage.getItem("user"));
+  try {
+    const data  = await axios.get(`${apiUrl}Tenant/RolesPermission?id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${token.token.data}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+//create role permission
+export const createRolePermission = async (obj) => {
+  const token = JSON.parse(localStorage.getItem("user"));
+  try {
+    const data  = await axios.post(`${apiUrl}Tenant/CreateAccessLevel`, obj, {
+      headers: {
+        Authorization: `Bearer ${token.token.data}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+};

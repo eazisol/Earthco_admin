@@ -184,7 +184,7 @@ export const TenantScreen = () => {
                         placeholder="Search Tenant..."
                         value={search}
                         onChange={handleSearchChange}
-                        style={{ minWidth: 200, marginRight: "15px" }}
+                        style={{ minWidth: 200, }}
                       />
                     </div>
                     <table id="employees-tblwrapper" className="table">

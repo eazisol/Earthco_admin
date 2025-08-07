@@ -202,18 +202,18 @@ export const QBookScreen = () => {
                     <div className="col-xl-3 mb-3 ml-2 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
                       <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
                         <label className="form-check-label mb-0 me-2" style={{ whiteSpace: "nowrap" }}>
-                          {formData.QBMode == 2 ? "Production" : "Sandbox"}
+                          {formData.QBMode == 1 ? "Production" : "Sandbox"}
                         </label>
                        
                         <input
                           className="form-check-input"
                           type="checkbox"
                           name="QBMode"
-                          checked={formData.QBMode == 2}
+                          checked={formData.QBMode == 1}
                           onChange={(e) => {
                             setFormData((prev) => ({
                               ...prev,
-                              QBMode: e.target.checked ? 2 : 1
+                              QBMode: e.target.checked ? 1 : 2
                             }))
                           }}
                           style={{ marginLeft: "12px" }}

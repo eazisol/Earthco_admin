@@ -401,8 +401,8 @@ export const CompaniesScreen = () => {
                     <div className="d-flex justify-content-between align-items-center mb-2 pt-3">
                       <h4 className="heading mb-0"></h4>
                       <button
-                        className="btn btn-primary btn-sm ml-3"
-                        style={{marginRight:"15px"}}
+                          className="btn btn-primary btn-sm"
+                         
                         onClick={() => {
                           setSelectedId(0);
                           setFormData({
