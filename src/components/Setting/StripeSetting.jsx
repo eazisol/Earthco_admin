@@ -193,30 +193,26 @@ export const StripeSetting = () => {
                   <div className="row">
                     <h4 className="card-title mb-4 col-xl-9">Stripe Settings</h4>
                     <div className="col-xl-3 mb-3 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
-                      <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
-                        <label className="form-check-label mb-0 me-2" style={{ whiteSpace: "nowrap" }}>
-                              {isProduction ? "Production" : "Sandbox"}
-                            </label>
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              name="StripeMode"
-                              checked={isProduction}
-                              onChange={(e) => {
-                                // 1 = Production, 0 = Sandbox
-                                handleInputChange({
-                                  target: {
-                                    name: "StripeMode",
-                                    value: e.target.checked ? 1 : 0,
-                                  },
-                                });
-                                // Clear errors when mode changes
-                                setErrors({});
-                              }}
-                              style={{ marginLeft: "12px" }}
-                            />
-                        
-                          </div>
+                    <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content", cursor: "pointer" }} onClick={() => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          StripeMode: formData.StripeMode == 1 ? 2 : 1
+                        }))
+                      }}>
+                          <label className="form-check-label mb-0 me-2" style={{ whiteSpace: "nowrap" }}>
+                                  {formData.StripeMode == 1 ? "Production" : "Sandbox"}
+                              </label>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                name="StripeMode" 
+                                checked={formData.StripeMode == 1}  
+                                readOnly
+                                 
+                                style={{ marginLeft: "12px" }}
+                              />
+                          
+                            </div>
                     </div>
                   </div>
                  

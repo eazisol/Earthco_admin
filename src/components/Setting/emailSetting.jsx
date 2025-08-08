@@ -227,7 +227,16 @@ export const EmailScreen = () => {
                     <h4 className="card-title mb-4 col-xl-8">Email Settings</h4>
                     <div className="col-xl-4 mb-3 ml-2 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
                       <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
-                        <label className="form-check-label mb-0 me-2" style={{ whiteSpace: "nowrap" }}>
+                        <label 
+                          className="form-check-label mb-0 me-2" 
+                          style={{ whiteSpace: "nowrap", cursor: "pointer" }}
+                          onClick={() => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              EmailMode: formData.EmailMode == 2 ? 1 : 2
+                            }))
+                          }}
+                        >
                           {formData.EmailMode == 2 ? "Production" : "Sandbox"}
                         </label>
                         <input

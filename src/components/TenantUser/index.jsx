@@ -190,14 +190,14 @@ export const TenantScreen = () => {
                         ) : tenantData?.filter(emp=>emp.RoleId==2)?.map((emp, index) =>{
                           
                           return (
-                          <tr key={index} onClick={() => navigate(`/profile?id=${emp.TenantId}`)} style={{cursor:"pointer"}}>
-                            <td>
+                          <tr key={index} >
+                            <td onClick={() => navigate(`/profile?id=${emp.TenantId}`)} style={{cursor:"pointer"}}>
                               <h6>{emp.CompanyName}</h6>
                             </td>
-                            <td className="text-center">
+                            <td className="text-center" onClick={() => navigate(`/profile?id=${emp.TenantId}`)} style={{cursor:"pointer"}}>
                               <span>{emp.SubDomain}</span>
                             </td>
-                            <td className="text-center">
+                            <td className="text-center" onClick={() => navigate(`/profile?id=${emp.TenantId}`)} style={{cursor:"pointer"}}>
                               <span 
                                 className="text-primary "  
                              
@@ -205,7 +205,7 @@ export const TenantScreen = () => {
                                 {emp.Email}
                               </span>
                             </td>
-                            <td className="text-center">
+                            <td className="text-center" onClick={() => navigate(`/profile?id=${emp.TenantId}`)} style={{cursor:"pointer"}}>
                               <span>{emp.PhoneNo}</span>
                             </td>
                             {/* <td className="text-center">

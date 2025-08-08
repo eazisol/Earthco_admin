@@ -397,8 +397,17 @@ export const PackagesScreen = () => {
             <div className="row align-items-center">
               <div className="col-xl-6 ">
 
-                <div className="form-check form-switch" >
-                  <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
+                <div className="form-check form-switch">
+                  <label
+                    className="form-check-label mb-0"
+                    style={{ whiteSpace: "nowrap", cursor: "pointer" }}
+                    onClick={() => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        isActive: !formData.isActive
+                      }));
+                    }}
+                  >
                     {formData.isActive == null ? "Inactive" : formData.isActive ? "Active" : "Inactive"}
                   </label>
                   <input
@@ -410,9 +419,8 @@ export const PackagesScreen = () => {
                       setFormData((prev) => ({
                         ...prev,
                         isActive: e.target.checked
-                      }))
+                      }));
                     }}
-
                   />
                 </div>
 

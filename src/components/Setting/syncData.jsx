@@ -20,16 +20,11 @@ import {
   TextField,
 } from "@mui/material";
 import { getCompanyList } from "../../APIS/companies";
+import { useAppContext } from "../../context/AppContext";
 export const SyncData = () => {
+  const {loginUser} = useAppContext();
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const hostname = window.location.hostname;
-  let subdomain = '';
-
-  if (hostname.includes('.')) {
-    subdomain = hostname.split('.')[0];
-  } else {
-    subdomain = 'localhost';
-  }
+  
   const [employeesData, setEmployeesData] = useState([]);
   const [loader, setLoader] = useState(false);
   const fetchCompanies = async () => {
@@ -79,7 +74,7 @@ export const SyncData = () => {
                   </div>
                   <div className="table-responsive active-projects style-1">
                     <iframe
-                      src={`https://api.earthcoapp.com/Home/Tokens/?Value=${subdomain}&GetCompanyId=${selectedCompany}`}
+                      src={`https://api.earthcoapp.com/Home/Tokens/?Value=${loginUser?.Data?.SubDomain}&GetCompanyId=${selectedCompany}`}
                       scrolling="no"
                       style={{
                         height: "calc(100vh - 150px)", // Adjusted height to prevent cutting

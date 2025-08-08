@@ -200,7 +200,12 @@ export const QBookScreen = () => {
                       QuickBooks Settings
                     </h4>
                     <div className="col-xl-3 mb-3 ml-2 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
-                      <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
+                      <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content", cursor: "pointer" }} onClick={() => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          QBMode: formData.QBMode == 1 ? 2 : 1
+                        }))
+                      }}>
                         <label className="form-check-label mb-0 me-2" style={{ whiteSpace: "nowrap" }}>
                           {formData.QBMode == 1 ? "Production" : "Sandbox"}
                         </label>
@@ -210,12 +215,7 @@ export const QBookScreen = () => {
                           type="checkbox"
                           name="QBMode"
                           checked={formData.QBMode == 1}
-                          onChange={(e) => {
-                            setFormData((prev) => ({
-                              ...prev,
-                              QBMode: e.target.checked ? 1 : 2
-                            }))
-                          }}
+                          readOnly
                           style={{ marginLeft: "12px" }}
                         />
                       </div>
