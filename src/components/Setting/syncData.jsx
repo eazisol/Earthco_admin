@@ -52,7 +52,7 @@ export const SyncData = () => {
                   <div class="col-xl-4 mb-3 " style={{paddingLeft:"2%",paddingTop:"1%"}}>
                     <FormControl fullWidth>
                       <label className="form-label">
-                        Type<span className="text-danger">*</span>
+                        Company
                       </label>
                       <Select
                         name="PackageTypeId"
