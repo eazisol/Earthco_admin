@@ -14,11 +14,6 @@ const Sidebar = ({ isSidebarOpen = true }) => {
   const getRolePermissionData = async (id) => {
     setGetPermissionLoading(true);
     const response = await getRolePermission(id);
-    if(response.status === 401){
-      localStorage.removeItem('user');
-      setLoginUser(null);
-      navigate('/login');
-    }
     setRolePermission(
       response?.data?.SelectedMenuAccess?.filter(
         (permission) => permission.isactive === true

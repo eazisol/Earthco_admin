@@ -1,13 +1,13 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { toast } from 'react-toastify';
+import { isAuthenticated } from '../utils/authUtils';
 
 const RoleBasedRoute = ({ children }) => {
   const { loginUser } = useAppContext();
   
   // Check if user is logged in
-  if (!loginUser || !loginUser.token || !loginUser.token.data) {
+  if (!isAuthenticated() || !loginUser || !loginUser.token || !loginUser.token.data) {
     return <Navigate to="/login" replace />;
   }
 

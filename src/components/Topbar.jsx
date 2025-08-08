@@ -6,29 +6,23 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LanguageIcon from '@mui/icons-material/Language';
 import { Tooltip } from "@mui/material";
+import { getCurrentUser } from "../utils/authUtils";
+
 const Topbar = () => {
-  const { loginUser, setLoginUser } = useAppContext();
+  const { loginUser, setLoginUser, logout } = useAppContext();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = getCurrentUser();
     if (user) {
-      try {
-        setLoginUser(JSON.parse(user));
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        localStorage.removeItem('user');
-      }
+      setLoginUser(user);
     }
   }, [setLoginUser]);
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    setLoginUser(null);
+    logout();
     setIsDropdownOpen(false);
-    navigate('/login');
-    toast.success('Logged out successfully');
   };
 
   const toggleDropdown = () => {

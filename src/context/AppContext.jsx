@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { toast } from 'react-toastify';
+import { getCurrentUser, clearUserAndRedirect } from '../utils/authUtils';
+
 // Create the context
 const AppContext = createContext();
 
@@ -14,21 +16,35 @@ export const useAppContext = () => {
 
 // Provider component
 export const AppProvider = ({ children }) => {
-const [loginUser,setLoginUser] = useState(null);
-const [rolePermission, setRolePermission] = useState([]);
-useEffect(() => {
-  const user = localStorage.getItem('user');
-  if (user) {
-    setLoginUser(JSON.parse(user));
-  }
-}, []);
- 
+  const [loginUser, setLoginUser] = useState(null);
+  const [rolePermission, setRolePermission] = useState([]);
+
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (user) {
+      setLoginUser(user);
+    } else {
+      setLoginUser(null);
+    }
+  }, []);
+
+  const logout = () => {
+    setLoginUser(null);
+    setRolePermission([]);
+    localStorage.removeItem('user');
+    toast.success('Logged out successfully');
+    // Add a small delay to allow toast message to display
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 1000);
+  };
 
   const value = {
     setLoginUser,
     loginUser,
     rolePermission,
-    setRolePermission
+    setRolePermission,
+    logout
   };
 
   return (

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
-import { AddTenant, getTenantById } from "../../APIS/auth";
+import { AddTenant, getTenantById, updateTenantStatus } from "../../APIS/auth";
 import { useAppContext } from "../../context/AppContext";
 import { useSearchParams } from "react-router-dom";
-import { CircularProgress, TextField,  InputAdornment, IconButton } from "@mui/material";
+import { CircularProgress, TextField,  InputAdornment, IconButton, Tooltip } from "@mui/material";
 import { toast } from "react-toastify";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -314,7 +314,39 @@ useEffect(() => {
                           }}
                         />
                       </div>
-                      
+                      <div className="form-check form-switch d-flex align-items-center justify-content-center mb-4" style={{ width: "fit-content" ,paddingLeft:"1%"}}>
+                      <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
+                          {formData.isActive ? "Active" : "Inactive"}
+                        </label>
+                       
+                                  <Tooltip title={formData.isActive ? "Activate Tenant" : "Inactivate Tenant"} arrow>
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      checked={formData.isActive}
+                                      onChange={() => {
+                                        setModalOpen(true);
+                                        setModalConfig({
+                                          title: "Confirmation",
+                                          description: `Are you sure you want to ${formData.isActive ? "Inactivate" : "activate"} this tenant?`,
+                                          onConfirm: async () => {
+                                            const data = await updateTenantStatus({ id: formData.TenantId, Active: formData.isActive ? false : true });
+                                            if (data?.status == 200) {
+                                              toast.success(data?.data?.Message);
+                                              fetchTenantProfile();
+                                              // Do not close the modal here
+                                            } else {
+                                              toast.error(data?.Message);
+                                            }
+                                          },
+                                          confirmText: formData.isActive ? "Inactivate" : "Activate",
+                                          cancelText: "Cancel",
+                                        });
+                                      }}
+                                      style={{ marginLeft: "12px" }}
+                                    />
+                                  </Tooltip>
+                                </div>
                     
                     </div>
                     <div className="row align-items-center">

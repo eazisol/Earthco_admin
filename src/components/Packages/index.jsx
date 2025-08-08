@@ -6,7 +6,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useEffect, useMemo, useState,useRef } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { Offcanvas } from "bootstrap";
 import { toast } from "react-toastify";
 import {
@@ -18,7 +18,7 @@ import {
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import Pagination from '@mui/material/Pagination';
 import TitleBar from "../TitleBar";
-
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 export const PackagesScreen = () => {
   const [packageOptions, setPackageOptions] = useState([]);
   const [errors, setErrors] = useState({});
@@ -38,21 +38,21 @@ export const PackagesScreen = () => {
     isActive: true,
   });
   const editor = useRef(null);
-	const [content, setContent] = useState('');
+  const [content, setContent] = useState('');
 
-	const config = useMemo(() => ({
-			readonly: false,
-			placeholder: ''
-		}),
-		[]
-	);
+  const config = useMemo(() => ({
+    readonly: false,
+    placeholder: ''
+  }),
+    []
+  );
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "Confirmation",
     description: "Are you sure you want to delete this package?",
-    onConfirm: () => {},
-    confirmText: "Delete", 
+    onConfirm: () => { },
+    confirmText: "Delete",
     cancelText: "Cancel",
   });
 
@@ -65,7 +65,7 @@ export const PackagesScreen = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    const numericFields = [ "MaxStorageMB", "Price", 'maxCompanies','maxUser'];
+    const numericFields = ["MaxStorageMB", "Price", 'maxCompanies', 'maxUser'];
 
     if (name === "name") {
       // Validate name field
@@ -113,7 +113,7 @@ export const PackagesScreen = () => {
     } else if (!/^[a-zA-Z0-9\s_-]*$/.test(formData.name)) {
       newErrors.name = "Name can only contain letters, numbers, spaces, dashes and underscores";
     }
-    
+
     if (!formData.maxUser) newErrors.maxUser = "Max User is required";
     if (!formData.MaxStorageMB) newErrors.MaxStorageMB = "Max Storage is required";
     if (!formData.Price) newErrors.Price = "Price is required";
@@ -223,19 +223,19 @@ export const PackagesScreen = () => {
         setSelectedId(0);
         fetchPackages();
         setOpenForm(false);
-        toast.success(response?.data?.Message );
+        toast.success(response?.data?.Message);
       } else {
-        toast.error(response?.data?.Message );
+        toast.error(response?.data?.Message);
       }
     } catch (error) {
       console.error(error);
-      toast.error(error?.response?.data?.Message );
+      toast.error(error?.response?.data?.Message);
     }
   };
 
   return (
     <DashboardLayout>
-       <ConfirmationModal
+      <ConfirmationModal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
         title={modalConfig.title}
@@ -251,12 +251,12 @@ export const PackagesScreen = () => {
       >
         <div class="offcanvas-header">
           <h5 class="modal-title" id="#gridSystemModal">
-           {selectedId === 0 ? "Add package" : "Edit package"}
+            {selectedId === 0 ? "Add package" : "Edit package"}
           </h5>
           <button
             type="button"
             className="btn-close close-btn"
-          
+
             onClick={() => {
               const offcanvasEl = document.getElementById("offcanvasExample");
               const bsOffcanvas =
@@ -392,120 +392,93 @@ export const PackagesScreen = () => {
                   <div className="text-danger small">{errors.Description}</div>
                 )}
               </div>
-            
-            </div>
-           <div className="row align-items-center">
-            <div className="col-xl-6 ">
-           
-                      <div className="form-check form-switch" >
-                        <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
-                          {formData.isActive==null ?"Inactive" : formData.isActive ? "Active" : "Inactive"}
-                        </label>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="isActive"
-                          checked={formData.isActive==null ? false : formData.isActive}
-                          onChange={(e) => {
-                            setFormData((prev) => ({
-                              ...prev,
-                              isActive: e.target.checked
-                            }))
-                          }}
-                       
-                        />
-                      </div>
-                   
-            </div>
-            <div className="col-xl-6">
-            <div style={{ textAlign: "end" }} > 
-              <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loader}>
-                {selectedId === 0 ? "Add" : "Update"}
-              </button>
-             
 
-            
-               <button
-                className="btn btn-danger light ms-1 cancel-btn"
-                onClick={() => {
-                  setOpenForm(false);
-                  setSelectedId(0);
-                  const offcanvasEl =
-                    document.getElementById("offcanvasExample");
-                  const bsOffcanvas =
-                    Offcanvas.getInstance(offcanvasEl) ||
-                    new Offcanvas(offcanvasEl);
-                  bsOffcanvas.hide();
-                  setErrors({});
-                  setFormData({
-                    name: "",
-                    maxUser: "",
-                    maxStorage: "",
-                    monthlyPrice: "",
-                    maxCompanies: "",
-                    Description: "",
-                    isActive: true,
-                  });
-                }}
-              >
-                Cancel
-              </button>
             </div>
+            <div className="row align-items-center">
+              <div className="col-xl-6 ">
+
+                <div className="form-check form-switch" >
+                  <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
+                    {formData.isActive == null ? "Inactive" : formData.isActive ? "Active" : "Inactive"}
+                  </label>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="isActive"
+                    checked={formData.isActive == null ? false : formData.isActive}
+                    onChange={(e) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        isActive: e.target.checked
+                      }))
+                    }}
+
+                  />
+                </div>
+
+              </div>
+              <div className="col-xl-6">
+                <div style={{ textAlign: "end" }} >
+                  <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loader}>
+                    {selectedId === 0 ? "Add" : "Update"}
+                  </button>
+
+
+
+                  <button
+                    className="btn btn-danger light ms-1 cancel-btn"
+                    onClick={() => {
+                      setOpenForm(false);
+                      setSelectedId(0);
+                      const offcanvasEl =
+                        document.getElementById("offcanvasExample");
+                      const bsOffcanvas =
+                        Offcanvas.getInstance(offcanvasEl) ||
+                        new Offcanvas(offcanvasEl);
+                      bsOffcanvas.hide();
+                      setErrors({});
+                      setFormData({
+                        name: "",
+                        maxUser: "",
+                        maxStorage: "",
+                        monthlyPrice: "",
+                        maxCompanies: "",
+                        Description: "",
+                        isActive: true,
+                      });
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+
             </div>
-                   
-           </div>
-         
+
           </div>
         </div>
       </div>
       <div className="content-body">
- <TitleBar icon={ <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M13.5 2.53H7.41C5.5 2.52 3.94 4.04 3.9 5.95V15.77C3.85 17.71 5.39 19.31 7.33 19.36H14.73C16.65 19.28 18.17 17.69 18.15 15.77V7.37L13.5 2.53Z"
-              stroke='#888888'
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M13.27 2.52V5.19C13.27 6.49 14.32 7.54 15.62 7.55H18.15"
-              stroke='#888888'
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M13.1 14.08H8.15"
-              stroke='#888888'
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M11.22 10.64H8.15"
-              stroke='#888888'
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>} title="Packages" />
+        <TitleBar icon={<DescriptionOutlinedIcon />} title="Packages" />
         <div className="container-fluid">
-          <div className="row table-space" > 
+          <div className="row table-space" >
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
                     <div className=" d-flex justify-content-between align-items-center mb-2 pt-3 ">
-                    <TextField
-                     className="serch-package "
+                      <TextField
+                        className="serch-package "
                         size="small"
                         placeholder="Search Packages..."
                         value={search}
                         onChange={handleSearchChange}
                         style={{ minWidth: 200 }}
                       />
-                   
-                  
-                 
-                     <button 
+
+
+
+                      <button
                         className="btn btn-primary btn-sm add-package-btn"
                         onClick={() => {
                           setSelectedId(0);
@@ -526,9 +499,9 @@ export const PackagesScreen = () => {
                       >
                         + Add Package
                       </button>
-                     
-                   
-                     
+
+
+
                     </div>
                     <table id="employees-tblwrapper" className="table">
                       <thead>
@@ -571,7 +544,7 @@ export const PackagesScreen = () => {
                                   PackageTypeId: emp.PackageTypeId,
                                   Description: emp.Description || "",
                                   isActive: emp.isActive,
-                                  });
+                                });
                                 setContent(emp.Description || "");
                                 const offcanvasEl =
                                   document.getElementById("offcanvasExample");

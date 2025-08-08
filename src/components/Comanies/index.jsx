@@ -20,7 +20,7 @@ import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import { addCompany, deleteCompany, getCompanyList } from "../../APIS/companies";
 import TitleBar from "../TitleBar";
 import { useAppContext } from "../../context/AppContext";
-
+import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined'
 export const CompaniesScreen = () => {
   const { loginUser } = useAppContext();
 
@@ -111,7 +111,6 @@ export const CompaniesScreen = () => {
     // console.log(obj, 'obj');
     try {
       const response = await addCompany(obj);
-      console.log("🚀 ~ handleSubmit ~ response:", response)
       // console.log(response, 'response');
       if (response.status === 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
@@ -417,12 +416,7 @@ export const CompaniesScreen = () => {
         </div>
       </div>
       <div className="content-body">
- <TitleBar icon={  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path d="M6.46932 12.2102H0.693665" stroke='#888888' stroke-linecap="round" stroke-linejoin="round"/>
-							<path d="M9.04547 3.32535H14.8211" stroke='#888888' stroke-linecap="round" stroke-linejoin="round"/>
-							<path fill-rule="evenodd" clip-rule="evenodd" d="M4.99912 3.27573C4.99912 2.08805 4.02914 1.125 2.8329 1.125C1.63667 1.125 0.666687 2.08805 0.666687 3.27573C0.666687 4.46342 1.63667 5.42647 2.8329 5.42647C4.02914 5.42647 4.99912 4.46342 4.99912 3.27573Z" stroke='#888888' stroke-linecap="round" stroke-linejoin="round"/>
-							<path fill-rule="evenodd" clip-rule="evenodd" d="M15.3333 12.1743C15.3333 10.9866 14.3641 10.0235 13.1679 10.0235C11.9709 10.0235 11.0009 10.9866 11.0009 12.1743C11.0009 13.3619 11.9709 14.325 13.1679 14.325C14.3641 14.325 15.3333 13.3619 15.3333 12.1743Z" stroke='#888888' stroke-linecap="round" stroke-linejoin="round"/>
-							</svg>} title="Companies" />
+ <TitleBar icon={<StoreOutlinedIcon />} title="Companies" />
         <div className="container-fluid">
           <div className="row ">
             <div className="col-xl-12">

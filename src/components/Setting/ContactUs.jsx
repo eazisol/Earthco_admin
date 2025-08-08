@@ -11,7 +11,7 @@ import TitleBar from "../TitleBar";
 import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import { contactUs, deleteContactUs } from "../../APIS/settings";
 import { toast } from "react-toastify";
-
+import ContactPageOutlinedIcon from '@mui/icons-material/ContactPageOutlined'
 export const ContactUs = () => {
     const { loginUser } = useAppContext();
     const [selectedId, setSelectedId] = useState(0);
@@ -118,7 +118,7 @@ export const ContactUs = () => {
                 onConfirm={modalConfig.onConfirm}
             />
             <div className="content-body">
-                <TitleBar title="Contact Us" />
+                <TitleBar icon={<ContactPageOutlinedIcon />} title="Contact Us" />
                 <div className="container-fluid">
                     <div className="row table-space"  >
                         <div className="col-xl-12">
@@ -130,6 +130,7 @@ export const ContactUs = () => {
                                             <thead>
                                                 <tr>
                                                     <th style={{width:"20%"}}>Name</th>
+                                                    <th style={{width:"20%"}}>Subject</th>
                                                     <th style={{width:"50%"}}>Message</th>
                                                     <th style={{width:"10%"}}>Date</th>
                                                     <th style={{width:"10%"}}>Action</th>
@@ -146,6 +147,9 @@ export const ContactUs = () => {
                                                             <td >
                                                                 <span>{transaction.Name}</span><br />
                                                                 <span>{transaction.Email}</span>
+                                                            </td>
+                                                            <td >
+                                                                <span>{transaction.Subject}</span>
                                                             </td>
                                                             <td style={{textWrap:"wrap"}}>
                                                                {transaction.Message}
