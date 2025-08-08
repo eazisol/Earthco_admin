@@ -5,7 +5,8 @@ import DashboardLayout from "./components/DashboardLayout/DashboardLayout";
 import { getTenantById } from "./APIS/auth";
 import TitleBar from "./components/TitleBar";
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
-// Custom styles for the tenant table
+import { getStats } from "./APIS/settings";
+  // Custom styles for the tenant table
 const tenantTableStyles = {
   tableHeader: {
     backgroundColor: '#f8f9fa',
@@ -144,29 +145,56 @@ function Dashboard() {
     }
   };
 
-
+  const [stats, setStats] = useState(null);
+  console.log("🚀 ~ stats:", stats)
+  const fetchStats = async () => {
+    const response = await getStats();
+    setStats(response?.data);
+  };
+  useEffect(() => {
+    fetchStats();
+  }, []);
   return (
     <DashboardLayout>
       <div class="content-body">
         <TitleBar icon={<HomeOutlinedIcon />} title={'Dashboard'} />
         <div className="container-fluid">
 
-          {/* <div className="row">
+       {loginUser?.Data?.RoleId == 1 &&    <div className="row">
               <div className="col-xl-3 col-sm-6">
                 <div className="card chart-grd same-card">
                   <div className="card-body depostit-card p-0">
                     <div className="depostit-card-media d-flex justify-content-between pb-0">
-                      <div>
-                        <h6>Total Deposit</h6>
-                        <h3>$1200.00</h3>
-                      </div>
-                      <div className="icon-box ">
-                        <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M11.4642 13.7074C11.4759 12.1252 10.8504 10.8738 9.60279 9.99009C8.6392 9.30968 7.46984 8.95476 6.33882 8.6137C3.98274 7.89943 3.29927 7.52321 3.29927 6.3965C3.29927 5.14147 4.93028 4.69493 6.32655 4.69493C7.34341 4.69493 8.51331 5.01109 9.23985 5.47964L10.6802 3.24887C9.73069 2.6333 8.43112 2.21342 7.14783 2.0831V0H4.49076V2.22918C2.12884 2.74876 0.640949 4.29246 0.640949 6.3965C0.640949 7.87005 1.25327 9.03865 2.45745 9.86289C3.37331 10.4921 4.49028 10.83 5.56927 11.1572C7.88027 11.8557 8.81873 12.2813 8.80805 13.691L8.80799 13.7014C8.80799 14.8845 7.24005 15.3051 5.89676 15.3051C4.62786 15.3051 3.248 14.749 2.46582 13.9222L0.535522 15.7481C1.52607 16.7957 2.96523 17.5364 4.4907 17.8267V20.0001H7.14783V17.8735C9.7724 17.4978 11.4616 15.9177 11.4642 13.7074Z" fill="var(--primary)"/>
-                        </svg>
-                      </div>
+                        <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
+                          <h6> Total Tenant</h6>
+                          <h3>{stats?.TotalTenant}</h3>
+                        </div>
+                        <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
+                          <h6> Total Transaction</h6>
+                          <h3>{stats?.TotalTransaction}</h3>
+                        </div>
+                      
+                       
                     </div>
-                    <div id="NewCustomers"></div>
+                  
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-3 col-sm-6">
+                <div className="card chart-grd same-card">
+                  <div className="card-body depostit-card p-0">
+                    <div className="depostit-card-media d-flex justify-content-between pb-0">
+                        <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
+                          <h6> Active Tenant</h6>
+                          <h3>{stats?.TotalActiveTenant}</h3>
+                        </div>
+                        <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
+                          <h6> InActive Tenant</h6>
+                          <h3>{stats?.TotalInActiveTenant}</h3>
+                        </div>
+                       
+                    </div>
+                  
                   </div>
                 </div>
               </div>
@@ -218,7 +246,7 @@ function Dashboard() {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>}
 
           {/* Tenant Information Table */}
           <div className="row ">

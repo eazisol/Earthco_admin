@@ -73,3 +73,18 @@ export const deleteContactUs=async(id)=>{
   } catch (error) {
     throw error;
   }}
+  //get stats
+  export const getStats = async () => {
+    const token = JSON.parse(localStorage.getItem("user"));
+    try {
+      const response = await axios.get(`${apiUrl}Settings/GetDashboardStats`, {
+        headers: {
+          Authorization: `Bearer ${token.token.data}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response;
+    } catch (error) {
+      return error;
+    }
+  };
