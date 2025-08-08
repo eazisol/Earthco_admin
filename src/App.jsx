@@ -29,6 +29,7 @@ import { toast } from 'react-toastify';
 import { CustomButton } from './components/CustomButton'
 import { ContactUs } from './components/Setting/ContactUs'
 import { RoleAndPermission } from './components/Setting/roleandpersmission'
+import { SyncData } from './components/Setting/syncData'
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -358,6 +359,8 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/role-and-permission" element={<RoleAndPermission />} />
+          <Route path="/term-and-privacy" element={<TermAndPrivacy />} />
+          <Route path="/sync-data" element={<SyncData />} />
         </Routes>
       </Layout>
     </Router>
