@@ -395,8 +395,8 @@ export const PackagesScreen = () => {
             
             </div>
            <div className="row align-items-center">
-            <div className="col-xl-6">
-            <div className="mt-5 " >
+            <div className="col-xl-6 ">
+           
                       <div className="form-check form-switch" >
                         <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
                           {formData.isActive==null ?"Inactive" : formData.isActive ? "Active" : "Inactive"}
@@ -415,10 +415,10 @@ export const PackagesScreen = () => {
                        
                         />
                       </div>
-                    </div>
+                   
             </div>
             <div className="col-xl-6">
-            <div style={{ textAlign: "end" }} className="mt-5"> 
+            <div style={{ textAlign: "end" }} > 
               <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loader}>
                 {selectedId === 0 ? "Add" : "Update"}
               </button>

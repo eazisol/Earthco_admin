@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate  } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { getRolePermission } from "../APIS/auth";
 import * as MuiIcons from '@mui/icons-material';
@@ -7,13 +7,18 @@ import * as MuiIcons from '@mui/icons-material';
 const Sidebar = ({ isSidebarOpen = true }) => {
   const location = useLocation();
   const [openSubmenu, setOpenSubmenu] = useState(null);
-  const { loginUser } = useAppContext();
-  const [rolePermission, setRolePermission] = useState([]);
+  const { loginUser, rolePermission, setRolePermission, setLoginUser } = useAppContext();
+  const navigate = useNavigate();
   const [getPermissionLoading, setGetPermissionLoading] = useState(false);
 
   const getRolePermissionData = async (id) => {
     setGetPermissionLoading(true);
     const response = await getRolePermission(id);
+    if(response.status === 401){
+      localStorage.removeItem('user');
+      setLoginUser(null);
+      navigate('/login');
+    }
     setRolePermission(
       response?.data?.SelectedMenuAccess?.filter(
         (permission) => permission.isactive === true

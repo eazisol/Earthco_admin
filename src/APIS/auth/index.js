@@ -64,7 +64,7 @@ export const getTenantById = async (id) => {
     );
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 export const getTenantRole = async () => {
@@ -234,6 +234,7 @@ export const createRolePermission = async (obj) => {
         "Content-Type": "application/json",
       },
     });
+    console.log("🚀 ~ createRolePermission ~ data:", data)
     return data;
   } catch (error) {
     return error;

@@ -15,6 +15,7 @@ export const useAppContext = () => {
 // Provider component
 export const AppProvider = ({ children }) => {
 const [loginUser,setLoginUser] = useState(null);
+const [rolePermission, setRolePermission] = useState([]);
 useEffect(() => {
   const user = localStorage.getItem('user');
   if (user) {
@@ -25,7 +26,9 @@ useEffect(() => {
 
   const value = {
     setLoginUser,
-    loginUser
+    loginUser,
+    rolePermission,
+    setRolePermission
   };
 
   return (

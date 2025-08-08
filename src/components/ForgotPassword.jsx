@@ -99,7 +99,7 @@ const ForgotPassword = () => {
   return (
     <section className="contact" style={{paddingBottom:"85px"}}>
       <div className="container" data-aos="fade-up">
-        <div className="section-title" style={{marginTop: "7%"}}> 
+        <div className="section-title" style={{marginTop: "11.5%"}}> 
           {/* <h2>
             {!showOTP && !showNewPassword 
               ? "Forgot Password" 

@@ -54,7 +54,7 @@ export const SyncData = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-          </svg>} title="Packages" />
+          </svg>} title="Data Sync" />
         <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-12">

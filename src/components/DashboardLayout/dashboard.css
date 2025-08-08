@@ -12607,11 +12607,13 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   .content-body .container-xl, 
   .content-body .container-xxl {
     padding-top: 1.875rem;
-    padding-right: 1.875rem;
+    padding-right: 0px;
     padding-left: 1.875rem;
     max-width: calc(100% - 3.75rem); /* Maintain consistent gap from sidebar */
   }
-  
+  .breadcrumb{
+    padding-left: 29px !important;
+  }
   /* Ensure consistent margin from sidebar */
   .content-body {
     margin-left: 210px;

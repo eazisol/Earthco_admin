@@ -28,7 +28,6 @@ export const LoginForm = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedPackageDetails, setSelectedPackageDetails] = useState(null);
-  console.log("🚀 ~ LoginForm ~ selectedPackageDetails:", selectedPackageDetails)
   const navigate = useNavigate();
 
   // Fetch package details by ID when component mounts
@@ -315,7 +314,7 @@ export const LoginForm = () => {
   return (
     <section className="contact">
       <div className="container" data-aos="fade-up">
-        <div className="section-title " style={{marginTop: "7%"}}> 
+        <div className="section-title " style={{marginTop: "11.5%"}}> 
           <h2>Create Account</h2>
           <p>
             Join Earthco today and start your journey towards beautiful
@@ -420,6 +419,22 @@ export const LoginForm = () => {
                 
                 <input
                   type="text"
+                  name="SubDomain"
+                  className={`form-control ${errors.SubDomain ? "is-invalid" : ""} mt-2`}
+                  id="SubDomain"
+                  value={formData.SubDomain}
+                  onChange={handleInputChange}
+                  placeholder="Username"
+                  style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
+                />
+                {errors.SubDomain && (
+                  <div className="invalid-feedback">{errors.SubDomain}</div>
+                )}
+              </div>
+              <div className="form-group col-md-6">
+                
+                <input
+                  type="text"
                   name="Email"
                   className={`form-control ${errors.Email ? "is-invalid" : ""} mt-2`}
                   id="Email"
@@ -448,8 +463,6 @@ export const LoginForm = () => {
                   <div className="invalid-feedback">{errors.CompanyName}</div>
                 )}
               </div>
-            </div>
-            <div className="row">
               <div className="form-group col-md-6">
                 
                 <input
@@ -466,51 +479,10 @@ export const LoginForm = () => {
                   <div className="invalid-feedback">{errors.PhoneNo}</div>
                 )}
               </div>
-                  <div className="form-group col-md-6">
-                
-                <input
-                  type="text"
-                  name="SubDomain"
-                  className={`form-control ${errors.SubDomain ? "is-invalid" : ""} mt-2`}
-                  id="SubDomain"
-                  value={formData.SubDomain}
-                  onChange={handleInputChange}
-                  placeholder="Username"
-                  style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
-                />
-                {errors.SubDomain && (
-                  <div className="invalid-feedback">{errors.SubDomain}</div>
-                )}
-              </div>
             </div>
+           
             <div className="row mt-2">
-              {/* <div className="col-xl-6 mb-3">
-                <FormControl fullWidth>
-                  <label className="form-label">
-                    Role <span className="text-danger">*</span>
-                  </label>
-                  <Select
-                    name="RoleId"
-                    value={formData.RoleId}
-                    onChange={handleInputChange}
-                    style={{ height: "2.5rem" }}
-                    error={!!errors.RoleId}
-                  >
-                    {role?.map((option) => (
-                      <MenuItem
-                        key={option.RoleId}
-                        value={option.RoleId}
-                      >
-                        {option.Role}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {errors.RoleId && (
-                    <div className="text-danger small">{errors.RoleId}</div>
-                  )}
-                </FormControl>
-              </div> */}
-              {/* Package dropdown removed - package is pre-selected */}
+             
               <div className="form-group col-md-6">
                 <div className="input-group">
                   <input

@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 
 function Branding() {
   const [loginUser,setLoginUser] = useState(null)
+  console.log("🚀 ~ Branding ~ loginUser:", loginUser)
   
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
@@ -408,11 +409,15 @@ const handleSubscription=async(plan)=>{
           >
             <div className={`box featured`}>
               <h3>{plan.Name}</h3>
+              <div className="d-flex align-items-center">
               <h4>
                 <sup>$</sup>
                 {plan.Price}
-                <span className="per-month">per month</span>
+              
               </h4>
+              <span className="per-month">/month</span></div>
+                
+               
               <p>{plan?.Description}</p>
               <ul>
               
@@ -451,20 +456,22 @@ const handleSubscription=async(plan)=>{
                   <div className="address">
                     <i className="bi bi-geo-alt"></i>
                     <h4>Location:</h4>
-                    <p>A108 Adam Street, New York, NY 535022</p>
+                    <p>   HQ: 130 W. Central 
+                    Ave Santa Ana CA 92705</p>
                   </div>
                   <div className="email">
                     <i className="bi bi-envelope"></i>
                     <h4>Email:</h4>
-                    <p>info@example.com</p>
+                    <p>info@earthcompany.org</p>
                   </div>
                   <div className="phone">
                     <i className="bi bi-phone"></i>
                     <h4>Call:</h4>
-                    <p>+1 5589 55488 55</p>
+                    <p>714-571-0455</p>
                   </div>
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
+            
+                   src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d12272.993206630573!2d-117.86846232032603!3d33.747380855980374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1691531234567"
                     frameBorder="0"
                     style={{ border: 0, width: "100%", height: "290px" }}
                     allowFullScreen
@@ -568,7 +575,7 @@ const handleSubscription=async(plan)=>{
       {/* ======= Footer ======= */}
 
       <div id="preloader"></div>
-      <a
+      <a 
         href="#"
         className="back-to-top d-flex align-items-center justify-content-center"
       >

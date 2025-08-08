@@ -39,6 +39,7 @@ export const CompaniesScreen = () => {
     Website: "",
     SecondPhoneNo: "",
     Email: "",
+    isActive: false,
   });
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
@@ -128,6 +129,7 @@ export const CompaniesScreen = () => {
           Website: "",
           SecondPhoneNo: "",
           Email: "",
+          isActive: false,
         });
         setSelectedId(0);
         fetchCompanies();
@@ -229,6 +231,7 @@ export const CompaniesScreen = () => {
                 Website: "",
                 SecondPhoneNo: "",
                 Email: "",
+                isActive: false,
               });
             }}
           >
@@ -350,7 +353,30 @@ export const CompaniesScreen = () => {
                 />
               </div>
             </div>
-
+            <div className="row align-items-center">
+            <div className="col-xl-6  ">
+           
+                      <div className="form-check form-switch" >
+                        <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
+                          {formData.isActive==null ?"Inactive" : formData.isActive ? "Active" : "Inactive"}
+                        </label>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="isActive"
+                          checked={formData.isActive==null ? false : formData.isActive}
+                          onChange={(e) => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              isActive: e.target.checked
+                            }))
+                          }}
+                       
+                        />
+                      </div>
+                   
+            </div>
+            <div className="col-xl-6">
             <div style={{ textAlign: "end" }}>
               <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loader}>
                 {
@@ -376,12 +402,17 @@ export const CompaniesScreen = () => {
                     Website: "",
                     SecondPhoneNo: "",
                     Email: "",
-                  });
+                    isActive: false,
+                    });
                 }}
               >
                 Cancel
               </button>
             </div>
+            </div>
+                   
+           </div>
+          
           </div>
         </div>
       </div>
@@ -414,6 +445,7 @@ export const CompaniesScreen = () => {
                             Website: "",
                             SecondPhoneNo: "",
                             Email: "",
+                            isActive: false,
                           });
                           setErrors({}); // Clear errors when opening the form
 
@@ -434,7 +466,6 @@ export const CompaniesScreen = () => {
                           <th className="text-center">Phone</th>
                           <th className="text-center">Address</th>
                           <th className="text-center">Website</th>
-                          {loginUser?.Data.roleId==1 && <th className="text-center">Action</th>}
                         </tr>
                       </thead>
                       <tbody>
@@ -467,7 +498,8 @@ export const CompaniesScreen = () => {
                                   SecondPhoneNo: emp.SecondPhoneNo || "",
                                   Address: emp.Address || "",
                                   Website: emp.Website || "",
-                                });
+                                  isActive: emp.isActive || false,
+                                  });
                                 setErrors({}); // Clear errors when editing
 
                                 const offcanvasEl =

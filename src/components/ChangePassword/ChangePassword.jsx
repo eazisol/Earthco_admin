@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 
 const DemoPasswordFields = () => {
     const [tenant, setTenant] = useState(null);
-    console.log("🚀 ~ DemoPasswordFields ~ tenant:", tenant)
 
     const [formData, setFormData] = useState({
         oldPassword: '',
@@ -127,9 +126,8 @@ const DemoPasswordFields = () => {
           <div className="row table-space">
             <div className="col-xl-5">
               <div className="card">
-                <div className="card-body">
+                <div className="card-body p-0">
                   <div className="row">
-                  <h4 className="card-title mb-4 col-xl-8">Change Password</h4>
                   <div className="container-fluid">
                     <div className="col-xl-12 mb-4">
                         <label className="form-label">Current Password</label>
@@ -183,10 +181,8 @@ const DemoPasswordFields = () => {
                             }}
                         />
                     </div>
-                    {/* <p className="mt-2 mb-1 ">&#8226; At least 8 characters</p>
-            <p className="mb-1 ">&#8226; At least 1 number</p>
-            <p className=" ">&#8226; At least 1 upper case letter</p> */}
-                    <div className="col-xl-12 mb-5">
+             
+                    <div className="col-xl-12 mb-4">
                         <label className="form-label">Confirm New Password</label>
                         <TextField
                             className="form-control form-control-sm"
@@ -211,8 +207,10 @@ const DemoPasswordFields = () => {
                             }}
                         />
                     </div>
-
-                    <div className="col-xl-12 mb-3">
+                    <p className="mt-2 mb-1 ">&#8226; At least 8 characters</p>
+            <p className="mb-1 ">&#8226; At least 1 number</p>
+            <p className=" ">&#8226; At least 1 upper case letter</p>
+                    <div className="col-xl-12 mb-5">
                         <button
                             className="btn btn-primary w-100"
                             onClick={handleSubmit}

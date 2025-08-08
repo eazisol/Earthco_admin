@@ -488,10 +488,10 @@ a:hover {
 }
 
  .custom-login-btn:hover {
-  background: var(--nav-active-color) !important;
+  background: var(--primary-green) !important;
   color: var(--button-color) !important;
   border-radius: 50px;
-  border:1px solid var(--nav-active-color) !important;
+  border:1px solid var(--primary-green) !important;
 }
  .btn-outlined {
   font-family: "Poppins", sans-serif;
