@@ -252,13 +252,13 @@ export const CompanyScreen = () => {
   return (
     <DashboardLayout>
       <div className="content-body">
-  <TitleBar title="Company Settings" />
+  <TitleBar title="Brand Settings" />
         <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-12">
               <div className="card">
                 <div className="card-body">
-                  <h4 className="card-title mb-4">Company Settings</h4>
+                  <h4 className="card-title mb-4">Brand Settings</h4>
                   {/* Tabs */}
                   <ul className="nav nav-tabs mb-3" role="tablist">
                     <li className="nav-item" role="presentation">
