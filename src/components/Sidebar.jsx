@@ -7,9 +7,9 @@ import * as MuiIcons from '@mui/icons-material';
 const Sidebar = ({ isSidebarOpen = true }) => {
   const location = useLocation();
   const [openSubmenu, setOpenSubmenu] = useState(null);
-  const { loginUser, rolePermission, setRolePermission, setLoginUser } = useAppContext();
   const navigate = useNavigate();
   const [getPermissionLoading, setGetPermissionLoading] = useState(false);
+  const { loginUser, rolePermission, setRolePermission, setLoginUser } = useAppContext();
 
   const getRolePermissionData = async (id) => {
     setGetPermissionLoading(true);
@@ -124,15 +124,15 @@ const Sidebar = ({ isSidebarOpen = true }) => {
                     display: "flex",
                     alignItems: "center",
                     gap: "15px",
-                    backgroundColor: "transparent",
+                   
                   }}
                 >
-                  <span style={{ marginLeft: "8px" }}>
+                  <span style={{ marginLeft: "8px"}}> {/* Changed icon color */}
                     {item.icon}
                     {isSidebarOpen && (
                       <span
-                        style={{ marginLeft: "7px" }}
-                        className="menu-title text-white"
+                        style={{ marginLeft: "7px" }} // Changed text color
+                        className="menu-title"
                       >
                         {item.label}
                       </span>

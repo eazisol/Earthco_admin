@@ -324,13 +324,13 @@ function Dashboard() {
                             <td className="fw-semibold">{tenant.data.CompanyName || '-'}</td>
                             <td style={tenantTableStyles.statusCell}>{getStatusBadge(tenant.data.isActive)}</td>
                           </tr>
-                          <tr>
+                          {/* <tr>
                             <td style={tenantTableStyles.fieldName}>Database Name</td>
                             <td style={tenantTableStyles.valueCell}>
                               <code style={tenantTableStyles.code}>{tenant.data.DatabaseName || '-'}</code>
                             </td>
                             <td style={tenantTableStyles.statusCell}>-</td>
-                          </tr>
+                          </tr> */}
                           <tr>
                             <td style={tenantTableStyles.fieldName}>Sub Domain</td>
                             <td style={tenantTableStyles.valueCell}>
@@ -448,7 +448,7 @@ function Dashboard() {
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td style={tenantTableStyles.fieldName}>Created Date</td>
+                                    <td style={tenantTableStyles.fieldName}>Subscription Date</td>
                                     <td className="fw-semibold">{formatDate(pkg.CreatedDate)}</td>
                                     <td style={tenantTableStyles.statusCell}>-</td>
                                   </tr>

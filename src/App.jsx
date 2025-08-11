@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, NavLink } from 'react-router-dom'
+import React, { useEffect, lazy, Suspense, useState } from "react";
 import Branding from './Branding'
 import Register from './Register'
 import Dashboard from './Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
 import RoleBasedRoute from './components/RoleBasedRoute'
-import { useEffect, useState } from 'react'
 import { LoginScreen } from './Login'
 import { PackagesScreen } from './components/Packages'
 import { TenantScreen } from './components/TenantUser'
@@ -19,12 +19,12 @@ import ForgotPassword from './components/ForgotPassword'
 import { TermAndPrivacy } from './components/Setting/termAndPrivacy'
 import ProfilePage from './components/Profile/ProfilePage'
 import ChangePassword from './components/ChangePassword'
-import { AppProvider } from './context/AppContext'
+import { AppProvider, useAppContext } from './context/AppContext'
 import { Button } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';  
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
-import { AddNewsletter } from './APIS/auth';
+import { AddNewsletter, getRolePermission } from './APIS/auth';
 import { toast } from 'react-toastify';
 import { CustomButton } from './components/CustomButton'
 import { ContactUs } from './components/Setting/ContactUs'
@@ -282,7 +282,27 @@ function Layout({ children }) {
   );
 }
 
+
 function App() {
+  
+  const { loginUser, rolePermission, setRolePermission, setLoginUser } = useAppContext();
+  console.log("🚀 ~ App ~ rolePermission:", rolePermission)
+
+  const getRolePermissionData = async (id) => {
+    const response = await getRolePermission(id);
+    setRolePermission(
+      response?.data?.SelectedMenuAccess?.filter(
+        (permission) => permission.isactive === true
+      ) || []
+    );
+  };
+
+  useEffect(() => {
+    if (loginUser?.Data?.RoleId) {
+      getRolePermissionData(loginUser?.Data?.RoleId);
+    }
+  }, [loginUser]);
+  
   return (
     <AppProvider>
       <Router>

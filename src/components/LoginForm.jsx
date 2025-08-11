@@ -1,13 +1,14 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { CustomButtonGreen } from "./CustomButton";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CircularProgress, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import {  getPackageById } from "../APIS/packages";
+import { getPackageById } from "../APIS/packages";
 import { RegisterTenant } from "../APIS/auth";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { toast } from "react-toastify";
-import image from "../assets/img/loginForm.jpg"
+import image from "../assets/img/loginForm.jpg";
+
 export const LoginForm = () => {
   const [searchParams] = useSearchParams();
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ export const LoginForm = () => {
     CompanyName: "",
     PhoneNo: "",
     RoleId: 2,
-    PackageId: "", 
+    PackageId: "",
     SubDomain: "",
     Email: "",
     Password: "",
@@ -34,7 +35,7 @@ export const LoginForm = () => {
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
-    
+
     const packageId = searchParams.get('packageId');
     if (packageId) {
       fetchPackageById(packageId);
@@ -44,7 +45,7 @@ export const LoginForm = () => {
   const fetchPackageById = async (packageId) => {
     try {
       const response = await getPackageById(packageId);
-      
+
       if (response) {
         setSelectedPackageDetails(response);
         setFormData(prev => ({
@@ -54,7 +55,6 @@ export const LoginForm = () => {
       }
     } catch (error) {
       console.error('Error fetching package details:', error);
-    } finally {
     }
   };
 
@@ -71,7 +71,7 @@ export const LoginForm = () => {
         }));
         return;
       }
-      
+
       if (value.length > 50) {
         setErrors(prev => ({
           ...prev,
@@ -105,7 +105,7 @@ export const LoginForm = () => {
         }));
         return;
       }
-      
+
       // Clear error if valid
       setErrors(prev => ({
         ...prev,
@@ -142,8 +142,6 @@ export const LoginForm = () => {
       ...prev,
       [name]: value,
     }));
-
-   
   };
 
   const validateForm = () => {
@@ -166,7 +164,7 @@ export const LoginForm = () => {
     } else if (formData.LastName.trim().length < 2) {
       newErrors.LastName = "Last name must be at least 2 characters long";
     } else if (formData.LastName.trim().length > 50) {
-      newErrors.LastName = "Last name cannot exceed 50 characters";  
+      newErrors.LastName = "Last name cannot exceed 50 characters";
     } else if (!/^[a-zA-Z\s]*$/.test(formData.LastName)) {
       newErrors.LastName = "Last name can only contain letters and spaces";
     }
@@ -196,7 +194,7 @@ export const LoginForm = () => {
     // Password validation
     if (!formData.Password) {
       newErrors.Password = "Password is required";
-    } else if (formData.Password.length < 6) {
+    } else if (formData.Password.length < 8) {
       newErrors.Password = "Password must be at least 8 characters long";
     }
 
@@ -224,16 +222,9 @@ export const LoginForm = () => {
       newErrors.PackageId = "Please select a package";
     }
 
-   
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-
- 
-
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -245,14 +236,14 @@ export const LoginForm = () => {
     setIsSubmitting(true);
 
     try {
-      const packageToUse = selectedPackageDetails 
-      
+      const packageToUse = selectedPackageDetails;
+
       // Prepare data for API call (remove confirmPassword as it's not needed on backend)
       const { confirmPassword, ...registerData } = formData;
       const obj = {
         TenantId: 0,
         FirstName: formData.FirstName,
-        LastName: formData.LastName, 
+        LastName: formData.LastName,
         Email: formData.Email,
         Password: formData.Password,
         SubDomain: formData.SubDomain,
@@ -261,7 +252,7 @@ export const LoginForm = () => {
         RoleId: formData.RoleId,
         tblUserpackages: [
           {
-            UserPackageId:0,
+            UserPackageId: 0,
             PackageId: packageToUse?.PackageId,
             TenantId: 0,
             Name: packageToUse?.Name,
@@ -270,13 +261,12 @@ export const LoginForm = () => {
             MaxStorageMB: packageToUse?.MaxStorageMB,
             MaxCompanies: packageToUse?.MaxCompanies,
             Price: packageToUse?.Price,
-            
           }
         ]
       };
       const data = await RegisterTenant(obj);
-      if(data?.status==200){
-        toast.success(data?.data?.Message)
+      if (data?.status == 200) {
+        toast.success(data?.data?.Message);
         setFormData({
           Email: "",
           Password: "",
@@ -288,23 +278,18 @@ export const LoginForm = () => {
           PhoneNo: "",
           RoleId: 2,
         });
-      }else if(data?.status==409){
-        toast.error(data?.response?.data)
-      }else{
-        toast.error(data?.data?.Message)
+      } else if (data?.status == 409) {
+        toast.error(data?.response?.data);
+      } else {
+        toast.error(data?.data?.Message);
       }
 
       if (data?.data?.PaymentLink) {
-
         window.open(data.data.PaymentLink, '_blank');
-        navigate("/login")
+        navigate("/login");
       }
-
-      // Reset form after successful submission
-      
-
     } catch (error) {
-      toast.error(error?.response?.data)
+      toast.error(error?.response?.data);
       console.error("Registration error:", error);
     } finally {
       setIsSubmitting(false);
@@ -314,7 +299,7 @@ export const LoginForm = () => {
   return (
     <section className="contact">
       <div className="container" data-aos="fade-up">
-        <div className="section-title " style={{marginTop: "11.5%"}}> 
+        <div className="section-title" style={{ marginTop: "11.5%" }}>
           <h2>Create Account</h2>
           <p>
             Join Earthco today and start your journey towards beautiful
@@ -324,7 +309,7 @@ export const LoginForm = () => {
         </div>
 
         <div
-          className="d-flex "
+          className="d-flex"
           style={{
             width: "100%",
             alignItems: "stretch",
@@ -340,9 +325,9 @@ export const LoginForm = () => {
             }}
           >
             <img
-                              src={image}
+              src={image}
               alt="Registration"
-              className="img-fluid  shadow"
+              className="img-fluid shadow"
               style={{
                 width: "100%",
                 height: "100%", // Important
@@ -355,7 +340,6 @@ export const LoginForm = () => {
           {/* Right side - Form */}
 
           <form
-            
             onSubmit={handleSubmit}
             className="php-email-form"
             style={{
@@ -363,10 +347,10 @@ export const LoginForm = () => {
               padding: "40px", // Add some space if needed
             }}
           >
-            <h4 style={{ color: '#6DA34D', marginBottom: '24px', textAlign: 'center', fontWeight:"bold",fontSize:"24px"}}>
-           Register Now
+            <h4 style={{ color: '#6DA34D', marginBottom: '24px', textAlign: 'center', fontWeight: "bold", fontSize: "24px" }}>
+              Register Now
             </h4>
-           
+
             {/* Display selected package info if available */}
             {selectedPackageDetails && (
               <div className="mb-4 p-3" style={{ background: '#f8f9fa', borderRadius: '8px', border: '1px solid #e9ecef' }}>
@@ -384,11 +368,10 @@ export const LoginForm = () => {
 
             <div className="row">
               <div className="form-group col-md-6">
-                
                 <input
                   type="text"
                   name="FirstName"
-                  className={`form-control ${errors.FirstName ? "is-invalid" : ""} `}
+                  className={`form-control ${errors.FirstName ? "is-invalid" : ""}`}
                   id="FirstName"
                   value={formData.FirstName}
                   onChange={handleInputChange}
@@ -400,11 +383,10 @@ export const LoginForm = () => {
                 )}
               </div>
               <div className="form-group col-md-6">
-                
                 <input
                   type="text"
                   name="LastName"
-                  className={`form-control ${errors.LastName ? "is-invalid" : ""} `}
+                  className={`form-control ${errors.LastName ? "is-invalid" : ""}`}
                   id="LastName"
                   value={formData.LastName}
                   onChange={handleInputChange}
@@ -416,7 +398,6 @@ export const LoginForm = () => {
                 )}
               </div>
               <div className="form-group col-md-6">
-                
                 <input
                   type="text"
                   name="SubDomain"
@@ -432,7 +413,6 @@ export const LoginForm = () => {
                 )}
               </div>
               <div className="form-group col-md-6">
-                
                 <input
                   type="text"
                   name="Email"
@@ -448,7 +428,6 @@ export const LoginForm = () => {
                 )}
               </div>
               <div className="form-group col-md-6">
-                
                 <input
                   type="text"
                   name="CompanyName"
@@ -464,7 +443,6 @@ export const LoginForm = () => {
                 )}
               </div>
               <div className="form-group col-md-6">
-                
                 <input
                   type="tel"
                   name="PhoneNo"
@@ -480,15 +458,14 @@ export const LoginForm = () => {
                 )}
               </div>
             </div>
-           
+
             <div className="row mt-2">
-             
               <div className="form-group col-md-6">
                 <div className="input-group">
                   <input
                     type={showPassword ? "text" : "password"}
                     name="Password"
-                    className={`form-control ${errors.Password ? "is-invalid" : ""} `}
+                    className={`form-control ${errors.Password ? "is-invalid" : ""}`}
                     id="Password"
                     value={formData.Password}
                     onChange={e => {
@@ -517,14 +494,14 @@ export const LoginForm = () => {
                     <IconButton
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end"
-                      style={{ position: 'absolute', right: '18px', zIndex: '999',top:"3px" }}
+                      style={{ position: 'absolute', right: '18px', zIndex: '999', top: "3px" }}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </div>
                 </div>
                 {errors.Password && (
-                  <div className="invalid-feedback" style={{display: 'block'}}>{errors.Password}</div>
+                  <div className="invalid-feedback" style={{ display: 'block' }}>{errors.Password}</div>
                 )}
               </div>
               <div className="form-group col-md-6">
@@ -532,7 +509,7 @@ export const LoginForm = () => {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
-                    className={`form-control ${errors.confirmPassword ? "is-invalid" : ""} `}
+                    className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}`}
                     id="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={e => {
@@ -556,45 +533,40 @@ export const LoginForm = () => {
                     <IconButton
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       edge="end"
-                      style={{ position: 'absolute', right: '18px', zIndex: '999',top:"3px" }}
+                      style={{ position: 'absolute', right: '18px', zIndex: '999', top: "3px" }}
                     >
                       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </div>
                 </div>
                 {errors.confirmPassword && (
-                  <div className="invalid-feedback" style={{display: 'block'}}>{errors.confirmPassword}</div>
+                  <div className="invalid-feedback" style={{ display: 'block' }}>{errors.confirmPassword}</div>
                 )}
               </div>
             </div>
-           
-            <p className="mt-2 mb-1 ">&#8226; At least 8 characters</p>
-            <p className="mb-1 ">&#8226; At least 1 number</p>
+
+            <p className="mt-2 mb-1">&#8226; At least 8 characters</p>
+            <p className="mb-1">&#8226; At least 1 number</p>
             <p className=" ">&#8226; At least 1 upper case letter</p>
-            {/* {registerError && (
-              <div className="alert alert-danger mt-3" role="alert">
-                {registerError}
-              </div>
-            )} */}
             <div className="mt-2">
               <CustomButtonGreen
-              className="w-100"
+                className="w-100"
                 text={
-                  isSubmitting 
-                  ? "Creating Account..."
-                  : "Create Account"
+                  isSubmitting
+                    ? "Creating Account..."
+                    : "Create Account"
                 }
                 type="submit"
-                disabled={isSubmitting }
+                disabled={isSubmitting}
               />
-             <p className="text-center mt-2">
-  Already user? <Link 
-    to="/login" 
-    style={{ color: '#6DA34D', fontWeight: 500, textDecoration: 'none', transition: 'color 0.2s' }}
-    onMouseOver={e => e.target.style.color = '#55842A'}
-    onMouseOut={e => e.target.style.color = '#6DA34D'}
-  >Login</Link>
-</p>
+              <p className="text-center mt-2">
+                Already user? <Link
+                  to="/login"
+                  style={{ color: '#6DA34D', fontWeight: 500, textDecoration: 'none', transition: 'color 0.2s' }}
+                  onMouseOver={e => e.target.style.color = '#55842A'}
+                  onMouseOut={e => e.target.style.color = '#6DA34D'}
+                >Login</Link>
+              </p>
             </div>
           </form>
         </div>

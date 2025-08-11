@@ -7,7 +7,7 @@ import {
 } from "./components/CustomButton";
 import { useNavigate } from "react-router";
 import HeroSection from "./components/HeroSection";
-import { getPackages } from "./APIS/packages";
+import { getPackageById, getPackages } from "./APIS/packages";
 import { ConfirmationModal } from "./components/Reuseable/ConfirmationModal";
 import { AddContactMessage, checkPackageStatus, updateTenantPackage } from "./APIS/auth";
 import { toast } from "react-toastify";
@@ -15,8 +15,7 @@ import { toast } from "react-toastify";
 
 function Branding() {
   const [loginUser,setLoginUser] = useState(null)
-  console.log("🚀 ~ Branding ~ loginUser:", loginUser)
-  
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "",
@@ -151,6 +150,8 @@ const [isLoading,setIsLoading] = useState(false)
     }
   }
 const handleSubscription=async(plan)=>{
+
+  
   if(loginUser?.token?.data){
        const data = await checkPackageStatus();
     if(data?.data?.Status){
@@ -427,7 +428,17 @@ const handleSubscription=async(plan)=>{
                 <li><i class="bx bx-check"></i>{`Email support only`}</li>
               </ul>
         
-              <CustomButton onClick={() =>loginUser?.Data?.RoleId === 1 ? null: handleSubscription(plan)} disabled={loginUser?.Data?.RoleId === 1} />
+              <CustomButton 
+                onClick={() => {
+                  if (loginUser?.Data?.RoleId === 1) return;
+                  if (loginUser?.UserPackage?.PackageId === plan?.PackageId) {
+                    toast.error("Your current package is already active.");
+                  } else {
+                    handleSubscription(plan);
+                  }
+                }} 
+                disabled={loginUser?.Data?.RoleId === 1} 
+              />
             </div>
           </div>
         );

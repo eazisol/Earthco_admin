@@ -32,7 +32,6 @@ export const AppProvider = ({ children }) => {
     setLoginUser(null);
     setRolePermission([]);
     localStorage.removeItem('user');
-    toast.success('Logged out successfully');
     // Add a small delay to allow toast message to display
     setTimeout(() => {
       window.location.href = '/login';

@@ -115,8 +115,8 @@ export const TransactionsScreen = () => {
                         <tr>
                           <th>Invoice Number</th>
                           {loginUser?.Data?.RoleId === 1 && <th>Customer Name</th>}
-                          <th>Amount</th>
                           <th>Package Name</th>
+                          <th>Amount</th>
                           <th>Paid Date</th>
                           <th>Status</th>
                           <th>Links</th>
@@ -139,13 +139,13 @@ export const TransactionsScreen = () => {
                                   <h6>{transaction.FirstName}</h6>
                                 </div>
                               </td>}
-
-                              <td>
-                                <span className="text-center"> {`$${transaction.Price}`}</span>
-                              </td>
                               <td>
                                   <span>{transaction.Name}</span>
                                 </td>
+                              <td>
+                                <span className="text-center"> {`$${transaction.Price}`}</span>
+                              </td>
+                            
                               <td>
                                 <span>{transaction.PaidDate ? new Date(transaction.PaidDate).toLocaleDateString() : '-'}</span>
                               </td> <td>

@@ -92,7 +92,7 @@ if (!formData.PhoneNo || formData.PhoneNo.length < 7 || formData.PhoneNo.length 
       }
     } catch (error) {
       console.error("Error updating tenant profile:", error);
-      toast.error("Error updating profile data");
+      // toast.error("Error updating profile data");
     }finally{
       setLoading(false);
       }
@@ -106,7 +106,6 @@ if (!formData.PhoneNo || formData.PhoneNo.length < 7 || formData.PhoneNo.length 
       }
     }else{
         const response = await cancelSubscription(transactionId?.SubscriptionId, loginUser?.token?.data);
-        console.log("🚀 ~ handleCancelSubscription ~ response:", response)
         if(response) {
           toast.success("Subscription cancelled successfully");
           setModalOpen(false);
@@ -114,41 +113,41 @@ if (!formData.PhoneNo || formData.PhoneNo.length < 7 || formData.PhoneNo.length 
     }
     
   }
+  const fetchTenantProfile = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const tenantId = searchParams.get('id') || loginUser?.Data?.TenantId;
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      if (!tenantId) {
+        setError("Tenant ID not found");
+        return;
+      }
+
+      const response = await getTenantById(tenantId);
+
+
+      if (response?.data && !response.error) {
+          setFormData(response.data);
+      } else if (response?.error) {
+        setError(response.message);
+        toast.error(response.message );
+      } else {
+        setError("Failed to fetch tenant data");
+        // toast.error("Failed to fetch profile data");
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+      // toast.error("Error loading profile data");
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
    
-    const fetchTenantProfile = async () => {
-      setLoading(true);
-      setError(null);
 
-      try {
-        const tenantId = searchParams.get('id') || loginUser?.Data?.TenantId;
-        const user = JSON.parse(localStorage.getItem("user"));
-
-        if (!tenantId) {
-          setError("Tenant ID not found");
-          return;
-        }
-
-        const response = await getTenantById(tenantId);
-
-
-        if (response?.data && !response.error) {
-            setFormData(response.data);
-        } else if (response?.error) {
-          setError(response.message || "Failed to fetch tenant data");
-          toast.error(response.message || "Failed to fetch profile data");
-        } else {
-          setError("Failed to fetch tenant data");
-          toast.error("Failed to fetch profile data");
-        }
-      } catch (err) {
-        console.error("Error fetching tenant profile:", err);
-        setError("An unexpected error occurred");
-        toast.error("Error loading profile data");
-      } finally {
-        setLoading(false);
-      }
-    };
 
     fetchTenantProfile();
  
@@ -326,6 +325,7 @@ useEffect(() => {
                                 description: `Are you sure you want to ${formData.isActive ? "Inactivate" : "activate"} this tenant?`,
                                 onConfirm: async () => {
                                   const data = await updateTenantStatus({ id: formData.TenantId, Active: formData.isActive ? false : true });
+                                  
                                   if (data?.status == 200) {
                                     toast.success(data?.data?.Message);
                                     fetchTenantProfile();
