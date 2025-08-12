@@ -127,7 +127,7 @@ const Sidebar = ({ isSidebarOpen = true }) => {
                    
                   }}
                 >
-                  <span style={{ marginLeft: "8px"}}> {/* Changed icon color */}
+                  <span style={{ marginLeft: "8px",color:"white"}}> {/* Changed icon color */}
                     {item.icon}
                     {isSidebarOpen && (
                       <span

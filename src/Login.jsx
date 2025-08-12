@@ -71,30 +71,30 @@ export const LoginScreen = ({ onClose }) => {
           Password: formData.Password,
         },
       });
-      if(response?.status === 'success'){
-        toast.success(response?.response?.data );
+      if (response?.status === 'success') {
+        toast.success(response?.response?.data);
         navigate("/dashboard");
-      }else{
-        toast.error(response?.response?.data );
+      } else {
+        toast.error(response?.response?.data);
       }
       if (response?.error) {
-        throw new Error(response.message || "Login failed");
+        throw new Error(response.message );
       }
       // if (onClose) onClose();
       // navigate("/dashboard");
 
     } catch (error) {
-      setApiError(error.message || "Something went wrong");
+      setApiError(error.message );
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section className="contact" style={{paddingBottom:"85px"}}>
+    <section className="contact" style={{ paddingBottom: "85px" }}>
       <div className="container" data-aos="fade-up">
-        <div className="section-title" style={{marginTop: "11.5%"}}> 
-       
+        <div className="section-title" style={{ marginTop: "11.5%" }}>
+
         </div>
 
         <div
@@ -121,126 +121,128 @@ export const LoginScreen = ({ onClose }) => {
                 height: "100%",
                 objectFit: "cover",
                 borderRadius: "0",
-              
+
               }}
             />
           </div>
 
-         
-           
-         
-           
-              <form
-                onSubmit={handleSubmit}
-                className="php-email-form d-flex flex-column align-items-center justify-content-center"
-                style={{
-                  width: "50%",
-                  padding: "40px",
-                  minHeight: "100%",
-                
-                }}
-              >
-                
-                <div
-                  className="w-100 d-flex flex-column align-items-center"
-                 
-                >
-                  <h4 style={{ color: '#6DA34D', textAlign: 'left',width:"100%",fontWeight:"bold",fontSize:"24px" }}>
-                    Welome Back!
-                   </h4>
-            
-                   <p style={{ fontSize: 12,
-                        color: "#909090", marginBottom: '24px', textAlign: 'left',width:"100%" }}>
-            Access your Earthco account to manage your landscaping services, view project updates, and more.
-          </p>
-                   
-                  <div className="mb-3 w-100">
-                    <input
-                      type="email"
-                      className={`form-control ${errors.Email ? "is-invalid" : ""}`}
-                      id="loginEmail"
-                      name="Email"
-                      value={formData.Email}
-                      onChange={handleChange}
-                      placeholder="Enter your email"
-                      autoFocus
+
+
+
+
+          <form
+            onSubmit={handleSubmit}
+            className="php-email-form d-flex flex-column align-items-center justify-content-center"
+            style={{
+              width: "50%",
+              padding: "40px",
+              minHeight: "100%",
+
+            }}
+          >
+
+            <div
+              className="w-100 d-flex flex-column align-items-center"
+
+            >
+              <h4 style={{ color: '#6DA34D', textAlign: 'left', width: "100%", fontWeight: "bold", fontSize: "24px" }}>
+                Welome Back!
+              </h4>
+
+              <p style={{
+                fontSize: 12,
+                color: "#909090", marginBottom: '24px', textAlign: 'left', width: "100%"
+              }}>
+                Access your Earthco account to manage your landscaping services, view project updates, and more.
+              </p>
+
+              <div className="mb-3 w-100">
+                <input
+                  type="email"
+                  className={`form-control ${errors.Email ? "is-invalid" : ""}`}
+                  id="loginEmail"
+                  name="Email"
+                  value={formData.Email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  autoFocus
+                  style={{
+                    background: "#f4f7fa",
+                    border: "1px solid #e0e0e0",
+                  }}
+                />
+                {errors.Email && (
+                  <div className="invalid-feedback text-center">{errors.Email}</div>
+                )}
+              </div>
+              <div className=" position-relative w-100">
+                <div className="input-group">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className={`form-control ${errors.Password ? "is-invalid" : ""}`}
+                    id="loginPassword"
+                    name="Password"
+                    value={formData.Password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                    style={{
+                      background: "#f4f7fa",
+                      border: "1px solid #e0e0e0",
+                    }}
+                  />
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
                       style={{
-                        background: "#f4f7fa",
-                        border: "1px solid #e0e0e0",
-                      }}
-                    />
-                    {errors.Email && (
-                      <div className="invalid-feedback text-center">{errors.Email}</div>
-                    )}
-                  </div>
-                  <div className=" position-relative w-100">
-                    <div className="input-group">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        className={`form-control ${errors.Password ? "is-invalid" : ""}`}
-                        id="loginPassword"
-                        name="Password"
-                        value={formData.Password}
-                        onChange={handleChange}
-                        placeholder="Enter your password"
-                        style={{
-                          background: "#f4f7fa",
-                          border: "1px solid #e0e0e0",
-                        }}
-                      />
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                          style={{
-                            position: "absolute",
-                            right: "10px",
-                            top: "2px",
-                            zIndex: "999",
-                            height: "100%",
-                          }}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    </div>
-                    {errors.Password && (
-                      <div className="invalid-feedback text-center">{errors.Password}</div>
-                    )}
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center mb-4 w-100">
-                    <div className="form-check"></div>
-                    <Link
-                      to="/forgot-password"
-                      style={{
-                        fontSize: 14,
-                        color: "#6DA34D",
-                        textDecoration: "none",
-                        marginLeft: "auto",
+                        position: "absolute",
+                        right: "10px",
+                        top: "2px",
+                        zIndex: "999",
+                        height: "100%",
                       }}
                     >
-                      Forgot Password ?
-                    </Link>
-                  </div>
-                  
-                  <button
-                    type="submit"
-                    className="btn btn-success mb-2 "
-                    style={{
-                      background: "#7a9c3a",
-                      border: "none",
-                      width: "100%",
-                      // maxWidth: 250,
-                      alignSelf: "center",
-                      fontSize: "16px",
-                    }}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Signing In..." : "Sign In"}
-                  </button>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
                 </div>
-              </form>
-       
+                {errors.Password && (
+                  <div className="invalid-feedback text-center">{errors.Password}</div>
+                )}
+              </div>
+              <div className="d-flex justify-content-between align-items-center mb-4 w-100">
+                <div className="form-check"></div>
+                <Link
+                  to="/forgot-password"
+                  style={{
+                    fontSize: 14,
+                    color: "#6DA34D",
+                    textDecoration: "none",
+                    marginLeft: "auto",
+                  }}
+                >
+                  Forgot Password ?
+                </Link>
+              </div>
+
+              <button
+                type="submit"
+                className="btn btn-success mb-2 "
+                style={{
+                  background: "#7a9c3a",
+                  border: "none",
+                  width: "100%",
+                  // maxWidth: 250,
+                  alignSelf: "center",
+                  fontSize: "16px",
+                }}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Signing In..." : "Sign In"}
+              </button>
+            </div>
+          </form>
+
         </div>
       </div>
     </section>
