@@ -11,7 +11,7 @@ axios.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Show error message
-      toast.error('Session expired. Please login again.');
+      // toast.error('Session expired. Please login again.');
       
       // Clear user data and redirect
       clearUserAndRedirect();
@@ -253,7 +253,20 @@ export const createRolePermission = async (obj) => {
         "Content-Type": "application/json",
       },
     });
-    console.log("🚀 ~ createRolePermission ~ data:", data)
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+export const deleteRole = async (id,isConfirm) => {
+  const token = JSON.parse(localStorage.getItem("user"));
+  try {
+    const data  = await axios.get(`${apiUrl}Tenant/DeleteRole?id=${id}&isConfirm=${isConfirm}`, {
+      headers: {
+        Authorization: `Bearer ${token.token.data}`,
+        "Content-Type": "application/json",
+      },
+    });
     return data;
   } catch (error) {
     return error;

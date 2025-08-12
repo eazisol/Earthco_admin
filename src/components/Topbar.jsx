@@ -22,6 +22,7 @@ const Topbar = () => {
 
   const handleLogout = () => {
     logout();
+    toast.success('Logged out successfully');
     setIsDropdownOpen(false);
   };
 

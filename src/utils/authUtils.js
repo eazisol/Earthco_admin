@@ -12,7 +12,7 @@ export const isAuthenticated = () => {
     const parsedUser = JSON.parse(user);
     return !!(parsedUser?.token?.data);
   } catch (error) {
-    console.error('Error checking authentication:', error);
+    // console.error('Error checking authentication:', error);
     return false;
   }
 };
@@ -29,7 +29,7 @@ export const getCurrentUser = () => {
     const parsedUser = JSON.parse(user);
     return parsedUser?.token?.data ? parsedUser : null;
   } catch (error) {
-    console.error('Error getting current user:', error);
+    // console.error('Error getting current user:', error);
     return null;
   }
 };

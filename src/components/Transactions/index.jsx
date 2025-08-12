@@ -128,9 +128,7 @@ export const TransactionsScreen = () => {
                         ) : transactionsData?.length === 0 ? (
                           <tr><td colSpan={10} className="text-center">No data found</td></tr>
                         ) : (
-                          transactionsData?.map((transaction, index) => {
-
-                            return (<tr key={index}>
+                          transactionsData?.map((transaction, index) =>  (<tr key={index}>
                               <td>
                                 <span>{transaction.InvoiceNumber}</span>
                               </td>
@@ -179,8 +177,8 @@ export const TransactionsScreen = () => {
                               </td>
 
 
-                            </tr>);
-                          })
+                            </tr>)
+                          )
                         )}
                       </tbody>
                     </table>

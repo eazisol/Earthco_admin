@@ -286,7 +286,7 @@ function Layout({ children }) {
 function App() {
   
   const { loginUser, rolePermission, setRolePermission, setLoginUser } = useAppContext();
-  console.log("🚀 ~ App ~ rolePermission:", rolePermission)
+  //  console.log("🚀 ~ App ~ rolePermission:", rolePermission)
 
   const getRolePermissionData = async (id) => {
     const response = await getRolePermission(id);

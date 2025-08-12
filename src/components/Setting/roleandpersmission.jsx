@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../DashboardLayout/DashboardLayout"
 import TitleBar from "../TitleBar"
-import { createRole, createRolePermission, getRolePermission, getTenantRole } from "../../APIS/auth";
+import { createRole, createRolePermission, deleteRole, 	getRolePermission, getTenantRole } from "../../APIS/auth";
 import { toast } from "react-toastify";
+import {ConfirmationModal} from "../Reuseable/ConfirmationModal";
 
 export const RoleAndPermission = () => {
 	const [roleName, setRoleName] = useState("");
@@ -13,7 +14,7 @@ export const RoleAndPermission = () => {
 	const [rolePermission, setRolePermission] = useState([]);
 	const [accessLoading, setAccessLoading] = useState(false);
 	const [roleId, setRoleId] = useState(0);
-
+	const [showConfirmation, setShowConfirmation] = useState(false);
 	const getRoles = async () => {
 		setGetRolesLoading(true);
 		const response = await getTenantRole();
@@ -24,12 +25,13 @@ export const RoleAndPermission = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
-		const response = await createRole({ RoleId: 0, Role: roleName, isActive: true });
+		const response = await createRole({ RoleId: roleId, Role: roleName, isActive: true });
 		setLoading(false);
 		if (response.status === 200) {
 			toast.success(response.data.Message);
 			await getRoles();
 			setRoleName("");
+			setRoleId(0);
 		} else if (response.status == 409) {
 			toast.error(response.response.data);
 			setLoading(false);
@@ -69,26 +71,49 @@ export const RoleAndPermission = () => {
 		setAccessLoading(false);
 	}
 
+	const handleDeleteRole = async (id) => {
+		const response = await deleteRole(id,false	);
+		
+		if (response.status === 200) {
+			toast.success(response.data.Message);
+			await getRoles();
+			setShowConfirmation(false);
+			setRoleId(0);
+		}
+	}
+
 	return (
 		<DashboardLayout>
+			<ConfirmationModal
+				modalOpen={showConfirmation}
+				setModalOpen={setShowConfirmation}
+				title="Delete Role"
+				description="Are you sure you want to delete this role?"
+				onConfirm={()=>{handleDeleteRole(roleId)}}
+				confirmText="Delete"
+				cancelText="Cancel"
+			/>
+		
 			<div className="content-body">
-				<TitleBar title="Roles And Permissions" />
+				<TitleBar title="Roles & Permissions" />
 
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-xl-3 col-xxl-4">
+						<div class="col-xl-3 col-xxl-4" style={{ position: "fixed", zIndex: 1 }}>
 							<div class="card h-auto">
-								<div class="card-header">
-									<h4 class="heading mb-0">Role </h4>
+								<div class="card-header p-2" >
+									<h4 class="heading mb-0" style={{paddingLeft: "10px"}}>Roles </h4>
 								</div>
-								<div class="card-body">
-									<form class="finance-hr row" onSubmit={handleSubmit} style={{ display: "flex", alignItems: "center" }}>
-										<div class="form-group mb-3 col-8">
+								<div class="card-body" style={{ maxHeight: "75vh", overflowY: "auto" }}>
+									<form class="finance-hr row" onSubmit={handleSubmit} >
+										<div class="form-group mb-3 col-8 ">
 											<label class="text-secondary font-w500">Add New Role<span class="text-danger">*</span>
 											</label>
 											<input type="text" class="form-control" placeholder="Role Name" value={roleName} onChange={(e) => setRoleName(e.target.value)} />
 										</div>
-										<div class="form-group  col-4">
+										<div class="form-group mb-3 col-4 ">
+										<label class="text-white d-block">. 
+										</label>
 											<button type="submit" class="btn btn-primary " disabled={!roleName || loading}>{loading ? "Loading..." : "Confirm"}</button>
 										</div>
 									</form>
@@ -107,11 +132,21 @@ export const RoleAndPermission = () => {
 															setRoleId(role.RoleId);
 														}}
 														className={roleId === role.RoleId ? "active-role" : ""}
-														style={roleId === role.RoleId ? { backgroundColor: "#f0f0f0", borderRadius: "5px", cursor: "pointer" } : { cursor: "pointer" }}
-														onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#e0e0e0"}
-														onMouseLeave={(e) => e.currentTarget.style.backgroundColor = roleId === role.RoleId ? "#f0f0f0" : ""}
+														style={roleId === role.RoleId ? { backgroundColor: "#f0f0f0", borderRadius: "5px", cursor: "pointer", position: "relative" } : { cursor: "pointer", position: "relative" }}
+														onMouseEnter={(e) => {
+															e.currentTarget.style.backgroundColor = "#e0e0e0";
+															e.currentTarget.querySelector('.role-icons').style.display = 'inline';
+														}}
+														onMouseLeave={(e) => {
+															e.currentTarget.style.backgroundColor = roleId === role.RoleId ? "#f0f0f0" : "";
+															e.currentTarget.querySelector('.role-icons').style.display = 'none';
+														}}
 													>
 														{role.Role}
+														<div className="role-icons" style={{ display: 'none', position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)' }}>
+															<i className="fas fa-edit" style={{ marginRight: '10px', cursor: 'pointer' }} onClick={(e)=>{ e.stopPropagation(); setRoleName(role.Role); setRoleId(role.RoleId); }}></i>
+															<i className="fas fa-trash" style={{ cursor: 'pointer', color: "red" }} onClick={(e)=>{ e.stopPropagation(); setShowConfirmation(true); setRoleId(role.RoleId); }}></i>
+														</div>
 													</li>
 												))}
 											</ul>
@@ -120,14 +155,14 @@ export const RoleAndPermission = () => {
 								</div>
 							</div>
 						</div>
-						<div class="col-xl-8">
+						<div class="col-xl-8" style={{ marginLeft: "30%", overflowY: "auto"}}>
 							<div class="card">
 								<div class="card-body">
 									<table className="table">
 										<thead>
 											<tr>
-												<th>Name</th>
-												<th>Assign</th>
+												<th>Module</th>
+												<th>Assign Permissions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -141,7 +176,6 @@ export const RoleAndPermission = () => {
 												</tr>
 											) : (
 												rolePermission?.SelectedMenuAccess?.map((menu, index) => {
-													console.log("🚀 ~ menu:", menu);
 													return (
 														<tr key={index}>
 															<td>{menu?.menu?.Name}</td>
