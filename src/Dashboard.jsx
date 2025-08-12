@@ -73,7 +73,7 @@ function Dashboard() {
   const [tenant, setTenant] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState(null);
   console.log("🚀 ~ Dashboard ~ stats:", stats)
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -163,31 +163,28 @@ const [stats, setStats] = useState(null);
         <TitleBar icon={<HomeOutlinedIcon />} title={'Dashboard'} />
         <div className="container-fluid">
 
-            {loginUser?.Data?.RoleId == 1 ? <div className="row">
+          {loginUser?.Data?.RoleId == 1 ? <div className="row">
 
-              <DashbaordCard total={stats?.TotalTenant} color="info" title="Total Tenant" icon={<GroupOutlinedIcon  style={{color:"white",fontSize:"35px"}}/>} />
-                <DashbaordCard total={stats?.TotalActiveTenant} color='success' title="Active Tenant" icon={<PermIdentityOutlinedIcon  style={{color:"white",fontSize:"35px"}}/>  } />
-              <DashbaordCard total={stats?.TotalInActiveTenant} color='light' title="InActive Tenant" icon={<PersonOffOutlinedIcon  style={{color:"white",fontSize:"35px"}}/>} />
-              <DashbaordCard total={`$${stats?.TotalTransactionSum
-}`}  title="Total Transaction" icon={<PaidOutlinedIcon  style={{color:"white",fontSize:"35px"}}/>} />
-
-
-
-            </div>:
+            <DashbaordCard total={stats?.TotalTenant} color="info" title="Total Tenant" icon={<GroupOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+            <DashbaordCard total={stats?.TotalActiveTenant} color='success' title="Active Tenant" icon={<PermIdentityOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+            <DashbaordCard total={stats?.TotalInActiveTenant} color='light' title="InActive Tenant" icon={<PersonOffOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+            <DashbaordCard total={`$${stats?.TotalTransactionSum
+              }`} title="Total Transaction" icon={<PaidOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+</div> :
             <div className="row">
-            <DashbaordCard total={stats?.TotalCompanies} color="info" title="Total Companies" icon={<GroupOutlinedIcon  style={{color:"white",fontSize:"35px"}}/>} />
-            <DashbaordCard total={stats?.TotalActiveCompanies} color='success' title="Active Companies" icon={<PermIdentityOutlinedIcon  style={{color:"white",fontSize:"35px"}}/>  } />
-            <DashbaordCard total={stats?.TotalInActiveCompanies} color='light' title="InActive Companies" icon={<PersonOffOutlinedIcon  style={{color:"white",fontSize:"35px"}}/>} />
-            <DashbaordCard total={stats?.TotalTransaction}  title="Total Transaction" icon={<PaidOutlinedIcon  style={{color:"white",fontSize:"35px"}}/>} />
-          </div>}
+              <DashbaordCard total={stats?.TotalCompanies} color="info" title="Total Companies" icon={<GroupOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+              <DashbaordCard total={stats?.TotalActiveCompanies} color='success' title="Active Companies" icon={<PermIdentityOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+              <DashbaordCard total={stats?.TotalInActiveCompanies} color='light' title="InActive Companies" icon={<PersonOffOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+              <DashbaordCard total={stats?.TotalTransaction} title="Total Transaction" icon={<PaidOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+            </div>}
 
           {/* Tenant Information Table */}
-          <div className="row ">
+          <div className="row">
             <div className="col-xl-12">
-              <div className="card">
-                <div className="card-header border-0 pb-0">
+              <div className="card shadow-sm">
+                <div className="card-header border-0 pb-0 bg-light">
                   <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
-                    <h4 className="heading mb-0 me-auto">
+                    <h4 className="heading mb-0 me-auto text-dark">
                       <i className="fas fa-building me-2 text-primary"></i>
                       Tenant Information
                     </h4>
@@ -200,16 +197,13 @@ const [stats, setStats] = useState(null);
                             "noopener,noreferrer"
                           )
                         }
-                        className="btn btn-primary btn-sm ms-auto"
+                        className="btn btn-outline-primary btn-sm ms-auto"
                         style={{
-                          background: "#7b9b43",
-                          border: "none",
                           borderRadius: "22px",
                           padding: "8px 20px",
                           fontSize: "0.875rem",
                           fontWeight: 500,
                           cursor: "pointer",
-                          boxShadow: "0 2px 6px rgba(25, 118, 210, 0.08)",
                           transition: "background 0.2s",
                         }}
                       >
@@ -236,8 +230,8 @@ const [stats, setStats] = useState(null);
                     </div>
                   ) : tenant?.data ? (
                     <div className="table-responsive">
-                      <table className="table table-hover mb-0" style={{ borderCollapse: 'separate', borderSpacing: 0 }}>
-                        <thead>
+                      <table className="table  mb-0" style={{ borderCollapse: 'separate', borderSpacing: 0 }}>
+                        <thead className="bg-light">
                           <tr>
                             <th style={{ ...tenantTableStyles.tableHeader, width: '200px' }}>Field</th>
                             <th style={tenantTableStyles.tableHeader}>Value</th>
@@ -257,13 +251,6 @@ const [stats, setStats] = useState(null);
                             <td className="fw-semibold">{tenant.data.CompanyName || '-'}</td>
                             <td style={tenantTableStyles.statusCell}>{getStatusBadge(tenant.data.isActive)}</td>
                           </tr>
-                          {/* <tr>
-                            <td style={tenantTableStyles.fieldName}>Database Name</td>
-                            <td style={tenantTableStyles.valueCell}>
-                              <code style={tenantTableStyles.code}>{tenant.data.DatabaseName || '-'}</code>
-                            </td>
-                            <td style={tenantTableStyles.statusCell}>-</td>
-                          </tr> */}
                           <tr>
                             <td style={tenantTableStyles.fieldName}>Sub Domain</td>
                             <td style={tenantTableStyles.valueCell}>
