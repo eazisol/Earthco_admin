@@ -29,7 +29,7 @@ export const CompaniesScreen = () => {
   const [employeesData, setEmployeesData] = useState([]);
   const [selectedId, setSelectedId] = useState(0);
   const [openForm, setOpenForm] = useState(false);
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true); 
   const [formData, setFormData] = useState({
     CompanyName: "",
     CompanyRealmId: "",
@@ -143,29 +143,36 @@ export const CompaniesScreen = () => {
       setLoader(false);
     }
   };
+  const fetchTenant = async () => {
+    try {
+      const data = await getPackagesType(user.token.data);
+      setPackageOptions(data);
+    } catch (err) { }
+  };
 
   const fetchCompanies = async () => {
-    setLoader(true);
+    setLoader(true); // Set loader to true when fetching companies
     const response = await getCompanyList();
-    
+   if(response?.status == 200){
     setEmployeesData(response?.data?.Data);
+    setLoader(false); // Set loader to false after fetching companies
+   }else if(response?.status == 500){
+    setEmployeesData([]);
     setLoader(false);
+   }else{
+    toast.error(response?.data?.Message);
+    setEmployeesData([]);
+    setLoader(false);
+   }
   };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     fetchCompanies();
-    setLoader(false);
-    const fetchTenant = async () => {
-      try {
-        const data = await getPackagesType(user.token.data);
-        setPackageOptions(data);
-      } catch (err) { }
-    };
-
+   
     if (user.token.data) {
       fetchTenant();
-    }
+    } 
   }, []);
 
   const handleDelete = async (id) => {

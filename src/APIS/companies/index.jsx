@@ -11,7 +11,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
     });
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 export const addCompany = async (body) => {

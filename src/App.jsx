@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Link, useLocation, NavLink } from 'react-router-dom'
-import React, { useEffect, lazy, Suspense, useState } from "react";
+import { BrowserRouter as Router, Routes, Route,  useLocation,  } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
 import Branding from './Branding'
 import Register from './Register'
 import Dashboard from './Dashboard'
@@ -20,9 +20,6 @@ import { TermAndPrivacy } from './components/Setting/termAndPrivacy'
 import ProfilePage from './components/Profile/ProfilePage'
 import ChangePassword from './components/ChangePassword'
 import { AppProvider, useAppContext } from './context/AppContext'
-import { Button } from '@mui/material'
-import LogoutIcon from '@mui/icons-material/Logout';  
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { AddNewsletter, getRolePermission } from './APIS/auth';
 import { toast } from 'react-toastify';
@@ -286,7 +283,6 @@ function Layout({ children }) {
 function App() {
   
   const { loginUser, rolePermission, setRolePermission, setLoginUser } = useAppContext();
-  //  console.log("🚀 ~ App ~ rolePermission:", rolePermission)
 
   const getRolePermissionData = async (id) => {
     const response = await getRolePermission(id);

@@ -12974,7 +12974,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     .deznav .metismenu li {
       position: relative; }
     .deznav .metismenu .menu-title {
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 400;
 background-color: transparent !important;
      }
@@ -25741,7 +25741,6 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 .deznav .metismenu > li > a,
 .deznav .metismenu > li > a i,
 .deznav .metismenu > li > a svg,
-.deznav .metismenu > li > a .menu-title,
 .deznav .metismenu > li.mm-active > a,
 .deznav .metismenu > li.mm-active > a i,
 .deznav .metismenu > li.mm-active > a svg,
@@ -25770,7 +25769,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 /* Sidebar inactive text */
 .deznav .metismenu > li > a,
 .deznav .metismenu > li > a .menu-title {
-  color: #fff !important;
+  
   font-weight: normal;
 }
 /* Sidebar active text */

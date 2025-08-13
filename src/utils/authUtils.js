@@ -42,7 +42,7 @@ export const clearUserAndRedirect = () => {
   // Add a small delay to allow toast messages to display
   setTimeout(() => {
     window.location.href = '/login';
-  }, 1000);
+  }, 500);
 };
 
 /**
