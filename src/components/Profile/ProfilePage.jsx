@@ -26,7 +26,7 @@ const ProfilePage = () => {
     confirmPassword: "",
     tblUserPackages: []
   });
-  const [modalOpen, setModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "",
     description: "",
@@ -313,8 +313,8 @@ useEffect(() => {
                           }}
                         />
                       </div>
-                      <div className="form-check form-switch d-flex align-items-center justify-content-center mb-4" style={{ width: "fit-content", paddingLeft: "1%" }}>
-                        <Tooltip title={formData.isActive ? "Activate Tenant" : "Inactivate Tenant"} arrow>
+           { formData?.TenantId==loginUser?.Data?.TenantId ?null:  <div className="form-check form-switch d-flex align-items-center justify-content-center mb-4" style={{ width: "fit-content", paddingLeft: "1%" }}>
+                        <Tooltip title={formData.isActive ? "Activate Admin" : "Inactivate Admin"} arrow>
                           <label 
                             className="form-check-label mb-0" 
                             style={{ whiteSpace: "nowrap", cursor: "pointer" }}
@@ -370,7 +370,7 @@ useEffect(() => {
                             style={{ marginLeft: "12px" }}
                           />
                         </Tooltip>
-                      </div>
+                      </div>}
                     </div>
                     <div className="row align-items-center">
                         <div className="col-xl-6 d-flex align-items-center " style={{textAlign: "start",paddingLeft: "25px"}}>
@@ -396,7 +396,7 @@ useEffect(() => {
                   {/* )} */}
                 </div>
               </div>
-       {formData?.RoleId==2&&<div className="card table-space">
+       {formData?.RoleId==1&&<div className="card table-space">
                 <div className="card-body">
                   <h4 className="card-title mb-4 "  style={{marginLeft: "8px"}}>Active Package</h4>
                   <div className="table-responsive">

@@ -519,7 +519,7 @@ export const PackagesScreen = () => {
                           <th className="text-center">max Storage(MB) </th>
                           <th className="text-center">Monthly Price</th>
                           <th className="text-center">Max Companies</th>
-                          {/* <th className="text-center">Action</th> */}
+                          <th className="text-center">Status</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -576,6 +576,18 @@ export const PackagesScreen = () => {
                               </td>
                               <td className="text-center">
                                 <span>{emp.MaxCompanies ?? 0}</span>
+                              </td>
+                              <td className="text-center">
+                                {/* <span>{emp.isActive ? "Active" : "Inactive"}</span> */}
+                                <span style={{
+                                  padding: "2px 10px", fontSize: "11px", borderRadius: "12px", backgroundColor: emp.isActive ? '#c2ded1' :
+                                    emp.isActive === false ? '#f8d7da' :
+                                      '#e2e3e5', color: emp.isActive ? '#03543f' :
+                                        emp.isActive === false ? '#842029' :
+                                          '#41464b'
+                                }}>
+                                  {emp.isActive ? "Active" : "Inactive"}
+                                </span>
                               </td>
                               {/* <td className="text-center">
                                 <i

@@ -414,7 +414,16 @@ export const CompaniesScreen = () => {
             <div className="row align-items-center">
               <div className="col-xl-6">
                 <div className="form-check form-switch">
-                  <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
+                  <label
+                    className="form-check-label mb-0"
+                    style={{ whiteSpace: "nowrap", cursor: "pointer" }}
+                    onClick={() => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        isActive: !prev.isActive
+                      }))
+                    }}
+                  >
                     {formData.isActive == null ? "Inactive" : formData.isActive ? "Active" : "Inactive"}
                   </label>
                   <input

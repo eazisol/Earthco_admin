@@ -130,6 +130,7 @@ export const RoleAndPermission = () => {
 														onClick={() => {
 															getRolePermissionData(role.RoleId);
 															setRoleId(role.RoleId);
+															setRoleName(role.Role)
 														}}
 														className={roleId === role.RoleId ? "active-role" : ""}
 														style={roleId === role.RoleId ? { backgroundColor: "#f0f0f0", borderRadius: "5px", cursor: "pointer", position: "relative" } : { cursor: "pointer", position: "relative" }}

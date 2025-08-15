@@ -226,7 +226,7 @@ export const EmailScreen = () => {
                   <div className="row">
                     <h4 className="card-title mb-4 col-xl-8">Email Settings</h4>
                     <div className="col-xl-4 mb-3 ml-2 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
-                      <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
+                      {/* <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
                         <label 
                           className="form-check-label mb-0 me-2" 
                           style={{ whiteSpace: "nowrap", cursor: "pointer" }}
@@ -252,7 +252,7 @@ export const EmailScreen = () => {
                           }}
                           style={{ marginLeft: "12px" }}
                         />
-                      </div>
+                      </div> */}
                     </div>
                 
                   </div>

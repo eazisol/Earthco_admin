@@ -6,16 +6,17 @@ import { getTenantById } from "./APIS/auth";
 import TitleBar from "./components/TitleBar";
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import { getStats } from "./APIS/settings";
-import { DashbaordCard } from "./components/Reuseable/dashbaordCard";
+import { DashbaordCardCompany, DashbaordCardTransaction } from "./components/Reuseable/dashbaordCard";
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import PersonOffOutlinedIcon from '@mui/icons-material/PersonOffOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import Highcharts3D from "highcharts/highcharts-3d";
 import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import DomainDisabledOutlinedIcon from '@mui/icons-material/DomainDisabledOutlined';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 // Custom styles for the tenant table
 const tenantTableStyles = {
   tableHeader: {
@@ -26,7 +27,7 @@ const tenantTableStyles = {
     textTransform: 'uppercase',
     fontSize: '0.875rem',
     letterSpacing: '0.5px',
-   
+
   },
   sectionHeader: {
     backgroundColor: '#e3f2fd',
@@ -71,14 +72,17 @@ const tenantTableStyles = {
 
 function Dashboard() {
   const { user, setLoginUser, loginUser } = useAppContext();
+  console.log("🚀 ~ Dashboard ~ loginUser:", loginUser)
   const navigate = useNavigate();
   const [tenant, setTenant] = useState(null);
+  console.log("🚀 ~ Dashboard ~ tenant:", tenant)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [stats, setStats] = useState(null);
   const totalUsers = 5;
   const usedUsers = 3;
-
+  const [passwordElement, setPasswordElement] = useState(false);
+  const [password, setPassword] = useState('•••');
   const totalCompanies = 10;
   const usedCompanies = 7;
 
@@ -136,7 +140,7 @@ function Dashboard() {
       }
     ]
   };
-  
+
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -187,7 +191,7 @@ function Dashboard() {
   // Helper function to get status badge
   const getStatusBadge = (isActive) => {
     return (
-      <span className={`badge ${isActive ? 'bg-success' : 'bg-danger'} text-white px-3 py-1 rounded-pill`}>
+      <span className={`badge ${isActive ? 'bg-success' : 'bg-danger'} text-white px-3 py-1`}>
         {isActive ? 'Active' : 'Inactive'}
       </span>
     );
@@ -225,27 +229,27 @@ function Dashboard() {
 
           {loginUser?.Data?.RoleId == 1 ? <div className="row">
 
-            <DashbaordCard total={stats?.TotalTenant} onClick={()=>navigate('/tenant')} color="info" title="Total Tenant" icon={<GroupOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-            <DashbaordCard total={stats?.TotalActiveTenant} onClick={()=>navigate('/tenant')} color='success' title="Active Tenant" icon={<PermIdentityOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-            <DashbaordCard total={stats?.TotalInActiveTenant} onClick={()=>navigate('/tenant')} color='warning' title="Inactive Tenant" icon={<PersonOffOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-            <DashbaordCard total={`$${stats?.TotalTransactionSum
-              }`} onClick={()=>navigate('/transaction')} color='dark' title="Total Transaction" icon={<PaidOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+            <DashbaordCardCompany total={stats?.TotalTenant} activeAmount={stats?.TotalActiveTenant} inactiveAmount={stats?.TotalInActiveTenant}
+              onClick={() => navigate('/tenant')} color="info" title=" Tenant" icon={<GroupOutlinedIcon style={{ color: "white", fontSize: "25px" }} />}
+              activeIcon={<PermIdentityOutlinedIcon style={{ color: "white", fontSize: "25px" }} />} inactiveIcon={<PersonOffOutlinedIcon style={{ color: "white", fontSize: "25px" }} />} />
+
+            <DashbaordCardTransaction total={`$${stats?.TotalTransactionSum
+              }`} onClick={() => navigate('/transaction')} color='dark' title="Total Transaction" icon={<PaidOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
           </div> :
             <div className="row">
-              <DashbaordCard total={stats?.TotalCompanies} onClick={()=>navigate('/companies')} color="info" title="Total Companies" icon={<StoreOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-              <DashbaordCard total={stats?.TotalActiveCompanies} onClick={()=>navigate('/companies')} color='success' title="Active Companies" icon={<StoreOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-              <DashbaordCard total={stats?.TotalInActiveCompanies} onClick={()=>navigate('/companies')} color='warning' title="Inactive Companies" icon={<DomainDisabledOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-              <DashbaordCard total={stats?.TotalTransaction} onClick={()=>navigate('/transaction')} color="dark" title="Total Transaction" icon={<PaidOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+              <DashbaordCardCompany total={stats?.TotalCompanies} activeAmount={stats?.TotalActiveCompanies} inactiveAmount={stats?.TotalInActiveCompanies} onClick={() => navigate('/companies')} color="info" title="Companies" icon={<StoreOutlinedIcon style={{ color: "white", fontSize: "25px" }} />} activeIcon={<BusinessOutlinedIcon style={{ color: "white", fontSize: "25px" }} />} inactiveIcon={<DomainDisabledOutlinedIcon style={{ color: "white", fontSize: "25px" }} />} />
+
+              <DashbaordCardTransaction total={stats?.TotalTransaction} onClick={() => navigate('/transaction')} color="dark" title="Total Transaction" icon={<PaidOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
             </div>}
 
           {/* Tenant and Package Information Side by Side */}
           <div className="row">
             <div className="col-xl-6">
               <div className="card shadow-sm">
-                <div className="card-header border-0 pb-0 bg-light">
+                <div className="card-header border-0 pb-0 " style={{ backgroundColor: "#7b9b43", color: "white" }}>
                   <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
-                    <h4 className="heading mb-0 me-auto text-dark">
-                      <i className="fas fa-building me-2 text-primary"></i>
+                    <h4 className="heading mb-0 me-auto " style={{ color: "white" }}>
+                      <i className="fas fa-building me-2 "></i>
                       Account Information
                     </h4>
                   </div>
@@ -286,7 +290,11 @@ function Dashboard() {
                           <tr>
                             <td style={tenantTableStyles.fieldName}>Company Name</td>
                             <td className="fw-semibold">{tenant.data.CompanyName || '-'}</td>
-                            <td style={tenantTableStyles.statusCell}>{getStatusBadge(tenant.data.isActive)}</td>
+                            <td style={tenantTableStyles.statusCell}>
+                              <span>
+                                {getStatusBadge(tenant.data.isActive)}
+                              </span>
+                            </td>
                           </tr>
                           <tr>
                             <td style={tenantTableStyles.fieldName}>Sub Domain</td>
@@ -298,28 +306,50 @@ function Dashboard() {
                               ) : '-'}
                             </td>
                             <td style={tenantTableStyles.statusCell}>{loginUser?.Data?.SubDomain && (
-                              <button
-                                onClick={() =>
-                                  window.open(
-                                    `https://${loginUser?.Data?.SubDomain}.earthcoapp.com`,
-                                    "_blank",
-                                    "noopener,noreferrer"
-                                  )
-                                }
-                                className="btn btn-outline-primary btn-sm ms-auto"
-                                style={{
-                                  borderRadius: "22px",
-                                  padding: "8px 20px",
-                                  fontSize: "0.875rem",
-                                  fontWeight: 500,
-                                  cursor: "pointer",
-                                  transition: "background 0.2s",
-                                }}
+                              <a
+                                href={`https://${loginUser?.Data?.SubDomain}.earthcoapp.com`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ color: "#a5adb5" }}
+                                onMouseEnter={(e) => e.currentTarget.style.color = "#7b9b43"}
+                                onMouseLeave={(e) => e.currentTarget.style.color = "#a5adb5"}
                               >
                                 <i className="fas fa-external-link-alt me-1"></i>
                                 Visit Sub Domain
-                              </button>
+                              </a>
                             )}</td>
+                          </tr>
+                          <tr>
+                            <td style={tenantTableStyles.fieldName}>Admin Email</td>
+                            <td className="fw-semibold">admin@gmail.com</td>
+                            <td style={tenantTableStyles.statusCell}>
+                              -
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style={tenantTableStyles.fieldName}>Password</td>
+                            <td className="fw-semibold">
+                              <span id="password" style={{ display: 'inline-block', marginRight: '10px' }}>{password}</span>
+                              <button
+                                onClick={() => {
+                                  const passwordElement = document.getElementById('password');
+                                  if (passwordElement.textContent === '•••') {
+                                    setPassword('123');
+                                    setPasswordElement(true);
+                                  } else {
+                                    passwordElement.textContent = '•••';
+                                    setPassword('•••');
+                                    setPasswordElement(false);
+                                  }
+                                }}
+                                style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                              >
+                                {!passwordElement ? <Visibility /> : <VisibilityOff />}
+                              </button>
+                            </td>
+                            <td style={tenantTableStyles.statusCell}>
+                              -
+                            </td>
                           </tr>
                         </tbody>
                       </table>
@@ -336,14 +366,16 @@ function Dashboard() {
               </div>
             </div>
 
-          {loginUser?.Data?.RoleId != 1 &&  <div className="col-xl-6">
+            {loginUser?.Data?.RoleId != 1 && <div className="col-xl-6">
               <div className="card shadow-sm">
-                <div className="card-header border-0 pb-0 bg-light">
-                  <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
-                    <h4 className="heading mb-0 me-auto text-dark">
-                      <i className="fas fa-box me-2"></i>
+                <div className="card-header border-0 pb-0 " style={{ backgroundColor: "#7b9b43" }}>
+                  <div className="d-flex align-items-center justify-content-between mb-3" style={{ width: "100%" }}>
+                    <div style={{color:'white'}}>
+                      <i className="fas fa-box me-2 " style={{ color: "white" }}></i>
                       Package Information
-                    </h4>
+                   
+                    </div>
+                   
                   </div>
                 </div>
                 <div className="card-body p-0">
@@ -354,7 +386,7 @@ function Dashboard() {
                           <tr>
                             <th style={{ ...tenantTableStyles.tableHeader, width: '200px' }}>Field</th>
                             <th style={tenantTableStyles.tableHeader}>Value</th>
-                            <th style={{ ...tenantTableStyles.tableHeader, width: '150px',textAlign:'center' }}>Status</th>
+                            <th style={{ ...tenantTableStyles.tableHeader, width: '150px', textAlign: 'center' }}>Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -363,12 +395,19 @@ function Dashboard() {
                               <tr>
                                 <td style={tenantTableStyles.fieldName}>Package Name</td>
                                 <td style={tenantTableStyles.valueCell}>
-                                  <span className="badge bg-info text-white px-3 py-2 rounded-pill" style={tenantTableStyles.badge}>
+                                  <span className="badge bg-info text-white px-3 py-2 " style={tenantTableStyles.badge}>
                                     <i className="fas fa-crown me-1"></i>
                                     {pkg.Name || '-'}
                                   </span>
                                 </td>
-                                <td style={tenantTableStyles.statusCell}>{getStatusBadge(pkg.isActive)}</td>
+                                <td style={tenantTableStyles.statusCell}>
+
+                                  <span>
+                                    {getStatusBadge(pkg.isActive)}
+                                  </span>
+
+
+                                </td>
                               </tr>
                               <tr>
                                 <td style={tenantTableStyles.fieldName}>Package Price</td>
@@ -387,7 +426,7 @@ function Dashboard() {
                                   </span>
                                 </td>
                                 <td style={tenantTableStyles.statusCell}>
-                                  <span className={`badge ${getExpiryStatus(pkg.ExpiryDate).badge} text-white px-3 py-1 rounded-pill`}>
+                                  <span className={`badge ${getExpiryStatus(pkg.ExpiryDate).badge} text-white px-3 py-1 `}>
                                     {getExpiryStatus(pkg.ExpiryDate).status}
                                   </span>
                                 </td>

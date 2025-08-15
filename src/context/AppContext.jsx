@@ -34,8 +34,10 @@ export const AppProvider = ({ children }) => {
     localStorage.removeItem('user');
     // Add a small delay to allow toast message to display
     setTimeout(() => {
+      // toast.success('Logged out successfully');
       window.location.href = '/login';
-    }, 1000);
+      
+    }, 10);
   };
 
   const value = {
