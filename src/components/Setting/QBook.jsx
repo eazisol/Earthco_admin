@@ -135,7 +135,7 @@ export const QBookScreen = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setLoading(false);
-      toast.error("Please fix the validation errors");
+      // toast.error("Please fix the validation errors");
       return;
     }
 

@@ -5,8 +5,9 @@ import { getEmailSetting, addEmailSetting, SettingPrivacyAndTerms } from "../../
 import { toast } from "react-toastify";
 import imagePathCorrector from "../Reuseable/imagePathCorrector";
 import { useAppContext } from "../../context/AppContext";
-import JoditEditor from 'jodit-react';
+  import JoditEditor from 'jodit-react';
 import TitleBar from "../TitleBar";
+// import 'jodit/build/jodit.min.css';
 
 export const CompanyScreen = () => {
   const [settingData, setSettingData] = useState({});
@@ -23,7 +24,8 @@ export const CompanyScreen = () => {
   const [privacyContent, setPrivacyContent] = useState("");
   const config = useMemo(() => ({
     readonly: false,
-    placeholder: ''
+    placeholder: '',
+    toolbarAdaptive: false
   }), []);
   const editor = useRef(null);
   const editorPrivacy = useRef(null);

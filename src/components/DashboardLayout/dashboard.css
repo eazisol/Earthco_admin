@@ -129,6 +129,17 @@
 .tdbreak {
     word-wrap: wrap
 }
+.jodit-wysiwyg ul {
+  display: block;
+  list-style-type: disc !important;
+  margin-left: 1.5em;
+}
+
+.jodit-wysiwyg ol {
+  display: block;
+  list-style-type: decimal !important;
+  margin-left: 1.5em;
+}
 
 .text-right {
     text-align: right;

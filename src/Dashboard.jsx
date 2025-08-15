@@ -14,6 +14,8 @@ import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts3D from "highcharts/highcharts-3d";
+import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
+import DomainDisabledOutlinedIcon from '@mui/icons-material/DomainDisabledOutlined';
 // Custom styles for the tenant table
 const tenantTableStyles = {
   tableHeader: {
@@ -23,7 +25,8 @@ const tenantTableStyles = {
     color: '#495057',
     textTransform: 'uppercase',
     fontSize: '0.875rem',
-    letterSpacing: '0.5px'
+    letterSpacing: '0.5px',
+   
   },
   sectionHeader: {
     backgroundColor: '#e3f2fd',
@@ -222,17 +225,17 @@ function Dashboard() {
 
           {loginUser?.Data?.RoleId == 1 ? <div className="row">
 
-            <DashbaordCard total={stats?.TotalTenant} color="info" title="Total Tenant" icon={<GroupOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-            <DashbaordCard total={stats?.TotalActiveTenant} color='success' title="Active Tenant" icon={<PermIdentityOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-            <DashbaordCard total={stats?.TotalInActiveTenant} color='warning' title="Inactive Tenant" icon={<PersonOffOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+            <DashbaordCard total={stats?.TotalTenant} onClick={()=>navigate('/tenant')} color="info" title="Total Tenant" icon={<GroupOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+            <DashbaordCard total={stats?.TotalActiveTenant} onClick={()=>navigate('/tenant')} color='success' title="Active Tenant" icon={<PermIdentityOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+            <DashbaordCard total={stats?.TotalInActiveTenant} onClick={()=>navigate('/tenant')} color='warning' title="Inactive Tenant" icon={<PersonOffOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
             <DashbaordCard total={`$${stats?.TotalTransactionSum
-              }`} color='dark' title="Total Transaction" icon={<PaidOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+              }`} onClick={()=>navigate('/transaction')} color='dark' title="Total Transaction" icon={<PaidOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
           </div> :
             <div className="row">
-              <DashbaordCard total={stats?.TotalCompanies} color="info" title="Total Companies" icon={<GroupOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-              <DashbaordCard total={stats?.TotalActiveCompanies} color='success' title="Active Companies" icon={<PermIdentityOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-              <DashbaordCard total={stats?.TotalInActiveCompanies} color='warning' title="Inactive Companies" icon={<PersonOffOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
-              <DashbaordCard total={stats?.TotalTransaction} color="dark" title="Total Transaction" icon={<PaidOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+              <DashbaordCard total={stats?.TotalCompanies} onClick={()=>navigate('/companies')} color="info" title="Total Companies" icon={<StoreOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+              <DashbaordCard total={stats?.TotalActiveCompanies} onClick={()=>navigate('/companies')} color='success' title="Active Companies" icon={<StoreOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+              <DashbaordCard total={stats?.TotalInActiveCompanies} onClick={()=>navigate('/companies')} color='warning' title="Inactive Companies" icon={<DomainDisabledOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
+              <DashbaordCard total={stats?.TotalTransaction} onClick={()=>navigate('/transaction')} color="dark" title="Total Transaction" icon={<PaidOutlinedIcon style={{ color: "white", fontSize: "35px" }} />} />
             </div>}
 
           {/* Tenant and Package Information Side by Side */}
@@ -243,7 +246,7 @@ function Dashboard() {
                   <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
                     <h4 className="heading mb-0 me-auto text-dark">
                       <i className="fas fa-building me-2 text-primary"></i>
-                      Tenant Information
+                      Account Information
                     </h4>
                   </div>
                 </div>
@@ -269,7 +272,7 @@ function Dashboard() {
                           <tr>
                             <th style={{ ...tenantTableStyles.tableHeader, width: '200px' }}>Field</th>
                             <th style={tenantTableStyles.tableHeader}>Value</th>
-                            <th style={{ ...tenantTableStyles.tableHeader, width: '150px' }}>Status</th>
+                            <th style={{ ...tenantTableStyles.tableHeader, width: '150px', textAlign: 'center' }}>Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -333,7 +336,7 @@ function Dashboard() {
               </div>
             </div>
 
-            <div className="col-xl-6">
+          {loginUser?.Data?.RoleId != 1 &&  <div className="col-xl-6">
               <div className="card shadow-sm">
                 <div className="card-header border-0 pb-0 bg-light">
                   <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
@@ -351,7 +354,7 @@ function Dashboard() {
                           <tr>
                             <th style={{ ...tenantTableStyles.tableHeader, width: '200px' }}>Field</th>
                             <th style={tenantTableStyles.tableHeader}>Value</th>
-                            <th style={{ ...tenantTableStyles.tableHeader, width: '150px' }}>Status</th>
+                            <th style={{ ...tenantTableStyles.tableHeader, width: '150px',textAlign:'center' }}>Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -376,27 +379,6 @@ function Dashboard() {
                                 </td>
                                 <td style={tenantTableStyles.statusCell}>-</td>
                               </tr>
-
-                              {/* <tr>
-                                <td style={tenantTableStyles.fieldName}>Max Companies</td>
-                                <td style={tenantTableStyles.valueCell}>
-                                  <span className=" px-2 py-1 fw-semibold" >
-                                    {pkg.MaxCompanies || '0'} Companies
-                                  </span>
-                                  
-                                </td>
-                                <td style={tenantTableStyles.statusCell}>-</td>
-                              </tr> */}
-                              {/* <tr>
-                                <td style={tenantTableStyles.fieldName}>Storage Limit</td>
-                                <td>
-                                  <span className=" px-2 py-1">
-                                    <i className="fas fa-hdd me-1"></i>
-                                    {formatStorageSize(pkg.MaxStorageMB || 0)}
-                                  </span>
-                                </td>
-                                <td style={tenantTableStyles.statusCell}>-</td>
-                              </tr> */}
                               <tr>
                                 <td style={tenantTableStyles.fieldName}>Expiry Date</td>
                                 <td>
@@ -445,7 +427,7 @@ function Dashboard() {
                   )}
                 </div>
               </div>
-            </div>
+            </div>}
           </div>
 
         </div>
