@@ -6,6 +6,10 @@ import {
   MenuItem,
   Select,
   TextField,
+  Modal,
+  Box,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
@@ -21,6 +25,14 @@ import { addCompany, deleteCompany, getCompanyList } from "../../APIS/companies"
 import TitleBar from "../TitleBar";
 import { useAppContext } from "../../context/AppContext";
 import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined'
+
+// Center the modal on the screen
+const modalStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
 export const CompaniesScreen = () => {
   const { loginUser } = useAppContext();
 
@@ -29,7 +41,7 @@ export const CompaniesScreen = () => {
   const [employeesData, setEmployeesData] = useState([]);
   const [selectedId, setSelectedId] = useState(0);
   const [openForm, setOpenForm] = useState(false);
-  const [loader, setLoader] = useState(true); 
+  const [loader, setLoader] = useState(true);
   const [formData, setFormData] = useState({
     CompanyName: "",
     CompanyRealmId: "",
@@ -50,13 +62,15 @@ export const CompaniesScreen = () => {
     cancelText: "Cancel",
   });
 
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [checkboxStates, setCheckboxStates] = useState([]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-    // Remove error for the field as user types
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: undefined,
@@ -71,7 +85,6 @@ export const CompaniesScreen = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields before setting loader
     const newErrors = {};
     if (!formData.CompanyName.trim()) newErrors.CompanyName = "Company Name is required";
     if (!formData.CompanyRealmId.trim()) newErrors.CompanyRealmId = "Company Realm ID is required";
@@ -85,7 +98,6 @@ export const CompaniesScreen = () => {
       newErrors.PhoneNo = "Phone number must be between 7 and 15 characters";
     }
 
-    // Check if email already exists
     const emailExists = employeesData?.some(company =>
       company.Email?.toLowerCase() === formData.Email.toLowerCase() &&
       company.CompanyId !== selectedId
@@ -97,7 +109,6 @@ export const CompaniesScreen = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      // Don't set loader if there are errors
       return;
     }
 
@@ -108,10 +119,9 @@ export const CompaniesScreen = () => {
       ...formData,
       CompanyId: selectedId,
     };
-    // console.log(obj, 'obj');
+
     try {
       const response = await addCompany(obj);
-      // console.log(response, 'response');
       if (response.status === 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
         const bsOffcanvas =
@@ -134,51 +144,56 @@ export const CompaniesScreen = () => {
         fetchCompanies();
         toast.success(response?.data?.Message);
       } else {
-        toast.error(response?.data?.Message );
+        toast.error(response?.data?.Message);
       }
     } catch (error) {
-      
-      toast.error(error?.response?.data );
+      toast.error(error?.response?.data);
     } finally {
       setLoader(false);
     }
   };
+
   const fetchTenant = async () => {
     try {
       const data = await getPackagesType(user.token.data);
       setPackageOptions(data);
-    } catch (err) { }
+    } catch (err) {}
   };
 
   const fetchCompanies = async () => {
-    setLoader(true); // Set loader to true when fetching companies
+    setLoader(true);
     const response = await getCompanyList();
-   if(response?.status == 200){
-    setEmployeesData(response?.data?.Data);
-    setLoader(false); // Set loader to false after fetching companies
-   }else if(response?.status == 500){
-    setEmployeesData([]);
-    setLoader(false);
-   }else{
-    toast.error(response?.data?.Message);
-    setEmployeesData([]);
-    setLoader(false);
-   }
+    if (response?.status == 200) {
+      setEmployeesData(response?.data?.Data);
+      setCheckboxStates(new Array(response?.data?.Data.length).fill(false));
+      setLoader(false);
+    } else if (response?.status == 500) {
+      setEmployeesData([]);
+      setLoader(false);
+    } else {
+      toast.error(response?.data?.Message);
+      setEmployeesData([]);
+      setLoader(false);
+    }
   };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     fetchCompanies();
-   
+
     if (user.token.data) {
       fetchTenant();
-    } 
+    }
+
+    const staticCheck = true; // Static check for true or false
+    if (staticCheck) {
+      setPopupOpen(true);
+    }
   }, []);
 
   const handleDelete = async (id) => {
     try {
       const response = await deleteCompany(id);
-      // console.log('response', response);
       if (response?.status == 200) {
         const offcanvasEl = document.getElementById("offcanvasExample");
         const bsOffcanvas =
@@ -196,6 +211,20 @@ export const CompaniesScreen = () => {
     }
   };
 
+  const handleCheckboxChange = (index) => {
+    const updatedCheckboxStates = [...checkboxStates];
+    updatedCheckboxStates[index] = !updatedCheckboxStates[index];
+    setCheckboxStates(updatedCheckboxStates);
+
+    if (updatedCheckboxStates.every((state) => state)) {
+      setPopupOpen(false);
+      setFormData((prev) => ({
+        ...prev,
+        isActive: true,
+      }));
+    }
+  };
+
   return (
     <DashboardLayout>
       <ConfirmationModal
@@ -207,6 +236,29 @@ export const CompaniesScreen = () => {
         confirmText={modalConfig.confirmText}
         cancelText={modalConfig.cancelText}
       />
+      {/* <Modal
+        open={popupOpen}
+        onClose={() => setPopupOpen(false)}
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <Box sx={{ p: 4, backgroundColor: 'white', borderRadius: 1 ,width:"25%"}}>
+          <h4>Company Verification</h4>
+          {employeesData.map((company, index) => (
+            <div key={index} className="d-flex justify-content-between align-items-center">
+              <span>{company.CompanyName}</span>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={checkboxStates[index]}
+                    onChange={() => handleCheckboxChange(index)}
+                  />
+                }
+                label=""
+              />
+            </div>
+          ))}
+        </Box>
+      </Modal> */}
       <div
         class="offcanvas offcanvas-end customeoff"
         tabIndex="-1"
@@ -347,7 +399,7 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-                <div class="col-xl-6 mb-4">
+              <div class="col-xl-6 mb-4">
                 <label class="form-label">Address</label>
                 <TextField
                   className="form-control form-control-sm"
@@ -360,70 +412,64 @@ export const CompaniesScreen = () => {
               </div>
             </div>
             <div className="row align-items-center">
-            <div className="col-xl-6  ">
-           
-                      <div className="form-check form-switch" >
-                        <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
-                          {formData.isActive==null ?"Inactive" : formData.isActive ? "Active" : "Inactive"}
-                        </label>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="isActive"
-                          checked={formData.isActive==null ? false : formData.isActive}
-                          onChange={(e) => {
-                            setFormData((prev) => ({
-                              ...prev,
-                              isActive: e.target.checked
-                            }))
-                          }}
-                       
-                        />
-                      </div>
-                   
+              <div className="col-xl-6">
+                <div className="form-check form-switch">
+                  <label className="form-check-label mb-0" style={{ whiteSpace: "nowrap" }}>
+                    {formData.isActive == null ? "Inactive" : formData.isActive ? "Active" : "Inactive"}
+                  </label>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="isActive"
+                    checked={formData.isActive == null ? false : formData.isActive}
+                    onChange={(e) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        isActive: e.target.checked
+                      }))
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="col-xl-6">
+                <div style={{ textAlign: "end" }}>
+                  <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loader}>
+                    {selectedId === 0 ? "Add" : "Update"}
+                  </button>
+                  <button
+                    className="btn btn-danger light ms-1 cancel-btn"
+                    onClick={() => {
+                      setOpenForm(false);
+                      setSelectedId(0);
+                      const offcanvasEl = document.getElementById("offcanvasExample");
+                      const bsOffcanvas =
+                        Offcanvas.getInstance(offcanvasEl) ||
+                        new Offcanvas(offcanvasEl);
+                      bsOffcanvas.hide();
+                      setErrors({});
+                      setFormData({
+                        CompanyName: "",
+                        CompanyRealmId: "",
+                        DsiplayName: "",
+                        Address: "",
+                        PhoneNo: "",
+                        Website: "",
+                        SecondPhoneNo: "",
+                        Email: "",
+                        isActive: false,
+                      });
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="col-xl-6">
-            <div style={{ textAlign: "end" }}>
-              <button className="btn btn-primary me-1" onClick={handleSubmit} disabled={loader}>
-                {
-                selectedId === 0 ? "Add" : "Update"}
-              </button>
-              <button
-                className="btn btn-danger light ms-1 cancel-btn"
-                onClick={() => {
-                  setOpenForm(false);
-                  setSelectedId(0);
-                  const offcanvasEl = document.getElementById("offcanvasExample");
-                  const bsOffcanvas =
-                    Offcanvas.getInstance(offcanvasEl) ||
-                    new Offcanvas(offcanvasEl);
-                  bsOffcanvas.hide();
-                  setErrors({});
-                  setFormData({
-                    CompanyName: "",
-                    CompanyRealmId: "",
-                    DsiplayName: "",
-                    Address: "",
-                    PhoneNo: "",
-                    Website: "",
-                    SecondPhoneNo: "",
-                    Email: "",
-                    isActive: false,
-                    });
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-            </div>
-                   
-           </div>
-          
           </div>
         </div>
       </div>
       <div className="content-body">
- <TitleBar icon={<StoreOutlinedIcon />} title="Companies" />
+        <TitleBar icon={<StoreOutlinedIcon />} title="Companies" />
         <div className="container-fluid">
           <div className="row ">
             <div className="col-xl-12">
@@ -433,8 +479,7 @@ export const CompaniesScreen = () => {
                     <div className="d-flex justify-content-between align-items-center mb-2 pt-3">
                       <h4 className="heading mb-0"></h4>
                       <button
-                          className="btn btn-primary btn-sm"
-                         
+                        className="btn btn-primary btn-sm"
                         onClick={() => {
                           setSelectedId(0);
                           setFormData({
@@ -448,8 +493,7 @@ export const CompaniesScreen = () => {
                             Email: "",
                             isActive: false,
                           });
-                          setErrors({}); // Clear errors when opening the form
-
+                          setErrors({});
                           const offcanvasEl =
                             document.getElementById("offcanvasExample");
                           const bsOffcanvas = new Offcanvas(offcanvasEl);
@@ -487,7 +531,6 @@ export const CompaniesScreen = () => {
                             <tr
                               key={index}
                               onClick={(e) => {
-                                // Prevent row click if delete icon is clicked
                                 if (e.target.closest('.delete-icon')) return;
                                 setSelectedId(emp.CompanyId);
                                 setFormData({
@@ -500,9 +543,8 @@ export const CompaniesScreen = () => {
                                   Address: emp.Address || "",
                                   Website: emp.Website || "",
                                   isActive: emp.isActive || false,
-                                  });
-                                setErrors({}); // Clear errors when editing
-
+                                });
+                                setErrors({});
                                 const offcanvasEl =
                                   document.getElementById("offcanvasExample");
                                 const bsOffcanvas = new Offcanvas(offcanvasEl);
@@ -526,27 +568,29 @@ export const CompaniesScreen = () => {
                               <td className="text-center">
                                 <span>{emp.Website ?? "-"}</span>
                               </td>
-                           {loginUser?.Data.roleId==1 &&   <td className="text-center">
-                                <i
-                                  className="fa-solid fa-trash text-danger cursor-pointer delete-icon"
-                                  title="Delete Company"
-                                  style={{ cursor: 'pointer' }}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setModalOpen(true);
-                                    setModalConfig({
-                                      title: "Confirmation",
-                                      description: "Are you sure you want to delete this company?",
-                                      onConfirm: () => {
-                                        handleDelete(emp.CompanyId);
-                                        setModalOpen(false);
-                                      },
-                                      confirmText: "Delete",
-                                      cancelText: "Cancel",
-                                    });
-                                  }}
-                                ></i>
-                              </td>}
+                              {loginUser?.Data.roleId == 1 && (
+                                <td className="text-center">
+                                  <i
+                                    className="fa-solid fa-trash text-danger cursor-pointer delete-icon"
+                                    title="Delete Company"
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setModalOpen(true);
+                                      setModalConfig({
+                                        title: "Confirmation",
+                                        description: "Are you sure you want to delete this company?",
+                                        onConfirm: () => {
+                                          handleDelete(emp.CompanyId);
+                                          setModalOpen(false);
+                                        },
+                                        confirmText: "Delete",
+                                        cancelText: "Cancel",
+                                      });
+                                    }}
+                                  ></i>
+                                </td>
+                              )}
                             </tr>
                           ))
                         )}
