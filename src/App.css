@@ -32,18 +32,7 @@
     animation: logo-spin infinite 20s linear;
   }
 }
-.jodit-wysiwyg ul {
-  list-style-type: disc !important;
-  padding-left: 20px !important;
-}
 
-.jodit-wysiwyg ol {
-  list-style-type: decimal !important;
-  padding-left: 20px !important;
-}
-.jodit-wysiwyg ol li {
-  font-weight: bold;
-}
 
 .card {
   padding: 2em;

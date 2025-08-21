@@ -25,7 +25,8 @@ export const CompanyScreen = () => {
   const config = useMemo(() => ({
     readonly: false,
     placeholder: '',
-    toolbarAdaptive: false
+    toolbarAdaptive: false,
+    
   }), []);
   const editor = useRef(null);
   const editorPrivacy = useRef(null);
