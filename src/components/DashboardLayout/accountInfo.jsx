@@ -290,10 +290,10 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
                                                         {formatDate(pkg.ExpiryDate)}
                                                     </span>
                                                 </td>
-                                                <td style={tenantTableStyles.statusCell}>
-                                                    <span className={`badge ${getExpiryStatus(pkg.ExpiryDate).badge} text-white px-3 py-1 `}>
+                                                <td style={tenantTableStyles.statusCell}>-
+                                                    {/* <span className={`badge ${getExpiryStatus(pkg.ExpiryDate).badge} text-white px-3 py-1 `}>
                                                         {getExpiryStatus(pkg.ExpiryDate).status}
-                                                    </span>
+                                                    </span> */}
                                                 </td>
                                             </tr>
                                             <tr>

@@ -528,6 +528,7 @@ export const CompaniesScreen = () => {
                           <th className="text-center">Phone</th>
                           <th className="text-center">Address</th>
                           <th className="text-center">Website</th>
+                          <th className="text-center">Status</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -584,6 +585,17 @@ export const CompaniesScreen = () => {
                               </td>
                               <td className="text-center">
                                 <span>{emp.Website ?? "-"}</span>
+                              </td>
+                              <td className="text-center">
+                                <span style={{
+                                  padding: "2px 10px", fontSize: "11px", borderRadius: "12px", backgroundColor: emp.isActive ? '#c2ded1' :
+                                    emp.isActive === false ? '#f8d7da' :
+                                      '#e2e3e5', color: emp.isActive ? '#03543f' :
+                                        emp.isActive === false ? '#842029' :
+                                          '#41464b'
+                                }}>
+                                  {emp.isActive ? "Active" : "Inactive"}
+                                </span>
                               </td>
                               {loginUser?.Data.roleId == 1 && (
                                 <td className="text-center">
