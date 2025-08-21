@@ -217,7 +217,7 @@ export const CompanyScreen = () => {
     <div className="row">
       <div className="col-12">
         <div className="col-xl-12 ">
-          <label className="form-label">Terms And Conditions<span className="text-danger">*</span></label>
+          <label className="form-label">Terms and Conditions<span className="text-danger">*</span></label>
         </div>
         <JoditEditor
           // style={{ minHeight: "400px !important" }}

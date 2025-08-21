@@ -42,7 +42,7 @@ export const SyncData = () => {
 
 
       <div className="content-body">
-        <TitleBar icon={<SyncAltOutlinedIcon />} title="Data Sync" />
+        <TitleBar icon={<SyncAltOutlinedIcon />} title="Sync Data" />
         <div className="container-fluid">
           <div className="row table-space">
 
@@ -52,7 +52,7 @@ export const SyncData = () => {
                   <div class="col-xl-4 mb-3 " style={{paddingLeft:"2%",paddingTop:"1%"}}>
                     <FormControl fullWidth>
                       <label className="form-label">
-                        Company
+                      Select Company
                       </label>
                       <Select
                         name="PackageTypeId"

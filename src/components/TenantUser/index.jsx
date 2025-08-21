@@ -19,7 +19,7 @@ export const TenantScreen = () => {
   // Pagination and search state
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(11);
   const [totalCount, setTotalCount] = useState(0);
   const [packagesData, setPackagesdata] = useState({});
   const [role, setRole] = useState([]);

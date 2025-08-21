@@ -64,7 +64,7 @@ export const DashbaordCardCompany = ({
             <div className="students d-flex align-items-start justify-content-between flex-wrap">
               <div>
                 {/* Total Row */}
-                <div className="d-flex align-items-center mb-2">
+                <div className="d-flex align-items-center mb-1">
                   <span className="me-2 d-flex align-items-center" style={{ fontSize: "25px" }}>
                     {icon}
                   </span>
@@ -74,23 +74,23 @@ export const DashbaordCardCompany = ({
                 </div>
   
                 {/* Active Row */}
-                <div className="d-flex align-items-center  mb-2">
+                <div className="d-flex align-items-center  mb-1">
                   <span className="me-2 d-flex align-items-center" style={{ fontSize: "20px" }}>
                     {activeIcon}
                   </span>
-                  <h6 className="mb-0 text-white">
-                    {`Active :   `} <span style={{ color:"#091c74" }}>{activeAmount ?? 0}</span>
-                  </h6>
+                  <span className="mb-0 text-white">
+                    {`Active :   `} <span style={{ color:"#091c74",fontSize: "20px" }}>{activeAmount ?? 0}</span>
+                  </span>
                 </div>
   
                 {/* Inactive Row */}
-                <div className="d-flex align-items-center  mb-2">
+                <div className="d-flex align-items-center  mb-1">
                   <span className="me-2 d-flex align-items-center" style={{ fontSize: "20px" }}>
                     {inactiveIcon}
                   </span>
-                  <h6 className="mb-0 text-white">
-                    {`Inactive :   `} <span style={{ color: "#091c74"}}>{inactiveAmount ?? 0}</span>
-                  </h6>
+                  <span className="mb-0 text-white">
+                    {`Inactive :   `} <span style={{ color: "#091c74",fontSize: "20px" }}>{inactiveAmount ?? 0}</span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -113,14 +113,12 @@ export const DashbaordCardCompany = ({
           <div className="card-body" style={{ padding: "20px" }}>
             <div className="d-flex align-items-center justify-content-between">
               <div>
-                <span style={{ fontSize: "20px"}}>{icon}</span>
-                <h5 style={{ margin: "10px 0", color: "#6c757d" }}>{title}</h5>
-                <h4 style={{ margin: "0", color: "#091c74" }}>{total ?? 0}</h4>
-                {/* <p style={{ margin: "0", color: "#6c757d" }}>Last 30 days</p> */}
+                <div className="d-flex align-items-center mb-2">
+                  <span style={{ fontSize: "20px", marginRight: "8px" }}>{icon}</span>
+                  <h5 style={{ margin: "0", color: "#6c757d" }}>{title}</h5>
+                </div>
+                <h4 style={{ margin: "0 0 0 34px", color: "#091c74" }}>{total ?? 0}</h4>
               </div>
-                {/* <div style={{ display: "flex", alignItems: "center", backgroundColor: "#e0f7fa", borderRadius: "5px", padding: "5px 10px" }}>
-                  <span style={{ color: "#00796b", fontSize: "14px" }}>{percentageChange ?? 0}%</span>
-                </div> */}
             </div>
           </div>
         </div>

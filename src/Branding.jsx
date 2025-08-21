@@ -430,14 +430,17 @@ const handleSubscription=async(plan)=>{
         
               <CustomButton 
                 onClick={() => {
-                  if (loginUser?.Data?.RoleId === 1) return;
+                  if (loginUser?.Data?.RoleId === 1) {
+                    toast.error("Packages are not available for admin users.");
+                    return;
+                  }
                   if (loginUser?.UserPackage?.PackageId === plan?.PackageId) {
                     toast.error("Your current package is already active.");
                   } else {
                     handleSubscription(plan);
                   }
                 }} 
-                disabled={loginUser?.Data?.RoleId === 1} 
+                // disabled={loginUser?.Data?.RoleId === 1} 
               />
             </div>
           </div>

@@ -244,7 +244,7 @@ function Dashboard() {
             </div>}
           <div className="row">
             <div className="col-xl-6">
-              <div className="card shadow-sm" style={{borderRadius:"13px",border:"none"}}>
+              <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
                 <div className="card-header border-0 pb-0 " >
                   <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
                     <h4 className="heading mb-0 me-auto " >
@@ -319,8 +319,8 @@ function Dashboard() {
                 </div>
               </div>
             </div>
-      {loginUser?.Data?.RoleId == 1?      <div className="col-xl-6">
-              <div className="card shadow-sm" style={{borderRadius:"13px",border:"none"}}>
+            {loginUser?.Data?.RoleId == 1 ? <div className="col-xl-6">
+              <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
                 <div className="card-header border-0 pb-0 " >
                   <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
                     <h4 className="heading mb-0 me-auto " >
@@ -394,39 +394,39 @@ function Dashboard() {
 
                 </div>
               </div>
-            </div>:
-            <div className="col-xl-6">
-              <div className="card shadow-sm" style={{borderRadius:"13px",border:"none"}}>
-                <div className="card-header border-0 pb-0 " >
-                  <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
-                    <h4 className="heading mb-0 me-auto " >
-                      Account Information
-                    </h4>
+            </div> :
+              <div className="col-xl-6">
+                <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
+                  <div className="card-header border-0 pb-0 " >
+                    <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
+                      <h4 className="heading mb-0 me-auto " >
+                        Account Information
+                      </h4>
+                    </div>
+                  </div>
+                  <div className="card-body p-0">
+                    <div className="table-responsive  style-1">
+                      <tr>
+
+                        <td >
+
+
+                          <div style={{ width: "500px", margin: "auto" }}>
+                            <HighchartsReact highcharts={Highcharts} options={options} />
+                          </div>
+
+                        </td>
+                      </tr>
+                    </div>
                   </div>
                 </div>
-                <div className="card-body p-0">
-                  <div className="table-responsive  style-1">
-                  <tr>
-
-<td >
-  
-
-  <div style={{ width: "500px", margin: "auto" }}>
-    <HighchartsReact highcharts={Highcharts} options={options} />
-  </div>
-
-</td>
-</tr>
-                  </div>
-                </div>
-              </div>
-            </div>}
+              </div>}
           </div>
 
           {/* Tenant and Package Information Side by Side */}
           <div className="row">
             <div className={` ${loginUser?.Data?.RoleId == 1 ? 'col-lg-12' : 'col-lg-6'}`}>
-              <div className="card shadow-sm" style={{borderRadius:"13px",border:"none"}}>
+              <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
                 <div className="card-header border-0 pb-0 " >
                   <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
                     <h4 className="heading mb-0 me-auto " >
@@ -462,7 +462,7 @@ function Dashboard() {
                         </thead>
                         <tbody>
                           {/* Company Information */}
-                          
+
                           <tr>
                             <td style={tenantTableStyles.fieldName}>Company Name</td>
                             <td className="fw-semibold">{tenant.data.CompanyName || '-'}</td>
@@ -506,10 +506,10 @@ function Dashboard() {
                             <td style={tenantTableStyles.fieldName}>Password</td>
                             <td className="fw-semibold" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <span id="password" style={{ display: 'inline-block' }}>{password}</span>
-                             
+
                             </td>
                             <td style={tenantTableStyles.statusCell}>
-                            <button
+                              <button
                                 onClick={() => {
                                   const passwordElement = document.getElementById('password');
                                   if (passwordElement.textContent === '•••') {
@@ -543,17 +543,17 @@ function Dashboard() {
             </div>
 
             {loginUser?.Data?.RoleId != 1 &&
-             <div className="col-xl-6">
-              <div className="card shadow-sm">
-                <div className="card-header border-0 pb-0 " >
-                  <div className="d-flex align-items-center justify-content-between mb-3" style={{ width: "100%" }}>
-                  <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
-                    <h4 className="heading mb-0 me-auto " >
-                      <i className="fas fa-building me-2 "></i>
-                      Account Information
-                    </h4>
-                  </div>
-                    {/* <button
+              <div className="col-xl-6">
+                <div className="card shadow-sm">
+                  <div className="card-header border-0 pb-0 " >
+                    <div className="d-flex align-items-center justify-content-between mb-3" style={{ width: "100%" }}>
+                      <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
+                        <h4 className="heading mb-0 me-auto " >
+                          <i className="fas fa-building me-2 "></i>
+                          Account Information
+                        </h4>
+                      </div>
+                      {/* <button
                       className={`btn btn-danger btn-sm`}
                     // onClick={() => {
                     //   setModalOpen(true);
@@ -568,85 +568,85 @@ function Dashboard() {
                     >
                       {"Cancel Subscription"}
                     </button> */}
+                    </div>
+                  </div>
+                  <div className="card-body p-0">
+                    {tenant?.data?.tblUserPackages && tenant.data.tblUserPackages.length > 0 ? (
+                      <div className="table-responsive">
+                        <table className="table mb-0" style={{ borderCollapse: 'separate', borderSpacing: 0 }}>
+                          <thead className="bg-light">
+                            <tr>
+                              <th style={{ ...tenantTableStyles.tableHeader, width: '200px' }}>Field</th>
+                              <th style={tenantTableStyles.tableHeader}>Value</th>
+                              <th style={{ ...tenantTableStyles.tableHeader, width: '150px', textAlign: 'center' }}>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {tenant.data.tblUserPackages.map((pkg, index) => (
+                              <React.Fragment key={index}>
+                                <tr>
+                                  <td style={tenantTableStyles.fieldName}>Package Name</td>
+                                  <td style={tenantTableStyles.valueCell}>
+                                    <span className="badge bg-info text-white px-3 py-2 " style={tenantTableStyles.badge}>
+                                      <i className="fas fa-crown me-1"></i>
+                                      {pkg.Name || '-'}
+                                    </span>
+                                  </td>
+                                  <td style={tenantTableStyles.statusCell}>
+
+                                    <span>
+                                      {getStatusBadge(pkg.isActive)}
+                                    </span>
+
+
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style={tenantTableStyles.fieldName}>Package Price</td>
+                                  <td style={tenantTableStyles.valueCell}>
+                                    <span className=" px-2 py-1 fw-semibold" >
+                                      ${pkg.Price || '0.00'}
+                                    </span>
+                                  </td>
+                                  <td style={tenantTableStyles.statusCell}>-</td>
+                                </tr>
+                                <tr>
+                                  <td style={tenantTableStyles.fieldName}>Expiry Date</td>
+                                  <td>
+                                    <span className="fw-semibold">
+                                      {formatDate(pkg.ExpiryDate)}
+                                    </span>
+                                  </td>
+                                  <td style={tenantTableStyles.statusCell}>
+                                    <span className={`badge ${getExpiryStatus(pkg.ExpiryDate).badge} text-white px-3 py-1 `}>
+                                      {getExpiryStatus(pkg.ExpiryDate).status}
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style={tenantTableStyles.fieldName}>Subscription Date</td>
+                                  <td className="fw-semibold">{formatDate(pkg.CreatedDate)}</td>
+                                  <td style={tenantTableStyles.statusCell}>-</td>
+                                </tr>
+
+                              </React.Fragment>
+                            ))}
+                          </tbody>
+
+                        </table>
+
+                      </div>
+                    ) : (
+                      <div className="text-center py-5">
+                        <div className="alert alert-info mx-3" role="alert">
+                          <i className="fas fa-info-circle me-2"></i>
+                          No package information available
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-                <div className="card-body p-0">
-                  {tenant?.data?.tblUserPackages && tenant.data.tblUserPackages.length > 0 ? (
-                    <div className="table-responsive">
-                      <table className="table mb-0" style={{ borderCollapse: 'separate', borderSpacing: 0 }}>
-                        <thead className="bg-light">
-                          <tr>
-                            <th style={{ ...tenantTableStyles.tableHeader, width: '200px' }}>Field</th>
-                            <th style={tenantTableStyles.tableHeader}>Value</th>
-                            <th style={{ ...tenantTableStyles.tableHeader, width: '150px', textAlign: 'center' }}>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {tenant.data.tblUserPackages.map((pkg, index) => (
-                            <React.Fragment key={index}>
-                              <tr>
-                                <td style={tenantTableStyles.fieldName}>Package Name</td>
-                                <td style={tenantTableStyles.valueCell}>
-                                  <span className="badge bg-info text-white px-3 py-2 " style={tenantTableStyles.badge}>
-                                    <i className="fas fa-crown me-1"></i>
-                                    {pkg.Name || '-'}
-                                  </span>
-                                </td>
-                                <td style={tenantTableStyles.statusCell}>
-
-                                  <span>
-                                    {getStatusBadge(pkg.isActive)}
-                                  </span>
-
-
-                                </td>
-                              </tr>
-                              <tr>
-                                <td style={tenantTableStyles.fieldName}>Package Price</td>
-                                <td style={tenantTableStyles.valueCell}>
-                                  <span className=" px-2 py-1 fw-semibold" >
-                                    ${pkg.Price || '0.00'}
-                                  </span>
-                                </td>
-                                <td style={tenantTableStyles.statusCell}>-</td>
-                              </tr>
-                              <tr>
-                                <td style={tenantTableStyles.fieldName}>Expiry Date</td>
-                                <td>
-                                  <span className="fw-semibold">
-                                    {formatDate(pkg.ExpiryDate)}
-                                  </span>
-                                </td>
-                                <td style={tenantTableStyles.statusCell}>
-                                  <span className={`badge ${getExpiryStatus(pkg.ExpiryDate).badge} text-white px-3 py-1 `}>
-                                    {getExpiryStatus(pkg.ExpiryDate).status}
-                                  </span>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td style={tenantTableStyles.fieldName}>Subscription Date</td>
-                                <td className="fw-semibold">{formatDate(pkg.CreatedDate)}</td>
-                                <td style={tenantTableStyles.statusCell}>-</td>
-                              </tr>
-
-                            </React.Fragment>
-                          ))}
-                        </tbody>
-
-                      </table>
-                      
-                    </div>
-                  ) : (
-                    <div className="text-center py-5">
-                      <div className="alert alert-info mx-3" role="alert">
-                        <i className="fas fa-info-circle me-2"></i>
-                        No package information available
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>}
+              </div>}
           </div>
 
         </div>

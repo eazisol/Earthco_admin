@@ -130,10 +130,10 @@ function Layout({ children }) {
             <nav id="navbar" className={`navbar${mobileMenuOpen ? ' navbar-mobile' : ''}`}>
               <ul>
                 <li><a className="nav-link scrollto active" href="/#hero">Home</a></li>
-                <li><a className="nav-link scrollto" href="/#about">About</a></li>
+                <li><a className="nav-link scrollto" href="/#about">About Us</a></li>
                 <li><a className="nav-link scrollto" href="/#services">Services</a></li>
                 <li><a className="nav-link scrollto" href="/#pricing">Pricing</a></li>
-                <li><a className="nav-link scrollto" href="/#contact">Contact</a></li>
+                <li><a className="nav-link scrollto" href="/#contact">Contact Us</a></li>
                 <li>
                    <CustomButton text={loginUser?.Data ? "Dashboard" : "Login"} onClick={() => navigate(loginUser?.Data ? "/dashboard" : "/login")} className='custom-login-btn' />
                   </li>
