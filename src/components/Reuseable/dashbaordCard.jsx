@@ -11,30 +11,30 @@ export const DashbaordCardTenantCard = ({ total, active, inactive, title }) => {
                 <h5 style={{ color: "#6c757d" }}>{title}</h5>
                 <h4 style={{ color: "#091c74" }}>{total ?? 0}</h4>
               </div>
-              <div className="d-flex align-items-center w-100 justify-content-between">
-                <h5 style={{ color: "#6c757d",fontSize:"12px" }}>Active</h5>
-                <h4 style={{ color: "#091c74" }}>{active ?? 0}</h4>
-              </div>
-              <div className="d-flex align-items-center w-100 justify-content-between">
-                <h5 style={{ color: "#6c757d",fontSize:"12px" }}>Inactive</h5>
-                <h4 style={{ color: "#091c74" }}>{inactive ?? 0}</h4>
-              </div>
-              <div className="progress" style={{ height: "10px", width: "100%"}}>
-                <div
-                  className="progress-bar bg-success"
-                  role="progressbar"
-                  style={{ width: `${activePercentage}%` }}
-                  aria-valuenow={activePercentage}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-                <div
-                  role="progressbar"
-                  style={{ width: `${inactivePercentage}%` }}
-                  aria-valuenow={inactivePercentage}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
+              {/* Progress bar with active/inactive labels */}
+              <div className="w-100 mt-3">
+                <div className="d-flex justify-content-between mb-1" style={{ fontSize: "12px" }}>
+                  <span style={{ color: "#28a745" }}>Active: {active ?? 0}</span>
+                  <span style={{ color: "#dc3545" }}>Inactive: {inactive ?? 0}</span>
+                </div>
+                <div className="progress" style={{ height: "10px", width: "100%" }}>
+                  <div
+                    className="progress-bar bg-success"
+                    role="progressbar"
+                    style={{ width: `${activePercentage}%` }}
+                    aria-valuenow={activePercentage}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                  <div
+                    // className="progress-bar bg-danger"
+                    // role="progressbar"
+                    style={{ width: `${inactivePercentage}%` }}
+                    aria-valuenow={inactivePercentage}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
               </div>
             </div>
           </div>
@@ -106,18 +106,19 @@ export const DashbaordCardCompany = ({
     color = "info",
     percentageChange,
     onClick,
+    textColor = "#000"
   }) => {
     return (
-      <div className="col-xl-3 col-lg-6 col-sm-6" onClick={onClick} style={{ cursor: "pointer" }}>
-        <div className="card" style={{ borderRadius: "10px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+      <div className={`col-xl-3 col-lg-6 col-sm-6 `}>
+        <div className={`card  bg-${color}`} onClick={onClick}  style={{ borderRadius: "10px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", cursor: "pointer" }}>
           <div className="card-body" style={{ padding: "20px" }}>
             <div className="d-flex align-items-center justify-content-between">
               <div>
                 <div className="d-flex align-items-center mb-2">
                   <span style={{ fontSize: "20px", marginRight: "8px" }}>{icon}</span>
-                  <h5 style={{ margin: "0", color: "#6c757d" }}>{title}</h5>
+                  <h5 style={{ margin: "0", color: '#fff' }}>{title}</h5>
                 </div>
-                <h4 style={{ margin: "0 0 0 34px", color: "#091c74" }}>{total ?? 0}</h4>
+                <h4 style={{ margin: "0 0 0 34px", color: textColor }}>{total ?? 0}</h4>
               </div>
             </div>
           </div>
