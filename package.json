@@ -20,7 +20,6 @@
     "highcharts": "^12.3.0",
     "highcharts-more": "^0.1.7",
     "highcharts-react-official": "^3.2.2",
-    "jodit": "^4.6.2",
     "jodit-react": "^5.2.19",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

@@ -122,7 +122,7 @@ export const ContactUs = () => {
                 <div className="container-fluid">
                     <div className="row table-space"  >
                         <div className="col-xl-12">
-                            <div className="card">
+                            <div className="card shadow-sm rounded-card">
                                 <div className="card-body p-0">
                                     <div className="table-responsive active-projects style-1">
                                        

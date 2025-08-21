@@ -10,15 +10,15 @@ export const GoogleSetting = () => {
   const [formData, setFormData] = useState({
     GoogelClientId: "",
     GoogleClientSecret: "",
-   
+    GoogleMapKey:"",
     SettingId: 0
   });
   const [errors, setErrors] = useState({
     GoogelClientId: "",
     GoogleClientSecret: "",
-    
   });
   const [showClientSecret, setShowClientSecret] = useState(false);
+  const [googleMapKey, setGoogleMapKey] = useState(false);
   const validateInput = (name, value) => {
     if (!value) {
       return "This field is required";
@@ -72,9 +72,9 @@ export const GoogleSetting = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!validateForm()) {
-      return;
-    }
+    // if (!validateForm()) {
+    //   return;
+    // }
     
     setLoading(true);
     const formDataToSend = new FormData();
@@ -107,7 +107,7 @@ export const GoogleSetting = () => {
         <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-6">
-              <div className="card">
+              <div className="card shadow-sm rounded-card">
                 <div className="card-body">
                   <h4 className="card-title mb-4">Google Settings</h4>
                   {loading ? (
@@ -123,20 +123,20 @@ export const GoogleSetting = () => {
                         <Alert   severity="info"
                         className="mb-4"
                         style={{ width: "100%" }}>
-                          <AlertTitle>Info</AlertTitle>
+                          <AlertTitle style={{ fontSize: "1.1rem",}}>Info</AlertTitle>
                           <strong>How to set up your Google settings:</strong>
-                          <ol style={{ marginLeft: 16 }}>
+                          <p>   You need to provide your <b>Google Client ID</b> and <b>Google Client Secret</b>.</p>
+                          <ol style={{ marginTop: -10 }}>
                             <li>
-                              You need to provide your <b>Google Client ID</b> and <b>Google Client Secret</b>.<br />
                               <span style={{ fontSize: "0.95em" }}>
                                 To get your credentials:
-                                <ol style={{ marginLeft: 16 }}>
-                                  <li>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
-                                  <li>Create a new project or select an existing one.</li>
-                                  <li>Enable the relevant Google API (e.g., Maps, Places, etc.) for your project.</li>
-                                  <li>Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
-                                  <li>Configure the consent screen if prompted.</li>
-                                  <li>Select "Web application" and set the authorized redirect URIs as needed.</li>
+                                <ol style={{ marginLeft: 5 }}>
+                                  <li>&#8226; Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
+                                  <li>&#8226; Create a new project or select an existing one.</li>
+                                  <li>&#8226; Enable the relevant Google API (e.g., Maps, Places, etc.) for your project.</li>
+                                  <li>&#8226; Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
+                                  <li>&#8226; Configure the consent screen if prompted.</li>
+                                  <li>&#8226; Select "Web application" and set the authorized redirect URIs as needed.</li>
                                   <li>After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
                                 </ol>
                               </span>
@@ -149,8 +149,10 @@ export const GoogleSetting = () => {
                         </div>
                       
                         <div className="col-xl-12 mb-3">
-                          <label className="form-label">Client ID<span className="text-danger">*</span></label>
                           <TextField
+                          variant="outlined"
+                          label="Client ID"
+                          required
                             name="GoogelClientId"
                             value={formData.GoogelClientId}
                             onChange={handleInputChange}
@@ -160,9 +162,11 @@ export const GoogleSetting = () => {
                             helperText={errors.GoogelClientId}
                           />
                         </div>
-                        <div className="col-xl-12 mb-3">
-                          <label className="form-label">Client Secret<span className="text-danger">*</span></label>
+                        <div className="col-xl-12 mb-3 mt-3">
                             <TextField
+                            variant="outlined"
+                            label="Client Secret"
+                            required
                              type={showClientSecret ? "text" : "password"}
                               name="GoogleClientSecret"
                               value={formData.GoogleClientSecret}
@@ -198,8 +202,8 @@ export const GoogleSetting = () => {
                 </div>
               </div>
             </div>
-            {/* <div className="col-xl-6">
-              <div className="card">
+            <div className="col-xl-6">
+              <div className="card shadow-sm rounded-card">
                 <div className="card-body">
                   <h4 className="card-title mb-4">Map Settings</h4>
                   {loading ? (
@@ -215,20 +219,21 @@ export const GoogleSetting = () => {
                         <Alert severity="info"
                         className="mb-4"
                         style={{ width: "100%" }}>
-                          <AlertTitle>Info</AlertTitle>
+                          <AlertTitle style={{ fontSize: "1.1rem",}}>Info</AlertTitle>
                           <strong>How to set up your Google Map Keys:</strong>
-                          <ol style={{ marginLeft: 16 }}>
+                          <p>   You need to provide your <b>Google Maps API Key</b>.</p>
+                          <ol style={{ marginTop: -10 }}>
                             <li>
-                              You need to provide your <b>Google Maps API Key</b>.<br />
+                             
                               <span style={{ fontSize: "0.95em" }}>
                                 To get your API key:
-                                <ol style={{ marginLeft: 16 }}>
-                                  <li>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
-                                  <li>Create a new project or select an existing one.</li>
-                                  <li>Enable the Google Maps API for your project.</li>
-                                  <li>Go to "Credentials" and click "Create Credentials" &rarr; "API key".</li>
-                                  <li>Restrict your API key to prevent unauthorized use.</li>
-                                  <li>After creation, you will see your <b>API Key</b>.</li>
+                                  <ol style={{ marginLeft: 5 }}>
+                                  <li>&#8226; Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
+                                  <li>&#8226; Create a new project or select an existing one.</li>
+                                  <li>&#8226; Enable the Google Maps API for your project.</li>
+                                  <li>&#8226; Go to "Credentials" and click "Create Credentials" &rarr; "API key".</li>
+                                  <li>&#8226; Restrict your API key to prevent unauthorized use.</li>
+                                  <li>&#8226; After creation, you will see your <b>API Key</b>.</li>
                                 </ol>
                               </span>
                             </li>
@@ -240,36 +245,26 @@ export const GoogleSetting = () => {
                         </div>
                       
                         <div className="col-xl-12 mb-3">
-                          <label className="form-label">Client ID<span className="text-danger">*</span></label>
-                          <TextField
-                            name="GoogelClientId"
-                            value={formData.GoogelClientId}
-                            onChange={handleInputChange}
-                            size="small"
-                            fullWidth
-                            error={!!errors.GoogelClientId}
-                            helperText={errors.GoogelClientId}
-                          />
-                        </div>
-                        <div className="col-xl-12 mb-3">
-                          <label className="form-label">Client Secret<span className="text-danger">*</span></label>
                             <TextField
-                             type={showClientSecret ? "text" : "password"}
-                              name="GoogleClientSecret"
-                              value={formData.GoogleClientSecret}
+                            variant="outlined"
+                            label="Google Map Key"
+                            required
+                             type={googleMapKey ? "text" : "password"}
+                              name="GoogleMapKey"
+                              value={formData.GoogleMapKey}
                               onChange={handleInputChange}
                               size="small"
                               fullWidth
-                              error={!!errors.GoogleClientSecret}
-                              helperText={errors.GoogleClientSecret}
+                              error={!!errors.GoogleMapKey}
+                              helperText={errors.GoogleMapKey}
                               InputProps={{
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     <IconButton
-                                      onClick={() => setShowClientSecret(!showClientSecret)}
+                                      onClick={() => setGoogleMapKey(!googleMapKey)}
                                       edge="end"
                                     >
-                                      {showClientSecret ? <VisibilityOff /> : <Visibility />}
+                                      {googleMapKey ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                   </InputAdornment>
                                 ),
@@ -288,7 +283,7 @@ export const GoogleSetting = () => {
                   )}
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

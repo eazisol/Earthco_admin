@@ -95,7 +95,7 @@ export const TransactionsScreen = () => {
         <div className="container-fluid">
           <div className="row table-space"  >
             <div className="col-xl-12">
-              <div className="card">
+              <div className="card shadow-sm rounded-card">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
                     <div className="d-flex justify-content-between align-items-center mb-2 pt-3">
@@ -103,7 +103,9 @@ export const TransactionsScreen = () => {
                       <TextField
                         className="ml-3"
                         size="small"
-                        placeholder="Search..."
+                        variant="outlined"
+                        label="Search Transaction"
+                        // placeholder="Search Transaction..."
                         value={search}
                         onChange={handleSearchChange}
                         style={{ minWidth: 200 }}

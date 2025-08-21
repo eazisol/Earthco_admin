@@ -258,7 +258,7 @@ export const CompanyScreen = () => {
         <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-12">
-              <div className="card">
+              <div className="card shadow-sm rounded-card">
                 <div className="card-body">
                   {/* <h4 className="card-title mb-4">Brand Settings</h4> */}
                   {/* Tabs */}

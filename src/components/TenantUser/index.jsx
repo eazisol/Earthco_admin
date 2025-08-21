@@ -151,7 +151,7 @@ export const TenantScreen = () => {
         <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-12">
-              <div className="card">
+              <div className="card shadow-sm rounded-card">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
                     {/* Search Field */}
@@ -159,7 +159,9 @@ export const TenantScreen = () => {
                       <h4 className="heading mb-0" style={{marginLeft:"15px"}}></h4>
                       <TextField
                         size="small"
-                        placeholder="Search Tenant..."
+                        variant="outlined"
+                        label="Search Tenant"
+                        // placeholder="Search Tenant..."
                         value={search}
                         onChange={handleSearchChange}
                         style={{ minWidth: 200, }}

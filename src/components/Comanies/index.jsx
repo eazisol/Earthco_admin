@@ -300,10 +300,11 @@ export const CompaniesScreen = () => {
           <div class="container-fluid">
             <div class="row">
               <div className="col-xl-6 mb-4">
-                <label className="form-label">
-                  Company Name<span class="text-danger">*</span>
-                </label>
+               
                 <TextField
+                required
+                  label="Company Name"
+                  variant="outlined"
                   className="form-control form-control-sm"
                   name="CompanyName"
                   value={formData.CompanyName}
@@ -315,10 +316,11 @@ export const CompaniesScreen = () => {
                 />
               </div>
               <div class="col-xl-6 mb-4">
-                <label class="form-label">
-                  Company Realm ID<span class="text-danger">*</span>
-                </label>
+               
                 <TextField
+                required
+                  label="Company Realm ID"
+                  variant="outlined"
                   className="form-control form-control-sm"
                   name="CompanyRealmId"
                   value={formData.CompanyRealmId}
@@ -330,9 +332,10 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-4">
-                <label class="form-label">Display Name</label>
+              <div class="col-xl-6 mb-4 mt-3">
                 <TextField
+                  label="Display Name"
+                  variant="outlined"
                   className="form-control form-control-sm"
                   name="DsiplayName"
                   value={formData.DsiplayName}
@@ -342,11 +345,12 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-4">
-                <label class="form-label">
-                  Email<span class="text-danger">*</span>
-                </label>
+              <div class="col-xl-6 mb-4 mt-3">
+             
                 <TextField
+                required
+                  label="Email"
+                  variant="outlined"
                   className="form-control form-control-sm"
                   name="Email"
                   type="email"
@@ -359,11 +363,12 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-4">
-                <label class="form-label">
-                  Phone Number<span class="text-danger">*</span>
-                </label>
+              <div class="col-xl-6 mb-4 mt-3">
+               
                 <TextField
+                required
+                  label="Phone Number"
+                  variant="outlined"
                   className="form-control form-control-sm"
                   name="PhoneNo"
                   value={formData.PhoneNo}
@@ -375,9 +380,10 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-4">
-                <label class="form-label">Secondary Phone Number</label>
+              <div class="col-xl-6 mb-4 mt-3">
                 <TextField
+                  label="Secondary Phone Number"
+                  variant="outlined"
                   className="form-control form-control-sm"
                   name="SecondPhoneNo"
                   value={formData.SecondPhoneNo}
@@ -387,9 +393,10 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-4">
-                <label class="form-label">Website</label>
+              <div class="col-xl-6 mb-4 mt-3">
                 <TextField
+                  label="Website"
+                  variant="outlined"
                   className="form-control form-control-sm"
                   name="Website"
                   value={formData.Website}
@@ -399,9 +406,10 @@ export const CompaniesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-4">
-                <label class="form-label">Address</label>
+              <div class="col-xl-6 mb-4 mt-3">
                 <TextField
+                  label="Address"
+                  variant="outlined"
                   className="form-control form-control-sm"
                   name="Address"
                   value={formData.Address}
@@ -482,7 +490,7 @@ export const CompaniesScreen = () => {
         <div className="container-fluid">
           <div className="row ">
             <div className="col-xl-12">
-              <div className="card">
+              <div className="card shadow-sm rounded-card">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
                     <div className="d-flex justify-content-between align-items-center mb-2 pt-3">

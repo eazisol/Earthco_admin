@@ -2,6 +2,7 @@ import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import {
   CircularProgress,
   FormControl,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -283,9 +284,12 @@ export const PackagesScreen = () => {
         <div class="offcanvas-body">
           <div class="container-fluid">
             <div class="row">
-              <div className="col-xl-6 mb-3">
-                <label className="form-label">Name<span class="text-danger">*</span></label>
+              <div className="col-xl-6 mb-3 ">
+                {/* <label className="form-label">Name<span class="text-danger">*</span></label> */}
                 <TextField
+                  label="Name"
+                  variant="outlined"
+                  required
                   className="form-control form-control-sm"
                   name="name"
                   value={formData.name}
@@ -296,9 +300,12 @@ export const PackagesScreen = () => {
                 />
               </div>
               <div class="col-xl-6 mb-3">
-                <label class="form-label">Max User<span class="text-danger">*</span></label>
+                {/* <label class="form-label">Max User<span class="text-danger">*</span></label> */}
 
                 <TextField
+                  label="Max User"
+                  variant="outlined"
+                  required
                   className="form-control form-control-sm"
                   name="maxUser"
                   value={formData.maxUser}
@@ -309,11 +316,14 @@ export const PackagesScreen = () => {
                 />
               </div>
 
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
+              <div class="col-xl-6 mb-3 mt-3">
+                {/* <label for="exampleFormControlInput10" class="form-label">
                   Max Storage(MB)<span class="text-danger">*</span>
-                </label>
+                </label> */}
                 <TextField
+                  label="Max Storage(MB)"
+                  variant="outlined"
+                  required
                   className="form-control form-control-sm"
                   name="MaxStorageMB"
                   value={formData.MaxStorageMB}
@@ -323,40 +333,38 @@ export const PackagesScreen = () => {
                   helperText={errors.MaxStorageMB}
                 />
               </div>
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
-                  Monthly Price<span class="text-danger">*</span>
-                </label>
-                <TextField
-                  className="form-control form-control-sm"
-                  name="Price"
-                  value={formData.Price}
-                  onChange={handleInputChange}
-                  size="small"
-                  error={!!errors.Price}
-                  helperText={errors.Price}
-                />
-              </div>
-              <div class="col-xl-6 mb-3">
-                <label for="exampleFormControlInput10" class="form-label">
+
+              <div class="col-xl-6 mb-3 mt-3">
+                {/* <label for="exampleFormControlInput10" class="form-label">
                   Max Companies<span class="text-danger">*</span>
-                </label>
+                </label> */}
                 <TextField
+                  label="Max Companies"
+                  variant="outlined"
+                  required
                   className="form-control form-control-sm"
                   name="maxCompanies"
                   value={formData.maxCompanies}
                   onChange={handleInputChange}
                   size="small"
-                  error={!!errors.maxCompanies}
-                  helperText={errors.maxCompanies}
+                      error={!!errors.maxCompanies}
+                      helperText={errors.maxCompanies}
                 />
               </div>
-              <div class="col-xl-6 mb-3">
+              <div class="col-xl-6 mb-3 mt-3">
                 <FormControl fullWidth>
-                  <label className="form-label">
-                    Type<span className="text-danger">*</span>
-                  </label>
-                  <Select
+                  {/* <InputLabel
+                    id="package-type-label"
+                    className="form-label"
+                    style={{ marginTop: "-10px" }}
+                  >
+                    Type<span> *</span>
+                  </InputLabel> */}
+                  {/* <Select
+                    labelId="package-type-label"
+                    label="Type"
+                    variant="outlined"
+                    required
                     name="PackageTypeId"
                     value={formData.PackageTypeId}
                     onChange={handleInputChange}
@@ -371,30 +379,77 @@ export const PackagesScreen = () => {
                         {option.Package}
                       </MenuItem>
                     ))}
-                  </Select>
-                  {errors.PackageTypeId && (
+                  </Select> */}
+                  <TextField
+                    id="outlined-select-type"
+                    select
+                    label="Type"
+                    variant="outlined"
+                    required
+                    name="PackageTypeId"
+                    value={formData.PackageTypeId}
+                    onChange={handleInputChange}
+                    size="small"
+                    error={!!errors.PackageTypeId}
+                    defaultValue={formData.PackageTypeId}
+                    // helperText="Please select your type"
+                    helperText={errors.PackageTypeId}
+                  >
+                    {packageOptions?.map((option) => (
+                      <MenuItem
+                        key={option.PackageTypeId}
+                        value={option.PackageTypeId}
+                      >
+                        {option.Package}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  {/* {errors.PackageTypeId && (
                     <div className="text-danger small">{errors.PackageTypeId}</div>
-                  )}
+                  )} */}
                 </FormControl>
               </div>
-              <div className="col-xl-12 mb-3">
-                <label className="form-label">
+              <div class="col-xl-6 mb-3 mt-3">
+                {/* <label for="exampleFormControlInput10" class="form-label">
+                  Monthly Price<span class="text-danger">*</span>
+                </label> */}
+                <TextField
+                  label="Monthly Price"
+                  variant="outlined"
+                  required
+                  className="form-control form-control-sm"
+                  name="Price"
+                  value={formData.Price}
+                  onChange={handleInputChange}
+                  size="small"
+                  error={!!errors.Price}
+                  helperText={errors.Price}
+                />
+              </div>
+              <div className="col-xl-12 mb-3 mt-3">
+                {/* <label className="form-label">
                   Description<span className="text-danger">*</span>
-                </label>
-                <textarea
-                  className={`form-control form-control-sm ${errors.Description ? "is-invalid" : ""}`}
+                </label> */}
+                <TextField
+                  label="Description"
+                  variant="outlined"
+                  required
+                  className="form-control form-control-sm"
                   name="Description"
-                  rows="7"
                   value={formData.Description}
                   onChange={handleInputChange}
-                ></textarea>
-                {errors.Description && (
-                  <div className="text-danger small">{errors.Description}</div>
-                )}
+                  size="small"
+                  error={!!errors.Description}
+                  helperText={errors.Description}
+                  multiline
+                  rows={3}
+                />
+
+
               </div>
 
             </div>
-            <div className="row align-items-center">
+            <div className="row align-items-center mt-5">
               <div className="col-xl-6 ">
 
                 <div className="form-check form-switch">
@@ -471,14 +526,16 @@ export const PackagesScreen = () => {
         <div className="container-fluid">
           <div className="row table-space" >
             <div className="col-xl-12">
-              <div className="card">
+              <div className="card shadow-sm rounded-card" >
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
                     <div className=" d-flex justify-content-between align-items-center mb-2 pt-3 ">
                       <TextField
-                        className="serch-package "
+                        label="Search Package"
+                        variant="outlined"
+                        className="serch-package"
                         size="small"
-                        placeholder="Search Packages..."
+                        // placeholder="Search Packages..."
                         value={search}
                         onChange={handleSearchChange}
                         style={{ minWidth: 200 }}

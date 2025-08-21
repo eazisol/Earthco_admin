@@ -12,7 +12,7 @@ export const StripeSetting = () => {
     StripeProductionSecretId: "",
     StripeSandboxClientId: "",
     StripeSandboxSecretId: "",
-    StripeMode: 1 // 1 = Production, 0 = Sandbox
+    StripeMode: 2 // 2= Production, 1= Sandbox
   });
 
   const [errors, setErrors] = useState({});
@@ -20,7 +20,7 @@ export const StripeSetting = () => {
   const [showProductionSecret, setShowProductionSecret] = useState(false);
   const [showSandboxSecret, setShowSandboxSecret] = useState(false);
   // Helper to determine if current mode is production
-  const isProduction = parseInt(formData.StripeMode) === 1;
+  const isProduction = parseInt(formData.StripeMode) === 2;
 
   // Validation function, now mode-aware
   const validateField = (name, value) => {
@@ -98,7 +98,7 @@ export const StripeSetting = () => {
         StripeProductionSecretId: response?.data?.StripeProductionSecretId || "",
         StripeSandboxClientId: response?.data?.StripeSandboxClientId || "",
         StripeSandboxSecretId: response?.data?.StripeSandboxSecretId || "",
-        StripeMode: response?.data?.StripeMode !== undefined ? response?.data?.StripeMode : 1
+        StripeMode: response?.data?.StripeMode !== undefined ? response?.data?.StripeMode : 2
       });
     } catch (error) {
       console.error("Error fetching settings:", error);
@@ -188,7 +188,7 @@ export const StripeSetting = () => {
         <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-6">
-              <div className="card">
+              <div className="card shadow-sm rounded-card">
                 <div className="card-body">
                   <div className="row">
                     <h4 className="card-title mb-4 col-xl-9">Stripe Settings</h4>
@@ -196,17 +196,17 @@ export const StripeSetting = () => {
                     <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content", cursor: "pointer" }} onClick={() => {
                         setFormData((prev) => ({
                           ...prev,
-                          StripeMode: formData.StripeMode == 1 ? 2 : 1
+                          StripeMode: formData.StripeMode == 2 ? 1 : 2
                         }))
                       }}>
                           <label className="form-check-label mb-0 me-2" style={{ whiteSpace: "nowrap" }}>
-                                  {formData.StripeMode == 1 ? "Production" : "Sandbox"}
+                                  {formData.StripeMode == 2 ? "Production" : "Sandbox"}
                               </label>
                               <input
                                 className="form-check-input"
                                 type="checkbox"
                                 name="StripeMode" 
-                                checked={formData.StripeMode == 1}  
+                                  checked={formData.StripeMode == 2}  
                                 readOnly
                                  
                                 style={{ marginLeft: "12px" }}
@@ -230,28 +230,32 @@ export const StripeSetting = () => {
                         <Alert   severity="info"
                         className="mb-4"
                         style={{ width: "100%" }}>
-                          <AlertTitle>Info</AlertTitle>
+                          <AlertTitle style={{ fontSize: "1.1rem",}}>Info</AlertTitle>
                           <strong>How to set up your Stripe settings:</strong>
-                          <ol style={{ marginLeft: 16 }}>
+                          <p>   If you are using <b>Production</b> mode, you need to provide <b>Live Publishable Key</b> and <b>Live Secret Key</b>.</p>
+                          <ol style={{ marginTop: -10 }}>
                             <li>
-                              If you are using <b>Production</b> mode, you need to provide <b>Live Publishable Key</b> and <b>Live Secret Key</b>.<br />
+                     
                               <span style={{ fontSize: "0.95em" }}>
                                 To get your Production credentials:
-                                <ol style={{ marginLeft: 16 }}>
-                                  <li>Go to <a href="https://dashboard.stripe.com/apikeys" target="_blank" rel="noopener noreferrer">Stripe Dashboard</a>.</li>
-                                  <li>Sign in and navigate to "Developers" &gt; "API keys".</li>
-                                  <li>Use the "Standard keys" section to view your <b>Live Publishable Key</b> and <b>Live Secret Key</b>.</li>
+                                <ol style={{ marginLeft: 5 }}>
+                                  <li>&#8226; Go to <a href="https://dashboard.stripe.com/apikeys" target="_blank" rel="noopener noreferrer">Stripe Dashboard</a>.</li>
+                                  <li>&#8226; Sign in and navigate to "Developers" &gt; "API keys".</li>
+                                  <li>&#8226; Use the "Standard keys" section to view your <b>Live Publishable Key</b> and <b>Live Secret Key</b>.</li>
                                 </ol>
                               </span>
                             </li>
+                            </ol> 
+                            <p>   If you are using <b>Sandbox</b> mode, you need to provide <b>Test Publishable Key</b> and <b>Test Secret Key</b>.</p>
+                            <ol style={{ marginTop: -10 }}>
                             <li>
-                              If you are using <b>Sandbox</b> mode, you need to provide <b>Test Publishable Key</b> and <b>Test Secret Key</b>.<br />
+                             
                               <span style={{ fontSize: "0.95em" }}>
                                 To get your Sandbox credentials:
-                                <ol style={{ marginLeft: 16 }}>
-                                  <li>Go to <a href="https://dashboard.stripe.com/test/apikeys" target="_blank" rel="noopener noreferrer">Stripe Dashboard (Test Mode)</a>.</li>
-                                  <li>Sign in and navigate to "Developers" &gt; "API keys".</li>
-                                  <li>Use the "Standard keys" section to view your <b>Test Publishable Key</b> and <b>Test Secret Key</b>.</li>
+                                  <ol style={{ marginLeft: 5 }}>
+                                  <li>&#8226; Go to <a href="https://dashboard.stripe.com/test/apikeys" target="_blank" rel="noopener noreferrer">Stripe Dashboard (Test Mode)</a>.</li>
+                                  <li>&#8226; Sign in and navigate to "Developers" &gt; "API keys".</li>
+                                  <li>&#8226; Use the "Standard keys" section to view your <b>Test Publishable Key</b> and <b>Test Secret Key</b>.</li>
                                 </ol>
                               </span>
                             </li>
@@ -268,11 +272,11 @@ export const StripeSetting = () => {
                         {isProduction && (
                           <>
                             <div className="col-xl-12 mb-3">
-                              <label className="form-label">
-                                Publishable Key
-                                <span className="text-danger">*</span>
-                              </label>
-                              <TextField
+                             
+                              <TextField 
+                              label="Publishable Key"
+                              required
+                              variant="outlined"
                                 name="StripeProductionClientId"
                                 value={formData.StripeProductionClientId}
                                 onChange={handleInputChange}
@@ -283,12 +287,12 @@ export const StripeSetting = () => {
                                 helperText={errors.StripeProductionClientId}
                               />
                             </div>
-                            <div className="col-xl-12 mb-3">
-                              <label className="form-label">
-                                Secret Key
-                                <span className="text-danger">*</span>
-                              </label>
+                            <div className="col-xl-12 mb-3 mt-3">
+                             
                               <TextField
+                              label="Secret Key"
+                              required
+                              variant="outlined"
                                 type={showProductionSecret ? "text" : "password"}
                                 name="StripeProductionSecretId"
                                 value={formData.StripeProductionSecretId}
@@ -318,12 +322,12 @@ export const StripeSetting = () => {
                         {/* Sandbox Fields */}
                         {!isProduction && (
                           <>
-                            <div className="col-xl-12 mb-3">
-                              <label className="form-label">
-                                Publishable Key
-                                <span className="text-danger">*</span>
-                              </label>
+                            <div className="col-xl-12 mb-3 ">
+                            
                               <TextField
+                              label="Publishable Key"
+                              required
+                              variant="outlined"
                                 name="StripeSandboxClientId"
                                 value={formData.StripeSandboxClientId}
                                 onChange={handleInputChange}
@@ -334,12 +338,12 @@ export const StripeSetting = () => {
                                 helperText={errors.StripeSandboxClientId}
                               />
                             </div>
-                            <div className="col-xl-12 mb-3">
-                              <label className="form-label">
-                                Secret Key
-                                <span className="text-danger">*</span>
-                              </label>
+                            <div className="col-xl-12 mb-3 mt-3">
+                             
                               <TextField
+                              label="Secret Key"
+                              required
+                              variant="outlined"
                                 type={showSandboxSecret ? "text" : "password"}
                                   name="StripeSandboxSecretId"
                                 value={formData.StripeSandboxSecretId}

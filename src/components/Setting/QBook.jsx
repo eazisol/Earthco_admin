@@ -12,14 +12,15 @@ export const QBookScreen = () => {
     QBProductionClientSecret: "",
     QBSandBoxClientId: "",
     QBSandBoxClientSecret: "",
-    QBMode: 1 // 1 = Production, 0 = Sandbox
+    QBMode: 2, // 2 = Production, 1 = Sandbox
+    RedirectUrl:""
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showSandboxSecret, setShowSandboxSecret] = useState(false);
   const [showProductionSecret, setShowProductionSecret] = useState(false);
   // Helper to determine if current mode is production
-  const isProduction = parseInt(formData.QBMode) === 1;
+  const isProduction = parseInt(formData.QBMode) === 2;
 
   // Validation function, now mode-aware
   const validateField = (name, value) => {
@@ -27,7 +28,8 @@ export const QBookScreen = () => {
     if (isProduction) {
       if (
         name === "QBProductionClientId" ||
-        name === "QBProductionClientSecret"
+        name === "QBProductionClientSecret"||
+        name === "RedirectUrl"
       ) {
         if (!value || value.trim() === "") {
           return "This field is required in Production mode";
@@ -36,7 +38,8 @@ export const QBookScreen = () => {
     } else {
       if (
         name === "QBSandBoxClientId" ||
-        name === "QBSandBoxClientSecret"
+        name === "QBSandBoxClientSecret"||
+        name === "RedirectUrl"
       ) {
         if (!value || value.trim() === "") {
           return "This field is required in Sandbox mode";
@@ -88,9 +91,10 @@ export const QBookScreen = () => {
         QBProductionClientSecret: response?.data?.QBProductionClientSecret || "",
         QBSandBoxClientId: response?.data?.QBSandBoxClientId || "",
         QBSandBoxClientSecret: response?.data?.QBSandBoxClientSecret || "",
-        QBMode: response?.data?.QBMode ?? 1,
+        QBMode: response?.data?.QBMode ,
         TermsAndCondition: undefined,
-        PrivacyPolicy: undefined
+        PrivacyPolicy: undefined,
+        RedirectUrl: response?.data?.RedirectUrl || ""
       });
     } catch (error) {
       console.error("Error fetching settings:", error);
@@ -167,7 +171,8 @@ export const QBookScreen = () => {
       PrimeryColor: settingData?.PrimeryColor || null,
       SecondaryColor: settingData?.SecondaryColor || null,
       TermsAndCondition: undefined,
-      PrivacyPolicy: undefined
+      PrivacyPolicy: undefined,
+      RedirectUrl: formData.RedirectUrl
     };
 
     try {
@@ -193,7 +198,7 @@ export const QBookScreen = () => {
         <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-6">
-              <div className="card">
+              <div className="card shadow-sm rounded-card">
                 <div className="card-body">
                   <div className="row">
                     <h4 className="card-title mb-4 col-xl-9">
@@ -203,18 +208,18 @@ export const QBookScreen = () => {
                       <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content", cursor: "pointer" }} onClick={() => {
                         setFormData((prev) => ({
                           ...prev,
-                          QBMode: formData.QBMode == 1 ? 2 : 1
+                          QBMode: formData.QBMode == 2 ? 1 : 2
                         }))
                       }}>
                         <label className="form-check-label mb-0 me-2" style={{ whiteSpace: "nowrap" }}>
-                          {formData.QBMode == 1 ? "Production" : "Sandbox"}
+                          {formData.QBMode == 2 ? "Production" : "Sandbox"}
                         </label>
                        
                         <input
                           className="form-check-input"
                           type="checkbox"
                           name="QBMode"
-                          checked={formData.QBMode == 1}
+                          checked={formData.QBMode == 2}
                           readOnly
                           style={{ marginLeft: "12px" }}
                         />
@@ -233,53 +238,15 @@ export const QBookScreen = () => {
                   ) : (
                     <>
                       <div className="row">
-                        <div style={{ width: "100%" }}>
-                          
                       
-                        <Alert   severity="info"
-                        className="mb-4"
-                        style={{ width: "100%" }}>
-                          <AlertTitle>Info</AlertTitle>
-                          <strong>How to set up your QuickBooks settings:</strong>
-                          <ol style={{ marginLeft: 16 }}>
-                            <li>
-                              If you are using <b>Production</b> mode, you need to provide <b>Production Client ID</b> and <b>Production Client Secret</b>.<br />
-                              <span style={{ fontSize: "0.95em" }}>
-                                To get your Production credentials:
-                                <ol style={{ marginLeft: 16 }}>
-                                  <li>Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
-                                  <li>Sign in and create a new app or select an existing one.</li>
-                                  <li>Navigate to "Keys & OAuth".</li>
-                                  <li>Switch to "Production" tab to view your <b>Client ID</b> and <b>Client Secret</b>.</li>
-                                </ol>
-                              </span>
-                            </li>
-                            <li>
-                              If you are using <b>Sandbox</b> mode, you need to provide <b>Sandbox Client ID</b> and <b>Sandbox Client Secret</b>.<br />
-                              <span style={{ fontSize: "0.95em" }}>
-                                To get your Sandbox credentials:
-                                <ol style={{ marginLeft: 16 }}>
-                                  <li>Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
-                                  <li>Sign in and create a new app or select an existing one.</li>
-                                  <li>Navigate to "Keys & OAuth".</li>
-                                  <li>Use the "Development" tab to view your <b>Client ID</b> and <b>Client Secret</b> for Sandbox.</li>
-                                </ol>
-                              </span>
-                            </li>
-                            <li>
-                              Click <b>Save</b> to apply your settings.
-                            </li>
-                          </ol>
-                        </Alert>
-                        </div>
                         {isProduction && (
                           <>
                             <div className="col-xl-12 mb-3">
-                              <label className="form-label">
-                                Production Client ID
-                                <span className="text-danger">*</span>
-                              </label>
+                             
                               <TextField
+                              variant="outlined"
+                              label="Production Client ID"
+                              required
                                 name="QBProductionClientId"
                                 value={formData.QBProductionClientId}
                                 onChange={handleInputChange}
@@ -290,12 +257,12 @@ export const QBookScreen = () => {
                               />
                             </div>
 
-                            <div className="col-xl-12 mb-3">
-                              <label className="form-label">
-                                Production Client Secret
-                                <span className="text-danger">*</span>
-                              </label>
+                            <div className="col-xl-12 mb-3 mt-3">
+                             
                               <TextField
+                              variant="outlined"
+                              label="Production Client Secret"
+                              required
                                 type={showProductionSecret ? "text" : "password"}
                                 name="QBProductionClientSecret"
                                 value={formData.QBProductionClientSecret}
@@ -325,11 +292,11 @@ export const QBookScreen = () => {
                         {!isProduction && (
                           <>
                             <div className="col-xl-12 mb-3">
-                              <label className="form-label">
-                                Sandbox Client ID
-                                <span className="text-danger">*</span>
-                              </label>
+                            
                               <TextField
+                              variant="outlined"
+                              label="Sandbox Client ID"
+                              required
                                 name="QBSandBoxClientId"
                                 value={formData.QBSandBoxClientId}
                                 onChange={handleInputChange}
@@ -340,13 +307,13 @@ export const QBookScreen = () => {
                               />
                             </div>
 
-                            <div className="col-xl-12 mb-3">
-                              <label className="form-label">
-                                Sandbox Client Secret
-                                <span className="text-danger">*</span>
-                              </label>
+                            <div className="col-xl-12 mb-3 mt-3">
+                             
                               <div style={{ position: 'relative' }}>
                                 <TextField
+                                variant="outlined"
+                                label="Sandbox Client Secret"
+                                required
                                   type={showSandboxSecret ? "text" : "password"}
                                   name="QBSandBoxClientSecret"
                                   value={formData.QBSandBoxClientSecret}
@@ -373,6 +340,22 @@ export const QBookScreen = () => {
                             </div>
                           </>
                         )}
+                        <div className="col-xl-12 mb-3 mt-3">
+                         
+                          <TextField
+                          variant="outlined"
+                          label="Redirect URL"
+                          required
+                            name="RedirectUrl"
+                            value={formData.RedirectUrl}
+                            onChange={handleInputChange}
+                            size="small"
+                            fullWidth
+                          />
+                          <small className="text-muted">
+                            This is the URL where users will be redirected after authentication.
+                          </small>
+                        </div>
                       </div>
 
                       <div className="mt-3 d-flex justify-content-end">
@@ -382,6 +365,59 @@ export const QBookScreen = () => {
                       </div>
                     </>
                   )}
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6">
+              <div className="card shadow-sm rounded-card">
+                <div className="card-body">
+                  <div className="row">
+                  <div style={{ width: "100%" }}>
+                          
+                      
+                          <Alert   severity="info"
+                          className="mb-4"
+                          style={{ width: "100%" }}>
+                            <AlertTitle style={{ fontSize: "1.1rem",}}>Info</AlertTitle>
+                            <strong>How to set up your QuickBooks settings:</strong>
+                            <p>  If you are using <b>Production</b> mode, you need to provide <b>Production Client ID</b> and <b>Production Client Secret</b>.</p>
+                            <ol style={{ marginTop: -10 }}>
+                              <li>
+                            
+                                <span style={{ fontSize: "0.95em" }}>
+                                  To get your Production credentials:
+                                  <ol style={{ marginLeft: 5 }}>
+                                    <li>&#8226;  Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
+                                    <li>&#8226;  Sign in and create a new app or select an existing one.</li>
+                                    <li>&#8226;  Navigate to "Keys & OAuth".</li>
+                                    <li>&#8226;  Switch to "Production" tab to view your <b>Client ID</b> and <b>Client Secret</b>.</li>
+                                  </ol>
+                                </span>
+                              </li>
+                              </ol>
+                              <p>  If you are using <b>Sandbox</b> mode, you need to provide <b>Sandbox Client ID</b> and <b>Sandbox Client Secret</b>.</p>
+                              <ol style={{ marginTop: -10 }}>
+                              <li>
+                               
+                                <span style={{ fontSize: "0.95em" }}>
+                                  To get your Sandbox credentials:
+                                  <ol style={{ marginLeft: 5 }}>
+                                    <li>&#8226;  Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
+                                    <li>&#8226;  Sign in and create a new app or select an existing one.</li>
+                                    <li>&#8226;  Navigate to "Keys & OAuth".</li>
+                                    <li>&#8226;  Use the "Development" tab to view your <b>Client ID</b> and <b>Client Secret</b> for Sandbox.</li>
+                                  </ol>
+                                </span>
+                              </li>
+                             
+                              </ol>
+                              <li>
+                                Click <b>Update Settings</b> to apply your settings.
+                              </li>
+                           
+                          </Alert>
+                          </div>
+                  </div>
                 </div>
               </div>
             </div>

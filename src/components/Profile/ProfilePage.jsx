@@ -202,8 +202,11 @@ useEffect(() => {
                   ) : ( */}
                     <div className="row">
                       <div className="col-xl-3 mb-3">
-                        <label className="form-label">First Name<span className="text-danger">*</span></label>
+                       
                         <TextField
+                          variant="outlined"
+                          label="First Name"
+                          required
                           className="form-control form-control-sm"
                           name="FirstName"
                           value={formData.FirstName}
@@ -212,8 +215,11 @@ useEffect(() => {
                         />
                       </div>
                       <div className="col-xl-3 mb-3">
-                        <label className="form-label">Last Name<span className="text-danger">*</span></label>
+                       
                         <TextField
+                          variant="outlined"
+                          label="Last Name"
+                          required
                           className="form-control form-control-sm"
                           name="LastName"
                           value={formData.LastName}
@@ -222,8 +228,11 @@ useEffect(() => {
                         />
                       </div>
                       <div className="col-xl-3 mb-3">
-                        <label className="form-label">Email<span className="text-danger">*</span></label>
+                       
                         <TextField
+                          variant="outlined"
+                          label="Email"
+                          required
                           className="form-control form-control-sm"
                           name="Email"
                           value={formData.Email}
@@ -233,8 +242,11 @@ useEffect(() => {
                         />
                       </div>
                       <div className="col-xl-3 mb-3">
-                        <label className="form-label">Company Name<span className="text-danger">*</span></label>
+                       
                         <TextField
+                          variant="outlined"
+                          label="Company Name"
+                          required
                           className="form-control form-control-sm"
                           name="CompanyName"
                           value={formData.CompanyName}
@@ -243,9 +255,12 @@ useEffect(() => {
                           disabled
                         />
                       </div>
-                      <div className="col-xl-3 mb-3">
-                        <label className="form-label">Phone no.<span className="text-danger">*</span></label>
+                      <div className="col-xl-3 mb-3 mt-3">
+                       
                         <TextField
+                          variant="outlined"
+                          label="Phone no."
+                          required
                           className="form-control form-control-sm"
                           name="PhoneNo"
                           value={formData.PhoneNo}
@@ -255,9 +270,12 @@ useEffect(() => {
                         />
                       </div>
                   
-                      <div className="col-xl-3 mb-3">
-                        <label className="form-label">Username<span className="text-danger">*</span></label>
+                      <div className="col-xl-3 mb-3 mt-3">
+                       
                         <TextField
+                          variant="outlined"
+                          label="Username"
+                          required
                           className="form-control form-control-sm"
                           name="SubDomain"
                           value={formData.SubDomain}
@@ -267,9 +285,12 @@ useEffect(() => {
                         />
                       </div>
                     
-                      <div className="col-xl-3 mb-3">
-                        <label className="form-label">Password</label>
+                      <div className="col-xl-3 mb-3 mt-3">
+                       
                         <TextField
+                          variant="outlined"
+                          label="Password"
+                          required
                           className="form-control form-control-sm"
                           name="Password"
                           value={formData.Password}
@@ -290,9 +311,12 @@ useEffect(() => {
                           }}
                         />
                       </div>
-                        <div className="col-xl-3 mb-3">
-                        <label className="form-label">Confirm Password</label>
+                        <div className="col-xl-3 mb-3 mt-3">
+                       
                         <TextField
+                          variant="outlined"
+                          label="Confirm Password"
+                          required
                           className="form-control form-control-sm"
                           name="confirmPassword"
                           value={formData.confirmPassword}
@@ -396,7 +420,7 @@ useEffect(() => {
                   {/* )} */}
                 </div>
               </div>
-       {formData?.RoleId==1&&<div className="card table-space">
+       {formData?.RoleId==1&&<div className="card table-space shadow-sm rounded-card">
                 <div className="card-body">
                   <h4 className="card-title mb-4 "  style={{marginLeft: "8px"}}>Active Package</h4>
                   <div className="table-responsive">

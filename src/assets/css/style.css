@@ -20,7 +20,10 @@
   --error-message: #dc3545;
   --header-bg: #100f1f;
 }
-
+.jodit-wysiwyg {
+  color: #111 !important;
+  background: #fff !important;
+}
 body { 
   font-family:"Poppins", sans-serif;
   color: #444444;

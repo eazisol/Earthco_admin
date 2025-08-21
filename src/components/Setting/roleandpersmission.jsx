@@ -100,7 +100,7 @@ export const RoleAndPermission = () => {
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xl-3 col-xxl-4" style={{ position: "fixed", zIndex: 1 }}>
-							<div class="card h-auto">
+							<div class="card shadow-sm rounded-card h-auto">
 								<div class="card-header p-2" >
 									<h4 class="heading mb-0" style={{paddingLeft: "10px"}}>Roles </h4>
 								</div>
@@ -157,7 +157,7 @@ export const RoleAndPermission = () => {
 							</div>
 						</div>
 						<div class="col-xl-8" style={{ marginLeft: "30%", overflowY: "auto"}}>
-							<div class="card">
+							<div class="card shadow-sm rounded-card">
 								<div class="card-body">
 									<table className="table">
 										<thead>

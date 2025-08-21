@@ -3722,7 +3722,11 @@ textarea.form-control-lg {
 
 .card-link + .card-link {
   margin-left: var(--bs-card-spacer-x); }
-
+.rounded-card{
+  border-radius:13px;
+  border:none;
+  
+}
 .card-header {
   padding: var(--bs-card-cap-padding-y) var(--bs-card-cap-padding-x);
   margin-bottom: 0;

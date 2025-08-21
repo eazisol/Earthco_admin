@@ -64,11 +64,11 @@ export const EmailScreen = () => {
   };
 
   const validateClientId = (clientId) => {
-    if (!clientId) return "";
-    const clientIdRegex = /^[a-zA-Z0-9-_.]+$/;
-    if (!clientIdRegex.test(clientId)) {
-      return "Client ID must contain only letters, numbers, hyphens, underscores and periods";
-    }
+    if (!clientId) return "Client ID is required";
+    return "";
+  };
+  const validateClientSecret = (clientSecret) => {
+    if (!clientSecret) return "Client Secret is required";
     return "";
   };
 
@@ -117,7 +117,12 @@ export const EmailScreen = () => {
         EmailClientId: validateClientId(value)
       }));
     }
-
+    if (name === "EmailClientSecret") {
+      setErrors(prev => ({
+        ...prev,
+        EmailClientSecret: validateClientSecret(value)
+      }));
+    }
     if (name === "EmailPort") {
       setErrors(prev => ({
         ...prev,
@@ -221,7 +226,7 @@ export const EmailScreen = () => {
         <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-6">
-              <div className="card">
+              <div className="card shadow-sm rounded-card">
                 <div className="card-body">
                   <div className="row">
                     <h4 className="card-title mb-4 col-xl-8">Email Settings</h4>
@@ -266,8 +271,10 @@ export const EmailScreen = () => {
            <>
                  <div className="row">
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">Email Address<span className="text-danger">*</span></label>
                       <TextField
+                      label="Email Address"
+                      variant="outlined"
+                      required
                         name="Email"
                         value={formData.Email}
                         onChange={handleInputChange}
@@ -279,8 +286,10 @@ export const EmailScreen = () => {
                     </div>
 
                     <div className="col-xl-6 mb-3">
-                      <label className="form-label">Password<span className="text-danger">*</span></label>
                       <TextField
+                      label="Password"
+                      variant="outlined"
+                      required
                         name="EmailPassword"
                         type={showPassword ? "text" : "password"}
                         value={formData.EmailPassword}
@@ -304,9 +313,11 @@ export const EmailScreen = () => {
                       />
                     </div>
 
-                    <div className="col-xl-6 mb-3">
-                      <label className="form-label">Port<span className="text-danger">*</span></label>
+                    <div className="col-xl-6 mb-3 mt-3">
                       <TextField
+                      label="Port"
+                      variant="outlined"
+                      required
                         name="EmailPort"
                         value={formData.EmailPort}
                         onChange={handleInputChange}
@@ -322,29 +333,34 @@ export const EmailScreen = () => {
                       />
                     </div>
 
-                    <div className="col-xl-6 mb-3">
-                      <FormControl fullWidth>
-                        <label className="form-label">SSL/TLS<span className="text-danger">*</span></label>
-                        <Select
-                          name="EmailSSL"
-                          value={formData.EmailSSL ? "true" : "false"}
-                          onChange={(e) =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              EmailSSL: e.target.value === "true",
-                            }))
-                          }
-                          style={{ height: "2.5rem" }}
-                        >
-                          <MenuItem value="true">Yes</MenuItem>
-                          <MenuItem value="false">No</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </div>
-
-                    <div className="col-xl-6 mb-3">
-                      <label className="form-label">SMTP Host<span className="text-danger">*</span></label>
+                    <div className="col-xl-6 mb-3 mt-3">
+                     <FormControl fullWidth>
                       <TextField
+                    id="outlined-select-type"
+                    select
+                    label="SSL/TLS"
+                    variant="outlined"
+                    required
+                      name="EmailSSL"
+                    value={formData.EmailSSL ? "true" : "false"}
+                    onChange={handleInputChange}
+                    size="small"
+                    error={!!errors.EmailSSL}
+                    defaultValue={formData.EmailSSL ? "true" : "false"}
+                    // helperText="Please select your type"
+                    helperText={errors.EmailSSL}
+                  >
+                    <MenuItem value="true">Yes</MenuItem>
+                    <MenuItem value="false">No</MenuItem>
+                  </TextField>
+                  </FormControl>
+                      </div>
+
+                    <div className="col-xl-6 mb-3 mt-3">
+                      <TextField
+                      label="SMTP Host"
+                      variant="outlined"
+                      required
                         name="EmailHost"
                         value={formData.EmailHost}
                         onChange={handleInputChange}
@@ -352,45 +368,15 @@ export const EmailScreen = () => {
                         fullWidth
                         error={!!errors.EmailHost}
                         helperText={errors.EmailHost}
-                        placeholder="e.g., smtp.gmail.com"
+                        // placeholder="e.g., smtp.gmail.com"
                       />
                     </div>
-                    <div style={{ width: "100%" }}>
-                      <Alert
-                        severity="info"
-                        className="mb-4"
-                        style={{ width: "100%" }}
-                      >
-                        <AlertTitle>Info</AlertTitle>
-                        <strong>How to set up your email settings:</strong>
-                        <ol style={{ marginLeft: 16 }}>
-                          <li>
-                            If you are using OAuth (advanced), you need to provide <b>Client ID</b> and <b>Client Secret</b>.<br />
-                            <span style={{ fontSize: "0.95em" }}>
-                              To get your Client ID and Client Secret for Gmail:
-                              <ol style={{ marginLeft: 16 }}>
-                                <li>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
-                                <li>Create a new project or select an existing one.</li>
-                                <li>Enable the Gmail API for your project.</li>
-                                <li>Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
-                                <li>Configure the consent screen if prompted.</li>
-                                <li>Select "Web application" and set the authorized redirect URIs as needed.</li>
-                                <li>After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
-                              </ol>
-                            </span>
-                          </li>
-                          {/* <li>
-                            Choose the <b>Email Mode</b> (1 for SMTP, 2 for OAuth).
-                          </li> */}
-                          <li>
-                            Click <b>Save</b> to apply your settings.
-                          </li>
-                        </ol>
-                      </Alert>
-                    </div>
-                    <div className="col-xl-12 mb-3">
-                      <label className="form-label">Client ID</label>
+                
+                    <div className="col-xl-12 mb-3 mt-3">
                       <TextField
+                      label="Client ID"
+                      variant="outlined"
+                      required
                         name="EmailClientId"
                         value={formData.EmailClientId}
                         onChange={handleInputChange}
@@ -398,13 +384,15 @@ export const EmailScreen = () => {
                         fullWidth
                         error={!!errors.EmailClientId}
                         helperText={errors.EmailClientId}
-                        placeholder="Enter alphanumeric client ID"
+                        // placeholder="Enter alphanumeric client ID"
                       />
                     </div>
 
-                    <div className="col-xl-12 mb-3">
-                      <label className="form-label">Client Secret</label>
+                    <div className="col-xl-12 mb-3 mt-3">
                       <TextField
+                      label="Client Secret"
+                      variant="outlined"
+                      required
                         name="EmailClientSecret"
                         type={showClientSecret ? "text" : "password"}
                         value={formData.EmailClientSecret}
@@ -438,6 +426,45 @@ export const EmailScreen = () => {
                 {/* } */}
 
                 
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6">
+              <div className="card shadow-sm rounded-card">
+                <div className="card-body">
+                <div style={{ width: "100%" }}>
+                      <Alert
+                        severity="info"
+                        className="mb-4"
+                        style={{ width: "100%" }}
+                      >
+                        <AlertTitle>Info</AlertTitle>
+                        <strong>How to set up your email settings:</strong>
+                        <p>If you are using OAuth (advanced), you need to provide <b>Client ID</b> and <b>Client Secret</b>.</p>
+                        <ol style={{ marginTop: -10 }}>
+                          <li>
+                            <span style={{ fontSize: "0.95em" }}>
+                              To get your Client ID and Client Secret for Gmail:
+                              <ol style={{ marginLeft: 16 }}>
+                                <li>&#8226; Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
+                                <li>&#8226; Create a new project or select an existing one.</li>
+                                <li>&#8226; Enable the Gmail API for your project.</li>
+                                <li>&#8226; Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
+                                <li>&#8226; Configure the consent screen if prompted.</li>
+                                <li>&#8226; Select "Web application" and set the authorized redirect URIs as needed.</li>
+                                <li>&#8226; After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
+                              </ol>
+                            </span>
+                          </li>
+                          {/* <li>
+                            Choose the <b>Email Mode</b> (1 for SMTP, 2 for OAuth).
+                          </li> */}
+                          <li>
+                            Click <b>Update Settings</b> to apply your settings.
+                          </li>
+                        </ol>
+                      </Alert>
+                    </div>
                 </div>
               </div>
             </div>

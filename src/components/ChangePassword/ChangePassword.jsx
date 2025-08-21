@@ -125,14 +125,16 @@ const DemoPasswordFields = () => {
                 <div className="container-fluid">
           <div className="row table-space">
             <div className="col-xl-5">
-              <div className="card">
+              <div className="card shadow-sm rounded-card">
                 <div className="card-body p-0">
                   <div className="row">
                   <div className="container-fluid">
                     <div className="col-xl-12 mb-4">
-                        <label className="form-label">Current Password</label>
                         
                         <TextField
+                        variant="outlined"
+                        label="Current Password"
+                        required
                             className="form-control form-control-sm"
                             name="oldPassword"
                             value={formData.oldPassword}
@@ -156,9 +158,11 @@ const DemoPasswordFields = () => {
                         />
                     </div>
 
-                    <div className="col-xl-12 mb-4">
-                        <label className="form-label">New Password</label>
+                    <div className="col-xl-12 mb-4 mt-3">
                         <TextField
+                        variant="outlined"
+                        label="New Password"
+                        required
                             className="form-control form-control-sm"
                             name="Password"
                             value={formData.Password}
@@ -182,9 +186,11 @@ const DemoPasswordFields = () => {
                         />
                     </div>
              
-                    <div className="col-xl-12 mb-4">
-                        <label className="form-label">Confirm New Password</label>
+                    <div className="col-xl-12 mb-4 mt-3">
                         <TextField
+                        variant="outlined"
+                        label="Confirm New Password"
+                        required
                             className="form-control form-control-sm"
                             name="confirmPassword"
                             value={formData.confirmPassword}
