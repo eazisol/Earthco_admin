@@ -42,7 +42,7 @@ export const SyncData = () => {
 
 
       <div className="content-body">
-        <TitleBar icon={<SyncAltOutlinedIcon />} title="Sync Data" />
+        <TitleBar icon={<SyncAltOutlinedIcon />} title="Sync QuickBooks Data" />
         <div className="container-fluid">
           <div className="row table-space">
 

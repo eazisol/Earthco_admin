@@ -21,7 +21,10 @@ const Topbar = () => {
   }, [setLoginUser]);
 
   const handleLogout = () => {
-    logout();
+    // logout();
+    setLoginUser(null);
+    localStorage.removeItem('user');
+    navigate('/login');
     toast.success('Logged out successfully');
     setIsDropdownOpen(false);
   };
