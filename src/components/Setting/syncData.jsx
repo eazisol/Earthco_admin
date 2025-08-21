@@ -49,7 +49,7 @@ export const SyncData = () => {
             <div className="col-xl-12">
               <div className="card shadow-sm rounded-card">
                 <div className="card-body p-0">
-                  <div class="col-xl-4 mb-3 " style={{paddingLeft:"2%",paddingTop:"1%"}}>
+                  <div class="col-xl-3 mb-3 " style={{paddingLeft:"2%",paddingTop:"1%"}}>
                     <FormControl fullWidth>
                       <label className="form-label">
                       Select Company
