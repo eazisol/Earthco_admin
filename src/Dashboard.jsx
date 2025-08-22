@@ -75,7 +75,7 @@ function Dashboard() {
 
           </div> :
             <div className="row">
-              <WelcomeCard userName={`${loginUser?.Data?.FirstName} ${loginUser?.Data?.LastName}`} />
+              <WelcomeCard userName={`${loginUser?.Data?.FirstName}!`} />
               <DashbaordCardTenant total={stats?.TotalCompanies} onClick={() => navigate('/companies')} color="info" textColor="#fff" title="Total Companies" icon={<StoreOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} />
               <DashbaordCardTenant total={`$${stats?.TotalTransactionSum}`} onClick={() => navigate('/transaction')} color="dark" textColor="#fff" title="Total Transactions" icon={<PaidOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} />
             </div>}

@@ -482,25 +482,39 @@ export const WelcomeCard = ({ userName = "Mr. Dianne Russell" }) => {
         color: "#fff",
         display: "flex",
         alignItems: "center",
-        padding: "2rem 2.5rem",
+        padding: "1rem 2.5rem",
         boxShadow: "0 0.5rem 1.5rem rgba(44, 62, 80, 0.08)"
     };
 
     return (
-        <div className="col-xl-3">
-            <div className="card shadow-sm" style={gradientStyle}>
-                <div style={{ width: "100%" }}>
-                    <div className="mb-2" style={{ fontSize: "13px", fontWeight: 500, lineHeight: 1.2 }}>
-                        Good evening
-                    </div>
-                    <div className="mb-2" style={{ fontSize: "13px", fontWeight: 700 }}>
-                        {userName}
-                    </div>
-                    <div style={{ fontSize: "12px", color: "#fff" }}>
-                        Welcome to Earthco
-                    </div>
+        // <div className="col-xl-3">
+        //     <div className="card shadow-sm" style={gradientStyle}>
+        //         <div style={{ width: "100%" }}>
+        //             <div  style={{ fontSize: "18px", fontWeight: 700,}}>
+        //                 Good Evening,
+        //             </div>
+        //             <div  style={{ fontSize: "18px", fontWeight: 700 }}>
+        //                 {userName}
+        //             </div>
+        //             {/* <div style={{ fontSize: "13px", color: "#fff" }}>
+        //                 Welcome to Earthco
+        //             </div> */}
+        //         </div>
+        //     </div>
+        // </div>
+        <div className={`col-xl-3 col-lg-6 col-sm-6 `}>
+        <div className={`card`} style={{ borderRadius: "10px", background: "linear-gradient(90deg,rgb(150, 184, 92) 0%,rgb(125, 158, 75) 100%)", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", cursor: "pointer" }}>
+          <div className="card-body" style={{ padding: "20px" }}>
+            <div className="d-flex align-items-center justify-content-between">
+              <div>
+                <div className="d-flex align-items-center mb-1">
+                  <h5 style={{ fontSize: "18px", fontWeight: 700, color: '#fff' }}>Good Evening,</h5>
                 </div>
+                <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#fff' }}>{userName}</h4>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     );
 }

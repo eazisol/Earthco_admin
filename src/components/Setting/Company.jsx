@@ -12,8 +12,8 @@ import TitleBar from "../TitleBar";
 export const CompanyScreen = () => {
   const [settingData, setSettingData] = useState({});
   const [formData, setFormData] = useState({
-    PrimeryColor: "",
-    SecondaryColor: "",
+    PrimeryColor: "#000000",
+    SecondaryColor: "#000000",
     File: null
   });
   const [loading, setLoading] = useState(false);
@@ -131,7 +131,8 @@ export const CompanyScreen = () => {
           <strong>Info:</strong> <br />
           <span>
             <b>Primary Color</b> will affect the main buttons and text color throughout the application.<br />
-            <b>Secondary Color</b> will be applied to the sidebar and top bar background.
+            <b>Secondary Color</b>  will be applied as the hover color for buttons and interactive elements to ensure a consistent look and feel.
+            
           </span>
         </Alert>
       </div>
