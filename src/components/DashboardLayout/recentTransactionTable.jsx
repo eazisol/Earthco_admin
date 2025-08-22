@@ -39,7 +39,7 @@ export const RecentTransactionTable = ({ loading, stats }) => {
 
                       <td>
                         <div className="products">
-                          <h6>{transaction?.tblTenant?.PackageName}</h6>
+                          <h6>{transaction?.Name}</h6>
                         </div>
                       </td>
 

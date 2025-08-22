@@ -12,7 +12,7 @@ import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
 import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import { RecentTransactionTable } from "./components/DashboardLayout/recentTransactionTable";
-import { AccountInfo, AccountInfoChart, PackageInfo } from "./components/DashboardLayout/accountInfo";
+import { AccountInfo, AccountInfoChart, PackageInfo, WelcomeCard   } from "./components/DashboardLayout/accountInfo";
 import { RecentRegisteredTable } from "./components/DashboardLayout/recentTransactionTable";
 function Dashboard() {
   const { user, setLoginUser, loginUser } = useAppContext();
@@ -75,6 +75,7 @@ function Dashboard() {
 
           </div> :
             <div className="row">
+              <WelcomeCard userName={`${loginUser?.Data?.FirstName} ${loginUser?.Data?.LastName}`} />
               <DashbaordCardTenant total={stats?.TotalCompanies} onClick={() => navigate('/companies')} color="info" textColor="#fff" title="Total Companies" icon={<StoreOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} />
               <DashbaordCardTenant total={`$${stats?.TotalTransactionSum}`} onClick={() => navigate('/transaction')} color="dark" textColor="#fff" title="Total Transactions" icon={<PaidOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} />
             </div>}

@@ -472,3 +472,35 @@ export const AccountInfoChart = ({ loading, error, tenant, loginUser, password, 
         </div>
     )
 }
+
+export const WelcomeCard = ({ userName = "Mr. Dianne Russell" }) => {
+    // Theme colors for gradient
+    const gradientStyle = {
+        background: "linear-gradient(90deg,rgb(150, 184, 92) 0%,rgb(125, 158, 75) 100%)",
+        borderRadius: "13px",
+        border: "none",
+        color: "#fff",
+        display: "flex",
+        alignItems: "center",
+        padding: "2rem 2.5rem",
+        boxShadow: "0 0.5rem 1.5rem rgba(44, 62, 80, 0.08)"
+    };
+
+    return (
+        <div className="col-xl-3">
+            <div className="card shadow-sm" style={gradientStyle}>
+                <div style={{ width: "100%" }}>
+                    <div className="mb-2" style={{ fontSize: "13px", fontWeight: 500, lineHeight: 1.2 }}>
+                        Good evening
+                    </div>
+                    <div className="mb-2" style={{ fontSize: "13px", fontWeight: 700 }}>
+                        {userName}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "#fff" }}>
+                        Welcome to Earthco
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
