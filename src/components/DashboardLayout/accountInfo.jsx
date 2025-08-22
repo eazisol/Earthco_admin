@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { ConfirmationModal } from '../Reuseable/ConfirmationModal';
+import { toast } from 'react-toastify';
+import { cancelSubscription } from '../../APIS/transactions';
 const tenantTableStyles = {
     tableHeader: {
         // backgroundColor: '#f8f9fa',
@@ -58,6 +61,7 @@ const tenantTableStyles = {
 
 // Helper function to get status badge
 const getStatusBadge = (isActive) => {
+
     return (
         <span className={`badge ${isActive ? 'bg-success' : 'bg-danger'} text-white px-3 py-1`}>
             {isActive ? 'Active' : 'Inactive'}
@@ -93,13 +97,16 @@ const getExpiryStatus = (expiryDate) => {
 };
 
 export const AccountInfo = ({ loading, error, tenant, loginUser, password, setPassword, passwordElement, setPasswordElement }) => {
+ 
     return (
+        <>
+    
         <div className={` ${loginUser?.Data?.RoleId == 1 ? 'col-lg-12' : 'col-lg-6'}`}>
             <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
                 <div className="card-header border-0 pb-0 " >
                     <div className="d-flex align-items-center " style={{ width: "100%" }}>
                         <h4 className="heading mb-0 me-auto " >
-                          
+
                             Account Information
                         </h4>
                     </div>
@@ -210,21 +217,73 @@ export const AccountInfo = ({ loading, error, tenant, loginUser, password, setPa
                 </div>
             </div>
         </div>
+        </>
     )
 }
 
 
 export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPassword, passwordElement, setPasswordElement }) => {
+    const [modalConfig, setModalConfig] = useState({
+        title: "",
+        description: "",
+        onConfirm: () => { },
+        confirmText: "Confirm",
+        cancelText: "Cancel"
+      });
+      const [modalOpen, setModalOpen] = useState(false);
+      const [transactionId, setTransactionId] = useState(null);
+      
+      const handleCancelSubscription = async () => {
+        // if (transactionId?.Status == 'incomplete_expired') {
+        //   const response = await resumeSubscription(transactionId?.SubscriptionId, loginUser?.token?.data);
+        //   if (response) {
+        //     toast.success("Subscription resumed successfully");
+        //     setModalOpen(false);
+        //   }
+        // } else {
+          const response = await cancelSubscription(transactionId?.SubscriptionId, loginUser?.token?.data);
+          if (response) {
+            toast.success("Subscription cancelled successfully");
+            setModalOpen(false);
+          }
+        // }
+    
+      }
     return loginUser?.Data?.RoleId != 1 &&
+    <>
+    <ConfirmationModal
+    modalOpen={modalOpen}
+    setModalOpen={setModalOpen}
+    title={modalConfig.title}
+    description={modalConfig.description}
+    onConfirm={modalConfig.onConfirm}
+    confirmText={modalConfig.confirmText}
+    cancelText={modalConfig.cancelText}
+  />
         <div className="col-xl-6">
             <div className="card shadow-sm">
                 <div className="card-header border-0 pb-0 " >
                     <div className="d-flex align-items-center justify-content-between mb-3" style={{ width: "100%" }}>
                         <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
                             <h4 className="heading mb-0 me-auto " >
-                             
-                               Package Information
+
+                                Package Information
                             </h4>
+                            <button
+                                className={`btn btn-danger btn-sm`}
+                                onClick={() => {
+                                    setModalOpen(true);
+                                    setModalConfig({
+                                      title: "Cancel Subscription",
+                                      description: "Are you sure you want to cancel your subscription?",
+                                      onConfirm: () => {
+                                        handleCancelSubscription()
+                                      }
+                                    });
+                                  }}
+                            >
+                                Cancel Subscription
+                            </button>
                         </div>
                         {/* <button
                     className={`btn btn-danger btn-sm`}
@@ -255,8 +314,8 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {tenant.data.tblUserPackages.map((pkg, index) => (
-                                        <React.Fragment key={index}>
+                                    {tenant.data.tblUserPackages.map((pkg, index) => {
+                                        return (<React.Fragment key={index}>
                                             <tr>
                                                 <td style={tenantTableStyles.fieldName}>Package Name</td>
                                                 <td style={tenantTableStyles.valueCell}>
@@ -277,7 +336,7 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
                                             <tr>
                                                 <td style={tenantTableStyles.fieldName}>Package Price</td>
                                                 <td style={tenantTableStyles.valueCell}>
-                                                    <span className=" px-2 py-1 fw-semibold" >
+                                                    <span className=" px-2 py-1 fw-semibold">
                                                         ${pkg.Price || '0.00'}
                                                     </span>
                                                 </td>
@@ -292,8 +351,8 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
                                                 </td>
                                                 <td style={tenantTableStyles.statusCell}>-
                                                     {/* <span className={`badge ${getExpiryStatus(pkg.ExpiryDate).badge} text-white px-3 py-1 `}>
-                                                        {getExpiryStatus(pkg.ExpiryDate).status}
-                                                    </span> */}
+            {getExpiryStatus(pkg.ExpiryDate).status}
+        </span> */}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -302,8 +361,8 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
                                                 <td style={tenantTableStyles.statusCell}>-</td>
                                             </tr>
 
-                                        </React.Fragment>
-                                    ))}
+                                        </React.Fragment>);
+                                    })}
                                 </tbody>
 
                             </table>
@@ -320,6 +379,7 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
                 </div>
             </div>
         </div>
+        </>
 
 }
 export const AccountInfoChart = ({ loading, error, tenant, loginUser, password, setPassword, passwordElement, setPasswordElement }) => {
@@ -327,88 +387,88 @@ export const AccountInfoChart = ({ loading, error, tenant, loginUser, password, 
     const totalUsers = 5;
     const usedUsers = 3;
     const usedCompanies = 7;
-  
+
     const maxStorage = 100; // GB
     const usedStorage = 65; // GB
-  
+
     const options = {
-      chart: {
-        type: "bar",
-        height: 300
-      },
-      title: {
-        text: "Overall Usage Overview",
-        style: { fontSize: "14px" }
-      },
-      xAxis: {
-        categories: ["Users", "Companies", "Storage (GB)"],
-        title: { text: null }
-      },
-      yAxis: {
-        min: 0,
-        max: 100, // Force y-axis to end at 100
-        tickPositions: [0, 20, 40, 60, 80, 100], // Only these ticks will show
-        title: { text: "Usage", align: "high" },
-        labels: { overflow: "justify" }
-      },
-      tooltip: {
-        pointFormat: "<b>{series.name}</b>: {point.y}"
-      },
-      plotOptions: {
-        series: {
-          stacking: "normal",
-          dataLabels: {
-            enabled: false // remove numbers on bars
-          }
-        }
-      },
-      legend: {
-        reversed: false
-      },
-      series: [
-        {
-          name: "Used",
-          data: [usedUsers, usedCompanies, usedStorage],
-          color: "#7b9b43"
+        chart: {
+            type: "bar",
+            height: 300
         },
-        {
-          name: "Remaining",
-          data: [
-            totalUsers - usedUsers,
-            totalCompanies - usedCompanies,
-            maxStorage - usedStorage
-          ],
-          color: "#FFBF00"
-        }
-      ]
+        title: {
+            text: "Overall Usage Overview",
+            style: { fontSize: "14px" }
+        },
+        xAxis: {
+            categories: ["Users", "Companies", "Storage (GB)"],
+            title: { text: null }
+        },
+        yAxis: {
+            min: 0,
+            max: 100, // Force y-axis to end at 100
+            tickPositions: [0, 20, 40, 60, 80, 100], // Only these ticks will show
+            title: { text: "Usage", align: "high" },
+            labels: { overflow: "justify" }
+        },
+        tooltip: {
+            pointFormat: "<b>{series.name}</b>: {point.y}"
+        },
+        plotOptions: {
+            series: {
+                stacking: "normal",
+                dataLabels: {
+                    enabled: false // remove numbers on bars
+                }
+            }
+        },
+        legend: {
+            reversed: false
+        },
+        series: [
+            {
+                name: "Used",
+                data: [usedUsers, usedCompanies, usedStorage],
+                color: "#7b9b43"
+            },
+            {
+                name: "Remaining",
+                data: [
+                    totalUsers - usedUsers,
+                    totalCompanies - usedCompanies,
+                    maxStorage - usedStorage
+                ],
+                color: "#FFBF00"
+            }
+        ]
     };
-  
+
     return (
         <div className="col-xl-6">
-        <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
-          <div className="card-header border-0 pb-0 " >
-            <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
-              <h4 className="heading mb-0 me-auto " >
-                    Package Overview
-              </h4>
+            <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
+                <div className="card-header border-0 pb-0 " >
+                    <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
+                        <h4 className="heading mb-0 me-auto " >
+                            Package Overview
+                        </h4>
+                    </div>
+                </div>
+                <div className="card-body p-0">
+                    <div className="table-responsive  style-1">
+                        <tr>
+
+                            <td >
+
+
+                                <div style={{ width: "500px", margin: "auto" }}>
+                                    <HighchartsReact highcharts={Highcharts} options={options} />
+                                </div>
+
+                            </td>
+                        </tr>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div className="card-body p-0">
-            <div className="table-responsive  style-1">
-              <tr>
-
-                <td >
-
-
-                  <div style={{ width: "500px", margin: "auto" }}>
-                    <HighchartsReact highcharts={Highcharts} options={options} />
-                  </div>
-
-                </td>
-              </tr>
-            </div>
-          </div>
         </div>
-      </div>
     )
 }
