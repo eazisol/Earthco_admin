@@ -1,4 +1,391 @@
-import { BrowserRouter as Router, Routes, Route,  useLocation,  } from 'react-router-dom'
+// import { BrowserRouter as Router, Routes, Route,  useLocation,  } from 'react-router-dom'
+// import React, { useEffect, useState } from "react";
+// import Branding from './Branding'
+// import Register from './Register'
+// import Dashboard from './Dashboard'
+// import ProtectedRoute from './components/ProtectedRoute'
+// import RoleBasedRoute from './components/RoleBasedRoute'
+// import { LoginScreen } from './Login'
+// import { PackagesScreen } from './components/Packages'
+// import { TenantScreen } from './components/TenantUser'
+// import { TransactionsScreen } from './components/Transactions'
+// import { EmailScreen } from './components/Setting/emailSetting'
+// import { QBookScreen } from './components/Setting/QBook'
+// import { CompanyScreen } from './components/Setting/Company'
+// import { GoogleSetting } from './components/Setting/googleMap';
+// import { StripeSetting } from './components/Setting/StripeSetting';
+// import { CompaniesScreen } from './components/Comanies';
+// import ForgotPassword from './components/ForgotPassword'
+// import { TermAndPrivacy } from './components/Setting/termAndPrivacy'
+// import ProfilePage from './components/Profile/ProfilePage'
+// import ChangePassword from './components/ChangePassword'
+// import { AppProvider, useAppContext } from './context/AppContext'
+// import { useNavigate } from 'react-router-dom';
+// import { AddNewsletter, getRolePermission } from './APIS/auth';
+// import { toast } from 'react-toastify';
+// import { CustomButton } from './components/CustomButton'
+// import { ContactUs } from './components/Setting/ContactUs'
+// import { RoleAndPermission } from './components/Setting/roleandpersmission'
+// import { SyncData } from './components/Setting/syncData'
+// function Layout({ children }) {
+//   const location = useLocation();
+//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+//   const navigate = useNavigate();
+//   const [Email, setEmail] = useState("");
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [loginUser, setLoginUser] = useState(null);
+
+//   useEffect(() => {
+//     const selectHeader = document.querySelector("#header");
+//     if (selectHeader) {
+//       let headerOffset = selectHeader.offsetTop;
+//       let nextElement = selectHeader.nextElementSibling;
+//       const headerScrolled = () => {
+//         if (window.pageYOffset > headerOffset) {
+//           selectHeader.classList.add("header-scrolled");
+//         } else {
+//           selectHeader.classList.remove("header-scrolled");
+//         }
+//       };
+//       window.addEventListener("load", headerScrolled);
+//       window.addEventListener("scroll", headerScrolled);
+//     }
+
+//     // Highlight active nav link on scroll
+//     const handleScroll = () => {
+//       const sections = ["hero", "about", "services", "contact", "pricing"];
+//       const scrollPos = window.scrollY + 120; // 120px offset for header
+//       sections.forEach((id) => {
+//         const section = document.getElementById(id);
+//         const navLink = document.querySelector(`#navbar a[href="/#${id}"]`);
+//         if (section && navLink) {
+//           if (
+//             scrollPos >= section.offsetTop &&
+//             scrollPos < section.offsetTop + section.offsetHeight
+//           ) {
+//             navLink.classList.add("active");
+//           } else {
+//             navLink.classList.remove("active");
+//           }
+//         }
+//       });
+//     };
+//     window.addEventListener("scroll", handleScroll);
+//     window.addEventListener("load", handleScroll);
+//     setMobileMenuOpen(false); // Close mobile menu on route change
+//     return () => {
+//       window.removeEventListener("scroll", handleScroll);
+//       window.removeEventListener("load", handleScroll);
+//     };
+//   }, [location]);
+
+//   useEffect(() => {
+//     const loginUser = localStorage.getItem("user");
+//     setLoginUser(JSON.parse(loginUser));
+//   }, [location]);
+
+//   const hideNavFooter = location.pathname.startsWith("/dashboard");
+//   const showNavFooter =
+//     location.pathname === "/" ||
+//     location.pathname === "/register" ||
+//     location.pathname === "/login" ||
+//     location.pathname === "/forgot-password";
+
+//   // Add this line to detect register page
+//   const isRegisterPage = location.pathname === "/register";
+//   const isLoginPage = location.pathname === "/login";
+//   const isForgotPasswordPage = location.pathname === "/forgot-password";
+//   const handleMobileToggle = () => {
+//     setMobileMenuOpen((prev) => !prev);
+//   };
+
+//   const handleSubscribe = async (e) => {
+//     e.preventDefault();
+//     setIsLoading(true);
+//     if (!Email) {
+//       toast.error("Please enter your email");
+//       setIsLoading(false);
+//       return;
+//     }
+//     const data = await AddNewsletter({ Email });
+//     if (data?.Message) {
+//       toast.success(data?.Message);
+//       setEmail("");
+//     } else {
+//       toast.error(data?.Message);
+//       setEmail("");
+//     }
+//     setIsLoading(false);
+//   };
+//   return (
+//     <>
+//       {showNavFooter && (
+//         <header id="header" className='fixed-top register-navbar'>
+//           <div className="container d-flex align-items-center">
+//             <h1 className="logo me-auto">
+//               <a href="/#hero" className="logo me-auto">
+//                 <img src="/assets/img/favicon.svg" alt="" className="img-fluid" />
+//               </a>
+//             </h1>
+//             <nav id="navbar" className={`navbar${mobileMenuOpen ? ' navbar-mobile' : ''}`}>
+//               <ul>
+//                 <li><a className="nav-link scrollto active" href="/#hero">Home</a></li>
+//                 <li><a className="nav-link scrollto" href="/#about">About Us</a></li>
+//                 <li><a className="nav-link scrollto" href="/#services">Services</a></li>
+//                 <li><a className="nav-link scrollto" href="/#pricing">Pricing</a></li>
+//                 <li><a className="nav-link scrollto" href="/#contact">Contact Us</a></li>
+//                 <li>
+//                    <CustomButton text={loginUser?.Data ? "Dashboard" : "Login"} onClick={() => navigate(loginUser?.Data ? "/dashboard" : "/login")} className='custom-login-btn' />
+//                   </li>
+
+//               </ul>
+//               <i
+//                 className={`bi ${mobileMenuOpen ? 'bi-x' : 'bi-list'} mobile-nav-toggle`}
+//                 onClick={handleMobileToggle}
+//                 style={{ cursor: 'pointer' }}
+//               ></i>
+//             </nav>
+//           </div>
+//         </header>
+//       )}
+//       {children}
+//       {/* Add scroll-margin-top for all sections to fix heading hidden under navbar */}
+//       <style>{`
+//         section[id] { scroll-margin-top: 100px; }
+//       `}</style>
+//       {showNavFooter && (
+//         <footer id="footer">
+//           <div className="footer-newsletter ">
+//             <div className="container">
+//               <div className="row justify-content-center">
+//                 <div className="col-lg-6">
+//                   <h4>Join Our Newsletter</h4>
+//                   <p>
+//                     Join our newsletter to get landscaping tips, seasonal updates,
+//                     and exclusive offers from Earthco — straight to your inbox.
+//                   </p>
+//                   <form onSubmit={handleSubscribe}>
+//                     <input type="email" name="Email" placeholder='Enter Your Email' value={Email} onChange={(e)=>setEmail(e.target.value)} />
+//                     <input type="submit" value={isLoading ? "Subscribing..." : "Subscribe"} />
+//                   </form>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//           <div className="footer-top text-start">
+//             <div className="container">
+//               <div className="row">
+//                 <div className="col-lg-4 col-md-6 footer-contact">
+//                   <a href="" className="logo me-auto">
+//                     <img
+//                       src="/assets/img/favicon.png"
+//                       alt=""
+//                       className="footer-image"
+//                     />
+//                   </a>
+//                   <p>
+//                     HQ: 130 W. Central <br />
+//                     Ave Santa Ana CA 92705
+//                     <br />
+//                     United States <br />
+//                     <br />
+//                     <strong>Phone:</strong> 714-571-0455
+//                     <br />
+//                     <strong>Email:</strong> info@earthcompany.org
+//                     <br />
+//                   </p>
+//                 </div>
+//                 <div className="col-lg-4 col-md-6 footer-links">
+//                   <h4>Quick Navigation</h4>
+//                   <ul>
+//                     <li>
+//                       <i className="bx bx-chevron-right"></i> <a href="/#">Home</a>
+//                     </li>
+//                     <li>
+//                       <i className="bx bx-chevron-right"></i>{" "}
+//                       <a href="/#about">About us</a>
+//                     </li>
+//                     <li>
+//                       <i className="bx bx-chevron-right"></i>{" "}
+//                       <a href="/#services">Services</a>
+//                     </li>
+//                     <li>
+//                       <i className="bx bx-chevron-right"></i>{" "}
+//                       <a href="/#pricing">Pricing</a>
+//                     </li>
+//                     <li>
+//                       <i className="bx bx-chevron-right"></i>{" "}
+//                       <a href="/login">Login</a>
+//                     </li>
+//                   </ul>
+//                 </div>
+//                 <div className="col-lg-4 col-md-6 footer-links">
+//                   <h4>Our Social Networks</h4>
+//                   <p>
+//                     Connect with us on social media to stay updated on our latest projects, landscaping tips, and company news.
+//                   </p>
+//                   <div className="social-links mt-3">
+//                     <a
+//                       target="_blank"
+//                       href="https://www.facebook.com/EarthcoLandscape/"
+//                       className="facebook"
+//                     >
+//                       <i className="bx bxl-facebook"></i>
+//                     </a>
+//                     <a
+//                       target="_blank"
+//                       href="https://www.instagram.com/earthcolandscape/"
+//                       className="instagram"
+//                     >
+//                       <i className="bx bxl-instagram"></i>
+//                     </a>
+//                     <a
+//                       target="_blank"
+//                       href="https://www.linkedin.com/authwall?trk=gf&trkInfo=AQE314XMnHbXpAAAAWxDUWcAAEk2mbZXRmafEkca-v2ZmH6VTF0sxefgKAjuaGP1gYfi7TCBQctAK56pdjYPEshHFefCjfHRUH6jp0BhH9jGmz_zqJtNcFy3X9qgFkgx2vVPdRs=&originalReferer=https://www.earthcompany.org/&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Fearthco-commercial-landscape%3Ftrk%3Dnav_account_sub_nav_company_admin"
+//                       className="linkedin"
+//                     >
+//                       <i className="bx bxl-linkedin"></i>
+//                     </a>
+
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//           <div className="container footer-bottom clearfix">
+//             <div className="copyright">
+//               &copy; Copyright{" "}
+
+//                 <span>2025 EARTHCO COMMERCIAL LANDSCAPE</span>
+//               . All Rights Reserved
+//             </div>
+//             <div className="credits">
+//               Designed by{" "}
+//               <a target="_blank" href="https://eazisols.com/">
+//                 eazisols
+//               </a>
+//             </div>
+//           </div>
+//         </footer>
+//       )}
+//       {/* <div id="preloader"></div> */}
+//       <a
+//         href="#"
+//         className="back-to-top d-flex align-items-center justify-content-center"
+//       >
+//         <i className="bi bi-arrow-up-short"></i>
+//       </a>
+//     </>
+//   );
+// }
+
+
+// function App() {
+
+//   const { loginUser, rolePermission, setRolePermission, setLoginUser } = useAppContext();
+
+//   const getRolePermissionData = async (id) => {
+//     const response = await getRolePermission(id);
+//     setRolePermission(
+//       response?.data?.SelectedMenuAccess?.filter(
+//         (permission) => permission.isactive === true
+//       ) || []
+//     );
+//   };
+
+//   useEffect(() => {
+//     if (loginUser?.Data?.RoleId) {
+//       getRolePermissionData(loginUser?.Data?.RoleId);
+//     }
+//   }, [loginUser]);
+
+//   return (
+//     <AppProvider>
+//       <Router>
+//         <Layout>
+//           <Routes>
+//           <Route path="/" element={<Branding />} />
+//           <Route path="/register" element={<Register />} />
+//           <Route path="/login" element={<LoginScreen />} />
+//           <Route path="/dashboard" element={
+//             <ProtectedRoute>
+//               <Dashboard />
+//             </ProtectedRoute>
+//           } />
+//           <Route path="/package" element={
+//             <RoleBasedRoute>
+//               <PackagesScreen />
+//             </RoleBasedRoute>
+//           } />
+//           <Route path="/tenant" element={
+//             <RoleBasedRoute>
+//               <TenantScreen />
+//             </RoleBasedRoute>
+//           } />
+//           <Route path="/profile" element={
+//             <ProtectedRoute>
+//               <ProfilePage />
+//             </ProtectedRoute>
+//           } />
+//           <Route path="/change-password" element={
+//             <ProtectedRoute>
+//               <ChangePassword />
+//             </ProtectedRoute>
+//           } />
+//           <Route path="/transaction" element={
+//             <ProtectedRoute>
+//               <TransactionsScreen />
+//             </ProtectedRoute>
+//           } />
+//           <Route path="/email" element={
+//             <ProtectedRoute>
+//               <EmailScreen />
+//             </ProtectedRoute>
+//           } />
+//           <Route path="/qb" element={
+//             <ProtectedRoute>
+//               <QBookScreen />
+//             </ProtectedRoute>
+//           } />
+//           <Route path="/company" element={
+//             <ProtectedRoute>
+//               <CompanyScreen />
+//             </ProtectedRoute>
+//           } />
+//           <Route path="/google-map" element={
+//             <ProtectedRoute>
+//               <GoogleSetting />
+//             </ProtectedRoute>
+//           } />
+//           <Route path="/stripe" element={
+//             <RoleBasedRoute>
+//               <StripeSetting />
+//             </RoleBasedRoute>
+//           } />
+//               <Route path="/companies" element={
+//                 <ProtectedRoute>
+//                   <CompaniesScreen />
+//                 </ProtectedRoute>
+//               } />
+//               <Route path="/term-and-privacy" element={
+//                 <ProtectedRoute>
+//                   <TermAndPrivacy />
+//                 </ProtectedRoute>
+//               } />
+//           <Route path="/forgot-password" element={<ForgotPassword />} />
+//           <Route path="/contact-us" element={<ContactUs />} />
+//           <Route path="/role-and-permission" element={<RoleAndPermission />} />
+//           <Route path="/term-and-privacy" element={<TermAndPrivacy />} />
+//           <Route path="/sync-data" element={<SyncData />} />
+//         </Routes>
+//       </Layout>
+//     </Router>
+//     </AppProvider>
+//   )
+// }
+
+// export default App
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import React, { useEffect, useState } from "react";
 import Branding from './Branding'
 import Register from './Register'
@@ -20,13 +407,44 @@ import { TermAndPrivacy } from './components/Setting/termAndPrivacy'
 import ProfilePage from './components/Profile/ProfilePage'
 import ChangePassword from './components/ChangePassword'
 import { AppProvider, useAppContext } from './context/AppContext'
-import { useNavigate } from 'react-router-dom';
 import { AddNewsletter, getRolePermission } from './APIS/auth';
 import { toast } from 'react-toastify';
 import { CustomButton } from './components/CustomButton'
 import { ContactUs } from './components/Setting/ContactUs'
 import { RoleAndPermission } from './components/Setting/roleandpersmission'
 import { SyncData } from './components/Setting/syncData'
+import { PageNotFound } from './components/PageNotFound'
+
+/* ---------------------------------
+   COMPONENT MAP (ControllerName → Component)
+--------------------------------- */
+const componentMap = {
+  Dashboard,
+  PackagesScreen,
+  TenantScreen,
+  TransactionsScreen,
+  EmailScreen,
+  QBookScreen,
+  CompanyScreen,
+  GoogleSetting,
+  StripeSetting,
+  CompaniesScreen,
+  ContactUs,
+  RoleAndPermission,
+  SyncData,
+  Branding,
+  ProfilePage,
+  ChangePassword,
+  TermAndPrivacy,
+  ForgotPassword,
+  Register,
+  LoginScreen,
+  PageNotFound,
+  };
+
+/* ---------------------------------
+   LAYOUT COMPONENT
+--------------------------------- */
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -39,7 +457,6 @@ function Layout({ children }) {
     const selectHeader = document.querySelector("#header");
     if (selectHeader) {
       let headerOffset = selectHeader.offsetTop;
-      let nextElement = selectHeader.nextElementSibling;
       const headerScrolled = () => {
         if (window.pageYOffset > headerOffset) {
           selectHeader.classList.add("header-scrolled");
@@ -51,18 +468,15 @@ function Layout({ children }) {
       window.addEventListener("scroll", headerScrolled);
     }
 
-    // Highlight active nav link on scroll
+    // Highlight active nav link
     const handleScroll = () => {
       const sections = ["hero", "about", "services", "contact", "pricing"];
-      const scrollPos = window.scrollY + 120; // 120px offset for header
+      const scrollPos = window.scrollY + 120;
       sections.forEach((id) => {
         const section = document.getElementById(id);
         const navLink = document.querySelector(`#navbar a[href="/#${id}"]`);
         if (section && navLink) {
-          if (
-            scrollPos >= section.offsetTop &&
-            scrollPos < section.offsetTop + section.offsetHeight
-          ) {
+          if (scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight) {
             navLink.classList.add("active");
           } else {
             navLink.classList.remove("active");
@@ -72,7 +486,7 @@ function Layout({ children }) {
     };
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("load", handleScroll);
-    setMobileMenuOpen(false); // Close mobile menu on route change
+    setMobileMenuOpen(false);
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("load", handleScroll);
@@ -84,17 +498,12 @@ function Layout({ children }) {
     setLoginUser(JSON.parse(loginUser));
   }, [location]);
 
-  const hideNavFooter = location.pathname.startsWith("/dashboard");
   const showNavFooter =
     location.pathname === "/" ||
     location.pathname === "/register" ||
     location.pathname === "/login" ||
     location.pathname === "/forgot-password";
 
-  // Add this line to detect register page
-  const isRegisterPage = location.pathname === "/register";
-  const isLoginPage = location.pathname === "/login";
-  const isForgotPasswordPage = location.pathname === "/forgot-password";
   const handleMobileToggle = () => {
     setMobileMenuOpen((prev) => !prev);
   };
@@ -117,6 +526,7 @@ function Layout({ children }) {
     }
     setIsLoading(false);
   };
+
   return (
     <>
       {showNavFooter && (
@@ -135,9 +545,9 @@ function Layout({ children }) {
                 <li><a className="nav-link scrollto" href="/#pricing">Pricing</a></li>
                 <li><a className="nav-link scrollto" href="/#contact">Contact Us</a></li>
                 <li>
-                   <CustomButton text={loginUser?.Data ? "Dashboard" : "Login"} onClick={() => navigate(loginUser?.Data ? "/dashboard" : "/login")} className='custom-login-btn' />
-                  </li>
-                
+                  <CustomButton text={loginUser?.Data ? "Dashboard" : "Login"} onClick={() => navigate(loginUser?.Data ? "/dashboard" : "/login")} className='custom-login-btn' />
+                </li>
+
               </ul>
               <i
                 className={`bi ${mobileMenuOpen ? 'bi-x' : 'bi-list'} mobile-nav-toggle`}
@@ -165,7 +575,7 @@ function Layout({ children }) {
                     and exclusive offers from Earthco — straight to your inbox.
                   </p>
                   <form onSubmit={handleSubscribe}>
-                    <input type="email" name="Email" placeholder='Enter Your Email' value={Email} onChange={(e)=>setEmail(e.target.value)} />
+                    <input type="email" name="Email" placeholder='Enter Your Email' value={Email} onChange={(e) => setEmail(e.target.value)} />
                     <input type="submit" value={isLoading ? "Subscribing..." : "Subscribe"} />
                   </form>
                 </div>
@@ -246,7 +656,7 @@ function Layout({ children }) {
                     >
                       <i className="bx bxl-linkedin"></i>
                     </a>
-                   
+
                   </div>
                 </div>
               </div>
@@ -255,8 +665,8 @@ function Layout({ children }) {
           <div className="container footer-bottom clearfix">
             <div className="copyright">
               &copy; Copyright{" "}
-          
-                <span>2025 EARTHCO COMMERCIAL LANDSCAPE</span>
+
+              <span>2025 EARTHCO COMMERCIAL LANDSCAPE</span>
               . All Rights Reserved
             </div>
             <div className="credits">
@@ -279,109 +689,83 @@ function Layout({ children }) {
   );
 }
 
-
+/* ---------------------------------
+   APP COMPONENT (Dynamic Routes)
+--------------------------------- */
 function App() {
-  
-  const { loginUser, rolePermission, setRolePermission, setLoginUser } = useAppContext();
+  const { loginUser, rolePermission, setRolePermission, loading } = useAppContext();
 
   const getRolePermissionData = async (id) => {
     const response = await getRolePermission(id);
     setRolePermission(
-      response?.data?.SelectedMenuAccess?.filter(
-        (permission) => permission.isactive === true
-      ) || []
+      response?.data?.SelectedMenuAccess?.filter((permission) => permission.isactive === true) || []
     );
   };
+
+  if (loading) {
+    return <div style={{ textAlign: 'center', marginTop: '50px' }}>Loading...</div>;
+  }
 
   useEffect(() => {
     if (loginUser?.Data?.RoleId) {
       getRolePermissionData(loginUser?.Data?.RoleId);
     }
   }, [loginUser]);
-  
+
   return (
-    <AppProvider>
+    
       <Router>
         <Layout>
           <Routes>
-          <Route path="/" element={<Branding />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<LoginScreen />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
+            {/* Public routes */}
+            <Route path="/" element={<Branding />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/dashboard" element={<ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
-          } />
-          <Route path="/package" element={
-            <RoleBasedRoute>
-              <PackagesScreen />
-            </RoleBasedRoute>
-          } />
-          <Route path="/tenant" element={
-            <RoleBasedRoute>
-              <TenantScreen />
-            </RoleBasedRoute>
-          } />
-          <Route path="/profile" element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          } />
-          <Route path="/change-password" element={
-            <ProtectedRoute>
-              <ChangePassword />
-            </ProtectedRoute>
-          } />
-          <Route path="/transaction" element={
-            <ProtectedRoute>
-              <TransactionsScreen />
-            </ProtectedRoute>
-          } />
-          <Route path="/email" element={
-            <ProtectedRoute>
-              <EmailScreen />
-            </ProtectedRoute>
-          } />
-          <Route path="/qb" element={
-            <ProtectedRoute>
-              <QBookScreen />
-            </ProtectedRoute>
-          } />
-          <Route path="/company" element={
-            <ProtectedRoute>
-              <CompanyScreen />
-            </ProtectedRoute>
-          } />
-          <Route path="/google-map" element={
-            <ProtectedRoute>
-              <GoogleSetting />
-            </ProtectedRoute>
-          } />
-          <Route path="/stripe" element={
-            <RoleBasedRoute>
-              <StripeSetting />
-            </RoleBasedRoute>
-          } />
-              <Route path="/companies" element={
-                <ProtectedRoute>
-                  <CompaniesScreen />
-                </ProtectedRoute>
-              } />
-              <Route path="/term-and-privacy" element={
-                <ProtectedRoute>
-                  <TermAndPrivacy />
-                </ProtectedRoute>
-              } />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/role-and-permission" element={<RoleAndPermission />} />
-          <Route path="/term-and-privacy" element={<TermAndPrivacy />} />
-          <Route path="/sync-data" element={<SyncData />} />
-        </Routes>
-      </Layout>
-    </Router>
-    </AppProvider>
-  )
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            } />
+            <Route path="/change-password" element={
+              <ProtectedRoute>
+                <ChangePassword />
+              </ProtectedRoute>
+            } />
+            {/* Dynamic role-based routes */}
+            {rolePermission?.map((item) => {
+              const Component = componentMap[item.menu.ControllerName];
+              if (!Component) return null;
+
+              return (
+                <Route
+                  key={item.menu.MenuId}
+                  path={item.menu.ActionName}
+                  element={
+                    // <ProtectedRoute>
+                    //   <RoleBasedRoute
+                    //     allowedRoles={[item.roleid]}
+                    //     currentRole={loginUser?.Data?.RoleId}
+                    //   >
+                        <Component />
+                    //   </RoleBasedRoute>
+                    // </ProtectedRoute>
+                  }
+                />
+              );
+            })}
+
+            {/* Catch-all */}
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Layout>
+      </Router>
+ 
+  );
 }
 
-export default App
+export default App;

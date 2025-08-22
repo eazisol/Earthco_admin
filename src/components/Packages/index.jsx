@@ -38,16 +38,9 @@ export const PackagesScreen = () => {
     Description: "",
     isActive: true,
   });
-  const editor = useRef(null);
   const [content, setContent] = useState('');
 
-  const config = useMemo(() => ({
-    readonly: false,
-    placeholder: ''
-  }),
-    []
-  );
-
+  
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "Confirmation",
