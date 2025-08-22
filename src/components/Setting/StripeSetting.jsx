@@ -238,11 +238,11 @@ export const StripeSetting = () => {
                      
                               <span style={{ fontSize: "0.95em" }}>
                                 To get your Production credentials:
-                                <ol style={{ marginLeft: 5 }}>
+                                <ul style={{ marginLeft: 5, listStyle: "none" }}>
                                   <li>&#8226; Go to <a href="https://dashboard.stripe.com/apikeys" target="_blank" rel="noopener noreferrer">Stripe Dashboard</a>.</li>
                                   <li>&#8226; Sign in and navigate to "Developers" &gt; "API keys".</li>
                                   <li>&#8226; Use the "Standard keys" section to view your <b>Live Publishable Key</b> and <b>Live Secret Key</b>.</li>
-                                </ol>
+                                </ul>
                               </span>
                             </li>
                             </ol> 
@@ -252,11 +252,11 @@ export const StripeSetting = () => {
                              
                               <span style={{ fontSize: "0.95em" }}>
                                 To get your Sandbox credentials:
-                                  <ol style={{ marginLeft: 5 }}>
+                                  <ul style={{ marginLeft: 5, listStyle: "none" }}>
                                   <li>&#8226; Go to <a href="https://dashboard.stripe.com/test/apikeys" target="_blank" rel="noopener noreferrer">Stripe Dashboard (Test Mode)</a>.</li>
                                   <li>&#8226; Sign in and navigate to "Developers" &gt; "API keys".</li>
                                   <li>&#8226; Use the "Standard keys" section to view your <b>Test Publishable Key</b> and <b>Test Secret Key</b>.</li>
-                                </ol>
+                                </ul>
                               </span>
                             </li>
                             <li>

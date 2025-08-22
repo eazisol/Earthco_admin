@@ -445,7 +445,7 @@ export const EmailScreen = () => {
                           <li>
                             <span style={{ fontSize: "0.95em" }}>
                               To get your Client ID and Client Secret for Gmail:
-                              <ol style={{ marginLeft: 16 }}>
+                              <ul style={{ marginLeft: 16, listStyle: "none" }}>
                                 <li>&#8226; Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
                                 <li>&#8226; Create a new project or select an existing one.</li>
                                 <li>&#8226; Enable the Gmail API for your project.</li>
@@ -453,7 +453,7 @@ export const EmailScreen = () => {
                                 <li>&#8226; Configure the consent screen if prompted.</li>
                                 <li>&#8226; Select "Web application" and set the authorized redirect URIs as needed.</li>
                                 <li>&#8226; After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
-                              </ol>
+                              </ul>
                             </span>
                           </li>
                           {/* <li>

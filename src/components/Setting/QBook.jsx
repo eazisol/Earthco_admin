@@ -386,12 +386,12 @@ export const QBookScreen = () => {
                             
                                 <span style={{ fontSize: "0.95em" }}>
                                   To get your Production credentials:
-                                  <ol style={{ marginLeft: 5 }}>
+                                  <ul style={{ marginLeft: 5, listStyle: "none" }}>
                                     <li>&#8226;  Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
                                     <li>&#8226;  Sign in and create a new app or select an existing one.</li>
                                     <li>&#8226;  Navigate to "Keys & OAuth".</li>
                                     <li>&#8226;  Switch to "Production" tab to view your <b>Client ID</b> and <b>Client Secret</b>.</li>
-                                  </ol>
+                                  </ul>
                                 </span>
                               </li>
                               </ol>
@@ -401,12 +401,12 @@ export const QBookScreen = () => {
                                
                                 <span style={{ fontSize: "0.95em" }}>
                                   To get your Sandbox credentials:
-                                  <ol style={{ marginLeft: 5 }}>
+                                  <ul style={{ marginLeft: 5, listStyle: "none" }}>
                                     <li>&#8226;  Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
                                     <li>&#8226;  Sign in and create a new app or select an existing one.</li>
                                     <li>&#8226;  Navigate to "Keys & OAuth".</li>
                                     <li>&#8226;  Use the "Development" tab to view your <b>Client ID</b> and <b>Client Secret</b> for Sandbox.</li>
-                                  </ol>
+                                  </ul>
                                 </span>
                               </li>
                              
