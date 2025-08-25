@@ -281,7 +281,7 @@ const handleSubscription=async(plan)=>{
                   our clients' expectations with innovative solutions and
                   reliable service.
                 </p>
-                <CustomButtonRec text="Learn More" />
+                {/* <CustomButtonRec text="Learn More" /> */}
               </div>
             </div>
           </div>

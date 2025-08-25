@@ -23,7 +23,10 @@ createRoot(document.getElementById('root')).render(
     <AppProvider>
       <App />
       <ToastContainer 
-        position="bottom-right" 
+      style={{
+       marginTop:"63px"
+      }}
+        position="top-right" 
         autoClose={3000} 
         hideProgressBar={false} 
         newestOnTop={false} 

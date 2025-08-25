@@ -480,13 +480,13 @@ export const WelcomeCard = ({ userName = "" }) => {
    
 
     return (
-        <div className={`col-xl-6 col-lg-6 col-sm-6 `}>
+        <div className={`col-xl-5 col-lg-5 col-sm-5 `}>
         <div className={`card`} style={{  backgroundColor:"#fff",  cursor: "pointer",borderRadius:"5px" }}>
           <div className="card-body" style={{ padding: "20px" }}>
             <div className="d-flex align-items-center justify-content-between">
               <div>
                   <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#6c757d',lineHeight:"0.5" }}>{`${userName}`}</h4>
-                <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#6c757d' }}><span style={{color:"#7b9b43"}}>Earthco</span></h4>
+                <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#6c757d' }}> Welcome to <span style={{color:"#7b9b43"}}>Earthco</span></h4>
                 <h4 style={{ fontSize: "11px", color: '#6c757d' }} >Here's what's happening with your app.</h4>
               </div>
               <div><img src={wellcomeImage} alt="welcome" style={{ width: "80px", height: "80px",borderRadius:"50%" }} /></div>

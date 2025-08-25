@@ -3,18 +3,14 @@ import { toast } from "react-toastify";
 import { clearUserAndRedirect } from "../../utils/authUtils";
 const apiUrl = import.meta.env.VITE_API_URL;
 
-// Create axios interceptor to handle authentication errors
 axios.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Show error message
-      // toast.error('Session expired. Please login again.');
-      
-      // Clear user data and redirect
-      clearUserAndRedirect();
+      const currentPath = window.location.pathname;
+      if (currentPath !== "/login") {
+        clearUserAndRedirect();
+      }
     }
     return Promise.reject(error);
   }

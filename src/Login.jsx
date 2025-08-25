@@ -57,13 +57,44 @@ export const LoginScreen = ({ onClose }) => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async () => {
+  //   // e.preventDefault();
+  //   setApiError("");
+  //   if (!validateForm()) return;
+
+  //   setIsSubmitting(true);
+
+  //   try {
+  //     const response = await loginUser({
+  //       body: {
+  //         Email: formData.Email,
+  //         Password: formData.Password,
+  //       },
+  //     });
+  //     if (response?.status === 'success') {
+  //       toast.success(response?.response?.data);
+  //       navigate("/dashboard");
+  //     } else {
+  //       toast.error(response?.response?.data);
+  //     }
+  //     if (response?.error) {
+  //       throw new Error(response.message );
+  //     }
+  //     // if (onClose) onClose();
+  //     // navigate("/dashboard");
+
+  //   } catch (error) {
+  //     setApiError(error.message );
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+  const handleSubmit = async () => {
     setApiError("");
     if (!validateForm()) return;
-
+  
     setIsSubmitting(true);
-
+  
     try {
       const response = await loginUser({
         body: {
@@ -71,25 +102,24 @@ export const LoginScreen = ({ onClose }) => {
           Password: formData.Password,
         },
       });
-      if (response?.status === 'success') {
+  
+      if (response?.status === "success") {
         toast.success(response?.response?.data);
         navigate("/dashboard");
       } else {
         toast.error(response?.response?.data);
       }
+  
       if (response?.error) {
-        throw new Error(response.message );
+        throw new Error(response.message);
       }
-      // if (onClose) onClose();
-      // navigate("/dashboard");
-
     } catch (error) {
-      setApiError(error.message );
+      setApiError(error.message);
     } finally {
       setIsSubmitting(false);
     }
   };
-
+  
   return (
     <section className="contact" style={{ paddingBottom: "85px" }}>
       <div className="container" data-aos="fade-up">
@@ -108,7 +138,7 @@ export const LoginScreen = ({ onClose }) => {
           <div
             className="login-image-container"
             style={{
-              width: "50%",
+              width: "60%",
               overflow: "hidden",
             }}
           >
@@ -126,15 +156,10 @@ export const LoginScreen = ({ onClose }) => {
             />
           </div>
 
-
-
-
-
-          <form
-            onSubmit={handleSubmit}
+          <div
             className="php-email-form d-flex flex-column align-items-center justify-content-center"
             style={{
-              width: "50%",
+              width: "40%",
               padding: "40px",
               minHeight: "100%",
 
@@ -226,7 +251,8 @@ export const LoginScreen = ({ onClose }) => {
               </div>
 
               <button
-                type="submit"
+                type="button"
+                onClick={handleSubmit}
                 className="btn btn-success mb-2 "
                 style={{
                   background: "#7a9c3a",
@@ -241,7 +267,7 @@ export const LoginScreen = ({ onClose }) => {
                 {isSubmitting ? "Signing In..." : "Sign In"}
               </button>
             </div>
-          </form>
+          </div>
 
         </div>
       </div>

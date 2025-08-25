@@ -127,7 +127,7 @@ const ForgotPassword = () => {
           <div
             className="login-image-container"
             style={{
-              width: "50%",
+              width: "60%",
               overflow: "hidden",
             }}
           >
@@ -149,7 +149,7 @@ const ForgotPassword = () => {
             
 
               <form onSubmit={handleSubmit} className="php-email-form"  s style={{
-                  width: "50%",
+                  width: "40%",
                   padding: "40px",
                   minHeight: "100%",
                   display: "flex",
