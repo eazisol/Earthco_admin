@@ -25,6 +25,7 @@ import { addCompany, deleteCompany, getCompanyList } from "../../APIS/companies"
 import TitleBar from "../TitleBar";
 import { useAppContext } from "../../context/AppContext";
 import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined'
+import { DashbaordCardTenantCard } from "../Reuseable/dashbaordCard";
 
 // Center the modal on the screen
 const modalStyle = {
@@ -488,7 +489,8 @@ export const CompaniesScreen = () => {
       <div className="content-body">
         <TitleBar icon={<StoreOutlinedIcon />} title="Companies" />
         <div className="container-fluid">
-          <div className="row ">
+        <DashbaordCardTenantCard total={employeesData?.length} color="info" textColor="#fff" title="Total Companies" icon={<StoreOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} active={employeesData?.filter(item => item.isActive).length || 0} inactive={employeesData?.filter(item => !item.isActive).length || 0} />
+          <div className="row table-space mt-2">
             <div className="col-xl-12">
               <div className="card shadow-sm rounded-card">
                 <div className="card-body p-0">
@@ -588,12 +590,11 @@ export const CompaniesScreen = () => {
                               </td>
                               <td className="text-center">
                                 <span style={{
-                                  padding: "2px 10px", fontSize: "11px", borderRadius: "12px", backgroundColor: emp.isActive ? '#c2ded1' :
-                                    emp.isActive === false ? '#f8d7da' :
-                                      '#e2e3e5', color: emp.isActive ? '#03543f' :
-                                        emp.isActive === false ? '#842029' :
-                                          '#41464b'
-                                }}>
+                                    padding: "2px 10px", fontSize: "11px", borderRadius: "4px", backgroundColor: emp.isActive ? '#28A745' :
+                                      emp.isActive === false ? '#FFC107' :
+                                          '#000000', color:  '#fff' 
+                                          
+                                  }}>
                                   {emp.isActive ? "Active" : "Inactive"}
                                 </span>
                               </td>

@@ -12,14 +12,14 @@ import { useAppContext } from "../../context/AppContext";
 import TitleBar from "../TitleBar";
 import { useNavigate } from "react-router-dom";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import { DashbaordCardTenantCard } from "../Reuseable/dashbaordCard";
 
 export const TenantScreen = () => {
   const navigate = useNavigate();
   const [tenantData, setTenantData] = useState([]);
-  // Pagination and search state
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(11);
+  const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [packagesData, setPackagesdata] = useState({});
   const [role, setRole] = useState([]);
@@ -149,7 +149,8 @@ export const TenantScreen = () => {
       <div className="content-body">
           <TitleBar icon={<PersonOutlineOutlinedIcon />} title="Tenant List" />
         <div className="container-fluid">
-          <div className="row table-space">
+        <DashbaordCardTenantCard total={tenantData?.length} color="info" textColor="#fff" title="Total Tenant" icon={<PersonOutlineOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} active={tenantData?.filter(item => item.isActive).length || 0} inactive={tenantData?.filter(item => !item.isActive).length || 0} />
+          <div className="row table-space mt-2">
             <div className="col-xl-12">
               <div className="card shadow-sm rounded-card">
                 <div className="card-body p-0">

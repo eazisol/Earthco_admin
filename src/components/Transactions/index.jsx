@@ -9,6 +9,7 @@ import { useAppContext } from "../../context/AppContext";
 import Pagination from '@mui/material/Pagination';
 import TitleBar from "../TitleBar";
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined'
+import { DashbaordCardTenantCard } from "../Reuseable/dashbaordCard";
 export const TransactionsScreen = () => {
   const { loginUser } = useAppContext();
   const [selectedId, setSelectedId] = useState(0);
@@ -93,6 +94,8 @@ export const TransactionsScreen = () => {
       <div className="content-body">
         <TitleBar icon={<ReceiptLongOutlinedIcon />} title="Transactions" />
         <div className="container-fluid">
+        <DashbaordCardTenantCard total={transactionsData?.length} color="info" textColor="#fff" title="Total Transactions" icon={<ReceiptLongOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} Active="Paid" Inactive="Incomplete" active={transactionsData?.filter(item => item.Status === 'paid').length || 0} inactive={transactionsData?.filter(item => item.Status === 'incomplete').length || 0} />
+
           <div className="row table-space"  >
             <div className="col-xl-12">
               <div className="card shadow-sm rounded-card">

@@ -2,12 +2,10 @@ import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import {
   CircularProgress,
   FormControl,
-  InputLabel,
   MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
 import { toast } from "react-toastify";
 import {
@@ -20,7 +18,10 @@ import { ConfirmationModal } from "../Reuseable/ConfirmationModal";
 import Pagination from '@mui/material/Pagination';
 import TitleBar from "../TitleBar";
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import { DashbaordCardTenantCard } from "../Reuseable/dashbaordCard";
+import { useNavigate } from "react-router-dom";
 export const PackagesScreen = () => {
+  const navigate = useNavigate();
   const [packageOptions, setPackageOptions] = useState([]);
   const [errors, setErrors] = useState({});
   const [employeesData, setEmployeesData] = useState([]);
@@ -50,7 +51,6 @@ export const PackagesScreen = () => {
     cancelText: "Cancel",
   });
 
-  // Pagination and search state
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -62,7 +62,6 @@ export const PackagesScreen = () => {
     const numericFields = ["MaxStorageMB", "Price", 'maxCompanies', 'maxUser'];
 
     if (name === "name") {
-      // Validate name field
       const isValid = /^[a-zA-Z0-9\s_-]{0,50}$/.test(value);
       if (!isValid) return;
 
@@ -71,11 +70,9 @@ export const PackagesScreen = () => {
 
     if (numericFields.includes(name)) {
       if (name === "Price") {
-        // Allow numbers and commas for Price field
         const isValid = /^[\d.]*$/.test(value);
         if (!isValid) return;
       } else {
-        // Only allow numbers for other numeric fields
         const isValid = /^\d*$/.test(value);
         if (!isValid) return;
       }
@@ -122,7 +119,6 @@ export const PackagesScreen = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setLoader(false);
-      // toast.error("Please fill all required fields");
       return;
     }
 
@@ -164,7 +160,6 @@ export const PackagesScreen = () => {
     }
   };
 
-  // Update fetchPackages to use search, page, pageSize
   const fetchPackages = async (searchValue = search, pageValue = page, pageSizeValue = pageSize) => {
     setLoader(true);
     const response = await getPackages({
@@ -202,29 +197,8 @@ export const PackagesScreen = () => {
     fetchPackages(value, 1, pageSize);
   };
 
-  // Pagination handler
   const handlePageChange = (event, value) => {
     setPage(value);
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      const response = await deletePackage(id);
-      if (response?.status === 200) {
-        const offcanvasEl = document.getElementById("offcanvasExample");
-        const bsOffcanvas = Offcanvas.getInstance(offcanvasEl) || new Offcanvas(offcanvasEl);
-        bsOffcanvas.hide();
-        setSelectedId(0);
-        fetchPackages();
-        setOpenForm(false);
-        toast.success(response?.data?.Message);
-      } else {
-        toast.error(response?.data?.Message);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error(error?.response?.data?.Message);
-    }
   };
 
   return (
@@ -263,7 +237,7 @@ export const PackagesScreen = () => {
               setFormData({
                 name: "",
                 maxUser: "",
-                maxStorage: "",
+                MaxStorageMB: "",
                 monthlyPrice: "",
                 maxCompanies: "",
                 Description: "",
@@ -278,7 +252,6 @@ export const PackagesScreen = () => {
           <div class="container-fluid">
             <div class="row">
               <div className="col-xl-6 mb-3 ">
-                {/* <label className="form-label">Name<span class="text-danger">*</span></label> */}
                 <TextField
                   label="Name"
                   variant="outlined"
@@ -293,7 +266,6 @@ export const PackagesScreen = () => {
                 />
               </div>
               <div class="col-xl-6 mb-3">
-                {/* <label class="form-label">Max User<span class="text-danger">*</span></label> */}
 
                 <TextField
                   label="Max User"
@@ -310,9 +282,7 @@ export const PackagesScreen = () => {
               </div>
 
               <div class="col-xl-6 mb-3 mt-3">
-                {/* <label for="exampleFormControlInput10" class="form-label">
-                  Max Storage(MB)<span class="text-danger">*</span>
-                </label> */}
+             
                 <TextField
                   label="Max Storage(MB)"
                   variant="outlined"
@@ -328,9 +298,7 @@ export const PackagesScreen = () => {
               </div>
 
               <div class="col-xl-6 mb-3 mt-3">
-                {/* <label for="exampleFormControlInput10" class="form-label">
-                  Max Companies<span class="text-danger">*</span>
-                </label> */}
+              
                 <TextField
                   label="Max Companies"
                   variant="outlined"
@@ -346,33 +314,7 @@ export const PackagesScreen = () => {
               </div>
               <div class="col-xl-6 mb-3 mt-3">
                 <FormControl fullWidth>
-                  {/* <InputLabel
-                    id="package-type-label"
-                    className="form-label"
-                    style={{ marginTop: "-10px" }}
-                  >
-                    Type<span> *</span>
-                  </InputLabel> */}
-                  {/* <Select
-                    labelId="package-type-label"
-                    label="Type"
-                    variant="outlined"
-                    required
-                    name="PackageTypeId"
-                    value={formData.PackageTypeId}
-                    onChange={handleInputChange}
-                    style={{ height: "2.5rem" }}
-                    error={!!errors.PackageTypeId}
-                  >
-                    {packageOptions?.map((option) => (
-                      <MenuItem
-                        key={option.PackageTypeId}
-                        value={option.PackageTypeId}
-                      >
-                        {option.Package}
-                      </MenuItem>
-                    ))}
-                  </Select> */}
+                
                   <TextField
                     id="outlined-select-type"
                     select
@@ -385,7 +327,6 @@ export const PackagesScreen = () => {
                     size="small"
                     error={!!errors.PackageTypeId}
                     defaultValue={formData.PackageTypeId}
-                    // helperText="Please select your type"
                     helperText={errors.PackageTypeId}
                   >
                     {packageOptions?.map((option) => (
@@ -397,15 +338,11 @@ export const PackagesScreen = () => {
                       </MenuItem>
                     ))}
                   </TextField>
-                  {/* {errors.PackageTypeId && (
-                    <div className="text-danger small">{errors.PackageTypeId}</div>
-                  )} */}
+                 
                 </FormControl>
               </div>
               <div class="col-xl-6 mb-3 mt-3">
-                {/* <label for="exampleFormControlInput10" class="form-label">
-                  Monthly Price<span class="text-danger">*</span>
-                </label> */}
+                
                 <TextField
                   label="Monthly Price"
                   variant="outlined"
@@ -420,9 +357,7 @@ export const PackagesScreen = () => {
                 />
               </div>
               <div className="col-xl-12 mb-3 mt-3">
-                {/* <label className="form-label">
-                  Description<span className="text-danger">*</span>
-                </label> */}
+              
                 <TextField
                   label="Description"
                   variant="outlined"
@@ -496,8 +431,7 @@ export const PackagesScreen = () => {
                       setFormData({
                         name: "",
                         maxUser: "",
-                        maxStorage: "",
-                        monthlyPrice: "",
+                        MaxStorageMB: "",
                         maxCompanies: "",
                         Description: "",
                         isActive: true,
@@ -516,10 +450,12 @@ export const PackagesScreen = () => {
       </div>
       <div className="content-body">
         <TitleBar icon={<DescriptionOutlinedIcon />} title="Packages" />
+      
         <div className="container-fluid">
+          <DashbaordCardTenantCard total={employeesData?.Data?.length} color="info" textColor="#fff" title="Total Packages" icon={<DescriptionOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} active={employeesData?.Data?.filter(item => item.isActive).length || 0} inactive={employeesData?.Data?.filter(item => !item.isActive).length || 0} />
           <div className="row table-space" >
             <div className="col-xl-12">
-              <div className="card shadow-sm rounded-card" >
+              <div className="card shadow-sm rounded-card "  >
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects style-1">
                     <div className=" d-flex justify-content-between align-items-center mb-2 pt-3 ">
@@ -528,7 +464,6 @@ export const PackagesScreen = () => {
                         variant="outlined"
                         className="serch-package"
                         size="small"
-                        // placeholder="Search Packages..."
                         value={search}
                         onChange={handleSearchChange}
                         style={{ minWidth: 200 }}
@@ -590,7 +525,6 @@ export const PackagesScreen = () => {
                             <tr
                               key={index}
                               onClick={(e) => {
-                                // Prevent row click if delete icon is clicked
                                 if (e.target.closest('.delete-icon')) return;
                                 setSelectedId(emp.PackageId);
                                 setFormData({
@@ -628,7 +562,6 @@ export const PackagesScreen = () => {
                                 <span>{emp.MaxCompanies ?? 0}</span>
                               </td>
                               <td className="text-center">
-                                {/* <span>{emp.isActive ? "Active" : "Inactive"}</span> */}
                                 <span style={{
                                   padding: "2px 10px", fontSize: "11px", borderRadius: "4px", backgroundColor: emp.isActive ? '#28A745' :
                                     emp.isActive === false ? '#FFC107' :
@@ -637,33 +570,12 @@ export const PackagesScreen = () => {
                                   {emp.isActive ? "Active" : "Inactive"}
                                 </span>
                               </td>
-                              {/* <td className="text-center">
-                                <i
-                                  className="fa-solid fa-trash text-danger cursor-pointer delete-icon"
-                                  title="Delete Package"
-                                  style={{ cursor: 'pointer' }}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setModalOpen(true);
-                                    setModalConfig({
-                                      title: "Confirmation",
-                                      description: "Are you sure you want to delete this package?",
-                                      onConfirm: () => {
-                                        handleDelete(emp.PackageId);
-                                        setModalOpen(false);
-                                      },
-                                      confirmText: "Delete",
-                                      cancelText: "Cancel",
-                                    });
-                                  }}
-                                ></i>
-                              </td> */}
+                             
                             </tr>
                           ))
                         )}
                       </tbody>
                     </table>
-                    {/* Pagination Controls */}
                     <div className="d-flex justify-content-end align-items-center p-3">
                       <Pagination
                         count={Math.ceil(totalCount / pageSize)}

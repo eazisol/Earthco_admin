@@ -1,13 +1,15 @@
 import { CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export const RecentTransactionTable = ({ loading, stats }) => {
+  const navigate = useNavigate();
   return (
     <div className="col-xl-6">
       <div className="card shadow-sm" style={{ borderRadius: "5px", border: "none" }}>
         <div className="card-header border-0 pb-1 pt-3 " style={{backgroundColor: "#7b9b43",borderTopLeftRadius:"5px",borderTopRightRadius:"5px"}}>
           <div className="d-flex align-items-center mb-2" style={{ width: "100%" }}>
             <h4 className="heading mb-0 me-auto text-white" >
-              Latest Transactions
+           Transactions
             </h4>
           </div>
 
@@ -22,6 +24,7 @@ export const RecentTransactionTable = ({ loading, stats }) => {
                   <th style={{padding: "5px",fontSize:"14px"}}>Amount</th>
                   <th style={{padding: "5px",fontSize:"14px"}}>Paid Date</th>
                   <th style={{padding: "5px",fontSize:"14px"}}>Status</th>
+                  <th style={{padding: "5px",fontSize:"14px"}}>View</th>
                 </tr>
               </thead>
               <tbody>
@@ -60,7 +63,18 @@ export const RecentTransactionTable = ({ loading, stats }) => {
                         </span>
 
                       </td>
-
+                      <td className="text-center">
+                          <a
+                            href="/transaction"
+                            style={{ cursor: "pointer", color: "#7b9b43", textDecoration: "underline" }}
+                            onClick={e => {
+                              e.preventDefault();
+                              navigate('/transaction');
+                            }}
+                          >
+                            View
+                          </a>
+                        </td>
 
 
                     </tr>);
@@ -77,13 +91,14 @@ export const RecentTransactionTable = ({ loading, stats }) => {
 }
 
 export const RecentRegisteredTable = ({ loading, stats }) => {
+  const navigate = useNavigate();
   return (
     <div className="col-xl-6">
       <div className="card shadow-sm" style={{ borderRadius: "5px", border: "none" }}>
         <div className="card-header border-0 pb-1 pt-3" style={{backgroundColor: "#7b9b43",borderTopLeftRadius:"5px",borderTopRightRadius:"5px"}}>
           <div className="d-flex align-items-center mb-2" style={{ width: "100%" }}>
             <h4 className="heading mb-0 me-auto text-white" >
-              Latest Registered
+             Registered
             </h4>
           </div>
 
@@ -97,9 +112,8 @@ export const RecentRegisteredTable = ({ loading, stats }) => {
                   <th style={{padding: "5px",fontSize:"14px"}}>Name</th>
                   <th style={{padding: "5px",fontSize:"14px"}}>Username</th>
                   <th style={{padding: "5px",fontSize:"14px"  }}>Phone No</th>
-                  {/* <th className="text-center">Role</th> */}
                   <th style={{padding: "5px",fontSize:"14px"}}>Status</th>
-                  {/* <th className="text-center">Action</th> */}
+                  <th style={{padding: "5px",fontSize:"14px"}}>View</th>
                 </tr>
               </thead>
               <tbody>
@@ -126,9 +140,7 @@ export const RecentRegisteredTable = ({ loading, stats }) => {
                         <td className="text-center" >
                           <span>{emp.PhoneNo}</span>
                         </td>
-                        {/* <td className="text-center">
-                              <h6>{emp.Role}</h6>
-                            </td> */}
+                       
 
                         <td >
                           <span style={{
@@ -141,7 +153,18 @@ export const RecentRegisteredTable = ({ loading, stats }) => {
 
 
                         </td>
-
+                        <td className="text-center">
+                          <a
+                            href="/tenant"
+                            style={{ cursor: "pointer", color: "#7b9b43", textDecoration: "underline" }}
+                            onClick={e => {
+                              e.preventDefault();
+                              navigate('/tenant');
+                            }}
+                          >
+                            View
+                          </a>
+                        </td>
                       </tr>
                     )
                   })}

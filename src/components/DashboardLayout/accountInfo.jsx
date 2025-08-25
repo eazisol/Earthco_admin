@@ -117,7 +117,7 @@ export const AccountInfo = ({ loading, error, tenant, loginUser, password, setPa
                 <div className="card-body p-0">
                     {loading ? (
                         <div className="text-center ">
-                            <div className="spinner-border text-primary" role="status">
+                            <div className="spinner-border text-primary mt-2" role="status">
                                 <span className="visually-hidden">Loading...</span>
                             </div>
                             <p className="mt-2 text-muted">Loading tenant information...</p>
@@ -191,12 +191,12 @@ export const AccountInfo = ({ loading, error, tenant, loginUser, password, setPa
                                             <button
                                                 onClick={() => {
                                                     const passwordElement = document.getElementById('password');
-                                                    if (passwordElement.textContent === '•••') {
+                                                    if (passwordElement.textContent === '***') {
                                                         setPassword('123');
                                                         setPasswordElement(true);
                                                     } else {
-                                                        passwordElement.textContent = '•••';
-                                                        setPassword('•••');
+                                                        passwordElement.textContent = '***';
+                                                        setPassword('***');
                                                         setPasswordElement(false);
                                                     }
                                                 }}
