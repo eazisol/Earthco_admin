@@ -172,7 +172,7 @@ export const LoginScreen = ({ onClose }) => {
                   }}
                 />
                 {errors.Email && (
-                  <div className="invalid-feedback text-center">{errors.Email}</div>
+                  <div className="invalid-feedback">{errors.Email}</div>
                 )}
               </div>
               <div className=" position-relative w-100">
@@ -207,7 +207,7 @@ export const LoginScreen = ({ onClose }) => {
                   </InputAdornment>
                 </div>
                 {errors.Password && (
-                  <div className="invalid-feedback text-center">{errors.Password}</div>
+                  <div className="invalid-feedback ">{errors.Password}</div>
                 )}
               </div>
               <div className="d-flex justify-content-between align-items-center mb-4 w-100">

@@ -476,7 +476,7 @@ export const AccountInfoChart = ({ loading, error, tenant, loginUser, password, 
     )
 }
 
-export const WelcomeCard = ({ userName = "Mr. Dianne Russell" }) => {
+export const WelcomeCard = ({ userName = "" }) => {
    
 
     return (
@@ -485,8 +485,8 @@ export const WelcomeCard = ({ userName = "Mr. Dianne Russell" }) => {
           <div className="card-body" style={{ padding: "20px" }}>
             <div className="d-flex align-items-center justify-content-between">
               <div>
-                  <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#6c757d',lineHeight:"0.5" }}>{`Good Evening, ${userName}`}</h4>
-                <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#6c757d' }}>Welcome to <span style={{color:"#7b9b43"}}>Earthco</span></h4>
+                  <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#6c757d',lineHeight:"0.5" }}>{`${userName}`}</h4>
+                <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#6c757d' }}><span style={{color:"#7b9b43"}}>Earthco</span></h4>
                 <h4 style={{ fontSize: "11px", color: '#6c757d' }} >Here's what's happening with your app.</h4>
               </div>
               <div><img src={wellcomeImage} alt="welcome" style={{ width: "80px", height: "80px",borderRadius:"50%" }} /></div>
