@@ -5,15 +5,18 @@ import HighchartsReact from 'highcharts-react-official';
 import { ConfirmationModal } from '../Reuseable/ConfirmationModal';
 import { toast } from 'react-toastify';
 import { cancelSubscription } from '../../APIS/transactions';
+import wellcomeImage from '../../assets/img/wellcomeImage.png'
 const tenantTableStyles = {
     tableHeader: {
         // backgroundColor: '#f8f9fa',
         borderBottom: '2px solid #dee2e6',
         fontWeight: '600',
         color: '#495057',
-        textTransform: 'uppercase',
-        fontSize: '0.875rem',
+        // textTransform: 'uppercase',
+        fontSize: '14px',
         letterSpacing: '0.5px',
+paddingTop: '5px',
+paddingBottom: '5px',
 
     },
     sectionHeader: {
@@ -26,8 +29,8 @@ const tenantTableStyles = {
     fieldName: {
         fontWeight: '600',
         color: '#495057',
-        backgroundColor: '#f8f9fa',
-        borderRight: '1px solid #dee2e6'
+        // backgroundColor: '#f8f9fa',
+        // borderRight: '1px solid #dee2e6'
     },
     statusCell: {
         textAlign: 'center',
@@ -102,10 +105,10 @@ export const AccountInfo = ({ loading, error, tenant, loginUser, password, setPa
         <>
     
         <div className={` ${loginUser?.Data?.RoleId == 1 ? 'col-lg-12' : 'col-lg-6'}`}>
-            <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
-                <div className="card-header border-0 pb-0 " >
+                <div className="card shadow-sm" style={{  border: "none",borderRadius:"5px" }}>
+                <div className="card-header border-0 pb-1 pt-3 text-white" style={{backgroundColor: "#7b9b43",borderTopLeftRadius:"5px",borderTopRightRadius:"5px"}}>
                     <div className="d-flex align-items-center " style={{ width: "100%" }}>
-                        <h4 className="heading mb-0 me-auto " >
+                        <h4 className="heading  me-auto text-white" >
 
                             Account Information
                         </h4>
@@ -113,25 +116,25 @@ export const AccountInfo = ({ loading, error, tenant, loginUser, password, setPa
                 </div>
                 <div className="card-body p-0">
                     {loading ? (
-                        <div className="text-center py-5">
+                        <div className="text-center ">
                             <div className="spinner-border text-primary" role="status">
                                 <span className="visually-hidden">Loading...</span>
                             </div>
                             <p className="mt-2 text-muted">Loading tenant information...</p>
                         </div>
                     ) : error ? (
-                        <div className="text-center py-5">
+                        <div className="text-center ">
                             <div className="alert alert-danger mx-3" role="alert">
                                 <i className="fas fa-exclamation-triangle me-2"></i>
                                 {error}
                             </div>
                         </div>
                     ) : tenant?.data ? (
-                        <div className="table-responsive">
+                        <div className="table-responsive p-0">
                             <table className="table mb-0" >
-                                <thead className="bg-light">
+                                <thead  style={{backgroundColor: "#D3DEE6"}}>
                                     <tr>
-                                        <th style={{ ...tenantTableStyles.tableHeader, width: '200px' }}>Field</th>
+                                        <th style={{ ...tenantTableStyles.tableHeader, width: '200px' }}>Fields</th>
                                         <th style={tenantTableStyles.tableHeader}>Credentials</th>
                                         <th style={{ ...tenantTableStyles.tableHeader, width: '150px', textAlign: 'center' }}>Status</th>
                                     </tr>
@@ -261,11 +264,11 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
     cancelText={modalConfig.cancelText}
   />
         <div className="col-xl-6">
-            <div className="card shadow-sm">
-                <div className="card-header border-0 pb-0 " >
-                    <div className="d-flex align-items-center justify-content-between mb-3" style={{ width: "100%" }}>
-                        <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
-                            <h4 className="heading mb-0 me-auto " >
+            <div className="card shadow-sm" style={{borderRadius:"5px"}}>
+                <div className="card-header border-0 pt-2 pb-1" style={{backgroundColor:"#7b9b43",borderTopLeftRadius:"5px",borderTopRightRadius:"5px"}}>
+                    <div className="d-flex align-items-center justify-content-between pb-1" style={{ width: "100%" }}>
+                        <div className="d-flex align-items-center" style={{ width: "100%"}}>
+                            <h4 className="heading mb-0 me-auto text-white" >
 
                                 Package Information
                             </h4>
@@ -304,11 +307,11 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
                 </div>
                 <div className="card-body p-0">
                     {tenant?.data?.tblUserPackages && tenant.data.tblUserPackages.length > 0 ? (
-                        <div className="table-responsive">
+                        <div className="table-responsive p-0">
                             <table className="table mb-0" style={{ borderCollapse: 'separate', borderSpacing: 0 }}>
-                                <thead className="bg-light">
+                                <thead  style={{backgroundColor: "#D3DEE6"}}>
                                     <tr>
-                                        <th style={{ ...tenantTableStyles.tableHeader, width: '200px' }}>Field</th>
+                                        <th style={{ ...tenantTableStyles.tableHeader, width: '200px' }}>Fields</th>
                                         <th style={tenantTableStyles.tableHeader}>Value</th>
                                         <th style={{ ...tenantTableStyles.tableHeader, width: '150px', textAlign: 'center' }}>Status</th>
                                     </tr>
@@ -317,7 +320,7 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
                                     {tenant.data.tblUserPackages.map((pkg, index) => {
                                         return (<React.Fragment key={index}>
                                             <tr>
-                                                <td style={tenantTableStyles.fieldName}>Package Name</td>
+                                                <td style={tenantTableStyles.fieldName} >Package Name</td>
                                                 <td style={tenantTableStyles.valueCell}>
                                                     <span className="badge bg-info text-white px-3 py-2 " style={tenantTableStyles.badge}>
                                                         <i className="fas fa-crown me-1"></i>
@@ -445,10 +448,10 @@ export const AccountInfoChart = ({ loading, error, tenant, loginUser, password, 
 
     return (
         <div className="col-xl-6">
-            <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
-                <div className="card-header border-0 pb-0 " >
-                    <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
-                        <h4 className="heading mb-0 me-auto " >
+            <div className="card shadow-sm" style={{  border: "none",borderRadius:"5px" }}>
+                <div className="card-header border-0 pt-3 pb-1" style={{backgroundColor:"#7b9b43",borderTopLeftRadius:"5px",borderTopRightRadius:"5px"}}>
+                    <div className="d-flex align-items-center mb-1" style={{ width: "100%" }}>
+                        <h4 className="heading mb-0 me-auto text-white" >
                             Package Overview
                         </h4>
                     </div>
@@ -474,44 +477,19 @@ export const AccountInfoChart = ({ loading, error, tenant, loginUser, password, 
 }
 
 export const WelcomeCard = ({ userName = "Mr. Dianne Russell" }) => {
-    // Theme colors for gradient
-    const gradientStyle = {
-        background: "linear-gradient(90deg,rgb(150, 184, 92) 0%,rgb(125, 158, 75) 100%)",
-        borderRadius: "13px",
-        border: "none",
-        color: "#fff",
-        display: "flex",
-        alignItems: "center",
-        padding: "1rem 2.5rem",
-        boxShadow: "0 0.5rem 1.5rem rgba(44, 62, 80, 0.08)"
-    };
+   
 
     return (
-        // <div className="col-xl-3">
-        //     <div className="card shadow-sm" style={gradientStyle}>
-        //         <div style={{ width: "100%" }}>
-        //             <div  style={{ fontSize: "18px", fontWeight: 700,}}>
-        //                 Good Evening,
-        //             </div>
-        //             <div  style={{ fontSize: "18px", fontWeight: 700 }}>
-        //                 {userName}
-        //             </div>
-        //             {/* <div style={{ fontSize: "13px", color: "#fff" }}>
-        //                 Welcome to Earthco
-        //             </div> */}
-        //         </div>
-        //     </div>
-        // </div>
-        <div className={`col-xl-3 col-lg-6 col-sm-6 `}>
-        <div className={`card`} style={{ borderRadius: "10px", background: "linear-gradient(90deg,rgb(150, 184, 92) 0%,rgb(125, 158, 75) 100%)", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", cursor: "pointer" }}>
+        <div className={`col-xl-6 col-lg-6 col-sm-6 `}>
+        <div className={`card`} style={{  backgroundColor:"#fff",  cursor: "pointer",borderRadius:"5px" }}>
           <div className="card-body" style={{ padding: "20px" }}>
             <div className="d-flex align-items-center justify-content-between">
               <div>
-                <div className="d-flex align-items-center mb-1">
-                  <h5 style={{ fontSize: "18px", fontWeight: 700, color: '#fff' }}>Good Evening,</h5>
-                </div>
-                <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#fff' }}>{userName}</h4>
+                  <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#6c757d',lineHeight:"0.5" }}>{`Good Evening, ${userName}`}</h4>
+                <h4 style={{ fontSize: "18px", fontWeight: 700, color: '#6c757d' }}>Welcome to <span style={{color:"#7b9b43"}}>Earthco</span></h4>
+                <h4 style={{ fontSize: "11px", color: '#6c757d' }} >Here's what's happening with your app.</h4>
               </div>
+              <div><img src={wellcomeImage} alt="welcome" style={{ width: "80px", height: "80px",borderRadius:"50%" }} /></div>
             </div>
           </div>
         </div>

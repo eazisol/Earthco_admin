@@ -173,7 +173,19 @@ const ProfilePage = () => {
   //     </DashboardLayout>
   //   );
   // }
-
+if(loading){
+  return (
+    <DashboardLayout>
+      <div className="content-body">
+        <div className="container-fluid">
+          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "400px" }}>
+            <CircularProgress />
+          </div>
+        </div>
+      </div>
+    </DashboardLayout>
+  )
+}
   return (
     <DashboardLayout>
       <ConfirmationModal
@@ -192,7 +204,7 @@ const ProfilePage = () => {
 
           <div className="card table-space">
             <div className="card-body">
-              <h4 className="card-title mb-4">Profile Settings</h4>
+              <h4 className="card-title mb-4">User Details</h4>
               {/* {loading ? (
                     <div className="text-center">
                       <div className="spinner-border" role="status">
@@ -428,7 +440,7 @@ const ProfilePage = () => {
               {/* )} */}
             </div>
           </div>
-          {loginUser?.Data?.RoleId != 1 && <div className="card table-space shadow-sm rounded-card">
+         {/* <div className="card table-space shadow-sm rounded-card">
             <div className="card-body">
               <h4 className="card-title mb-4 " style={{ marginLeft: "8px" }}>Active Package</h4>
               <div className="table-responsive">
@@ -474,7 +486,7 @@ const ProfilePage = () => {
                 </table>
               </div>
             </div>
-          </div>}
+          </div> */}
 
         </div>
       </div>

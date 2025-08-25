@@ -3,25 +3,25 @@ import { CircularProgress } from "@mui/material";
 export const RecentTransactionTable = ({ loading, stats }) => {
   return (
     <div className="col-xl-6">
-      <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
-        <div className="card-header border-0 pb-0 " >
-          <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
-            <h4 className="heading mb-0 me-auto " >
+      <div className="card shadow-sm" style={{ borderRadius: "5px", border: "none" }}>
+        <div className="card-header border-0 pb-1 pt-3 " style={{backgroundColor: "#7b9b43",borderTopLeftRadius:"5px",borderTopRightRadius:"5px"}}>
+          <div className="d-flex align-items-center mb-2" style={{ width: "100%" }}>
+            <h4 className="heading mb-0 me-auto text-white" >
               Latest Transactions
             </h4>
           </div>
 
         </div>
         <div className="card-body p-0" >
-          <div className="table-responsive  style-1" style={{ padding: "0px 15px" }}>
+          <div className="table-responsive  style-1 p-0" >
             <table id="employees-tblwrapper" className="table">
 
-              <thead>
+              <thead  style={{backgroundColor: "#D3DEE6"}}>
                 <tr>
-                  <th>Package Name</th>
-                  <th>Amount</th>
-                  <th>Paid Date</th>
-                  <th>Status</th>
+                  <th style={{padding: "5px",fontSize:"14px"}}>Package Name</th>
+                  <th style={{padding: "5px",fontSize:"14px"}}>Amount</th>
+                  <th style={{padding: "5px",fontSize:"14px"}}>Paid Date</th>
+                  <th style={{padding: "5px",fontSize:"14px"}}>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -49,15 +49,12 @@ export const RecentTransactionTable = ({ loading, stats }) => {
 
                       <td>
                         <span>{transaction.PaidDate ? new Date(transaction.PaidDate).toLocaleDateString() : '-'}</span>
-                      </td> <td className="text-center">
+                      </td> <td >
                         <span style={{
-                          padding: "2px 10px", fontSize: "11px", borderRadius: "12px", backgroundColor: transaction.Status === 'paid' ? '#c2ded1' :
-                            transaction.Status === 'Pending' ? '#fff3cd' :
-                              transaction.Status === 'incomplete' ? '#f8d7da' :
-                                '#e2e3e5', color: transaction.Status === 'paid' ? '#03543f' :
-                                  transaction.Status === 'Pending' ? '#664d03' :
-                                    transaction.Status === 'incomplete' ? '#842029' :
-                                      '#41464b'
+                          padding: "2px 10px", fontSize: "11px", borderRadius: "4px", backgroundColor: transaction.Status === 'paid' ? '#28A745' :
+                            transaction.Status === 'Pending' ? '#FFC107' :
+                              transaction.Status === 'incomplete' ? '#000000' :
+                                '#FF7676', color:'#fff'
                         }}>
                           {transaction.Status.charAt(0).toUpperCase() + transaction.Status.slice(1)}
                         </span>
@@ -82,10 +79,10 @@ export const RecentTransactionTable = ({ loading, stats }) => {
 export const RecentRegisteredTable = ({ loading, stats }) => {
   return (
     <div className="col-xl-6">
-      <div className="card shadow-sm" style={{ borderRadius: "13px", border: "none" }}>
-        <div className="card-header border-0 pb-0 " >
-          <div className="d-flex align-items-center mb-3" style={{ width: "100%" }}>
-            <h4 className="heading mb-0 me-auto " >
+      <div className="card shadow-sm" style={{ borderRadius: "5px", border: "none" }}>
+        <div className="card-header border-0 pb-1 pt-3" style={{backgroundColor: "#7b9b43",borderTopLeftRadius:"5px",borderTopRightRadius:"5px"}}>
+          <div className="d-flex align-items-center mb-2" style={{ width: "100%" }}>
+            <h4 className="heading mb-0 me-auto text-white" >
               Latest Registered
             </h4>
           </div>
@@ -93,21 +90,21 @@ export const RecentRegisteredTable = ({ loading, stats }) => {
         </div>
         <div className="card-body p-0">
 
-          <div className="table-responsive  style-1" style={{ padding: "0px 15px" }}>
+          <div className="table-responsive  style-1 p-0" >
             <table id="employees-tblwrapper" className="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th className="text-center">Username</th>
-                  <th className="text-center">Phone No</th>
+              <thead  style={{backgroundColor: "#D3DEE6" }}>
+                <tr >
+                  <th style={{padding: "5px",fontSize:"14px"}}>Name</th>
+                  <th style={{padding: "5px",fontSize:"14px"}}>Username</th>
+                  <th style={{padding: "5px",fontSize:"14px"  }}>Phone No</th>
                   {/* <th className="text-center">Role</th> */}
-                  <th className="text-center">Status</th>
+                  <th style={{padding: "5px",fontSize:"14px"}}>Status</th>
                   {/* <th className="text-center">Action</th> */}
                 </tr>
               </thead>
               <tbody>
                 {loading ? <tr>
-                  <td colSpan={6} className="text-center py-5">
+                  <td colSpan={6} className="text-center ">
                     <CircularProgress />
                   </td>
                 </tr>
@@ -119,7 +116,7 @@ export const RecentRegisteredTable = ({ loading, stats }) => {
 
                     return (
                       <tr key={index} >
-                        <td >
+                        <td className="products">
                           <h6>{emp.CompanyName}</h6>
                         </td>
                         <td className="text-center" >
@@ -133,13 +130,11 @@ export const RecentRegisteredTable = ({ loading, stats }) => {
                               <h6>{emp.Role}</h6>
                             </td> */}
 
-                        <td className="text-center">
+                        <td >
                           <span style={{
-                            padding: "2px 10px", fontSize: "11px", borderRadius: "12px", backgroundColor: emp.isActive ? '#c2ded1' :
-                              emp.isActive === false ? '#f8d7da' :
-                                '#e2e3e5', color: emp.isActive ? '#03543f' :
-                                  emp.isActive === false ? '#842029' :
-                                    '#41464b'
+                            padding: "2px 10px", fontSize: "11px", borderRadius: "4px", backgroundColor: emp.isActive ? '#28A745' :
+                              emp.isActive === false ? '#FFC107' :
+                                '#000000', color: "#fff"
                           }}>
                             {emp.isActive ? "Active" : "Inactive"}
                           </span>

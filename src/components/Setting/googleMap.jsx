@@ -109,7 +109,7 @@ export const GoogleSetting = () => {
             <div className="col-xl-6">
               <div className="card shadow-sm rounded-card">
                 <div className="card-body">
-                  <h4 className="card-title mb-4">Google Settings</h4>
+                  <h4 className="card-title mb-4">Google API Credentials</h4>
                   {loading ? (
                     <div className="text-center">
                       <div className="spinner-border" role="status">
@@ -205,7 +205,7 @@ export const GoogleSetting = () => {
             <div className="col-xl-6">
               <div className="card shadow-sm rounded-card">
                 <div className="card-body">
-                  <h4 className="card-title mb-4">Map Settings</h4>
+                  <h4 className="card-title mb-4">Google Map Key</h4>
                   {loading ? (
                     <div className="text-center">
                       <div className="spinner-border" role="status">

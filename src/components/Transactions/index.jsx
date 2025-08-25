@@ -154,13 +154,10 @@ export const TransactionsScreen = () => {
                                 <span>{transaction.PaidDate ? new Date(transaction.PaidDate).toLocaleDateString() : '-'}</span>
                               </td> <td>
                                 <span style={{
-                                  padding: "2px 10px", fontSize: "11px", borderRadius: "12px", backgroundColor: transaction.Status === 'paid' ? '#c2ded1' :
-                                    transaction.Status === 'Pending' ? '#fff3cd' :
-                                      transaction.Status === 'incomplete' ? '#f8d7da' :
-                                        '#e2e3e5', color: transaction.Status === 'paid' ? '#03543f' :
-                                          transaction.Status === 'Pending' ? '#664d03' :
-                                            transaction.Status === 'incomplete' ? '#842029' :
-                                              '#41464b'
+                                  padding: "2px 10px", fontSize: "11px", borderRadius: "4px", backgroundColor: transaction.Status === 'paid' ? '#28A745' :
+                                    transaction.Status === 'Pending' ? '#FFC107' :
+                                      transaction.Status === 'incomplete' ? '#000000' :
+                                        '#FF7676', color: "#fff"
                                 }}>
                                   {transaction.Status.charAt(0).toUpperCase() + transaction.Status.slice(1)}
                                 </span>

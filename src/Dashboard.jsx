@@ -67,11 +67,14 @@ function Dashboard() {
         <div className="container-fluid">
 
           {loginUser?.Data?.RoleId == 1 ? <div className="row">
-            <DashbaordCardTenant total={stats?.TotalTenant} onClick={() => navigate('/tenant')} color="info" title="Total Tenant" textColor="#fff" icon={<GroupOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} />
-            <DashbaordCardTenant total={stats?.TotalActiveSubscriptions} onClick={() => navigate('/transaction')} color="dark" textColor="#fff" title="Total Subscriptions" icon={<RequestQuoteOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} />
-            <DashbaordCardTenant total={`$${stats?.TotalTransactionSum
-              }`} onClick={() => navigate('/transaction')} color="success" title="Total Transaction" textColor="#fff" icon={<PaidOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} />
-            <DashbaordCardTenantCard total={stats?.TotalTenant} active={stats?.TotalActiveTenant} inactive={stats?.TotalInActiveTenant} title="Total Tenant" icon={<GroupOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} />
+            {/* <DashbaordCardTenant total={stats?.TotalTenant} onClick={() => navigate('/tenant')} color="info" title="Total Tenant" textColor="#fff" icon={<GroupOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} />
+            <DashbaordCardTenant total={stats?.TotalActiveSubscriptions} onClick={() => navigate('/transaction')} color="dark" textColor="#fff" title="Total Subscriptions" icon={<RequestQuoteOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} /> */}
+            {/* <DashbaordCardTenant total={`$${stats?.TotalTransactionSum
+              }`} onClick={() => navigate('/transaction')} color="success" title="Total Transaction" textColor="#fff" icon={<PaidOutlinedIcon style={{ color: "#fff", fontSize: "25px" }} />} /> */}
+              <WelcomeCard userName={`${loginUser?.Data?.FirstName}!`} />
+            <DashbaordCardTenantCard total={stats?.TotalTenant} active={stats?.TotalActiveTenant} inactive={stats?.TotalInActiveTenant} title="Total Tenant" icon={<GroupOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
+            <DashbaordCardTenantCard total={`$${stats?.TotalTransactionSum
+                }`} active={stats?.TotalActiveTenant} Active="paid" Inactive="Unpaid" inactive={stats?.TotalInActiveTenant} title="Transactions" icon={<PaidOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
 
           </div> :
             <div className="row">

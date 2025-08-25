@@ -191,7 +191,7 @@ export const StripeSetting = () => {
               <div className="card shadow-sm rounded-card">
                 <div className="card-body">
                   <div className="row">
-                    <h4 className="card-title mb-4 col-xl-9">Stripe Settings</h4>
+                    <h4 className="card-title mb-4 col-xl-9">Stripe Integration Setup</h4>
                     <div className="col-xl-3 mb-3 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
                     <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content", cursor: "pointer" }} onClick={() => {
                         setFormData((prev) => ({

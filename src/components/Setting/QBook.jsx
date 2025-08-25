@@ -201,9 +201,8 @@ export const QBookScreen = () => {
               <div className="card shadow-sm rounded-card">
                 <div className="card-body">
                   <div className="row">
-                    <h4 className="card-title mb-4 col-xl-9">
-                      QuickBooks Settings
-                    </h4>
+                    <h4 className="card-title mb-4 col-xl-9">QuickBooks Integration Setup</h4>  
+                     
                     <div className="col-xl-3 mb-3 ml-2 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
                       <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content", cursor: "pointer" }} onClick={() => {
                         setFormData((prev) => ({
@@ -238,7 +237,47 @@ export const QBookScreen = () => {
                   ) : (
                     <>
                       <div className="row">
-                      
+                      <div className="col-xl-12  ">     <Alert   severity="info"
+                          className="mb-4"
+                          style={{ width: "100%" }}>
+                            <AlertTitle style={{ fontSize: "1.1rem",}}>Info</AlertTitle>
+                            <strong>How to set up your QuickBooks settings:</strong>
+                            <p>  If you are using <b>Production</b> mode, you need to provide <b>Production Client ID</b> and <b>Production Client Secret</b>.</p>
+                            <ol style={{ marginTop: -10 }}>
+                              <li>
+                            
+                                <span style={{ fontSize: "0.95em" }}>
+                                  To get your Production credentials:
+                                  <ul style={{ marginLeft: 5, listStyle: "none" }}>
+                                    <li>&#8226;  Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
+                                    <li>&#8226;  Sign in and create a new app or select an existing one.</li>
+                                    <li>&#8226;  Navigate to "Keys & OAuth".</li>
+                                    <li>&#8226;  Switch to "Production" tab to view your <b>Client ID</b> and <b>Client Secret</b>.</li>
+                                  </ul>
+                                </span>
+                              </li>
+                              </ol>
+                              <p>  If you are using <b>Sandbox</b> mode, you need to provide <b>Sandbox Client ID</b> and <b>Sandbox Client Secret</b>.</p>
+                              <ol style={{ marginTop: -10 }}>
+                              <li>
+                               
+                                <span style={{ fontSize: "0.95em" }}>
+                                  To get your Sandbox credentials:
+                                  <ul style={{ marginLeft: 5, listStyle: "none" }}>
+                                    <li>&#8226;  Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
+                                    <li>&#8226;  Sign in and create a new app or select an existing one.</li>
+                                    <li>&#8226;  Navigate to "Keys & OAuth".</li>
+                                    <li>&#8226;  Use the "Development" tab to view your <b>Client ID</b> and <b>Client Secret</b> for Sandbox.</li>
+                                  </ul>
+                                </span>
+                              </li>
+                             
+                              </ol>
+                              <li>
+                                Click <b>Update Settings</b> to apply your settings.
+                              </li>
+                           
+                          </Alert></div>
                         {isProduction && (
                           <>
                             <div className="col-xl-12 mb-3">
@@ -368,59 +407,7 @@ export const QBookScreen = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
-              <div className="card shadow-sm rounded-card">
-                <div className="card-body">
-                  <div className="row">
-                  <div style={{ width: "100%" }}>
-                          
-                      
-                          <Alert   severity="info"
-                          className="mb-4"
-                          style={{ width: "100%" }}>
-                            <AlertTitle style={{ fontSize: "1.1rem",}}>Info</AlertTitle>
-                            <strong>How to set up your QuickBooks settings:</strong>
-                            <p>  If you are using <b>Production</b> mode, you need to provide <b>Production Client ID</b> and <b>Production Client Secret</b>.</p>
-                            <ol style={{ marginTop: -10 }}>
-                              <li>
-                            
-                                <span style={{ fontSize: "0.95em" }}>
-                                  To get your Production credentials:
-                                  <ul style={{ marginLeft: 5, listStyle: "none" }}>
-                                    <li>&#8226;  Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
-                                    <li>&#8226;  Sign in and create a new app or select an existing one.</li>
-                                    <li>&#8226;  Navigate to "Keys & OAuth".</li>
-                                    <li>&#8226;  Switch to "Production" tab to view your <b>Client ID</b> and <b>Client Secret</b>.</li>
-                                  </ul>
-                                </span>
-                              </li>
-                              </ol>
-                              <p>  If you are using <b>Sandbox</b> mode, you need to provide <b>Sandbox Client ID</b> and <b>Sandbox Client Secret</b>.</p>
-                              <ol style={{ marginTop: -10 }}>
-                              <li>
-                               
-                                <span style={{ fontSize: "0.95em" }}>
-                                  To get your Sandbox credentials:
-                                  <ul style={{ marginLeft: 5, listStyle: "none" }}>
-                                    <li>&#8226;  Go to <a href="https://developer.intuit.com/app/developer/homepage" target="_blank" rel="noopener noreferrer">Intuit Developer Portal</a>.</li>
-                                    <li>&#8226;  Sign in and create a new app or select an existing one.</li>
-                                    <li>&#8226;  Navigate to "Keys & OAuth".</li>
-                                    <li>&#8226;  Use the "Development" tab to view your <b>Client ID</b> and <b>Client Secret</b> for Sandbox.</li>
-                                  </ul>
-                                </span>
-                              </li>
-                             
-                              </ol>
-                              <li>
-                                Click <b>Update Settings</b> to apply your settings.
-                              </li>
-                           
-                          </Alert>
-                          </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+           
           </div>
         </div>
       </div>

@@ -229,7 +229,7 @@ export const EmailScreen = () => {
               <div className="card shadow-sm rounded-card">
                 <div className="card-body">
                   <div className="row">
-                    <h4 className="card-title mb-4 col-xl-8">Email Settings</h4>
+                    <h4 className="card-title mb-3 col-xl-8">Mail Server Setup</h4>
                     <div className="col-xl-4 mb-3 ml-2 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
                       {/* <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
                         <label 
@@ -371,7 +371,39 @@ export const EmailScreen = () => {
                         // placeholder="e.g., smtp.gmail.com"
                       />
                     </div>
-                
+                    <div className="col-xl-12 mt-3">
+                    <Alert
+                        severity="info"
+                        className="mb-4"
+                        style={{ width: "100%" }}
+                      >
+                        <AlertTitle>Info</AlertTitle>
+                        <strong>How to set up your email settings:</strong>
+                        <p>If you are using OAuth (advanced), you need to provide <b>Client ID</b> and <b>Client Secret</b>.</p>
+                        <ol style={{ marginTop: -10 }}>
+                          <li>
+                            <span style={{ fontSize: "0.95em" }}>
+                              To get your Client ID and Client Secret for Gmail:
+                              <ul style={{ marginLeft: 16, listStyle: "none" }}>
+                                <li>&#8226; Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
+                                <li>&#8226; Create a new project or select an existing one.</li>
+                                <li>&#8226; Enable the Gmail API for your project.</li>
+                                <li>&#8226; Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
+                                <li>&#8226; Configure the consent screen if prompted.</li>
+                                <li>&#8226; Select "Web application" and set the authorized redirect URIs as needed.</li>
+                                <li>&#8226; After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
+                              </ul>
+                            </span>
+                          </li>
+                          {/* <li>
+                            Choose the <b>Email Mode</b> (1 for SMTP, 2 for OAuth).
+                          </li> */}
+                          <li>
+                            Click <b>Update Settings</b> to apply your settings.
+                          </li>
+                        </ol>
+                      </Alert>
+                      </div>
                     <div className="col-xl-12 mb-3 mt-3">
                       <TextField
                       label="Client ID"
@@ -429,45 +461,7 @@ export const EmailScreen = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
-              <div className="card shadow-sm rounded-card">
-                <div className="card-body">
-                <div style={{ width: "100%" }}>
-                      <Alert
-                        severity="info"
-                        className="mb-4"
-                        style={{ width: "100%" }}
-                      >
-                        <AlertTitle>Info</AlertTitle>
-                        <strong>How to set up your email settings:</strong>
-                        <p>If you are using OAuth (advanced), you need to provide <b>Client ID</b> and <b>Client Secret</b>.</p>
-                        <ol style={{ marginTop: -10 }}>
-                          <li>
-                            <span style={{ fontSize: "0.95em" }}>
-                              To get your Client ID and Client Secret for Gmail:
-                              <ul style={{ marginLeft: 16, listStyle: "none" }}>
-                                <li>&#8226; Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
-                                <li>&#8226; Create a new project or select an existing one.</li>
-                                <li>&#8226; Enable the Gmail API for your project.</li>
-                                <li>&#8226; Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
-                                <li>&#8226; Configure the consent screen if prompted.</li>
-                                <li>&#8226; Select "Web application" and set the authorized redirect URIs as needed.</li>
-                                <li>&#8226; After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
-                              </ul>
-                            </span>
-                          </li>
-                          {/* <li>
-                            Choose the <b>Email Mode</b> (1 for SMTP, 2 for OAuth).
-                          </li> */}
-                          <li>
-                            Click <b>Update Settings</b> to apply your settings.
-                          </li>
-                        </ol>
-                      </Alert>
-                    </div>
-                </div>
-              </div>
-            </div>
+          
           </div>
         </div>
       </div>
