@@ -13,7 +13,7 @@ export const getPackagesType = async (token) => {
     );
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 export const deletePackage = async (id) => {
@@ -30,7 +30,7 @@ export const deletePackage = async (id) => {
     );
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 export const addPackage = async (body) => {
@@ -45,7 +45,7 @@ export const addPackage = async (body) => {
       
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 export const getPackages = async ({ Search = "", DisplayStart = 0, DisplayLength = 10 } = {}) => {
@@ -64,7 +64,7 @@ export const getPackages = async ({ Search = "", DisplayStart = 0, DisplayLength
     );
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
   export const getPackageById = async (PackageId) => {
@@ -78,6 +78,6 @@ export const getPackages = async ({ Search = "", DisplayStart = 0, DisplayLength
     });
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };

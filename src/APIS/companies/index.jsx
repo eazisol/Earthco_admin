@@ -25,7 +25,7 @@ export const addCompany = async (body) => {
         });
         return data;
     } catch (error) {
-        throw error;
+        return error;
     }
 };
 export const deleteCompany = async (id) => {
@@ -40,6 +40,6 @@ export const deleteCompany = async (id) => {
         });
         return data;
     } catch (error) {
-        throw error;
+        return error;
     }
 };

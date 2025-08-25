@@ -39,7 +39,7 @@ export const AddContactMessage = async (obj) => {
   });
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 //newsletter
@@ -52,7 +52,7 @@ export const AddNewsletter = async (obj) => {
       });
     return data;
   } catch (error) {
-    throw error; 
+    return error; 
   }
 };
 export const AddTenant = async (obj) => {
@@ -66,7 +66,7 @@ export const AddTenant = async (obj) => {
       });
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 export const getTenantById = async (id) => {
@@ -100,7 +100,7 @@ export const getTenantRole = async () => {
     );
     return data;
   }catch (error) {
-    throw error;
+    return error;
   }
 };
 export const getTenant = async ({ Search = "", DisplayStart = 1, DisplayLength = 10 } = {}) => {
@@ -132,7 +132,7 @@ export const deleteTenant=async(id )=>{
     });
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 // /Accounts/RegisterTenant
@@ -143,7 +143,7 @@ export const RegisterTenant = async (obj) => {
     });
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 export const forgotPassword = async (obj) => {
@@ -151,7 +151,7 @@ export const forgotPassword = async (obj) => {
     const data  = await axios.post(`${apiUrl}Accounts/ForgetPassword`, obj);
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 export const verifyOTP = async (obj) => {
@@ -159,7 +159,7 @@ export const verifyOTP = async (obj) => {
     const data  = await axios.get(`${apiUrl}Accounts/VerifyForgetPasswordCode?Email=${obj.Email}&Code=${obj.Code}`);
     return data;
   } catch (error) {
-    throw error;
+    return error;
     }
   };
   export const resetPassword = async (obj) => {
@@ -167,7 +167,7 @@ export const verifyOTP = async (obj) => {
       const data  = await axios.post(`${apiUrl}Accounts/ChangeForgetPassword`,obj);
       return data;
     } catch (error) {
-        throw error;
+        return error;
     }
     };
   export const updateTenantStatus = async (obj) => {
@@ -181,7 +181,7 @@ export const verifyOTP = async (obj) => {
       });
       return data;
     } catch (error) {
-      throw error;
+      return error;
     }
   };
   export const checkPackageStatus=async()=>{
@@ -195,7 +195,7 @@ export const verifyOTP = async (obj) => {
       });
       return data;
     } catch (error) {
-      throw error;
+      return error;
     }
   };
   //Update tenant package
@@ -210,7 +210,7 @@ export const verifyOTP = async (obj) => {
       });
       return data;
     } catch (error) {
-      throw error;
+      return error;
     }
   };
   //Create Role 

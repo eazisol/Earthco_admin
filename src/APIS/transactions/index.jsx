@@ -14,7 +14,7 @@ export const getTenantServerSideList = async (search='', displayStart=1, display
     });
     return response.data;
   } catch (error) {
-    throw error;
+        return error;
   }
 };
 export const getTransactionById = async (id,token) => {
@@ -27,7 +27,7 @@ export const getTransactionById = async (id,token) => {
         });
         return response.data;
     } catch (error) {
-        throw error;
+        return error;
     }
 };
 
@@ -42,7 +42,7 @@ export const cancelSubscription = async (id,token) => {
         });
         return response.data;
     } catch (error) {
-        throw error;
+        return error;
     }
 };
 
@@ -58,6 +58,6 @@ export const resumeSubscription = async (id,token) => {
         });
         return response.data;
     } catch (error) {
-        throw error;
+        return error;
     }
 };

@@ -12,7 +12,7 @@ export const addEmailSetting = async (formData) => {
     });
     return response.data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 
@@ -41,7 +41,7 @@ export const SettingPrivacyAndTerms = async (data) => {
       });
       return response;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 //Contact us
@@ -56,7 +56,7 @@ export const contactUs=async(data)=>{
     });
     return response;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 //Delete contact us
@@ -71,7 +71,7 @@ export const deleteContactUs=async(id)=>{
     });
     return response;
   } catch (error) {
-    throw error;
+    return error;
   }}
   //get stats
   export const getStats = async () => {
@@ -85,6 +85,6 @@ export const deleteContactUs=async(id)=>{
       });
       return response;
     } catch (error) {
-      return error;
+        throw error;
     }
   };
