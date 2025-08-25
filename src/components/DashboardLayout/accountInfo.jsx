@@ -10,7 +10,7 @@ const tenantTableStyles = {
     tableHeader: {
         // backgroundColor: '#f8f9fa',
         borderBottom: '2px solid #dee2e6',
-        fontWeight: '600',
+        // fontWeight: '600',
         color: '#495057',
         // textTransform: 'uppercase',
         fontSize: '14px',

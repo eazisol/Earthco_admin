@@ -105,16 +105,69 @@ export const RoleAndPermission = () => {
 									<h4 class="heading mb-0" style={{paddingLeft: "10px"}}>Roles </h4>
 								</div>
 								<div class="card-body" style={{ maxHeight: "75vh", overflowY: "auto" }}>
-									<form class="finance-hr row" onSubmit={handleSubmit} >
-										<div class="form-group mb-3 col-8 ">
-											<label class="text-secondary font-w500">Add New Role<span class="text-danger">*</span>
+									<style>
+										{`
+											@media (max-width: 575.98px) {
+												.role-form-row {
+													flex-direction: column !important;
+												}
+												.role-form-col {
+													width: 100% !important;
+													max-width: 100% !important;
+												}
+											}
+											@media (min-width: 576px) and (max-width: 767.98px) {
+												.role-form-row {
+													flex-direction: row !important;
+												}
+												.role-form-col {
+													width: 100% !important;
+													max-width: 100% !important;
+												}
+											}
+											@media (min-width: 768px) and (max-width: 991.98px) {
+												.role-form-row {
+													flex-direction: row !important;
+												}
+												.role-form-col {
+													width: 50% !important;
+													max-width: 50% !important;
+												}
+											}
+											@media (min-width: 992px) and (max-width: 1199.98px) {
+												.role-form-row {
+													flex-direction: row !important;
+												}
+												.role-form-col {
+													width: 60% !important;
+													max-width: 60% !important;
+												}
+											}
+											@media (min-width: 1200px) {
+												.role-form-row {
+													flex-direction: row !important;
+												}
+												.role-form-col-7 {
+													width: 58.333333% !important;
+													max-width: 58.333333% !important;
+												}
+												.role-form-col-5 {
+													width: 41.666667% !important;
+													max-width: 41.666667% !important;
+												}
+											}
+										`}
+									</style>
+									<form className="finance-hr row role-form-row" onSubmit={handleSubmit} >
+										<div className="form-group mb-3 role-form-col role-form-col-7">
+											<label className="text-secondary font-w500">Add New Role<span className="text-danger">*</span>
 											</label>
-											<input type="text" class="form-control" placeholder="Role Name" value={roleName} onChange={(e) => setRoleName(e.target.value)} />
+											<input type="text" className="form-control" placeholder="Role Name" value={roleName} onChange={(e) => setRoleName(e.target.value)} />
 										</div>
-										<div class="form-group mb-3 col-4 ">
-										<label class="text-white d-block">. 
-										</label>
-											<button type="submit" class="btn btn-primary " disabled={!roleName || loading}>{loading ? "Loading..." : "Confirm"}</button>
+										<div className="form-group mb-3 role-form-col role-form-col-5">
+											<label className="text-white d-block">. 
+											</label>
+											<button type="submit" className="btn btn-primary " disabled={!roleName || loading}>{loading ? "Loading..." : roleId==0?"Add Role":"Update Role"}</button>
 										</div>
 									</form>
 									{getRolesLoading ? (

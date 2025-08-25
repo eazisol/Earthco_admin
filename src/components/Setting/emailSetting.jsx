@@ -229,7 +229,7 @@ export const EmailScreen = () => {
               <div className="card shadow-sm rounded-card">
                 <div className="card-body">
                   <div className="row">
-                    <h4 className="card-title mb-3 col-xl-8">Mail Server Setup</h4>
+                    <h4 className="card-title mb-4 col-xl-8">Mail Server Setup</h4>
                     <div className="col-xl-4 mb-3 ml-2 d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
                       {/* <div className="form-check form-switch d-flex align-items-center" style={{ width: "fit-content" }}>
                         <label 
