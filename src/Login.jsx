@@ -121,9 +121,9 @@ export const LoginScreen = ({ onClose }) => {
   };
   
   return (
-    <section className="contact" style={{ paddingBottom: "85px" }}>
+    <section className="contact" style={{ paddingBottom: "60px" }}>
       <div className="container" data-aos="fade-up">
-        <div className="section-title" style={{ marginTop: "11.5%" }}>
+        <div className="section-title" style={{ marginTop: "9%" }}>
 
         </div>
 
