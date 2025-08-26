@@ -448,6 +448,7 @@ const componentMap = {
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  console.log("🚀 ~ Layout ~ mobileMenuOpen:", mobileMenuOpen)
   const navigate = useNavigate();
   const [Email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -537,8 +538,8 @@ function Layout({ children }) {
                 <img src="/assets/img/favicon.svg" alt="" className="img-fluid" />
               </a>
             </h1>
-            <nav id="navbar" className={`navbar${mobileMenuOpen ? ' navbar-mobile' : ''}`}>
-              <ul>
+            <nav id="navbar" className={`navbar${mobileMenuOpen ? 'navbar-mobile' : ''}`}>
+              <ul className='navbar-ul'>
                 <li><a className="nav-link scrollto active" href="/#hero">Home</a></li>
                 <li><a className="nav-link scrollto" href="/#about">About Us</a></li>
                 <li><a className="nav-link scrollto" href="/#services">Services</a></li>

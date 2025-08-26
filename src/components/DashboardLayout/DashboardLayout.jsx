@@ -97,15 +97,15 @@ export default function DashboardLayout({ children, onLogout }) {
         {isMobile && menuOpen && (
           <div
             className="sidebar-overlay"
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              background: "rgba(0,0,0,0.4)",
-              zIndex: 1000,
-            }}
+            // style={{
+            //   position: "fixed",
+            //   top: 0,
+            //   left: 0,
+            //   width: "100vw",
+            //   height: "100vh",
+            //   // background: "rgba(0,0,0,0.4)",
+            //   zIndex: 1000,
+            // }}
             onClick={handleDrawerToggle} // Changed to handleDrawerToggle to close sidebar
           />
         )}

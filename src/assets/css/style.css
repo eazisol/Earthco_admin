@@ -321,7 +321,7 @@ a:hover {
   .mobile-nav-toggle {
     display: block;
   }
-  .navbar ul {
+  .navbar .navbar-ul {
     display: none;
   }
 }

@@ -3240,7 +3240,7 @@ textarea.form-control-lg {
     pointer-events: none;
     cursor: default; }
     #navbar ul li a.nav-link:hover {
-      color: gray;
+      color: var(--primary-green);
     }
 .nav-tabs {
   --bs-nav-tabs-border-width: 1px;

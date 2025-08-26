@@ -4,7 +4,7 @@ import { useAppContext } from "../context/AppContext";
 import { getRolePermission } from "../APIS/auth";
 import * as MuiIcons from '@mui/icons-material';
 
-const Sidebar = ({ isSidebarOpen = true }) => {
+const Sidebar = ({ isSidebarOpen = false }) => {
   const location = useLocation();
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const navigate = useNavigate();

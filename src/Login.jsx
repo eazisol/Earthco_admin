@@ -15,6 +15,7 @@ export const LoginScreen = ({ onClose }) => {
   });
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  console.log("🚀 ~ LoginScreen ~ errors:", errors)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -200,7 +201,7 @@ export const LoginScreen = ({ onClose }) => {
                   <div className="invalid-feedback">{errors.Email}</div>
                 )}
               </div>
-              <div className=" position-relative w-100">
+              <div className="position-relative w-100">
                 <div className="input-group">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -214,6 +215,7 @@ export const LoginScreen = ({ onClose }) => {
                       background: "#f4f7fa",
                       border: "1px solid #e0e0e0",
                     }}
+                    autoComplete="current-password"
                   />
                   <InputAdornment position="end">
                     <IconButton
@@ -226,14 +228,21 @@ export const LoginScreen = ({ onClose }) => {
                         zIndex: "999",
                         height: "100%",
                       }}
+                      tabIndex={-1}
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 </div>
-                {errors.Password && (
-                  <div className="invalid-feedback ">{errors.Password}</div>
-                )}
+                {/* Always render the error div to ensure it shows up when needed */}
+                <div
+                  className="invalid-feedback"
+                  style={{
+                    display: errors.Password ? "block" : "none",
+                  }}
+                >
+                  {errors.Password}
+                </div>
               </div>
               <div className="d-flex justify-content-between align-items-center mb-4 w-100">
                 <div className="form-check"></div>
