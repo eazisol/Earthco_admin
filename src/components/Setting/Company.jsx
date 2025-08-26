@@ -99,10 +99,7 @@ export const CompanyScreen = () => {
       PrivacyPolicy: privacyContent
     }
 
-    if (!formData.PrimeryColor || !formData.SecondaryColor) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
+   
 
     try {
       formDataToSend.append('SettingData', JSON.stringify(settingDataToSend));

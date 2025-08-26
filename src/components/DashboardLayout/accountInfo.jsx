@@ -105,7 +105,7 @@ export const AccountInfo = ({ loading, error, tenant, loginUser, password, setPa
         <>
     
         <div className={` ${loginUser?.Data?.RoleId == 1 ? 'col-lg-12' : 'col-lg-6'}`}>
-                <div className="card shadow-sm" style={{  border: "none",borderRadius:"5px" }}>
+                <div className="card shadow-sm" style={{  border: "none",borderRadius:"5px",minHeight:"270px" }}>
                 <div className="card-header border-0 pb-1 pt-3 text-white" style={{backgroundColor: "#7b9b43",borderTopLeftRadius:"5px",borderTopRightRadius:"5px"}}>
                     <div className="d-flex align-items-center " style={{ width: "100%" }}>
                         <h4 className="heading  me-auto text-white" >
