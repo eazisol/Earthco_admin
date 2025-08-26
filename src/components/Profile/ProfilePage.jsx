@@ -164,15 +164,7 @@ const ProfilePage = () => {
     }
     fetchTransactionId()
   }, [formData?.tblUserPackages])
-  // if (loading) {
-  //   return (
-  //     <DashboardLayout>
-  //       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "400px" }}>
-  //         <CircularProgress />
-  //       </div>
-  //     </DashboardLayout>
-  //   );
-  // }
+
 if(loading){
   return (
     <DashboardLayout>
@@ -205,13 +197,7 @@ if(loading){
           <div className="card table-space">
             <div className="card-body">
               <h4 className="card-title mb-4">User Details</h4>
-              {/* {loading ? (
-                    <div className="text-center">
-                      <div className="spinner-border" role="status">
-                        <span className="visually-hidden"><CircularProgress /></span>
-                      </div>
-                    </div>
-                  ) : ( */}
+             
               <div className="row">
                 <div className="col-xl-3 mb-3">
 
@@ -437,7 +423,7 @@ if(loading){
                   </button>
                 </div>
               </div>
-              {/* )} */}
+             
             </div>
           </div>
          {/* <div className="card table-space shadow-sm rounded-card">

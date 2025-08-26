@@ -267,6 +267,7 @@ export const LoginScreen = ({ onClose }) => {
                   background: "#7a9c3a",
                   border: "none",
                   width: "100%",
+                  borderRadius: "50px",
                   // maxWidth: 250,
                   alignSelf: "center",
                   fontSize: "16px",

@@ -130,13 +130,13 @@ export const GoogleSetting = () => {
                             <li>
                               <span style={{ fontSize: "0.95em" }}>
                                 To get your credentials:
-                                <ul style={{ marginLeft: 5, listStyle: "none" }}>
-                                  <li>&#8226; Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
-                                  <li>&#8226; Create a new project or select an existing one.</li>
-                                  <li>&#8226; Enable the relevant Google API (e.g., Maps, Places, etc.) for your project.</li>
-                                  <li>&#8226; Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
-                                  <li>&#8226; Configure the consent screen if prompted.</li>
-                                  <li>&#8226; Select "Web application" and set the authorized redirect URIs as needed.</li>
+                                <ul style={{ marginLeft: 5, listStyle: "disc" }}>
+                                  <li> Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
+                                  <li> Create a new project or select an existing one.</li>
+                                  <li> Enable the relevant Google API (e.g., Maps, Places, etc.) for your project.</li>
+                                  <li> Go to "Credentials" and click "Create Credentials" &rarr; "OAuth client ID".</li>
+                                  <li> Configure the consent screen if prompted.</li>
+                                  <li> Select "Web application" and set the authorized redirect URIs as needed.</li>
                                   <li>After creation, you will see your <b>Client ID</b> and <b>Client Secret</b>.</li>
                                 </ul>
                               </span>
@@ -227,13 +227,13 @@ export const GoogleSetting = () => {
                              
                               <span style={{ fontSize: "0.95em" }}>
                                 To get your API key:
-                                  <ul style={{ marginLeft: 5, listStyle: "none" }}>
-                                  <li>&#8226; Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
-                                  <li>&#8226; Create a new project or select an existing one.</li>
-                                  <li>&#8226; Enable the Google Maps API for your project.</li>
-                                  <li>&#8226; Go to "Credentials" and click "Create Credentials" &rarr; "API key".</li>
-                                  <li>&#8226; Restrict your API key to prevent unauthorized use.</li>
-                                  <li>&#8226; After creation, you will see your <b>API Key</b>.</li>
+                                  <ul style={{ marginLeft: 5, listStyle: "disc" }}>
+                                  <li> Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>.</li>
+                                  <li> Create a new project or select an existing one.</li>
+                                  <li> Enable the Google Maps API for your project.</li>
+                                  <li> Go to "Credentials" and click "Create Credentials" &rarr; "API key".</li>
+                                  <li> Restrict your API key to prevent unauthorized use.</li>
+                                  <li> After creation, you will see your <b>API Key</b>.</li>
                                 </ul>
                               </span>
                             </li>

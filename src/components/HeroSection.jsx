@@ -18,16 +18,17 @@ const HeroSection = () => {
     <div className="container">
       <div className="row">
         <div
-          className="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+          className="col-lg-6 d-flex flex-column justify-content-center pt-5 pt-lg-0 order-2 order-lg-1"
           data-aos="fade-up"
           data-aos-delay="200"
           style={{
            background: "rgba(77, 102, 18, 0.5)",
            borderRadius: "10px",
            padding: "20px",
+           marginTop: "25px",
           }}
         >
-          <h1 >Transforming Outdoor Spaces with Excellence</h1>
+          <h1 className='pt-3'>Transforming Outdoor Spaces with Excellence</h1>
           <h2 style={{color:"white"}}>
             We are Earthco — experts in landscape design, maintenance, and
             beautification for commercial and residential properties.
