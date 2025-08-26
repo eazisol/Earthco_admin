@@ -6,7 +6,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate, Link } from "react-router-dom";
 import earthcoLogo from "../assets/img/earthco_logo.png";
 import forgotPasswordImage from "../assets/img/loginForm.jpg";
-
+import OtpInput from 'react-otp-input';
 const ForgotPassword = () => {
   const [Email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -111,7 +111,10 @@ const ForgotPassword = () => {
       setIsLoading(false);
     }
   };
-
+  const handlePaste = (event) => {
+    const data = event.clipboardData.getData('text');
+    console.log(data)
+  };
   return (
     <section className="contact" style={{ paddingBottom: "60px", }}>
       <div className="container" data-aos="fade-up">
@@ -165,7 +168,7 @@ const ForgotPassword = () => {
 
 
 
-          <form onSubmit={handleSubmit} className="php-email-form" s style={{
+          <form onSubmit={handleSubmit} className="php-email-form" style={{
             width: "40%",
             padding: "40px",
             minHeight: "100%",
@@ -219,8 +222,17 @@ const ForgotPassword = () => {
                   </>
                 ) : showOTP ? (
                   <>
-
-                    <input
+                    <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "20px" }}>
+                      <OtpInput
+                        value={otp}
+                        onChange={setOTP}
+                        numInputs={8}
+                        shouldAutoFocus={true}
+                        onPaste={handlePaste}
+                        renderInput={(props) => <input {...props} />}
+                        inputStyle={{ width: "35px", marginRight: "10px" }}
+                      /></div>
+                    {/* <input
                       type="text"
                       className="form-control"
                       id="otp"
@@ -230,7 +242,7 @@ const ForgotPassword = () => {
                       placeholder="Enter Verification Code"
                       autoFocus
                       style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
-                    />
+                    /> */}
                   </>
                 ) : (
                   <>
