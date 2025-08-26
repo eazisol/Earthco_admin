@@ -107,6 +107,7 @@ export const LoginScreen = ({ onClose }) => {
       if (response?.status === "success") {
         toast.success(response?.response?.data);
         navigate("/dashboard");
+        setApiError("");
       } else {
         // toast.error(response?.response?.data);
         setApiError(response?.response?.data);
@@ -134,6 +135,7 @@ export const LoginScreen = ({ onClose }) => {
           style={{
             width: "100%",
             alignItems: "stretch",
+            boxShadow: "0 0 24px 0 rgba(0, 0, 0, 0.12)",
           }}
         >
           {/* Left side - Image */}

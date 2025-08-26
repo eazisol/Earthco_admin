@@ -129,7 +129,8 @@ const DemoPasswordFields = () => {
                 <div className="card-body p-0">
                   <div className="row">
                   <div className="container-fluid">
-                    <div className="col-xl-12 mb-4 mt-3">
+                  <h4 className="card-title mb-3 col-xl-8" >Update Your Password</h4>
+                    <div className="col-xl-12 mb-4">
                         
                         <TextField
                         variant="outlined"

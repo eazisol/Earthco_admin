@@ -63,7 +63,7 @@ export const RecentTransactionTable = ({ loading, stats }) => {
                         </span>
 
                       </td>
-                      <td className="text-center">
+                      <td >
                           <a
                             href="/transaction"
                             style={{ cursor: "pointer", color: "#7b9b43", textDecoration: "underline" }}
@@ -153,7 +153,7 @@ export const RecentRegisteredTable = ({ loading, stats }) => {
 
 
                         </td>
-                        <td className="text-center">
+                        <td >
                           <a
                             href="/tenant"
                             style={{ cursor: "pointer", color: "#7b9b43", textDecoration: "underline" }}

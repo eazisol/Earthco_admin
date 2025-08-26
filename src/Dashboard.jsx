@@ -22,7 +22,7 @@ function Dashboard() {
   const [error, setError] = useState(null);
   const [stats, setStats] = useState(null);
   const [passwordElement, setPasswordElement] = useState(false);
-  const [password, setPassword] = useState('•••');
+  const [password, setPassword] = useState('***');
  useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
 

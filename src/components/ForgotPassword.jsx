@@ -21,6 +21,15 @@ const ForgotPassword = () => {
   const [showConfirmPasswordField, setShowConfirmPasswordField] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  // Scrolls a bit above the contact section for better visibility
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      const yOffset = -100; // scroll 100px above the section
+      const y = contactSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -61,6 +70,7 @@ const ForgotPassword = () => {
         const response = await forgotPassword({ Email });
         if (response?.status == 200) {
           toast.success(response?.data?.Message);
+          setApiError("");
           setShowOTP(true);
         } else {
           // toast.error(response?.response?.data);
@@ -70,6 +80,7 @@ const ForgotPassword = () => {
         const response = await verifyOTP({ Email, Code: otp });
         if (response?.status == 200) {
           toast.success(response?.data);
+          setApiError("");
           setShowOTP(false);
           setShowNewPassword(true);
         } else {
@@ -87,6 +98,7 @@ const ForgotPassword = () => {
         });
         if (response?.status == 200) {
           toast.success(response?.data?.Message);
+          setApiError("");
           navigate("/login");
         } else {
           // toast.error(response?.response?.data);
@@ -125,6 +137,7 @@ const ForgotPassword = () => {
           style={{
             width: "100%",
             alignItems: "stretch",
+            boxShadow: "0 0 24px 0 rgba(0, 0, 0, 0.12)",
           }}
         >
           {/* Left side - Image */}
@@ -172,7 +185,13 @@ const ForgotPassword = () => {
                 {!showOTP && !showNewPassword
                   ? "Enter your email address to receive a password reset code."
                   : showOTP
-                    ? `Please enter the verification code we sent to your email. If you haven’t received the email, first check your spam or junk folder. If it’s not there, click 'Contact Us' for further assistance.`
+                    ? (
+                      <>
+                        Please enter the verification code we sent to your email. If you haven’t received the email, first check your spam or junk folder. If it’s not there, click&nbsp;
+                        <a href="/#contact" style={{ color: "#7b9b43", textDecoration: "underline" }} onClick={scrollToContact}>Contact Us</a>
+                        &nbsp;for further assistance.
+                      </>
+                    )
                     : "Create your new password."}
               </p>
               {apiError !== "" && (
