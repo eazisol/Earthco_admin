@@ -15,9 +15,9 @@ export const LoginScreen = ({ onClose }) => {
   });
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
-  console.log("🚀 ~ LoginScreen ~ errors:", errors)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState("");
+  console.log("🚀 ~ LoginScreen ~ apiError:", apiError)
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   // Check for existing token on component mount
@@ -108,7 +108,8 @@ export const LoginScreen = ({ onClose }) => {
         toast.success(response?.response?.data);
         navigate("/dashboard");
       } else {
-        toast.error(response?.response?.data);
+        // toast.error(response?.response?.data);
+        setApiError(response?.response?.data);
       }
   
       if (response?.error) {
@@ -181,7 +182,12 @@ export const LoginScreen = ({ onClose }) => {
               }}>
                 Access your Earthco account to manage your landscaping services, view project updates, and more.
               </p>
-
+{apiError !== "" && (
+  <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{width:"100%"}}>
+ {apiError}
+  <button className="btn-close" onClick={()=>setApiError("")}></button>
+</div>
+)}
               <div className="mb-3 w-100">
                 <input
                   type="email"
