@@ -12,7 +12,7 @@ import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
 import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import { RecentTransactionTable } from "./components/DashboardLayout/recentTransactionTable";
-import { AccountInfo, AccountInfoChart, PackageInfo, WelcomeCard   } from "./components/DashboardLayout/accountInfo";
+import { AccountInfo, AccountInfoChart, PackageInfo, WelcomeCard } from "./components/DashboardLayout/accountInfo";
 import { RecentRegisteredTable } from "./components/DashboardLayout/recentTransactionTable";
 function Dashboard() {
   const { user, setLoginUser, loginUser } = useAppContext();
@@ -21,9 +21,10 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [stats, setStats] = useState(null);
+  console.log("🚀 ~ Dashboard ~ stats:", stats)
   const [passwordElement, setPasswordElement] = useState(false);
   const [password, setPassword] = useState('***');
- useEffect(() => {
+  useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
 
     const fetchTenant = async () => {
@@ -53,7 +54,7 @@ function Dashboard() {
       return `${(sizeInMB / 1024).toFixed(1)} GB`;
     }
     return `${sizeInMB} MB`;
-  };const fetchStats = async () => {
+  }; const fetchStats = async () => {
     const response = await getStats();
     setStats(response?.data);
   };
@@ -67,16 +68,16 @@ function Dashboard() {
         <div className="container-fluid">
 
           {loginUser?.Data?.RoleId == 1 ? <div className="row">
-              <WelcomeCard userName={`${loginUser?.Data?.FirstName}!`} />
+            <WelcomeCard userName={`${loginUser?.Data?.FirstName}!`} />
             <DashbaordCardTenantCard total={stats?.TotalTenant} active={stats?.TotalActiveTenant} inactive={stats?.TotalInActiveTenant} title="Total Tenant" icon={<GroupOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
             <DashbaordCardTenantCard total={`$${stats?.TotalTransactionSum
-                }`} active={stats?.TotalActiveTenant} Active="Paid" Inactive="Unpaid" inactive={stats?.TotalInActiveTenant} title="Transactions" icon={<PaidOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
+              }`} active={stats?.TotalPaidTransaction} Active="Paid" Inactive="Unpaid" inactive={stats?.TotalUnPaidTransaction} title="Transactions" icon={<PaidOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
 
           </div> :
             <div className="row">
               <WelcomeCard userName={`${loginUser?.Data?.FirstName}!`} />
-              <DashbaordCardTenantCard total={stats?.TotalCompanies} onClick={() => navigate('/companies')} color="info" textColor="#fff" title="Total Companies" icon={<StoreOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
-              <DashbaordCardTenantCard total={`$${stats?.TotalTransactionSum}`} onClick={() => navigate('/transaction')} color="dark" textColor="#fff" title="Transactions" icon={<PaidOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
+              <DashbaordCardTenantCard total={stats?.TotalCompanies} inactive={stats?.TotalInActiveCompanies} active={stats?.TotalActiveCompanies} onClick={() => navigate('/companies')} color="info" textColor="#fff" title="Total Companies" icon={<StoreOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
+              <DashbaordCardTenantCard total={`$${stats?.TotalTransactionSum}`} active={stats?.TotalPaidTransaction} Active="Paid" Inactive="Unpaid" inactive={stats?.TotalUnPaidTransaction} onClick={() => navigate('/transaction')} color="dark" textColor="#fff" title="Transactions" icon={<PaidOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
             </div>}
           <div className="row">
             <AccountInfo

@@ -15,6 +15,8 @@ export const TransactionsScreen = () => {
   const [selectedId, setSelectedId] = useState(0);
   const [openForm, setOpenForm] = useState(false);
   const [transactionsData, setTransactionsData] = useState([]);
+  const [transactionStatus, setTransactionStatus] = useState(null)
+  console.log("🚀 ~ TransactionsScreen ~ transactionsData:", transactionStatus)
   // Pagination and search state
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -63,6 +65,7 @@ export const TransactionsScreen = () => {
     try {
       const data = await getTenantServerSideList(searchValue, pageValue, pageSizeValue);
       setTransactionsData(data.Data);
+      setTransactionStatus(data);
       setTotalCount(data.totalRecords || 0);
     } catch (e) {
       setTransactionsData([]);
@@ -94,8 +97,7 @@ export const TransactionsScreen = () => {
       <div className="content-body">
         <TitleBar icon={<ReceiptLongOutlinedIcon />} title="Transactions" />
         <div className="container-fluid">
-        <DashbaordCardTenantCard total={transactionsData?.length} color="info" textColor="#fff" title="Total Transactions" icon={<ReceiptLongOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} Active="Paid" Inactive="Incomplete" active={transactionsData?.filter(item => item.Status === 'paid').length || 0} inactive={transactionsData?.filter(item => item.Status === 'incomplete').length || 0} />
-
+          <DashbaordCardTenantCard total={`$${transactionStatus?.TotalTransactionSum}`} active={transactionStatus?.totalPaidTransaction} inactive={transactionStatus?.totalUnpaidTransaction} color="info" textColor="#fff" title="Total Transactions" icon={<ReceiptLongOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} Active="Paid" Inactive="Incomplete" />
           <div className="row table-space"  >
             <div className="col-xl-12">
               <div className="card shadow-sm rounded-card">
@@ -129,61 +131,61 @@ export const TransactionsScreen = () => {
                       </thead>
                       <tbody>
                         {loading ? (
-                        <tr>
-                        <td colSpan={6} className="text-center py-5">
-                          <CircularProgress />
-                        </td>
-                      </tr>
+                          <tr>
+                            <td colSpan={6} className="text-center py-5">
+                              <CircularProgress />
+                            </td>
+                          </tr>
                         ) : transactionsData?.length === 0 ? (
                           <tr><td colSpan={10} className="text-center">No data found</td></tr>
                         ) : (
-                          transactionsData?.map((transaction, index) =>  (<tr key={index}>
-                              <td>
-                                <span>{transaction.InvoiceNumber}</span>
-                              </td>
-                              {loginUser?.Data?.RoleId === 1 && <td>
-                                <div className="products">
-                                  <h6>{transaction.FirstName}</h6>
-                                </div>
-                              </td>}
-                              <td>
-                                  <span>{transaction.Name}</span>
-                                </td>
-                              <td>
-                                <span className="text-center"> {`$${transaction.Price}`}</span>
-                              </td>
-                            
-                              <td>
-                                <span>{transaction.PaidDate ? new Date(transaction.PaidDate).toLocaleDateString() : '-'}</span>
-                              </td> <td>
-                                <span style={{
-                                  padding: "2px 10px", fontSize: "11px", borderRadius: "4px", backgroundColor: transaction.Status === 'paid' ? '#28A745' :
-                                    transaction.Status === 'Pending' ? '#FFC107' :
-                                      transaction.Status === 'incomplete' ? '#000000' :
-                                        '#FF7676', color: "#fff"
-                                }}>
-                                  {transaction.Status.charAt(0).toUpperCase() + transaction.Status.slice(1)}
+                          transactionsData?.map((transaction, index) => (<tr key={index}>
+                            <td>
+                              <span>{transaction.InvoiceNumber}</span>
+                            </td>
+                            {loginUser?.Data?.RoleId === 1 && <td>
+                              <div className="products">
+                                <h6>{transaction.FirstName}</h6>
+                              </div>
+                            </td>}
+                            <td>
+                              <span>{transaction.Name}</span>
+                            </td>
+                            <td>
+                              <span className="text-center"> {`$${transaction.Price}`}</span>
+                            </td>
+
+                            <td>
+                              <span>{transaction.PaidDate ? new Date(transaction.PaidDate).toLocaleDateString() : '-'}</span>
+                            </td> <td>
+                              <span style={{
+                                padding: "2px 10px", fontSize: "11px", borderRadius: "4px", backgroundColor: transaction.Status === 'paid' ? '#28A745' :
+                                  transaction.Status === 'Pending' ? '#FFC107' :
+                                    transaction.Status === 'incomplete' ? '#000000' :
+                                      '#FF7676', color: "#fff"
+                              }}>
+                                {transaction.Status.charAt(0).toUpperCase() + transaction.Status.slice(1)}
+                              </span>
+
+                            </td>
+                            <td>
+                              <div>
+                                <span>
+                                  {transaction.PaymentLink && (<a href={transaction.PaymentLink} target="_blank" rel="noopener noreferrer" style={{ color: "#0000FF" }}>
+                                    Payment
+                                  </a>)}
                                 </span>
-
-                              </td>
-                              <td>
-                                <div>
-                                  <span>
-                                    {transaction.PaymentLink && (<a href={transaction.PaymentLink} target="_blank" rel="noopener noreferrer" style={{ color: "#0000FF" }}>
-                                      Payment
-                                    </a>)}
-                                  </span>
-                                  <span style={{ marginLeft: "5px", marginRight: "5px" }}>|</span>
-                                  <span>
-                                    {transaction.InvoiceLink && (<a href={transaction.InvoiceLink} target="_blank" rel="noopener noreferrer" style={{ color: "#0000FF" }}>
-                                      Invoice
-                                    </a>)}
-                                  </span>
-                                </div>
-                              </td>
+                                <span style={{ marginLeft: "5px", marginRight: "5px" }}>|</span>
+                                <span>
+                                  {transaction.InvoiceLink && (<a href={transaction.InvoiceLink} target="_blank" rel="noopener noreferrer" style={{ color: "#0000FF" }}>
+                                    Invoice
+                                  </a>)}
+                                </span>
+                              </div>
+                            </td>
 
 
-                            </tr>)
+                          </tr>)
                           )
                         )}
                       </tbody>

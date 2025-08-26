@@ -189,9 +189,7 @@ const ForgotPassword = () => {
                   : showOTP
                     ? (
                       <>
-                        Please enter the verification code we sent to your email. If you haven’t received the email, first check your spam or junk folder. If it’s not there, click&nbsp;
-                        <a href="/" style={{ color: "#7b9b43", textDecoration: "underline" }} onClick={scrollToContact}>Contact Us</a>
-                        &nbsp;for further assistance.
+                        Please enter the verification code we sent to your email. If you haven’t received the email, first check your spam or junk folder. If it’s not there, then contact us for further assistance.
                       </>
                     )
                     : "Create your new password."}
