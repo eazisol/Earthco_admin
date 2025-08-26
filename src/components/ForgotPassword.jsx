@@ -168,7 +168,7 @@ const ForgotPassword = () => {
             {!showOTP && !showNewPassword 
               ? "Enter your email address to receive a password reset code." 
               : showOTP 
-                ? "Enter the verification code sent to your email." 
+                ? `Please enter the verification code we sent to your email. If you haven’t received the email, first check your spam or junk folder. If it’s not there, click 'Contact Us' for further assistance.` 
                 : "Create your new password."}
           </p>
                 <div className="mb-3 w-100">
