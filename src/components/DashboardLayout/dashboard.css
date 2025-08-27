@@ -12600,7 +12600,8 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   transition: all .2s ease; }
   @media only screen and (max-width: 47.9375rem) {
     .content-body {
-      padding-right: 0rem; } }
+      padding-right: 0rem;
+      padding-left: 1rem; } }
 .content-body {
   margin-left: 210px;
   transition: all 0.3s ease;
