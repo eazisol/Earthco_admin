@@ -297,7 +297,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <section className="contact">
+    <section className="contact" >
       <div className="container" data-aos="fade-up">
         <div className="section-title" style={{ marginTop: "11.5%" }}>
           <h2>Create Account</h2>
@@ -308,20 +308,31 @@ export const LoginForm = () => {
           </p>
         </div>
 
+        {/* Responsive Flexbox Wrapper */}
         <div
-          className="d-flex"
+          className="login-flex-wrapper"
           style={{
+            display: "flex",
+            flexDirection: "row",
             width: "100%",
             alignItems: "stretch",
+            gap: "0",
+            // Responsive styles
+            flexWrap: "wrap",
           }}
         >
           {/* Left side - Image */}
-
           <div
             className="login-image-container"
             style={{
               width: "50%",
+              minWidth: "300px",
               overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              // Responsive
+              padding: "0",
             }}
           >
             <img
@@ -330,21 +341,26 @@ export const LoginForm = () => {
               className="img-fluid shadow"
               style={{
                 width: "100%",
-                height: "100%", // Important
-                objectFit: "cover", // Maintain cover look
-                borderRadius: "0", // Remove unnecessary radius
+                height: "100%",
+                minHeight: "250px",
+                objectFit: "cover",
+                borderRadius: "0",
               }}
             />
           </div>
 
           {/* Right side - Form */}
-
           <form
             onSubmit={handleSubmit}
             className="php-email-form"
             style={{
               width: "50%",
-              padding: "40px", // Add some space if needed
+              minWidth: "300px",
+              padding: "40px",
+              background: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
             }}
           >
             <h4 style={{ color: '#6DA34D', marginBottom: '24px', textAlign: 'center', fontWeight: "bold", fontSize: "24px" }}>
@@ -570,6 +586,7 @@ export const LoginForm = () => {
             </div>
           </form>
         </div>
+      
       </div>
     </section>
   );

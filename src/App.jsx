@@ -538,7 +538,7 @@ function Layout({ children }) {
                 <img src="/assets/img/favicon.svg" alt="" className="img-fluid" />
               </a>
             </h1>
-            <nav id="navbar" className={`navbar${mobileMenuOpen ? 'navbar-mobile' : ''}`}>
+            <nav id="navbar" className={`${mobileMenuOpen ? 'navbar-mobile' : 'navbar'}`}>
               <ul className='navbar-ul'>
                 <li><a className="nav-link scrollto active" href="/#hero">Home</a></li>
                 <li><a className="nav-link scrollto" href="/#about">About Us</a></li>

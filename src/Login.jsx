@@ -127,15 +127,17 @@ export const LoginScreen = ({ onClose }) => {
     <section className="contact" style={{ paddingBottom: "60px" }}>
       <div className="container" data-aos="fade-up">
         <div className="section-title" style={{ marginTop: "9%" }}>
-
         </div>
 
         <div
-          className="d-flex"
+          className="login-flex-wrapper"
           style={{
+            display: "flex",
+            flexDirection: "row",
             width: "100%",
             alignItems: "stretch",
             boxShadow: "0 0 24px 0 rgba(0, 0, 0, 0.12)",
+            flexWrap: "wrap",
           }}
         >
           {/* Left side - Image */}
@@ -143,7 +145,12 @@ export const LoginScreen = ({ onClose }) => {
             className="login-image-container"
             style={{
               width: "60%",
+              minWidth: "300px",
               overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "0",
             }}
           >
             <img
@@ -153,9 +160,9 @@ export const LoginScreen = ({ onClose }) => {
               style={{
                 width: "100%",
                 height: "100%",
+                minHeight: "250px",
                 objectFit: "cover",
                 borderRadius: "0",
-
               }}
             />
           </div>
@@ -164,16 +171,15 @@ export const LoginScreen = ({ onClose }) => {
             className="php-email-form d-flex flex-column align-items-center justify-content-center"
             style={{
               width: "40%",
+              minWidth: "300px",
               padding: "40px",
-              minHeight: "100%",
-
+              background: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
             }}
           >
-
-            <div
-              className="w-100 d-flex flex-column align-items-center"
-
-            >
+            <div className="w-100 d-flex flex-column align-items-center">
               <h4 style={{ color: '#6DA34D', textAlign: 'left', width: "100%", fontWeight: "bold", fontSize: "24px" }}>
                 Welome Back!
               </h4>
@@ -184,12 +190,12 @@ export const LoginScreen = ({ onClose }) => {
               }}>
                 Access your Earthco account to manage your landscaping services, view project updates, and more.
               </p>
-{apiError !== "" && (
-  <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{width:"100%"}}>
- {apiError}
-  <button className="btn-close" onClick={()=>setApiError("")}></button>
-</div>
-)}
+              {apiError !== "" && (
+                <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ width: "100%" }}>
+                  {apiError}
+                  <button className="btn-close" onClick={() => setApiError("")}></button>
+                </div>
+              )}
               <div className="mb-3 w-100">
                 <input
                   type="email"
@@ -276,7 +282,6 @@ export const LoginScreen = ({ onClose }) => {
                   border: "none",
                   width: "100%",
                   borderRadius: "50px",
-                  // maxWidth: 250,
                   alignSelf: "center",
                   fontSize: "16px",
                 }}
@@ -286,8 +291,8 @@ export const LoginScreen = ({ onClose }) => {
               </button>
             </div>
           </div>
-
         </div>
+       
       </div>
     </section>
   );

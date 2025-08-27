@@ -115,39 +115,27 @@ const ForgotPassword = () => {
     console.log(data)
   };
   return (
-    <section className="contact" style={{ paddingBottom: "60px", }}>
+    <section className="contact" style={{ paddingBottom: "60px" }}>
       <div className="container" data-aos="fade-up">
         <div className="section-title" style={{ marginTop: "9%" }}>
-          {/* <h2>
-            {!showOTP && !showNewPassword 
-              ? "Forgot Password" 
-              : showOTP 
-                ? "Enter OTP" 
-                : "Reset Password"}
-          </h2>
-          <p>
-            {!showOTP && !showNewPassword 
-              ? "Enter your email address to receive a password reset code." 
-              : showOTP 
-                ? "Enter the verification code sent to your email." 
-                : "Create your new password."}
-          </p> */}
         </div>
 
         <div
-          className="d-flex"
+          className="forgot-password-flex-wrapper d-flex"
           style={{
             width: "100%",
             alignItems: "stretch",
             boxShadow: "0 0 24px 0 rgba(0, 0, 0, 0.12)",
+            flexDirection: "row",
+            flexWrap: "wrap",
           }}
         >
-          {/* Left side - Image */}
           <div
             className="login-image-container"
             style={{
               width: "60%",
               overflow: "hidden",
+              minWidth: "300px",
             }}
           >
             <img
@@ -159,23 +147,25 @@ const ForgotPassword = () => {
                 height: "100%",
                 objectFit: "cover",
                 borderRadius: "0",
+                minHeight: "180px",
               }}
             />
           </div>
 
-          {/* Right side - Form */}
-
-
-
-          <form onSubmit={handleSubmit} className="php-email-form" style={{
-            width: "40%",
-            padding: "40px",
-            minHeight: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}>
-            <div className="w-100 d-flex flex-column align-items-center justify-content-center"
-            >
+          <form
+            onSubmit={handleSubmit}
+            className="php-email-form"
+            style={{
+              width: "40%",
+              minWidth: "300px",
+              padding: "40px",
+              minHeight: "100%",
+              display: "flex",
+              justifyContent: "center",
+              background: "#fff",
+            }}
+          >
+            <div className="w-100 d-flex flex-column align-items-center justify-content-center">
               <h4 style={{ color: '#6DA34D', textAlign: 'left', width: "100%", fontWeight: "bold", fontSize: "24px" }}>
                 {!showOTP && !showNewPassword
                   ? "Forgot Password"
@@ -203,7 +193,6 @@ const ForgotPassword = () => {
               <div className="mb-3 w-100">
                 {!showOTP && !showNewPassword ? (
                   <>
-
                     <input
                       type="email"
                       className={`form-control ${error ? "is-invalid" : ""}`}
@@ -228,23 +217,12 @@ const ForgotPassword = () => {
                         onPaste={handlePaste}
                         renderInput={(props) => <input {...props} />}
                         inputStyle={{ width: "35px", marginRight: "10px" }}
-                      /></div>
-                    {/* <input
-                      type="text"
-                      className="form-control"
-                      id="otp"
-                      name="otp"
-                      value={otp}
-                      onChange={e => setOTP(e.target.value)}
-                      placeholder="Enter Verification Code"
-                      autoFocus
-                      style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
-                    /> */}
+                      />
+                    </div>
                   </>
                 ) : (
                   <>
                     <div className="mb-3">
-
                       <div className="input-group">
                         <input
                           type={showNewPasswordField ? "text" : "password"}
@@ -268,7 +246,6 @@ const ForgotPassword = () => {
                       </div>
                     </div>
                     <div className="mb-3">
-
                       <div className="input-group">
                         <input
                           type={showConfirmPasswordField ? "text" : "password"}
@@ -314,8 +291,8 @@ const ForgotPassword = () => {
               </div>
             </div>
           </form>
-
         </div>
+       
       </div>
     </section>
   );
