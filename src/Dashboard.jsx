@@ -21,7 +21,6 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [stats, setStats] = useState(null);
-  console.log("🚀 ~ Dashboard ~ stats:", stats)
   const [passwordElement, setPasswordElement] = useState(false);
   const [password, setPassword] = useState('***');
   useEffect(() => {
@@ -111,14 +110,7 @@ function Dashboard() {
               setPasswordElement={setPasswordElement}
             />
             {loginUser?.Data?.RoleId != 1 && <AccountInfoChart
-              loading={loading}
-              error={error}
-              tenant={tenant}
-              loginUser={loginUser}
-              password={password}
-              setPassword={setPassword}
-              passwordElement={passwordElement}
-              setPasswordElement={setPasswordElement}
+                 stats={stats}
             />}
           </div>
         </div>

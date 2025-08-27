@@ -385,7 +385,8 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
         </>
 
 }
-export const AccountInfoChart = ({ loading, error, tenant, loginUser, password, setPassword, passwordElement, setPasswordElement }) => {
+export const AccountInfoChart = ({ stats }) => {
+
     const totalCompanies = 10;
     const totalUsers = 5;
     const usedUsers = 3;

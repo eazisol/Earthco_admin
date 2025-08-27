@@ -95,7 +95,7 @@ const Topbar = () => {
                       <div className="header-media">
                         <div 
                           className="rounded-circle d-flex align-items-center justify-content-center bg-primary text-white"
-                          style={{ width: '30px', height: '30px',  }}
+                          style={{ width: '30px', height: '30px',backgroundColor:"#7b9b43"  }}
                         >
                           {loginUser?.Data?.CompanyName?.charAt(0) }
                         </div>

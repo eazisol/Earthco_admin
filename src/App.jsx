@@ -448,7 +448,6 @@ const componentMap = {
 function Layout({ children }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  console.log("🚀 ~ Layout ~ mobileMenuOpen:", mobileMenuOpen)
   const navigate = useNavigate();
   const [Email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);

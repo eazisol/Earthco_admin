@@ -13140,9 +13140,9 @@ background-color: transparent !important;
     width: 100%;
     justify-content: flex-end;
   }
-  .header-info2 {
+  /* .header-info2 {
     display: none !important;
-  }
+  } */
 }
 .extra-menu-area + .show-more-btn .show-less {
   display: none; }
@@ -26855,8 +26855,8 @@ button {
     box-shadow: none !important; }
   @media only screen and (max-width: 87.5rem) {
     .btn {
-      padding: 0.625rem 1rem;
-      font-size: 0.813rem; } }
+      padding: 0.625rem 1rem ;
+      font-size: 0.813rem ; } }
  .btn.btn-success,
 .btn.btn-secondary,
 .btn.btn-warning,
