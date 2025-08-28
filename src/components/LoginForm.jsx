@@ -298,7 +298,7 @@ export const LoginForm = () => {
 
   return (
     <section className="contact" >
-      <div className="container" data-aos="fade-up">
+      <div className="container" >
         <div className="section-title" style={{ marginTop: "11.5%" }}>
           <h2>Create Account</h2>
           <p>

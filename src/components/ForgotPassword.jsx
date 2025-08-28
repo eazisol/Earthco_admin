@@ -116,7 +116,7 @@ const ForgotPassword = () => {
   };
   return (
     <section className="contact" style={{ paddingBottom: "60px" }}>
-      <div className="container" data-aos="fade-up">
+      <div className="container">
         <div className="section-title" style={{ marginTop: "9%" }}>
         </div>
 
