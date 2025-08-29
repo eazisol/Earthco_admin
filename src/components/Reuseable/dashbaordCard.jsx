@@ -1,6 +1,7 @@
-export const DashbaordCardTenantCard = ({ total, active, inactive, title,icon ,Active="Active",Inactive="Inactive"}) => {
-    const activePercentage = total ? (active / total) * 100 : 0;
-    const inactivePercentage = total ? (inactive / total) * 100 : 0;
+  export const DashbaordCardTenantCard = ({ total, active, inactive, title,icon ,Active="Active",Inactive="Inactive",transactionsTotal,transaction=false}) => {
+    console.log("🚀 ~ DashbaordCardTenantCard ~ transactionsTotal:", transactionsTotal)
+    const activePercentage =transaction? transactionsTotal ? (active / transactionsTotal) * 100 : 0 : total ? (active / total) * 100 : 0;
+    const inactivePercentage =transaction? transactionsTotal ? (inactive / transactionsTotal) * 100 : 0 : total ? (inactive / total) * 100 : 0;
 
     return (
       <div className="col-xl-3 col-lg-6 col-sm-6" style={{ cursor: "pointer" }}>

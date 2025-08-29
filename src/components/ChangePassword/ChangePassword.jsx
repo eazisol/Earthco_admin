@@ -133,6 +133,11 @@ const DemoPasswordFields = () => {
                     <div className="col-xl-12 mb-4">
                         
                         <TextField
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              handleSubmit();
+                            }
+                          }}
                         variant="outlined"
                         label="Current Password"
                         required
@@ -161,6 +166,11 @@ const DemoPasswordFields = () => {
 
                     <div className="col-xl-12 mb-4 mt-3">
                         <TextField
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              handleSubmit();
+                            }
+                          }}
                         variant="outlined"
                         label="New Password"
                         required
@@ -189,6 +199,11 @@ const DemoPasswordFields = () => {
              
                     <div className="col-xl-12 mb-4 mt-3">
                         <TextField
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              handleSubmit();
+                            }
+                          }}
                         variant="outlined"
                         label="Confirm New Password"
                         required

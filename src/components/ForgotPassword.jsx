@@ -194,6 +194,11 @@ const ForgotPassword = () => {
                 {!showOTP && !showNewPassword ? (
                   <>
                     <input
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleSubmit();
+                        }
+                      }}
                       type="email"
                       className={`form-control ${error ? "is-invalid" : ""}`}
                       id="forgotEmail"
@@ -225,6 +230,11 @@ const ForgotPassword = () => {
                     <div className="mb-3">
                       <div className="input-group">
                         <input
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              handleSubmit();
+                            }
+                          }}
                           type={showNewPasswordField ? "text" : "password"}
                           className={`form-control ${passwordError ? "is-invalid" : ""}`}
                           id="newPassword"
@@ -248,7 +258,12 @@ const ForgotPassword = () => {
                     <div className="mb-3">
                       <div className="input-group">
                         <input
-                          type={showConfirmPasswordField ? "text" : "password"}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              handleSubmit();
+                            }
+                          }}
+                            type={showConfirmPasswordField ? "text" : "password"}
                           className={`form-control ${passwordError ? "is-invalid" : ""}`}
                           id="confirmPassword"
                           value={confirmPassword}
@@ -272,6 +287,11 @@ const ForgotPassword = () => {
                 )}
               </div>
               <button
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
                 type="submit"
                 className="btn btn-success"
                 style={{

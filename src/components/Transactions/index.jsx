@@ -16,7 +16,7 @@ export const TransactionsScreen = () => {
   const [openForm, setOpenForm] = useState(false);
   const [transactionsData, setTransactionsData] = useState([]);
   const [transactionStatus, setTransactionStatus] = useState(null)
-  console.log("🚀 ~ TransactionsScreen ~ transactionsData:", transactionStatus)
+  console.log("🚀 ~ TransactionsScreen ~ transactionStatus:", transactionStatus)
   // Pagination and search state
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -97,7 +97,7 @@ export const TransactionsScreen = () => {
       <div className="content-body">
         <TitleBar icon={<ReceiptLongOutlinedIcon />} title="Transactions" />
         <div className="container-fluid">
-          <DashbaordCardTenantCard total={`$${transactionStatus?.TotalTransactionSum}`} active={transactionStatus?.totalPaidTransaction} inactive={transactionStatus?.totalUnpaidTransaction} color="info" textColor="#fff" title="Total Transactions" icon={<ReceiptLongOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} Active="Paid" Inactive="Incomplete" />
+          <DashbaordCardTenantCard total={`$${transactionStatus?.TotalTransactionSum}`} transaction={true} transactionsTotal={transactionStatus?.totalRecords} active={transactionStatus?.totalPaidTransaction} inactive={transactionStatus?.totalUnpaidTransaction} color="info" textColor="#fff" title="Total Transactions" icon={<ReceiptLongOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} Active="Paid" Inactive="Incomplete" />
           <div className="row table-space"  >
             <div className="col-xl-12">
               <div className="card shadow-sm rounded-card">

@@ -198,6 +198,11 @@ export const LoginScreen = ({ onClose }) => {
               )}
               <div className="mb-3 w-100">
                 <input
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
                   type="email"
                   className={`form-control ${errors.Email ? "is-invalid" : ""}`}
                   id="loginEmail"
@@ -218,6 +223,11 @@ export const LoginScreen = ({ onClose }) => {
               <div className="position-relative w-100">
                 <div className="input-group">
                   <input
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSubmit();
+                    }
+                  }}
                     type={showPassword ? "text" : "password"}
                     className={`form-control ${errors.Password ? "is-invalid" : ""}`}
                     id="loginPassword"
@@ -273,7 +283,10 @@ export const LoginScreen = ({ onClose }) => {
                 </Link>
               </div>
 
+              {/* Add onKeyDown event to handle Enter key */}
+             
               <button
+            
                 type="button"
                 onClick={handleSubmit}
                 className="btn btn-success mb-2 "
@@ -289,6 +302,9 @@ export const LoginScreen = ({ onClose }) => {
               >
                 {isSubmitting ? "Signing In..." : "Sign In"}
               </button>
+             
+
+             
             </div>
           </div>
         </div>

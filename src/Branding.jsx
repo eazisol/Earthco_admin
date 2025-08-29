@@ -11,6 +11,7 @@ import { getPackageById, getPackages } from "./APIS/packages";
 import { ConfirmationModal } from "./components/Reuseable/ConfirmationModal";
 import { AddContactMessage, checkPackageStatus, updateTenantPackage } from "./APIS/auth";
 import { toast } from "react-toastify";
+import { CircularProgress } from "@mui/material";
 
 
 function Branding() {
@@ -26,6 +27,7 @@ function Branding() {
   });
   let navigate = useNavigate();
   const [packages,setPackages] = useState([])
+  const [packageLoading,setPackageLoading] = useState(false)
   const [formData, setFormData] = useState({
     Name: "",
     Email: "",
@@ -111,14 +113,16 @@ const [isLoading,setIsLoading] = useState(false)
    })
    setIsLoading(false)
   };
+
   const fetchPackages = async (searchValue = '', pageValue = 1, pageSizeValue = 10) => {
-  
+    setPackageLoading(true)
     const response = await getPackages({
       Search: searchValue || "",
       DisplayStart: pageValue,
       DisplayLength: pageSizeValue,
     });
     setPackages(response?.Data)
+    setPackageLoading(false)
    
   };
   useEffect(() => {
@@ -399,7 +403,10 @@ const handleSubscription=async(plan)=>{
 
     <div className="row justify-content-center align-items-end" >
     
-      {packages?.filter(plan=>plan?.isActive).map((plan, index) => {
+      {
+      // packageLoading ? <div className="text-center d-flex justify-content-center align-items-center" style={{minHeight:"250px"}}><CircularProgress /></div> :
+      packages?.filter(plan=>plan?.isActive).length > 0 ?
+       packages?.filter(plan=>plan?.isActive).map((plan, index) => {
         return (
           <div
             key={index}
@@ -445,7 +452,7 @@ const handleSubscription=async(plan)=>{
             </div>
           </div>
         );
-      })}
+      }): <div className="text-center">No packages available</div>}
    
     </div>
   </div>

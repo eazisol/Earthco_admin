@@ -385,6 +385,11 @@ export const LoginForm = () => {
             <div className="row">
               <div className="form-group col-md-6">
                 <input
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
                   type="text"
                   name="FirstName"
                   className={`form-control ${errors.FirstName ? "is-invalid" : ""}`}
@@ -400,6 +405,11 @@ export const LoginForm = () => {
               </div>
               <div className="form-group col-md-6">
                 <input
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
                   type="text"
                   name="LastName"
                   className={`form-control ${errors.LastName ? "is-invalid" : ""}`}
@@ -415,6 +425,11 @@ export const LoginForm = () => {
               </div>
               <div className="form-group col-md-6">
                 <input
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
                   type="text"
                   name="SubDomain"
                   className={`form-control ${errors.SubDomain ? "is-invalid" : ""} mt-2`}
@@ -430,6 +445,11 @@ export const LoginForm = () => {
               </div>
               <div className="form-group col-md-6">
                 <input
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
                   type="text"
                   name="Email"
                   className={`form-control ${errors.Email ? "is-invalid" : ""} mt-2`}
@@ -445,6 +465,11 @@ export const LoginForm = () => {
               </div>
               <div className="form-group col-md-6">
                 <input
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
                   type="text"
                   name="CompanyName"
                   className={`form-control ${errors.CompanyName ? "is-invalid" : ""} mt-2`}
@@ -460,6 +485,11 @@ export const LoginForm = () => {
               </div>
               <div className="form-group col-md-6">
                 <input
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
                   type="tel"
                   name="PhoneNo"
                   className={`form-control ${errors.PhoneNo ? "is-invalid" : ""} mt-2`}
@@ -479,6 +509,11 @@ export const LoginForm = () => {
               <div className="form-group col-md-6">
                 <div className="input-group">
                   <input
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSubmit();
+                    }
+                  }}
                     type={showPassword ? "text" : "password"}
                     name="Password"
                     className={`form-control ${errors.Password ? "is-invalid" : ""}`}
@@ -523,7 +558,12 @@ export const LoginForm = () => {
               <div className="form-group col-md-6">
                 <div className="input-group">
                   <input
-                    type={showConfirmPassword ? "text" : "password"}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSubmit();
+                    }
+                  }}
+                      type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}`}
                     id="confirmPassword"

@@ -21,6 +21,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [stats, setStats] = useState(null);
+  console.log("🚀 ~ Dashboard ~ stats:", stats?.TotalTransaction)
   const [passwordElement, setPasswordElement] = useState(false);
   const [password, setPassword] = useState('***');
   useEffect(() => {
@@ -70,13 +71,13 @@ function Dashboard() {
             <WelcomeCard userName={`${loginUser?.Data?.FirstName}!`} />
             <DashbaordCardTenantCard total={stats?.TotalTenant} active={stats?.TotalActiveTenant} inactive={stats?.TotalInActiveTenant} title="Total Tenant" icon={<GroupOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
             <DashbaordCardTenantCard total={`$${stats?.TotalTransactionSum
-              }`} active={stats?.TotalPaidTransaction} Active="Paid" Inactive="Unpaid" inactive={stats?.TotalUnPaidTransaction} title="Transactions" icon={<PaidOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
+              }`} active={stats?.TotalPaidTransaction} Active="Paid" Inactive="Unpaid" transaction={true} transactionsTotal={stats?.TotalTransaction} inactive={stats?.TotalUnPaidTransaction} title="Transactions" icon={<PaidOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
 
           </div> :
             <div className="row">
               <WelcomeCard userName={`${loginUser?.Data?.FirstName}!`} />
               <DashbaordCardTenantCard total={stats?.TotalCompanies} inactive={stats?.TotalInActiveCompanies} active={stats?.TotalActiveCompanies} onClick={() => navigate('/companies')} color="info" textColor="#fff" title="Total Companies" icon={<StoreOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
-              <DashbaordCardTenantCard total={`$${stats?.TotalTransactionSum}`} active={stats?.TotalPaidTransaction} Active="Paid" Inactive="Unpaid" inactive={stats?.TotalUnPaidTransaction} onClick={() => navigate('/transaction')} color="dark" textColor="#fff" title="Transactions" icon={<PaidOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
+              <DashbaordCardTenantCard transaction={true} transactionsTotal={stats?.TotalTransaction} total={`$${stats?.TotalTransactionSum}`} active={stats?.TotalPaidTransaction} Active="Paid" Inactive="Unpaid" inactive={stats?.TotalUnPaidTransaction} onClick={() => navigate('/transaction')} color="dark" textColor="#fff" title="Transactions" icon={<PaidOutlinedIcon style={{ color: "#7b9b43", fontSize: "25px" }} />} />
             </div>}
           <div className="row">
             <AccountInfo
