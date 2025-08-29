@@ -304,64 +304,114 @@ const handleSubscription=async(plan)=>{
                 spaces thrive year-round.
               </p>
             </div>
-            <div className="row">
+            <div className="row g-4">
               {[
                 {
                   icon: "bx bxl-dribbble",
                   title: "Automated Report Generation",
                   description:
                     "Our platform offers powerful reporting tools for agents and admins. Generate weekly or monthly reports, view them instantly in the system, and download as professionally formatted PDFs. These reports support performance tracking, accountability, and better decision-making.",
-                  delay: "100",
                 },
                 {
                   icon: "bx bx-file",
                   title: "Smart Invoice Management",
                   description:
                     "Easily create, send, and manage invoices with our intuitive billing system. Track payment status, apply taxes or discounts, and generate recurring invoices as needed. Download or email invoices in professional PDF format directly from the system.",
-                  delay: "200",
                 },
                 {
                   icon: "bx bx-tachometer",
                   title: "Accurate Estimate Management",
                   description:
                     "Quickly generate and manage job estimates tailored to client needs. Add services, materials, and pricing with full flexibility. Share detailed estimates via PDF or email, and track their approval status in real-time.",
-                  delay: "300",
                 },
                 {
                   icon: "bx bx-layer",
                   title: "Purchase Order & Billing Management",
                   description:
                     "Easily create purchase orders, track vendor transactions, and manage billing workflows from a single interface. Link POs to estimates or invoices, monitor status updates, and keep financial records organized.",
-                  delay: "400",
                 },
               ].map((service, index) => (
                 <div
                   key={index}
-                  className={`col-xl-3 col-md-6 text-start d-flex align-items-stretch ${
-                    index > 1
-                      ? "mt-4 mt-xl-0"
-                      : index === 1
-                      ? "mt-4 mt-md-0"
-                      : ""
-                  }`}
+                  className={`col-xl-3 col-md-6 d-flex align-items-stretch`}
                   data-aos="zoom-in"
-                  data-aos-delay={service.delay}
+                  data-aos-delay={100 + index * 100}
                 >
-                  <div className="icon-box">
-                    <div className="icon">
+                  <div
+                    className="card shadow border-0 w-100 h-100 service-card-modern"
+                    style={{
+                      borderRadius: "18px",
+                      background: "linear-gradient(135deg, #f4f7fa 0%, #e9f5e1 100%)",
+                      transition: "box-shadow 0.3s",
+                      minHeight: "320px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      boxShadow: "0 4px 24px 0 rgba(58,125,14,0.08)",
+                      position: "relative",
+                      overflow: "hidden"
+                    }}
+                  >
+                    <div
+                      className="d-flex align-items-center justify-content-center"
+                      style={{
+                        width: 64,
+                        height: 64,
+                        borderRadius: "50%",
+                        background: "linear-gradient(135deg,rgb(73, 131, 35) 60%, #7b9b43 100%)",
+                        boxShadow: "0 2px 12px 0 rgba(58,125,14,0.12)",
+                        position: "absolute",
+                        // Fix: Move icon fully inside card, not cut off
+                        top: "10px",
+                        left: "20%",
+                        transform: "translateX(-50%)",
+                        zIndex: 2,
+                      }}
+                    >
                       <i
                         className={service.icon}
-                        style={{ color: "#3A7D0E" }}
+                        style={{
+                          color: "#fff",
+                          fontSize: "2rem",
+                        }}
                       ></i>
                     </div>
-                    <h4>
-                      <a href="">{service.title}</a>
-                    </h4>
-                    <p>{service.description}</p>
+                    <div style={{ padding: "90px 24px 7px 24px", flex: 1 }}>
+                      <h5
+                        className="fw-bold mb-2"
+                        style={{
+                          color: "#7b9b43",
+                          fontSize: "1.15rem",
+                          letterSpacing: "0.01em",
+                        }}
+                      >
+                        {service.title}
+                      </h5>
+                      <p
+                        className="text-muted"
+                        style={{
+                          fontSize: "0.97rem",
+                          marginBottom: 0,
+                          minHeight: "90px",
+                        }}
+                      >
+                        {service.description}
+                      </p>
+                    </div>
+                    <div
+                      style={{
+                        height: "4px",
+                        width: "100%",
+                        background: "linear-gradient(90deg, #3A7D0E 0%, #7b9b43 100%)",
+                        borderBottomLeftRadius: "18px",
+                        borderBottomRightRadius: "18px",
+                      }}
+                    ></div>
                   </div>
                 </div>
               ))}
             </div>
+        
           </div>
         </section>
 

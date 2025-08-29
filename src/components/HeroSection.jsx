@@ -37,7 +37,6 @@ const HeroSection = () => {
             <CustomButton onClick={scrollToPricing}/>
           </div>
         </div>
-        {/* No right column image, background is set via CSS */}
       </div>
     </div>
   </section>
