@@ -16,6 +16,7 @@ const ForgotPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [showNewPasswordField, setShowNewPasswordField] = useState(false);
   const [apiError, setApiError] = useState("");
   const [showConfirmPasswordField, setShowConfirmPasswordField] = useState(false);
@@ -39,12 +40,27 @@ const ForgotPassword = () => {
       setPasswordError("New password is required");
       return false;
     }
-    if (newPassword.length < 6) {
-      setPasswordError("Password must be at least 6 characters");
+    if (newPassword.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
       return false;
     }
+    if (!/[A-Z]/.test(newPassword)) {
+      setPasswordError("Must contain at least one uppercase letter");
+      return false;
+    }
+    if (!/\d/.test(newPassword)) {
+      setPasswordError("Must contain at least one number");
+      return false;
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) {
+      setPasswordError("Must contain at least one special character");
+      return false;
+    }
+   
+
+   
     if (newPassword !== confirmPassword) {
-      setPasswordError("Passwords do not match");
+      setConfirmPasswordError("Passwords do not match");
       return false;
     }
     return true;
@@ -54,6 +70,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     setError("");
     setPasswordError("");
+    setConfirmPasswordError("");
     setIsLoading(true);
 
     try {
@@ -98,7 +115,7 @@ const ForgotPassword = () => {
         if (response?.status == 200) {
           toast.success(response?.data?.Message);
           setApiError("");
-          navigate("/login");
+          window.location.href = "/login";
         } else {
           // toast.error(response?.response?.data);
           setApiError(response?.response?.data);
@@ -242,6 +259,7 @@ const ForgotPassword = () => {
                           onChange={e => setNewPassword(e.target.value)}
                           placeholder="Enter New Password"
                           autoFocus
+
                           style={{ background: '#f4f7fa', border: '1px solid #e0e0e0' }}
                         />
                         <InputAdornment position="end">
@@ -254,6 +272,7 @@ const ForgotPassword = () => {
                           </IconButton>
                         </InputAdornment>
                       </div>
+                      {passwordError && <div className="invalid-feedback" style={{ display: 'block' }}>{passwordError}</div>}
                     </div>
                     <div className="mb-3">
                       <div className="input-group">
@@ -264,7 +283,7 @@ const ForgotPassword = () => {
                             }
                           }}
                             type={showConfirmPasswordField ? "text" : "password"}
-                          className={`form-control ${passwordError ? "is-invalid" : ""}`}
+                          className={`form-control ${confirmPasswordError ? "is-invalid" : ""}`}
                           id="confirmPassword"
                           value={confirmPassword}
                           onChange={e => setConfirmPassword(e.target.value)}
@@ -281,7 +300,7 @@ const ForgotPassword = () => {
                           </IconButton>
                         </InputAdornment>
                       </div>
-                      {passwordError && <div className="invalid-feedback" style={{ display: 'block' }}>{passwordError}</div>}
+                      {confirmPasswordError && <div className="invalid-feedback" style={{ display: 'block' }}>{confirmPasswordError}</div>}
                     </div>
                   </>
                 )}

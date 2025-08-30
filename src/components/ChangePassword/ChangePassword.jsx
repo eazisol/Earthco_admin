@@ -164,8 +164,9 @@ const DemoPasswordFields = () => {
                         />
                     </div>
 
-                    <div className="col-xl-12 mb-4 mt-3">
+                    <div className="col-xl-12 mb-4 mt-3" >
                         <TextField
+                        style={{marginTop: "10px"}}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                               handleSubmit();
@@ -197,8 +198,9 @@ const DemoPasswordFields = () => {
                         />
                     </div>
              
-                    <div className="col-xl-12 mb-4 mt-3">
+                    <div className="col-xl-12 mb-4 mt-3" >
                         <TextField
+                        style={{marginTop: "10px"}}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                               handleSubmit();

@@ -544,13 +544,13 @@ a:hover {
   letter-spacing: 1px;
   margin-left: 30px !important;
   display: inline-block;
-  padding: 10px 20px 10px 20px;
+  padding: 4px 12px 4px 12px;
   border-radius: 50px;
   transition: 0.5s;
   /* margin: 10px 0 0 0; */
   color: var(--button-color) !important;
   background: transparent !important;
-  border: 1px solid #7b9b43 !important;
+  border: 2px solid #7b9b43 !important;
 }
 
  .custom-login-btn:hover {
