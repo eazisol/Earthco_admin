@@ -89,6 +89,7 @@ export const CompaniesScreen = () => {
     const newErrors = {};
     if (!formData.CompanyName.trim()) newErrors.CompanyName = "Company Name is required";
     if (!formData.CompanyRealmId.trim()) newErrors.CompanyRealmId = "Company Realm ID is required";
+    if (!formData.DsiplayName.trim()) newErrors.DsiplayName = "Display Name is required";
     if (!formData.Email.trim()) {
       newErrors.Email = "Email is required";
     } else if (!validateEmail(formData.Email.trim())) {
@@ -342,6 +343,8 @@ export const CompaniesScreen = () => {
                   value={formData.DsiplayName}
                   onChange={handleInputChange}
                   size="small"
+                  error={!!errors.DsiplayName}
+                  helperText={errors.DsiplayName}
                   inputProps={{ maxLength: 50 }}
                 />
               </div>

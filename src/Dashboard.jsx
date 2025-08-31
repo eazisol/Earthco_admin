@@ -21,7 +21,6 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [stats, setStats] = useState(null);
-  console.log("🚀 ~ Dashboard ~ stats:", stats?.TotalTransaction)
   const [passwordElement, setPasswordElement] = useState(false);
   const [password, setPassword] = useState('***');
   useEffect(() => {

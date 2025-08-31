@@ -1,6 +1,6 @@
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import image from "../../assets/img/team/team-1.jpg";
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Offcanvas } from "bootstrap";
 import { getTenantServerSideList } from "../../APIS/transactions";
@@ -138,7 +138,7 @@ export const ContactUs = () => {
                                             </thead>
                                             <tbody>
                                                 {loading ? (
-                                                    <tr><td colSpan={4} className="text-center">Loading...</td></tr>
+                                                    <tr><td colSpan={4} className="text-center"><CircularProgress /></td></tr>
                                                 ) : transactionsData?.length === 0 ? (
                                                     <tr><td colSpan={4} className="text-center">No data found</td></tr>
                                                 ) : (

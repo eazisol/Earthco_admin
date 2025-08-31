@@ -386,15 +386,19 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
 
 }
 export const AccountInfoChart = ({ stats }) => {
-
-    const totalCompanies = 10;
+console.log("🚀 ~ AccountInfoChart ~ stats:", stats)
+// TotalActiveCompanies
+// TotalCompanies
+// TotalInActiveCompanies
     const totalUsers = 5;
     const usedUsers = 3;
-    const usedCompanies = 7;
-
     const maxStorage = 100; // GB
     const usedStorage = 65; // GB
-
+    const totalCompanies = stats?.TotalCompanies ?? 0;
+    const usedCompanies = stats?.TotalActiveCompanies ?? 0;
+    
+    
+    
     const options = {
         chart: {
             type: "bar",
@@ -431,20 +435,20 @@ export const AccountInfoChart = ({ stats }) => {
         },
         series: [
             {
-                name: "Used",
-                data: [usedUsers, usedCompanies, usedStorage],
-                color: "#7b9b43"
+              name: "Used",
+              data: [usedUsers, usedCompanies, usedStorage],
+              color: "#7b9b43"
             },
             {
-                name: "Remaining",
-                data: [
-                    totalUsers - usedUsers,
-                    totalCompanies - usedCompanies,
-                    maxStorage - usedStorage
-                ],
-                color: "#FFBF00"
+              name: "Remaining",    
+              data: [
+                Math.max(totalUsers - usedUsers, 0),
+                Math.max(totalCompanies - usedCompanies, 0),
+                Math.max(maxStorage - usedStorage, 0)
+              ],
+              color: "#FFBF00"
             }
-        ]
+          ]
     };
 
     return (
