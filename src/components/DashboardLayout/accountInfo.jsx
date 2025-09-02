@@ -387,13 +387,14 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
 }
 export const AccountInfoChart = ({ stats }) => {
 console.log("🚀 ~ AccountInfoChart ~ stats:", stats)
-// TotalActiveCompanies
-// TotalCompanies
-// TotalInActiveCompanies
-    const totalUsers = 5;
-    const usedUsers = 3;
-    const maxStorage = 100; // GB
-    const usedStorage = 65; // GB
+// "MaxMBlimit": 5120.00,
+//     "MBUsed": null,
+//     "MaxUserslimit": 25,
+//     "UsedUsers": 1
+    const totalUsers = stats?.MaxUserslimit ?? 0;
+    const usedUsers = stats?.UsedUsers ?? 0;
+    const maxStorage = stats?.MaxMBlimit ?? 0; // GB
+    const usedStorage = stats?.MBUsed ?? 0; // GB
     const totalCompanies = stats?.TotalCompanies ?? 0;
     const usedCompanies = stats?.TotalActiveCompanies ?? 0;
     
