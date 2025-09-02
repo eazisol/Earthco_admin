@@ -386,15 +386,11 @@ export const PackageInfo = ({ loading, error, tenant, loginUser, password, setPa
 
 }
 export const AccountInfoChart = ({ stats }) => {
-console.log("🚀 ~ AccountInfoChart ~ stats:", stats)
-// "MaxMBlimit": 5120.00,
-//     "MBUsed": null,
-//     "MaxUserslimit": 25,
-//     "UsedUsers": 1
+
     const totalUsers = stats?.MaxUserslimit ?? 0;
     const usedUsers = stats?.UsedUsers ?? 0;
-    const maxStorage = stats?.MaxMBlimit ?? 0; // GB
-    const usedStorage = stats?.MBUsed ?? 0; // GB
+    const maxStorage = stats?.MaxMBlimit ?? 0; 
+    const usedStorage = stats?.MBUsed ?? 0; 
     const totalCompanies = stats?.TotalCompanies ?? 0;
     const usedCompanies = stats?.TotalActiveCompanies ?? 0;
     
@@ -410,13 +406,13 @@ console.log("🚀 ~ AccountInfoChart ~ stats:", stats)
             style: { fontSize: "14px" }
         },
         xAxis: {
-            categories: ["Users", "Companies", "Storage (GB)"],
+            categories: ["Users", "Companies", "Storage (MB)"],
             title: { text: null }
         },
         yAxis: {
             min: 0,
-            max: 100, // Force y-axis to end at 100
-            tickPositions: [0, 20, 40, 60, 80, 100], // Only these ticks will show
+            max: 100, 
+            tickPositions: [0, 20, 40, 60, 80, 100], 
             title: { text: "Usage", align: "high" },
             labels: { overflow: "justify" }
         },
@@ -427,7 +423,7 @@ console.log("🚀 ~ AccountInfoChart ~ stats:", stats)
             series: {
                 stacking: "normal",
                 dataLabels: {
-                    enabled: false // remove numbers on bars
+                    enabled: false 
                 }
             }
         },
